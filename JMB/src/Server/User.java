@@ -2,7 +2,6 @@ package Server;
 
 import java.util.ArrayList;
 
-//TODO: add a ArrayList of Projects to the user ... 
 /**
  * Represents a user.
  */
@@ -15,8 +14,6 @@ public class User {
 	private int idUser;
 	private int accessLevel;
 	private ArrayList<Project> projects;
-	
-	
 
 	/**
 	 * 
@@ -45,10 +42,10 @@ public class User {
 		accessLevel = a;
 		idUser = 0;
 		pass = p;
-		projects=pr;
+		projects = pr;
 	}
 
-	public User(String n, String f, String m, int a, String p, int id,ArrayList<Project> pr) {
+	public User(String n, String f, String m, int a, String p, int id, ArrayList<Project> pr) {
 		name = n;
 		fname = f;
 		mail = m;
@@ -86,10 +83,13 @@ public class User {
 			return false;
 		return true;
 	}
-	
-	protected ArrayList<Project> getProjects()
-	{
+
+	protected ArrayList<Project> getProjects() {
 		return this.projects;
 	}
 	
+	public boolean exists(){
+		return (this.idUser!=0);
+	}
+
 }
