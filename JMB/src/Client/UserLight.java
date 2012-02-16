@@ -1,8 +1,6 @@
-package Client;
+package jmbs.client;
 
 import java.util.ArrayList;
-
-import Server.Project;
 
 /**
  * Represents a user.
