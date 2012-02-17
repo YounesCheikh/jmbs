@@ -5,10 +5,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class ProjectDAO extends DAO{
-	
+public class ProjectDAO extends DAO {
+
 	public ProjectDAO(Connection c) {
-		con = c;
+		super(c);
 	}
 
 	/**
@@ -18,26 +18,20 @@ public class ProjectDAO extends DAO{
 	 */
 	public ArrayList<User> findUsers(int id) {
 		ArrayList<User> u = new ArrayList<User>();
-		ResultSet res = send(con,"SELECT participate.name,user.* FROM participate,user WHERE participate.idproject=" + id + " AND user.name=idproject.name;");
-		UserDAO uDAO= new UserDAO(con);
-		int userid=0;
+		ResultSet res = send("SELECT participate.name,user.* FROM participate,user WHERE participate.idproject=" + id + " AND user.name=idproject.name;");
+		UserDAO uDAO = new UserDAO(getConnection());
+		int userid = 0;
 		try {
-			userid=res.getInt("iduser");
-			u.add(new User(res.getString("name"), res.getString("forename"),
-					res.getString("email"), res.getInt("accesslevel"),
-					res.getString("pass"), userid,
-					uDAO.findProjects(userid)));
+			userid = res.getInt("iduser");
+			u.add(new User(res.getString("name"), res.getString("forename"), res.getString("email"), res.getInt("accesslevel"), res.getString("pass"), userid, uDAO.findProjects(userid)));
 			while (!res.isLast()) {
 				res.next();
-				userid=res.getInt("iduser");
-				u.add(new User(res.getString("name"), res.getString("forename"),
-						res.getString("email"), res.getInt("accesslevel"),
-						res.getString("pass"), userid,
-						uDAO.findProjects(userid)));
+				userid = res.getInt("iduser");
+				u.add(new User(res.getString("name"), res.getString("forename"), res.getString("email"), res.getInt("accesslevel"), res.getString("pass"), userid, uDAO.findProjects(userid)));
 			}
 
 		} catch (SQLException e) {
-			System.out.println("Unable to find project with id="+id+".");
+			System.out.println("Unable to find project with id=" + id + ".");
 		}
 
 		try {
@@ -47,7 +41,7 @@ public class ProjectDAO extends DAO{
 		}
 		return u;
 	}
-	
+
 	/**
 	 * Create a project using his name. If the name exits in the db then it will
 	 * return the project. Else it will create a new one.<br>
@@ -57,13 +51,13 @@ public class ProjectDAO extends DAO{
 	 *            name of the project
 	 */
 	public Project createProject(int id) {
-		ResultSet res = send(con,"SELECT * FROM project WHERE idproject=" + id + ";");
+		ResultSet res = send("SELECT * FROM project WHERE idproject=" + id + ";");
 		Project p = null;
-		
+
 		try {
-			p=new Project(res.getString("name"),res.getInt("idproject"));
+			p = new Project(res.getString("name"), res.getInt("idproject"));
 		} catch (SQLException e) {
-			System.out.println("Unable to find project with id="+id+".");
+			System.out.println("Unable to find project with id=" + id + ".");
 		}
 
 		try {
@@ -71,7 +65,7 @@ public class ProjectDAO extends DAO{
 		} catch (SQLException e) {
 			System.out.println("Database acess error !\n Unable to close connection !");
 		}
-		
+
 		return p;
 	}
 

@@ -8,7 +8,7 @@ import java.util.ArrayList;
 public class UserDAO extends DAO {
 
 	public UserDAO(Connection c) {
-		con = c;
+		super(c);
 	}
 
 	/**
@@ -20,15 +20,11 @@ public class UserDAO extends DAO {
 	protected User createUser(int userid) {
 
 		User u = null;
-		ResultSet res = send(con, "SELECT * FROM users WHERE iduser=" + userid
-				+ ";");
+		ResultSet res = send("SELECT * FROM users WHERE iduser=" + userid + ";");
 
 		try {
 
-			u = new User(res.getString("name"), res.getString("forename"),
-					res.getString("email"), res.getInt("accesslevel"),
-					res.getString("pass"), userid,
-					findProjects(userid));
+			u = new User(res.getString("name"), res.getString("forename"), res.getString("email"), res.getInt("accesslevel"), res.getString("pass"), userid, findProjects(userid));
 		} catch (SQLException e) {
 			System.out.println("No users for id=" + userid + " !");
 		}
@@ -36,8 +32,7 @@ public class UserDAO extends DAO {
 		try {
 			res.close();
 		} catch (SQLException e) {
-			System.out
-					.println("Database acess error !\n Unable to close connection !");
+			System.out.println("Database acess error !\n Unable to close connection !");
 		}
 		return u;
 	}
@@ -53,24 +48,19 @@ public class UserDAO extends DAO {
 	protected User createUser(String n, String fn) {
 		User u = null;
 		int userid = 0;
-		ResultSet res = send(con, "SELECT * FROM users WHERE name='" + n
-				+ "' AND forename='" + fn + "';");
+		ResultSet res = send("SELECT * FROM users WHERE name='" + n + "' AND forename='" + fn + "';");
 
 		try {
 			userid = res.getInt("iduser");
-			u = new User(res.getString("name"), res.getString("forename"),
-					res.getString("email"), res.getInt("accesslevel"),
-					res.getString("pass"), userid, findProjects(userid));
+			u = new User(res.getString("name"), res.getString("forename"), res.getString("email"), res.getInt("accesslevel"), res.getString("pass"), userid, findProjects(userid));
 		} catch (SQLException e) {
-			System.out.println("No users for name=" + n + " and forename=" + fn
-					+ " !");
+			System.out.println("No users for name=" + n + " and forename=" + fn + " !");
 		}
 
 		try {
 			res.close();
 		} catch (SQLException e) {
-			System.out
-					.println("Database acess error !\n Unable to close connection !");
+			System.out.println("Database acess error !\n Unable to close connection !");
 		}
 		return u;
 	}
@@ -84,23 +74,18 @@ public class UserDAO extends DAO {
 	protected User createUser(String em) {
 		User u = null;
 		int userid = 0;
-		ResultSet res = send(con, "SELECT * FROM users WHERE email='" + em
-				+ "';");
+		ResultSet res = send("SELECT * FROM users WHERE email='" + em + "';");
 		try {
 			userid = res.getInt("iduser");
-			u = new User(res.getString("name"), res.getString("forename"),
-					res.getString("email"), res.getInt("accesslevel"),
-					res.getString("pass"), userid, findProjects(userid));
+			u = new User(res.getString("name"), res.getString("forename"), res.getString("email"), res.getInt("accesslevel"), res.getString("pass"), userid, findProjects(userid));
 		} catch (SQLException e) {
-			System.out
-					.println("No users for with " + em + " as email adress !");
+			System.out.println("No users for with " + em + " as email adress !");
 		}
 
 		try {
 			res.close();
 		} catch (SQLException e) {
-			System.out
-					.println("Database acess error !\n Unable to close connection !");
+			System.out.println("Database acess error !\n Unable to close connection !");
 		}
 		return u;
 	}
@@ -113,18 +98,13 @@ public class UserDAO extends DAO {
 	 */
 	public ArrayList<Project> findProjects(int idUser) {
 		ArrayList<Project> p = new ArrayList<Project>();
-		ResultSet res = send(
-				con,
-				"SELECT participate.idproject,name FROM participate,project WHERE participate.iduser="
-						+ idUser
-						+ " AND participate.idproject=project.idproject;");
+		ResultSet res = send("SELECT participate.idproject,name FROM participate,project WHERE participate.iduser=" + idUser + " AND participate.idproject=project.idproject;");
 
 		try {
 			p.add(new Project(res.getString("name"), res.getInt("idproject")));
 			while (!res.isLast()) {
 				res.next();
-				p.add(new Project(res.getString("name"), res
-						.getInt("idproject")));
+				p.add(new Project(res.getString("name"), res.getInt("idproject")));
 			}
 
 		} catch (SQLException e) {
@@ -134,8 +114,7 @@ public class UserDAO extends DAO {
 		try {
 			res.close();
 		} catch (SQLException e) {
-			System.out
-					.println("Database acess error !\n Unable to close connection !");
+			System.out.println("Database acess error !\n Unable to close connection !");
 		}
 
 		return p;
@@ -153,24 +132,17 @@ public class UserDAO extends DAO {
 	protected ArrayList<User> findUsers(String uName) {
 		ArrayList<User> u = new ArrayList<User>();
 		int userid = 0;
-		ResultSet res = send(con, "SELECT * FROM users WHERE name='"
-				+ uName + "';");
+		ResultSet res = send("SELECT * FROM users WHERE name='" + uName + "';");
 		try {
 			if (uName.equals(res.getString("name"))) {
 				userid = res.getInt("iduser");
-				u.add(new User(res.getString("name"),
-						res.getString("forename"), res.getString("email"), res
-								.getInt("accesslevel"), res.getString("pass"),
-						userid, findProjects(userid)));
+				u.add(new User(res.getString("name"), res.getString("forename"), res.getString("email"), res.getInt("accesslevel"), res.getString("pass"), userid, findProjects(userid)));
 			}
 			while (!res.isLast()) {
 				res.next();
 				if (uName.equals(res.getString("name"))) {
 					userid = res.getInt("iduser");
-					u.add(new User(res.getString("name"), res
-							.getString("forename"), res.getString("email"), res
-							.getInt("accesslevel"), res.getString("pass"),
-							userid, findProjects(userid)));
+					u.add(new User(res.getString("name"), res.getString("forename"), res.getString("email"), res.getInt("accesslevel"), res.getString("pass"), userid, findProjects(userid)));
 				}
 			}
 		} catch (SQLException e) {
@@ -180,8 +152,7 @@ public class UserDAO extends DAO {
 		try {
 			res.close();
 		} catch (SQLException e) {
-			System.out
-					.println("Database acess error !\n Unable to close connection !");
+			System.out.println("Database acess error !\n Unable to close connection !");
 		}
 
 		return u;

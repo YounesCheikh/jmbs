@@ -11,16 +11,11 @@ import java.sql.Statement;
  */
 public abstract class DAO {
 	
-	protected Connection con;
+	private Connection con;
 
-	protected static ResultSet send(Connection con,String request)
+	protected ResultSet send(String request)
 	{
-		/*
-		 * petite subtilité: con semble etre un pointeur vers
-		 * l'attribut connection de la classe Connect ce qui
-		 * fait que cet attribut est libéré aussi a
-		 * l'utilisation de close()
-		 */
+		
 		ResultSet result;
 		try {
 			Statement state = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_READ_ONLY);
@@ -32,4 +27,14 @@ public abstract class DAO {
 		}
 		return result;
 	}	
+	
+	public DAO(Connection c)
+	{
+		con = c;
+	}
+	
+	public Connection getConnection()
+	{
+		return con;
+	}
 }
