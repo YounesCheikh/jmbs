@@ -11,7 +11,7 @@ public class Project {
 	String name;
 	int idProject = 0;
 	boolean exists;
-	ArrayList<Integer> users;
+	ArrayList<User> users;
 
 	/**
 	 * @param n

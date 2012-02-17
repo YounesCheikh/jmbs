@@ -12,22 +12,21 @@ public class ProjectDAO extends DAO {
 	}
 
 	/**
-	 * Lists all the users in the project
+	 * Lists all the users in the project without filling their Project array
 	 * 
 	 * @return Collection of User
 	 */
-	public ArrayList<User> findUsers(int id) {
+	public ArrayList<User> getUsers(int id) {
 		ArrayList<User> u = new ArrayList<User>();
 		ResultSet res = send("SELECT participate.name,user.* FROM participate,user WHERE participate.idproject=" + id + " AND user.name=idproject.name;");
-		UserDAO uDAO = new UserDAO(getConnection());
 		int userid = 0;
 		try {
 			userid = res.getInt("iduser");
-			u.add(new User(res.getString("name"), res.getString("forename"), res.getString("email"), res.getInt("accesslevel"), res.getString("pass"), userid, uDAO.findProjects(userid)));
+			u.add(new User(res.getString("name"), res.getString("forename"), res.getString("email"), res.getInt("accesslevel"), res.getString("pass"), userid, null));
 			while (!res.isLast()) {
 				res.next();
 				userid = res.getInt("iduser");
-				u.add(new User(res.getString("name"), res.getString("forename"), res.getString("email"), res.getInt("accesslevel"), res.getString("pass"), userid, uDAO.findProjects(userid)));
+				u.add(new User(res.getString("name"), res.getString("forename"), res.getString("email"), res.getInt("accesslevel"), res.getString("pass"), userid, null));
 			}
 
 		} catch (SQLException e) {
@@ -43,14 +42,14 @@ public class ProjectDAO extends DAO {
 	}
 
 	/**
-	 * Create a project using his name. If the name exits in the db then it will
+	 * find a project using his name. If the name exits in the db then it will
 	 * return the project. Else it will create a new one.<br>
 	 * Note: A project name must be unique.
 	 * 
-	 * @param n
-	 *            name of the project
+	 * @param id
+	 *            id of the project
 	 */
-	public Project createProject(int id) {
+	public Project findProject(int id) {
 		ResultSet res = send("SELECT * FROM project WHERE idproject=" + id + ";");
 		Project p = null;
 
