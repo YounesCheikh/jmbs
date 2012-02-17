@@ -24,7 +24,7 @@ public class UserDAO extends DAO {
 
 		try {
 
-			u = new User(res.getString("name"), res.getString("forename"), res.getString("email"), res.getInt("accesslevel"), res.getString("pass"), userid, findProjects(userid));
+			u = new User(res.getString("name"), res.getString("forename"), res.getString("email"), res.getInt("accesslevel"), res.getString("pass"), userid, getProjects(userid));
 		} catch (SQLException e) {
 			System.out.println("No users for id=" + userid + " !");
 		}
@@ -52,7 +52,7 @@ public class UserDAO extends DAO {
 
 		try {
 			userid = res.getInt("iduser");
-			u = new User(res.getString("name"), res.getString("forename"), res.getString("email"), res.getInt("accesslevel"), res.getString("pass"), userid, findProjects(userid));
+			u = new User(res.getString("name"), res.getString("forename"), res.getString("email"), res.getInt("accesslevel"), res.getString("pass"), userid, getProjects(userid));
 		} catch (SQLException e) {
 			System.out.println("No users for name=" + n + " and forename=" + fn + " !");
 		}
@@ -77,7 +77,7 @@ public class UserDAO extends DAO {
 		ResultSet res = send("SELECT * FROM users WHERE email='" + em + "';");
 		try {
 			userid = res.getInt("iduser");
-			u = new User(res.getString("name"), res.getString("forename"), res.getString("email"), res.getInt("accesslevel"), res.getString("pass"), userid, findProjects(userid));
+			u = new User(res.getString("name"), res.getString("forename"), res.getString("email"), res.getInt("accesslevel"), res.getString("pass"), userid, getProjects(userid));
 		} catch (SQLException e) {
 			System.out.println("No users for with " + em + " as email adress !");
 		}
