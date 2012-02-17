@@ -1,13 +1,11 @@
-package Client;
+package jmbs.client;
 
 import java.util.ArrayList;
-
-import Server.Project;
 
 /**
  * Represents a user.
  */
-public class User {
+public class UserDTO {
 
 	private String name;
 	private String fname;
@@ -15,7 +13,7 @@ public class User {
 	private String pass;
 	private int idUser;
 	private int accessLevel;
-	private ArrayList<Project> projects;
+	private ArrayList<Integer> projects;
 
 	/**
 	 * 
@@ -37,7 +35,7 @@ public class User {
 	 * @param pr
 	 *            :array of projects
 	 */
-	public User(String n, String f, String m, int a, String p, ArrayList<Project> pr) {
+	public UserDTO(String n, String f, String m, int a, String p, ArrayList<Integer> pr) {
 		name = n;
 		fname = f;
 		mail = m;
@@ -47,7 +45,7 @@ public class User {
 		projects = pr;
 	}
 
-	public User(String n, String f, String m, int a, String p, int id, ArrayList<Project> pr) {
+	public UserDTO(String n, String f, String m, int a, String p, int id, ArrayList<Integer> pr) {
 		name = n;
 		fname = f;
 		mail = m;
@@ -80,13 +78,13 @@ public class User {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		User other = (User) obj;
+		UserDTO other = (UserDTO) obj;
 		if (idUser != other.idUser)
 			return false;
 		return true;
 	}
 
-	protected ArrayList<Project> getProjects() {
+	public ArrayList<Integer> getProjects() {
 		return this.projects;
 	}
 	

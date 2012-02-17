@@ -7,6 +7,7 @@ package jmbs.client;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -31,7 +32,13 @@ public class CUPanel extends JPanel {
 	private JTextField jtFName;
 	private JTextField jtMail;
 	private JPasswordField jpfPass;
-
+	
+	private String strName;
+	private String strFName;
+	private String strMail;
+	private String strpass;
+	
+	
 	public CUPanel() {
 		// createAndShowGUI();
 		if (RIGHT_TO_LEFT) {
@@ -148,17 +155,19 @@ public class CUPanel extends JPanel {
 
 	public class ButtonListener implements ActionListener{ 
         public void actionPerformed(ActionEvent e) {
-        	String strName = jtName.getText();
-        	String strFName = jtFName.getText();
-        	String strMail = jtMail.getText();
-        	String strpass = jpfPass.getText(); // todo: hash with HashPassword to md5
+        	strName = jtName.getText();
+        	strFName = jtFName.getText();
+        	strMail = jtMail.getText();
+        	strpass = new HashPassword(jpfPass.getText()).getHashed(); // todo: hash with HashPassword to md5
         	
-        	System.out.println("NAME: "+strName+" "+ strFName);
-        	System.out.println("EMAIL "+strMail);
-        	System.out.println("PASS: "+strpass);
+        	//System.out.println("NAME: "+strName+" "+ strFName);
+        	//System.out.println("EMAIL "+strMail);
+        	//System.out.println("PASS: "+strpass);
         }  
     }
 	
-	
+	public UserDTO getUser() {
+		return new UserDTO(strName, strFName, strMail, 0, strpass, null);
+	}
 	
 }

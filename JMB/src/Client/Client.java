@@ -17,9 +17,13 @@ public class Client {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		
 		//System.out.println(new HashPassword("Younes").getHashed());
-		new Window();
+		//CUPanel content = new CUPanel();
+		new Window();//.setContentPane(content);
+		//UserLight u = content.getUser();
+		
+		//System.out.print(u.toString());
+		//System.out.println(new HashPassword("Bonjour").getHashed());
 		/*try {
 			
 			System.setSecurityManager(new RMISecurityManager());
@@ -34,6 +38,7 @@ public class Client {
 			System.out.println("Connexion impossible!");
 			e.printStackTrace();
 		}
+		
 		*/
 	}
 }

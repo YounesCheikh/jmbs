@@ -8,7 +8,7 @@ public class AdminObjectCreator {
 		
 	}
 	
-	public UserLight create () {
+	public UserDTO create () {
 		String n = null;
 		String f = null;
 		String m = null;
@@ -16,7 +16,7 @@ public class AdminObjectCreator {
 		String p = null;
 		int id = 0;
 		ArrayList<Integer> pr = null;
-		UserLight ul = new UserLight(n, f, m, a, p, id, pr);
+		UserDTO ul = new UserDTO(n, f, m, a, p, id, pr);
 		return ul;
 	}
 	
