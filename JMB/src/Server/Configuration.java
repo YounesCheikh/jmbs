@@ -7,7 +7,7 @@ import java.util.Properties;
 
 /**
  * Singleton used to set up a connection between the database specified in the
- * configuration file "db.connect" <br>
+ * configuration file "db.connect" <br>jhgfjg
  * 
  * Note: : YOU MUST A THE CONFIGURATION FILE TO USE THAT CLASS.
  * 
