@@ -156,15 +156,6 @@ public class User {
 		this.follows = follows;
 	}
 
-	/**
-	 * Says if the user exists in the database.
-	 * 
-	 * @return true - if the user is registered in the database.
-	 */
-	public boolean exists() {
-		return (this.idUser != 0);
-	}
-
 	/*
 	 * (non-Javadoc)
 	 * 

@@ -150,5 +150,23 @@ public class UserDAO extends DAO {
 
 		return ret;
 	}
+	
+	/**
+	 * Says if the user exists in the database.
+	 * 
+	 * @return true - if the user is registered in the database.
+	 */
+	public boolean exists(User u) {
+		boolean ret = false;
+		ResultSet res = send("SELECT * FROM users WHERE iduser ='" + u.getIdUser() + "';");
+		
+		try {
+			ret = res.getString("email").equals(u.getMail());
+		} catch (SQLException e) {
+			System.out.println("Invalid user.");
+			ret = false;
+		}
+		return ret;
+	}
 
 }
