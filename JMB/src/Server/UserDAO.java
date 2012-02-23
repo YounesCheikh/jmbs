@@ -95,30 +95,30 @@ public class UserDAO extends DAO {
 	// TODO add an option to list Users by second names...
 	// TODO change the method to be string research compatible/..
 	/**
-	 * Find all users having a specified name.
+	 * Find all users which names are containing uName.
 	 * 
 	 * @param uName
-	 *            name
+	 *            part of the searched name.
 	 * @return Array of User
 	 */
 	protected ArrayList<User> findUsers(String uName) {
 		ArrayList<User> u = new ArrayList<User>();
 		int userid = 0;
-		ResultSet res = send("SELECT * FROM users WHERE name='" + uName + "';");
+		ResultSet res = send("SELECT * FROM users WHERE name LIKE '%" + uName + "%';");
 		try {
-			if (uName.equals(res.getString("name"))) {
+			if (res.getString("name").contains(uName)) {
 				userid = res.getInt("iduser");
 				u.add(new User(res.getString("name"), res.getString("forename"), res.getString("email"), userid));
 			}
 			while (!res.isLast()) {
 				res.next();
-				if (uName.equals(res.getString("name"))) {
+				if (res.getString("name").contains(uName)) {
 					userid = res.getInt("iduser");
 					u.add(new User(res.getString("name"), res.getString("forename"), res.getString("email"), userid));
 				}
 			}
 		} catch (SQLException e) {
-			System.out.println("Database acess error ! ");
+			System.out.println("No users found with name containing " + uName);
 		}
 
 		try {

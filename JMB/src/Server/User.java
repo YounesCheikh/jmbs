@@ -172,13 +172,12 @@ public class User {
 	 */
 	@Override
 	public String toString() {
-		return "Name: " + name + "\nForename: " + fname + "\nEmail: " + mail + "\n";
+		return "\nName: " + name + "\nForename: " + fname + "\nEmail: " + mail + "\n";
 	}
 
 	/*
-	 * (non-Javadoc) 
-	 * 2 users are not even comparable if they have no id given by the DB. 
-	 * If one of the 2 users have a id equal to 0, result will be false
+	 * (non-Javadoc) 2 users are not even comparable if they have no id given by
+	 * the DB. If one of the 2 users have a id equal to 0, result will be false
 	 * anyways.
 	 * 
 	 * @see java.lang.Object#equals(java.lang.Object)
