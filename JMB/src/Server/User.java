@@ -27,10 +27,6 @@ public class User {
 	 *            : user's fore name
 	 * @param m
 	 *            : user's mail
-	 * @param a
-	 *            : user's access level
-	 * @param p
-	 *            : user's password
 	 * @param pr
 	 *            :array of projects
 	 */
