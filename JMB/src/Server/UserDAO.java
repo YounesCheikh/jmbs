@@ -12,10 +12,10 @@ public class UserDAO extends DAO {
 	}
 
 	/**
-	 * Find a user using his database id userid.
+	 * Find a user using his database id.
 	 * 
 	 * @param userid
-	 *            database id of the user u want to get.
+	 *            database id of the user u want to find.
 	 */
 	protected User findUser(int userid) {
 
