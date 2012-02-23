@@ -33,7 +33,7 @@ public class User {
 	}
 
 	/**
-	 * Creates a user from given informations. Used when id is known.
+	 * Creates a user with his id.
 	 * 
 	 * @param n
 	 *            user's name
