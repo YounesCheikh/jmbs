@@ -1,9 +1,11 @@
-package Server;
+package jmbs.server;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+
+import jmbs.common.*;
 
 public class UserDAO extends DAO {
 
@@ -64,7 +66,7 @@ public class UserDAO extends DAO {
 
 	// TODO create a method which will get the users teams
 	/**
-	 * Returns all t ifhe projects a user is involved in.
+	 * Returns all the projects a user is involved in.
 	 * 
 	 * @return Array of Projects
 	 */
@@ -166,7 +168,8 @@ public class UserDAO extends DAO {
 		try {
 			ret = res.getString("email").equals(em);
 		} catch (SQLException e) {
-			System.out.println("Invalid user.");
+			System.out.println("Unused email.");
+			ret = false;
 		}
 		return ret;
 	}
@@ -188,5 +191,7 @@ public class UserDAO extends DAO {
 		}
 		return ret;
 	}
+	
+	
 
 }

@@ -1,4 +1,4 @@
-package Server;
+package jmbs.server;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;

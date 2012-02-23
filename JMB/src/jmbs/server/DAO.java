@@ -1,4 +1,4 @@
-package Server;
+package jmbs.server;
 
 import java.sql.Connection;
 import java.sql.ResultSet;

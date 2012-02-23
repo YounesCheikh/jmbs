@@ -1,8 +1,10 @@
-package Server;
+package jmbs.server;
 
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
+
+import jmbs.common.*;
 
 public class test {
 	public static void main(String[] args) throws SQLException {
@@ -19,7 +21,8 @@ public class test {
 		ArrayList<User> user;
 		user = udao.findUsers("user");
 		
-		System.out.println(user);
+		System.out.println(udao.checkPassword(u,"user5pass"));
+		//System.out.println(user);
 		con.close();
 		
 	}

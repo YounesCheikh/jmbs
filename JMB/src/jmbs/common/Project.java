@@ -1,4 +1,4 @@
-package Server;
+package jmbs.common;
 
 import java.util.ArrayList;
 
