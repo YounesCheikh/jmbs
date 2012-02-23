@@ -12,40 +12,91 @@ public class User {
 	private String mail;
 	private int idUser;
 	private int accesslevel = 0;
-	private ArrayList<Project> projects;
+	private ArrayList<Project> projects = null;
+	private ArrayList<User> follows = null;
 
 	/**
-	 * 
-	 * Creates a user from given informations. Used to create a non existing
-	 * user: A User which does not exists in the db.<br>
-	 * This method should be used to create a user before registering him in the
-	 * database.
+	 * Creates a user from given informations.
 	 * 
 	 * @param n
-	 *            : user's name
+	 *            user's name
 	 * @param f
-	 *            : user's fore name
+	 *            user's fore name
 	 * @param m
-	 *            : user's mail
-	 * @param pr
-	 *            :array of projects
+	 *            user's mail
 	 */
-	public User(String n, String f, String m, ArrayList<Project> pr) {
+	public User(String n, String f, String m) {
 		name = n;
 		fname = f;
 		mail = m;
 		idUser = 0;
-		projects = pr;
 	}
 
-	public User(String n, String f, String m, int id, ArrayList<Project> pr) {
+	/**
+	 * Creates a user from given informations. Used when id is known.
+	 * 
+	 * @param n
+	 *            user's name
+	 * @param f
+	 *            user's fore name
+	 * @param m
+	 *            user's mail
+	 * @param id
+	 *            user's id
+	 */
+	public User(String n, String f, String m, int id) {
 		name = n;
 		fname = f;
 		mail = m;
 		idUser = id;
-		projects = pr;
 	}
 
+	/**
+	 * Returns the current projects of the user.
+	 * 
+	 * @return ArrayList containing all the users projects.
+	 */
+	public ArrayList<Project> getProjects() {
+		return this.projects;
+	}
+
+	/**
+	 * Sets the current projects of the user.
+	 * 
+	 * @param pr
+	 *            ArrayList of projects
+	 */
+	public void setProjects(ArrayList<Project> pr) {
+		this.projects = pr;
+	}
+
+	/**
+	 * Returns the current user's follows list.
+	 * 
+	 * @return ArrayList containing all the users that this user follows
+	 */
+	public ArrayList<User> getFollows() {
+		return follows;
+	}
+
+	/**
+	 * Sets the current user's follows list.
+	 * 
+	 * @param f ArrayList of users
+	 */
+	public void setFollows(ArrayList<User> f) {
+		this.follows = f;
+	}
+
+	/**
+	 * Says if the user exists in the database.
+	 * 
+	 * @return true - if the user is registered in the database.
+	 */
+	public boolean exists() {
+		return (this.idUser != 0);
+	}
+	
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -57,7 +108,10 @@ public class User {
 	}
 
 	/*
-	 * (non-Javadoc)
+	 * (non-Javadoc) 
+	 * 2 users are not even comparable if they have no id given by
+	 * the DB. If one of the 2 users have a id equal to 0, result will be false
+	 * anyways.
 	 * 
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
@@ -70,17 +124,9 @@ public class User {
 		if (getClass() != obj.getClass())
 			return false;
 		User other = (User) obj;
-		if (idUser != other.idUser)
+		if (idUser != other.idUser || idUser == 0 || other.idUser == 0)
 			return false;
 		return true;
-	}
-
-	protected ArrayList<Project> getProjects() {
-		return this.projects;
-	}
-	
-	public boolean exists(){
-		return (this.idUser!=0);
 	}
 
 }
