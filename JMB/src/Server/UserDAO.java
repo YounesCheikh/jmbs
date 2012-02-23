@@ -17,7 +17,7 @@ public class UserDAO extends DAO {
 	 * @param userid
 	 *            database id of the user u want to find.
 	 */
-	protected User getUser(int userid) {
+	public User getUser(int userid) {
 
 		User u = null;
 		ResultSet res = send("SELECT * FROM users WHERE iduser=" + userid + ";");
@@ -43,7 +43,7 @@ public class UserDAO extends DAO {
 	 * @param em
 	 *            email of the user.
 	 */
-	protected User getUser(String em) {
+	public User getUser(String em) {
 		User u = null;
 		int userid = 0;
 		ResultSet res = send("SELECT * FROM users WHERE email='" + em + "';");
@@ -64,7 +64,7 @@ public class UserDAO extends DAO {
 
 	// TODO create a method which will get the users teams
 	/**
-	 * Returns all the projects a user is involved in.
+	 * Returns all t ifhe projects a user is involved in.
 	 * 
 	 * @return Array of Projects
 	 */
@@ -100,7 +100,7 @@ public class UserDAO extends DAO {
 	 *            part of the searched name.
 	 * @return Array of User
 	 */
-	protected ArrayList<User> findUsers(String uName) {
+	public ArrayList<User> findUsers(String uName) {
 		ArrayList<User> u = new ArrayList<User>();
 		int userid = 0;
 		ResultSet res = send("SELECT * FROM users WHERE name LIKE '%" + uName + "%';");
@@ -127,6 +127,28 @@ public class UserDAO extends DAO {
 		}
 
 		return u;
+	}
+
+	/**
+	 * Check if the password matches with the db one.
+	 * 
+	 * @param u
+	 *            User
+	 * @param pass
+	 *            String containing password
+	 * @return true - if the password matches
+	 */
+	public boolean checkPassword(User u, String pass) {
+		boolean ret = false;
+		ResultSet res = send("SELECT pass FROM users WHERE iduser ='" + u.getIdUser() + "';");
+
+		try {
+			ret = res.getString("pass").equals(pass);
+		} catch (SQLException e) {
+			System.out.println("Invalid user.");
+		}
+
+		return ret;
 	}
 
 }
