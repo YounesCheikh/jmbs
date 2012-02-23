@@ -93,7 +93,6 @@ public class UserDAO extends DAO {
 	}
 
 	// TODO add an option to list Users by second names...
-	// TODO change the method to be string research compatible/..
 	/**
 	 * Find all users which names are containing uName.
 	 * 
