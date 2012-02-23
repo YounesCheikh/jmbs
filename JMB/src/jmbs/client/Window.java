@@ -11,14 +11,17 @@ public class Window extends JFrame {
 
 	public Window() {
 		this.setTitle("Create new user");
-		this.setSize(300, 340);
+		this.setSize(600, 400);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setLocationRelativeTo(null);
 
 		// Le conteneur principal
-		ConnectionPanel content = new ConnectionPanel();
+		//ConnectionPanel content = new ConnectionPanel();
+		//PrintMSGS pmsg = new PrintMSGS();
 		// On ajoute le conteneur
-		this.setContentPane(content);
-		this.setVisible(true);
+		//content.setPreferredSize(300,300);
+		//this.setContentPane(content);
+		//this.setContentPane(pmsg);
+		//this.setVisible(true);
 	}
 }
