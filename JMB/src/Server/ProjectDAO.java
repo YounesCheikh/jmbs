@@ -22,11 +22,11 @@ public class ProjectDAO extends DAO {
 		int userid = 0;
 		try {
 			userid = res.getInt("iduser");
-			u.add(new User(res.getString("name"), res.getString("forename"), res.getString("email"), res.getInt("accesslevel"), res.getString("pass"), userid, null));
+			u.add(new User(res.getString("name"), res.getString("forename"), res.getString("email"), userid));
 			while (!res.isLast()) {
 				res.next();
 				userid = res.getInt("iduser");
-				u.add(new User(res.getString("name"), res.getString("forename"), res.getString("email"), res.getInt("accesslevel"), res.getString("pass"), userid, null));
+				u.add(new User(res.getString("name"), res.getString("forename"), res.getString("email"), userid));
 			}
 
 		} catch (SQLException e) {
