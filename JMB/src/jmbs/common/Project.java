@@ -30,8 +30,6 @@ public class Project {
 	 * 
 	 * @param n
 	 *            name of the project
-	 * @param id
-	 *            project id
 	 */
 	public Project(String n) {
 		name = n;
