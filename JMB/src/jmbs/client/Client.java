@@ -32,7 +32,7 @@ public class Client {
 		//this.setContentPane(pmsg);
 		w.setVisible(true);
 		//pan.setLocation(0, 0);
-		//pan.setBackground(Color.cyan);
+		//wpan.setBackground(Color.cyan);
 		//connectPanel.setPreferredSize(new Dimension(300,400));
 		//connectPanel.setLocation(0,0);
 	}
