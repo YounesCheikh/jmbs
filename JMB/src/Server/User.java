@@ -176,8 +176,9 @@ public class User {
 	}
 
 	/*
-	 * (non-Javadoc) 2 users are not even comparable if they have no id given by
-	 * the DB. If one of the 2 users have a id equal to 0, result will be false
+	 * (non-Javadoc) 
+	 * 2 users are not even comparable if they have no id given by the DB. 
+	 * If one of the 2 users have a id equal to 0, result will be false
 	 * anyways.
 	 * 
 	 * @see java.lang.Object#equals(java.lang.Object)
