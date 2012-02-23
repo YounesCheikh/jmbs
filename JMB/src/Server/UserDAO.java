@@ -68,9 +68,9 @@ public class UserDAO extends DAO {
 	 * 
 	 * @return Array of Projects
 	 */
-	public ArrayList<Project> getProjects(int idUser) {
+	public ArrayList<Project> getProjects(User u) {
 		ArrayList<Project> p = new ArrayList<Project>();
-		ResultSet res = send("SELECT participate.idproject,name FROM participate,project WHERE participate.iduser=" + idUser + " AND participate.idproject=project.idproject;");
+		ResultSet res = send("SELECT participate.idproject,name FROM participate,project WHERE participate.iduser=" + u.getIdUser() + " AND participate.idproject=project.idproject;");
 
 		try {
 			p.add(new Project(res.getString("name"), res.getInt("idproject")));

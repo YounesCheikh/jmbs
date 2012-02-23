@@ -52,57 +52,110 @@ public class User {
 	}
 
 	/**
-	 * Returns the current projects of the user.
-	 * 
-	 * @return ArrayList containing all the users projects.
+	 * @return the name
 	 */
-	public ArrayList<Project> getProjects() {
-		return this.projects;
+	public String getName() {
+		return name;
 	}
 
 	/**
-	 * Sets the current projects of the user.
-	 * 
-	 * @param pr
-	 *            ArrayList of projects
+	 * @param name
+	 *            the name to set
 	 */
-	public void setProjects(ArrayList<Project> pr) {
-		this.projects = pr;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	/**
-	 * Returns the current user's follows list.
-	 * 
-	 * @return ArrayList containing all the users that this user follows
+	 * @return the fname
 	 */
-	public ArrayList<User> getFollows() {
-		return follows;
+	public String getFname() {
+		return fname;
 	}
 
 	/**
-	 * Sets the current user's follows list.
-	 * 
-	 * @param f
-	 *            ArrayList of users
+	 * @param fname
+	 *            the fname to set
 	 */
-	public void setFollows(ArrayList<User> f) {
-		this.follows = f;
+	public void setFname(String fname) {
+		this.fname = fname;
 	}
 
 	/**
-	 * @return the access level
+	 * @return the mail
+	 */
+	public String getMail() {
+		return mail;
+	}
+
+	/**
+	 * @param mail
+	 *            the mail to set
+	 */
+	public void setMail(String mail) {
+		this.mail = mail;
+	}
+
+	/**
+	 * @return the idUser
+	 */
+	public int getIdUser() {
+		return idUser;
+	}
+
+	/**
+	 * @param idUser
+	 *            the idUser to set
+	 */
+	public void setIdUser(int idUser) {
+		this.idUser = idUser;
+	}
+
+	/**
+	 * @return the accesslevel
 	 */
 	public int getAccesslevel() {
 		return accesslevel;
 	}
 
 	/**
-	 * @param al the access level to set
+	 * @param accesslevel
+	 *            the accesslevel to set
 	 */
-	public void setAccesslevel(int al) {
-		this.accesslevel = al;
+	public void setAccesslevel(int accesslevel) {
+		this.accesslevel = accesslevel;
 	}
-	
+
+	/**
+	 * @return the projects
+	 */
+	public ArrayList<Project> getProjects() {
+		return projects;
+	}
+
+	/**
+	 * @param projects
+	 *            the projects to set
+	 */
+	public void setProjects(ArrayList<Project> projects) {
+		this.projects = projects;
+	}
+
+	/**
+	 * @return the follows
+	 */
+	public ArrayList<User> getFollows() {
+		return follows;
+	}
+
+	/**
+	 * @param follows
+	 *            the follows to set
+	 */
+	public void setFollows(ArrayList<User> follows) {
+		this.follows = follows;
+	}
+
 	/**
 	 * Says if the user exists in the database.
 	 * 
@@ -111,8 +164,6 @@ public class User {
 	public boolean exists() {
 		return (this.idUser != 0);
 	}
-	
-
 
 	/*
 	 * (non-Javadoc)
@@ -144,7 +195,5 @@ public class User {
 			return false;
 		return true;
 	}
-
-
 
 }
