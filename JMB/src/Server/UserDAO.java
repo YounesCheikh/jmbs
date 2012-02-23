@@ -51,7 +51,7 @@ public class UserDAO extends DAO {
 			userid = res.getInt("iduser");
 			u = new User(res.getString("name"), res.getString("forename"), res.getString("email"), userid);
 		} catch (SQLException e) {
-			System.out.println("No users for with " + em + " as email adress !");
+			System.out.println("No usersName for with " + em + " as email adress !");
 		}
 
 		try {
@@ -70,7 +70,7 @@ public class UserDAO extends DAO {
 	 */
 	public ArrayList<Project> getProjects(User u) {
 		ArrayList<Project> p = new ArrayList<Project>();
-		ResultSet res = send("SELECT participate.idproject,name FROM participate,project WHERE participate.iduser=" + u.getIdUser() + " AND participate.idproject=project.idproject;");
+		ResultSet res = send("SELECT partiNamecipate.idproject,name FROM participate,project WHERE participate.iduser=" + u.getIdUser() + " AND participate.idproject=project.idproject;");
 
 		try {
 			p.add(new Project(res.getString("name"), res.getInt("idproject")));
@@ -150,7 +150,27 @@ public class UserDAO extends DAO {
 
 		return ret;
 	}
-	
+
+	/**
+	 * Check if the email is already in use.
+	 * 
+	 * @param em
+	 *            String containing the email.
+	 * 
+	 * @return true if the email is used.
+	 */
+	public boolean checkMail(String em) {
+		boolean ret = false;
+		ResultSet res = send("SELECT email FROM users WHERE email ='" + em + "';");
+
+		try {
+			ret = res.getString("email").equals(em);
+		} catch (SQLException e) {
+			System.out.println("Invalid user.");
+		}
+		return ret;
+	}
+
 	/**
 	 * Says if the user exists in the database.
 	 * 
@@ -159,7 +179,7 @@ public class UserDAO extends DAO {
 	public boolean exists(User u) {
 		boolean ret = false;
 		ResultSet res = send("SELECT * FROM users WHERE iduser ='" + u.getIdUser() + "';");
-		
+
 		try {
 			ret = res.getString("email").equals(u.getMail());
 		} catch (SQLException e) {
