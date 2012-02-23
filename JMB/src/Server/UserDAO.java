@@ -17,7 +17,7 @@ public class UserDAO extends DAO {
 	 * @param userid
 	 *            database id of the user u want to find.
 	 */
-	protected User findUser(int userid) {
+	protected User getUser(int userid) {
 
 		User u = null;
 		ResultSet res = send("SELECT * FROM users WHERE iduser=" + userid + ";");
@@ -43,7 +43,7 @@ public class UserDAO extends DAO {
 	 * @param em
 	 *            email of the user.
 	 */
-	protected User findUser(String em) {
+	protected User getUser(String em) {
 		User u = null;
 		int userid = 0;
 		ResultSet res = send("SELECT * FROM users WHERE email='" + em + "';");
