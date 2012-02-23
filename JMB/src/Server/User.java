@@ -82,12 +82,27 @@ public class User {
 	/**
 	 * Sets the current user's follows list.
 	 * 
-	 * @param f ArrayList of users
+	 * @param f
+	 *            ArrayList of users
 	 */
 	public void setFollows(ArrayList<User> f) {
 		this.follows = f;
 	}
 
+	/**
+	 * @return the access level
+	 */
+	public int getAccesslevel() {
+		return accesslevel;
+	}
+
+	/**
+	 * @param al the access level to set
+	 */
+	public void setAccesslevel(int al) {
+		this.accesslevel = al;
+	}
+	
 	/**
 	 * Says if the user exists in the database.
 	 * 
@@ -97,6 +112,8 @@ public class User {
 		return (this.idUser != 0);
 	}
 	
+
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -108,8 +125,7 @@ public class User {
 	}
 
 	/*
-	 * (non-Javadoc) 
-	 * 2 users are not even comparable if they have no id given by
+	 * (non-Javadoc) 2 users are not even comparable if they have no id given by
 	 * the DB. If one of the 2 users have a id equal to 0, result will be false
 	 * anyways.
 	 * 
@@ -128,5 +144,7 @@ public class User {
 			return false;
 		return true;
 	}
+
+
 
 }
