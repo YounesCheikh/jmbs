@@ -24,37 +24,9 @@ public class UserDAO extends DAO {
 
 		try {
 
-			u = new User(res.getString("name"), res.getString("forename"), res.getString("email"), res.getInt("accesslevel"), res.getString("pass"), userid, getProjects(userid));
+			u = new User(res.getString("name"), res.getString("forename"), res.getString("email"), userid);
 		} catch (SQLException e) {
 			System.out.println("No users for id=" + userid + " !");
-		}
-
-		try {
-			res.close();
-		} catch (SQLException e) {
-			System.out.println("Database acess error !\n Unable to close connection !");
-		}
-		return u;
-	}
-
-	/**
-	 * Find a user using his name + forename.
-	 * 
-	 * @param n
-	 *            Name of the user
-	 * @param fn
-	 *            Forename
-	 */
-	protected User findUser(String n, String fn) {
-		User u = null;
-		int userid = 0;
-		ResultSet res = send("SELECT * FROM users WHERE name='" + n + "' AND forename='" + fn + "';");
-
-		try {
-			userid = res.getInt("iduser");
-			u = new User(res.getString("name"), res.getString("forename"), res.getString("email"), res.getInt("accesslevel"), res.getString("pass"), userid, getProjects(userid));
-		} catch (SQLException e) {
-			System.out.println("No users for name=" + n + " and forename=" + fn + " !");
 		}
 
 		try {
@@ -77,7 +49,7 @@ public class UserDAO extends DAO {
 		ResultSet res = send("SELECT * FROM users WHERE email='" + em + "';");
 		try {
 			userid = res.getInt("iduser");
-			u = new User(res.getString("name"), res.getString("forename"), res.getString("email"), res.getInt("accesslevel"), res.getString("pass"), userid, getProjects(userid));
+			u = new User(res.getString("name"), res.getString("forename"), res.getString("email"), userid);
 		} catch (SQLException e) {
 			System.out.println("No users for with " + em + " as email adress !");
 		}
@@ -136,13 +108,13 @@ public class UserDAO extends DAO {
 		try {
 			if (uName.equals(res.getString("name"))) {
 				userid = res.getInt("iduser");
-				u.add(new User(res.getString("name"), res.getString("forename"), res.getString("email"), res.getInt("accesslevel"), res.getString("pass"), userid, getProjects(userid)));
+				u.add(new User(res.getString("name"), res.getString("forename"), res.getString("email"), userid));
 			}
 			while (!res.isLast()) {
 				res.next();
 				if (uName.equals(res.getString("name"))) {
 					userid = res.getInt("iduser");
-					u.add(new User(res.getString("name"), res.getString("forename"), res.getString("email"), res.getInt("accesslevel"), res.getString("pass"), userid, getProjects(userid)));
+					u.add(new User(res.getString("name"), res.getString("forename"), res.getString("email"), userid));
 				}
 			}
 		} catch (SQLException e) {
