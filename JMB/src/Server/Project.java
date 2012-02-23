@@ -9,26 +9,75 @@ import java.util.ArrayList;
 public class Project {
 
 	String name;
-	int idProject = 0;
-	boolean exists;
+	int idProject;
 	ArrayList<User> users;
 
 	/**
+	 * Creates a project knowing the id and the name.
+	 * 
 	 * @param n
 	 *            name of the project
-	 * @param id	
+	 * @param id
 	 *            project id
 	 */
 	public Project(String n, int id) {
-		name=n;
-		idProject=id;
-		exists = true;
+		name = n;
+		idProject = id;
+	}
+
+	/**
+	 * Creates a project knowing the name only.
+	 * 
+	 * @param n
+	 *            name of the project
+	 * @param id
+	 *            project id
+	 */
+	public Project(String n) {
+		name = n;
+		idProject = 0;
 	}
 	
-	public Project(String n) {
-		name=n;
-		idProject=0;
-		exists = false;
+	/**
+	 * @return the name
+	 */
+	public String getName() {
+		return name;
+	}
+
+	/**
+	 * @param name the name to set
+	 */
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	/**
+	 * @return the idProject
+	 */
+	public int getIdProject() {
+		return idProject;
+	}
+
+	/**
+	 * @param idProject the idProject to set
+	 */
+	public void setIdProject(int idProject) {
+		this.idProject = idProject;
+	}
+
+	/**
+	 * @return the users
+	 */
+	public ArrayList<User> getUsers() {
+		return users;
+	}
+
+	/**
+	 * @param users the users to set
+	 */
+	public void setUsers(ArrayList<User> users) {
+		this.users = users;
 	}
 
 	/*
@@ -36,12 +85,16 @@ public class Project {
 	 * 
 	 * @see java.lang.Object#toString()
 	 */
-
 	public String toString() {
 		return this.name;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 2 projects are not even comparable if they have no id given by the DB. 
+	 * If one of the 2 projects have a id equal to 0, result will be false
+	 * anyways.
+	 * 
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override
@@ -53,13 +106,9 @@ public class Project {
 		if (getClass() != obj.getClass())
 			return false;
 		Project other = (Project) obj;
-		if (idProject != other.idProject)
+		if (idProject != other.idProject || idProject == 0 || other.idProject == 0)
 			return false;
 		return true;
 	}
-
-
-
-	
 
 }
