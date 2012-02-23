@@ -10,9 +10,8 @@ public class User {
 	private String name;
 	private String fname;
 	private String mail;
-	private String pass;
 	private int idUser;
-	private int accessLevel;
+	private int accesslevel = 0;
 	private ArrayList<Project> projects;
 
 	/**
@@ -35,23 +34,19 @@ public class User {
 	 * @param pr
 	 *            :array of projects
 	 */
-	public User(String n, String f, String m, int a, String p, ArrayList<Project> pr) {
+	public User(String n, String f, String m, ArrayList<Project> pr) {
 		name = n;
 		fname = f;
 		mail = m;
-		accessLevel = a;
 		idUser = 0;
-		pass = p;
 		projects = pr;
 	}
 
-	public User(String n, String f, String m, int a, String p, int id, ArrayList<Project> pr) {
+	public User(String n, String f, String m, int id, ArrayList<Project> pr) {
 		name = n;
 		fname = f;
 		mail = m;
-		accessLevel = a;
 		idUser = id;
-		pass = p;
 		projects = pr;
 	}
 
