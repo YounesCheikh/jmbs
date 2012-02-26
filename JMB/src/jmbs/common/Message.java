@@ -2,7 +2,7 @@ package jmbs.common;
 
 import java.sql.Date;
 
-public class Messages {
+public class Message {
 
 	private int idMessage;
 	private User owner;
