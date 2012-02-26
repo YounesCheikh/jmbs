@@ -67,7 +67,7 @@ public class User {
 	}
 
 	/**
-	 * @return the fname
+	 * @return the fore name
 	 */
 	public String getFname() {
 		return fname;
@@ -75,14 +75,14 @@ public class User {
 
 	/**
 	 * @param fname
-	 *            the fname to set
+	 *            the fore name to set
 	 */
 	public void setFname(String fname) {
 		this.fname = fname;
 	}
 
 	/**
-	 * @return the mail
+	 * @return the email
 	 */
 	public String getMail() {
 		return mail;
@@ -90,14 +90,14 @@ public class User {
 
 	/**
 	 * @param mail
-	 *            the mail to set
+	 *            the email to set
 	 */
 	public void setMail(String mail) {
 		this.mail = mail;
 	}
 
 	/**
-	 * @return the idUser
+	 * @return the User id
 	 */
 	public int getIdUser() {
 		return idUser;
@@ -105,14 +105,14 @@ public class User {
 
 	/**
 	 * @param idUser
-	 *            the idUser to set
+	 *            the User id to set
 	 */
 	public void setIdUser(int idUser) {
 		this.idUser = idUser;
 	}
 
 	/**
-	 * @return the accesslevel
+	 * @return the access level
 	 */
 	public int getAccesslevel() {
 		return accesslevel;
@@ -120,14 +120,14 @@ public class User {
 
 	/**
 	 * @param accesslevel
-	 *            the accesslevel to set
+	 *            the access level to set
 	 */
 	public void setAccesslevel(int accesslevel) {
 		this.accesslevel = accesslevel;
 	}
 
 	/**
-	 * @return the projects
+	 * @return the projects	// TODO: more advanced equality check
 	 */
 	public ArrayList<Project> getProjects() {
 		return projects;
@@ -142,7 +142,7 @@ public class User {
 	}
 
 	/**
-	 * @return the follows
+	 * @return the followed users
 	 */
 	public ArrayList<User> getFollows() {
 		return follows;
@@ -150,7 +150,7 @@ public class User {
 
 	/**
 	 * @param follows
-	 *            the follows to set
+	 *            the followed users to set
 	 */
 	public void setFollows(ArrayList<User> follows) {
 		this.follows = follows;
@@ -182,6 +182,7 @@ public class User {
 		if (getClass() != obj.getClass())
 			return false;
 		User other = (User) obj;
+		// TODO: more advanced equality check
 		if (idUser != other.idUser || idUser == 0 || other.idUser == 0)
 			return false;
 		return true;

@@ -10,7 +10,7 @@ public class Project {
 
 	String name;
 	int idProject;
-	ArrayList<User> users;
+	ArrayList<User> users = null;
 
 	/**
 	 * Creates a project knowing the id and the name.
@@ -51,7 +51,7 @@ public class Project {
 	}
 
 	/**
-	 * @return the idProject
+	 * @return the Project id
 	 */
 	public int getIdProject() {
 		return idProject;
@@ -104,6 +104,7 @@ public class Project {
 		if (getClass() != obj.getClass())
 			return false;
 		Project other = (Project) obj;
+		// TODO: more advanced equality check
 		if (idProject != other.idProject || idProject == 0 || other.idProject == 0)
 			return false;
 		return true;
