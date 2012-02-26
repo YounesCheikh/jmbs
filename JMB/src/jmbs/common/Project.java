@@ -2,14 +2,27 @@ package jmbs.common;
 
 import java.util.ArrayList;
 
+// TODO: check how it displays on jdoc. Update when the method for transferring objects will be created.
 /**
- * Represents a Project.
+ * Represents a Project
+ * 
+ * It has a String name, an Integer id and an ArrayList of User called users.\n
+ * The array is left at null by default constructor because it would generate chained object creation if not.
+ * (e.g) All the projects of a user are required by the client.\n 
+ * Let n, the number of projects of that user and m the average number of users in a project. Clearly n << m \n
+ * We would have n Projects created (Complexity in terms of database access: n) and n*m Users created which makes
+ * a complexity of n*m >> n². And in most case when a user requests the Projects he won't even take a look at the
+ * users in it. \n
+ * So we choose to set the ArrayList to null by default. You can fill it with external methods like @link {@link jmbs.server.ProjectDAO#getUsers(int) getUsers()} 
+ * for the server part.
+ * 
  * 
  */
 public class Project {
 
 	String name;
-	int idProject;
+	int id;
+	// these attributes are not created by default because they are mostly unused or could trigger unwanted chained db access and object creation
 	ArrayList<User> users = null;
 
 	/**
@@ -21,8 +34,8 @@ public class Project {
 	 *            project id
 	 */
 	public Project(String n, int id) {
-		name = n;
-		idProject = id;
+		this.name = n;
+		this.id = id;
 	}
 
 	/**
@@ -32,8 +45,8 @@ public class Project {
 	 *            name of the project
 	 */
 	public Project(String n) {
-		name = n;
-		idProject = 0;
+		this.name = n;
+		this.id = 0;
 	}
 	
 	/**
@@ -53,15 +66,15 @@ public class Project {
 	/**
 	 * @return the Project id
 	 */
-	public int getIdProject() {
-		return idProject;
+	public int getId() {
+		return id;
 	}
 
 	/**
 	 * @param idProject the idProject to set
 	 */
-	public void setIdProject(int idProject) {
-		this.idProject = idProject;
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	/**
@@ -105,7 +118,7 @@ public class Project {
 			return false;
 		Project other = (Project) obj;
 		// TODO: more advanced equality check
-		if (idProject != other.idProject || idProject == 0 || other.idProject == 0)
+		if (id != other.id || id == 0 || other.id == 0)
 			return false;
 		return true;
 	}

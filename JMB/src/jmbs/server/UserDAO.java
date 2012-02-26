@@ -72,7 +72,7 @@ public class UserDAO extends DAO {
 	 */
 	public ArrayList<Project> getProjects(User u) {
 		ArrayList<Project> p = new ArrayList<Project>();
-		ResultSet res = send("SELECT partiNamecipate.idproject,name FROM participate,project WHERE participate.iduser=" + u.getIdUser() + " AND participate.idproject=project.idproject;");
+		ResultSet res = send("SELECT partiNamecipate.idproject,name FROM participate,project WHERE participate.iduser=" + u.getId() + " AND participate.idproject=project.idproject;");
 
 		try {
 			p.add(new Project(res.getString("name"), res.getInt("idproject")));
@@ -142,7 +142,7 @@ public class UserDAO extends DAO {
 	 */
 	public boolean checkPassword(User u, String pass) {
 		boolean ret = false;
-		ResultSet res = send("SELECT pass FROM users WHERE iduser ='" + u.getIdUser() + "';");
+		ResultSet res = send("SELECT pass FROM users WHERE iduser ='" + u.getId() + "';");
 
 		try {
 			ret = res.getString("pass").equals(pass);
@@ -181,7 +181,7 @@ public class UserDAO extends DAO {
 	 */
 	public boolean exists(User u) {
 		boolean ret = false;
-		ResultSet res = send("SELECT * FROM users WHERE iduser ='" + u.getIdUser() + "';");
+		ResultSet res = send("SELECT * FROM users WHERE iduser ='" + u.getId() + "';");
 
 		try {
 			ret = res.getString("email").equals(u.getMail());

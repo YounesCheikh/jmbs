@@ -2,6 +2,7 @@ package jmbs.common;
 
 import java.util.ArrayList;
 
+// TODO: create jdoc explanations like in jmbs.common.Project 
 /**
  * Represents a user.
  */
@@ -10,13 +11,18 @@ public class User {
 	private String name;
 	private String fname;
 	private String mail;
-	private int idUser;
+	private int id;
+	// these attributes are not created by default because they are mostly
+	// unused or could trigger unwanted chained db access and object creation
 	private int accesslevel = 0;
 	private ArrayList<Project> projects = null;
 	private ArrayList<User> follows = null;
 
 	/**
-	 * Creates a user from given informations.
+	 * Creates a user from given informations. Some attributes are not created
+	 * by default because they are mostly unused or could trigger unwanted
+	 * chained database access and chained object creation. Which would make
+	 * this object to heavy to be transfered in reasonable time.
 	 * 
 	 * @param n
 	 *            user's name
@@ -26,10 +32,10 @@ public class User {
 	 *            user's mail
 	 */
 	public User(String n, String f, String m) {
-		name = n;
-		fname = f;
-		mail = m;
-		idUser = 0;
+		this.name = n;
+		this.fname = f;
+		this.mail = m;
+		this.id = 0;
 	}
 
 	/**
@@ -45,10 +51,10 @@ public class User {
 	 *            user's id
 	 */
 	public User(String n, String f, String m, int id) {
-		name = n;
-		fname = f;
-		mail = m;
-		idUser = id;
+		this.name = n;
+		this.fname = f;
+		this.mail = m;
+		this.id = id;
 	}
 
 	/**
@@ -99,16 +105,16 @@ public class User {
 	/**
 	 * @return the User id
 	 */
-	public int getIdUser() {
-		return idUser;
+	public int getId() {
+		return id;
 	}
 
 	/**
 	 * @param idUser
 	 *            the User id to set
 	 */
-	public void setIdUser(int idUser) {
-		this.idUser = idUser;
+	public void setId(int idUser) {
+		this.id = idUser;
 	}
 
 	/**
@@ -127,7 +133,7 @@ public class User {
 	}
 
 	/**
-	 * @return the projects	// TODO: more advanced equality check
+	 * @return the projects // TODO: more advanced equality check
 	 */
 	public ArrayList<Project> getProjects() {
 		return projects;
@@ -183,7 +189,7 @@ public class User {
 			return false;
 		User other = (User) obj;
 		// TODO: more advanced equality check
-		if (idUser != other.idUser || idUser == 0 || other.idUser == 0)
+		if (id != other.id || id == 0 || other.id == 0)
 			return false;
 		return true;
 	}
