@@ -62,6 +62,7 @@ CREATE TABLE message ( /* Table des messages */
 	content varchar(600),
 	time timestamp, 
 	iduser integer NOT NULL,
+	title varchar(100);
 
 CONSTRAINT pk_message PRIMARY KEY (idmessage),
 CONSTRAINT fk_message_user FOREIGN KEY (iduser) REFERENCES users (iduser)
@@ -75,4 +76,5 @@ CONSTRAINT pk_f PRIMARY KEY (follower,followed),
 CONSTRAINT fk_follower_user FOREIGN KEY (follower) REFERENCES users (iduser), 
 CONSTRAINT fk_followed_user FOREIGN KEY (followed) REFERENCES users (iduser),
 );
+
 
