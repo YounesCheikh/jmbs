@@ -33,6 +33,7 @@ public class ConnectionPanel extends JPanel {
 	
 	public ConnectionPanel() {
 		jtMail = new JTextField();
+		jtMail.setColumns(20);
 		jpfPass = new JPasswordField();
 		//jtMail.setSize(new Dimension(30,30));
 		//jpfPass.setPreferredSize(new Dimension(30,30));
@@ -73,19 +74,27 @@ public class ConnectionPanel extends JPanel {
 		this.add(obj, c);
 	}
 	
-	private boolean verification (String mail, int passwdLength) {
+	private boolean verification (String mail) {
 		boolean correctMail = Pattern.matches("^[_a-z0-9-]+(\\.[_a-z0-9-]+)*@[a-z0-9-]+(\\.[a-z0-9-]+)+$", mail);
-		boolean correctPasswd = (passwdLength > 8);
-		return (correctMail && correctPasswd);
+		return (correctMail);
 	}
 	
+	private boolean verification (int passwdLength) {
+		boolean correctPasswd = (passwdLength > 8);
+		return (correctPasswd);
+	}
 	public class ButtonListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			//UserDTO u = submit(jtName.getText(), jtFName.getText(), jtMail.getText(), new HashPassword(passToString(jpfPass.getPassword())).getHashed());
 			System.out.println("Email: "+jtMail.getText());
 			System.out.println("Password: "+new HashPassword(passToString(jpfPass.getPassword())).getHashed());
-			if (!verification(jtMail.getText(), jpfPass.getPassword().length)) {
-				jStatus.setText("Email or password not valide!");
+			if (!verification(jtMail.getText())) {
+				jStatus.setText("Enter a valide email please!");
+				jStatus.setForeground(Color.red);
+				putElement(0, 3, jStatus);
+			}
+			else if (!verification(jpfPass.getPassword().length)) {
+				jStatus.setText("password less than 8 chars !");
 				jStatus.setForeground(Color.red);
 				putElement(0, 3, jStatus);
 			}

@@ -63,7 +63,10 @@ public class User {
 	public String getName() {
 		return name;
 	}
-
+	
+	public String getFullName() {
+		return (name+" "+fname);
+	}
 	/**
 	 * @param name
 	 *            the name to set
