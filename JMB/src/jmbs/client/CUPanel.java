@@ -77,13 +77,13 @@ public class CUPanel extends JPanel {
 
 	public class ButtonListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			UserDTO u = submit(jtName.getText(), jtFName.getText(), jtMail.getText(), new HashPassword(passToString(jpfPass.getPassword())).getHashed());
+			jmbs.common.User u = submit(jtName.getText(), jtFName.getText(), jtMail.getText(), new HashPassword(passToString(jpfPass.getPassword())).getHashed());
 			System.out.println(u.toString() + new HashPassword(passToString(jpfPass.getPassword())).getHashed());
 			System.out.println(new HashPassword("coucou").getHashed());
 		}
 
-		public UserDTO submit(String name, String fname, String mail, String psw) {
-			return new UserDTO(name, fname, mail, 0, psw, null);
+		public jmbs.common.User submit(String name, String fname, String mail, String psw) {
+			return new jmbs.common.User(name, fname, mail);
 		}
 
 		private String passToString(char[] pass) {
