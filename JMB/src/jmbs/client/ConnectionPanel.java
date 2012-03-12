@@ -86,8 +86,8 @@ public class ConnectionPanel extends JPanel {
 	public class ButtonListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			//UserDTO u = submit(jtName.getText(), jtFName.getText(), jtMail.getText(), new HashPassword(passToString(jpfPass.getPassword())).getHashed());
-			System.out.println("Email: "+jtMail.getText());
-			System.out.println("Password: "+new HashPassword(passToString(jpfPass.getPassword())).getHashed());
+			//System.out.println("Email: "+jtMail.getText());
+			//System.out.println("Password: "+new HashPassword(passToString(jpfPass.getPassword())).getHashed());
 			if (!verification(jtMail.getText())) {
 				jStatus.setText("Enter a valide email please!");
 				jStatus.setForeground(Color.red);
