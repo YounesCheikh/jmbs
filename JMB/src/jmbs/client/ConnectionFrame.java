@@ -1,9 +1,6 @@
 package jmbs.client;
 
-import java.awt.EventQueue;
-
 import javax.swing.JFrame;
-import javax.swing.JInternalFrame;
 
 public class ConnectionFrame extends JFrame {
 

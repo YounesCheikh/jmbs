@@ -112,6 +112,7 @@ public class ConnectionPanel extends JPanel {
 		}
 		*/
 		
+		@SuppressWarnings("unused")
 		private String passToString(char[] pass) {
 			String tmp = "";
 			for (char c : pass) {

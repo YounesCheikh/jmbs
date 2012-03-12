@@ -33,7 +33,6 @@ public class MainClient {
 	private JFrame frame;
 	private JEditorPane updateEditorPane;
 	private JEditorPane viewEditorPane;
-	private ConnectionPanel cp = new ConnectionPanel();
 	/**
 	 * Launch the application.
 	 */
