@@ -23,7 +23,7 @@ public class HashPassword {
 			BigInteger hash = new BigInteger(1, md5.digest());
 			hashword = hash.toString(16);
 		} catch (NoSuchAlgorithmException e) {
-			//e.printStackTrace();
+			e.printStackTrace();
 		}
 		return hashword;
 	}
