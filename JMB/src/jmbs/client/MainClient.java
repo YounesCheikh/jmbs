@@ -27,12 +27,14 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import javax.swing.JTextArea;
+import javax.swing.JTextPane;
 
 public class MainClient {
 
 	private JFrame frame;
-	private JEditorPane updateEditorPane;
 	private JEditorPane viewEditorPane;
+	private JTextPane updateTextPane;
 	/**
 	 * Launch the application.
 	 */
@@ -101,17 +103,15 @@ public class MainClient {
 		updateScrollPane.setViewportBorder(UIManager.getBorder("InsetBorder.aquaVariant"));
 		updatePanel.add(updateScrollPane);
 		
-		updateEditorPane = new JEditorPane();
-		updateEditorPane.setText("Write new update here: ");
-		updateEditorPane.addKeyListener(new KeyAdapter() {
+		updateTextPane = new JTextPane();
+		updateTextPane.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyPressed(KeyEvent e) {
-				if (e.getKeyChar()=='\n') {
+			public void keyTyped(KeyEvent arg0) {
+				if(arg0.getKeyChar()=='\n')
 					sendUpdate();
-				}
 			}
 		});
-		updateScrollPane.setViewportView(updateEditorPane);
+		updateScrollPane.setViewportView(updateTextPane);
 		GroupLayout groupLayout = new GroupLayout(frame.getContentPane());
 		groupLayout.setHorizontalGroup(
 			groupLayout.createParallelGroup(Alignment.TRAILING)
@@ -233,8 +233,8 @@ public class MainClient {
 		int sec = cal.get(Calendar.SECOND);// 0..59
 		String heure = new String();
 		heure+=new Integer(hour24).toString() +":"+ new Integer(min).toString()+":"+new Integer(sec).toString();
-		String status = updateEditorPane.getText().replaceAll("\n", "");
+		String status = updateTextPane.getText().replaceAll("\n", "");
 		viewEditorPane.setText(viewEditorPane.getText()+"\n"+"["+heure+"] "+"Younes: "+status);
-		updateEditorPane.setText("Write new update here: ");
+		updateTextPane.setText("");
 	}
 }
