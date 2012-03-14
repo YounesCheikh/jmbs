@@ -5,7 +5,7 @@ import javax.swing.JFrame;
 public class ConnectionFrame extends JFrame {
 
 	/**
-	 * 
+	 * Display a frame contain the connection panel
 	 */
 	private static final long serialVersionUID = 6941716821811760066L;
 
