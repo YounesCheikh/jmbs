@@ -10,6 +10,9 @@ public class Message {
 	private Date datetime;
 	private String title;
 
+	public Message() {
+		
+	}
 	/**
 	 * Creates a message knowing all informations.
 	 * 
