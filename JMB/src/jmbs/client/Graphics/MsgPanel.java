@@ -1,4 +1,4 @@
-package jmbs.client;
+package jmbs.client.Graphics;
 
 import javax.swing.JPanel;
 import javax.swing.GroupLayout;
@@ -18,6 +18,10 @@ public class MsgPanel extends JPanel {
 	 */
 	private static final long serialVersionUID = 8331996728301748647L;
 	/**
+	 * new panel to show user's profile picture.
+	 */
+	private AvatarPanel imgPanel;
+	/**
 	 * Create the panel.
 	 */
 	public MsgPanel(Message m) {
@@ -25,7 +29,8 @@ public class MsgPanel extends JPanel {
 		//this.setMaximumSize(getMaximumSize());
 		setBorder(UIManager.getBorder("SplitPaneDivider.horizontalGradientVariant"));
 		
-		AvatarPanel imgPanel = new AvatarPanel();
+		imgPanel = new AvatarPanel("avatar.jpg");
+		
 		
 		JPanel txtPanel = new JPanel();
 		GroupLayout groupLayout = new GroupLayout(this);

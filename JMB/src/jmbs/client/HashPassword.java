@@ -5,9 +5,12 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 public class HashPassword {
-
+	
 	String word = null;
-
+	/**
+	 * this class hash a String to Md5 password
+	 * @param password
+	 */
 	public HashPassword(String password) {
 		word = password;
 	}

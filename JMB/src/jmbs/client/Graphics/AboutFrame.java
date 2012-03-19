@@ -1,4 +1,4 @@
-package jmbs.client;
+package jmbs.client.Graphics;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -21,7 +21,10 @@ public class AboutFrame extends JFrame {
 	 * Create the frame.
 	 */
 	public AboutFrame() {
-		setBounds(100, 100, 450, 246);
+		setAlwaysOnTop(true);
+		setResizable(false);
+		setTitle("About JMBS");
+		setBounds(100, 100, 339, 246);
 		
 		JLabel lblHiThis = new JLabel("Hi , this program is blablablablablaal");
 		
@@ -39,20 +42,21 @@ public class AboutFrame extends JFrame {
 		groupLayout.setHorizontalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
 				.addGroup(groupLayout.createSequentialGroup()
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addGroup(groupLayout.createSequentialGroup()
-							.addGap(74)
-							.addComponent(lblHiThis, GroupLayout.PREFERRED_SIZE, 268, GroupLayout.PREFERRED_SIZE))
-						.addGroup(groupLayout.createSequentialGroup()
-							.addGap(131)
-							.addComponent(lblYounesBenjamin))
-						.addGroup(groupLayout.createSequentialGroup()
-							.addGap(111)
-							.addComponent(lblCyounescomBbabiccom))
-						.addGroup(groupLayout.createSequentialGroup()
-							.addGap(165)
-							.addComponent(btnOk)))
-					.addContainerGap(108, Short.MAX_VALUE))
+					.addGap(111)
+					.addComponent(lblYounesBenjamin, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+					.addGap(108))
+				.addGroup(Alignment.TRAILING, groupLayout.createSequentialGroup()
+					.addGap(46)
+					.addComponent(lblHiThis, GroupLayout.DEFAULT_SIZE, 268, Short.MAX_VALUE)
+					.addGap(28))
+				.addGroup(Alignment.TRAILING, groupLayout.createSequentialGroup()
+					.addGap(85)
+					.addComponent(lblCyounescomBbabiccom, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+					.addGap(81))
+				.addGroup(Alignment.TRAILING, groupLayout.createSequentialGroup()
+					.addContainerGap(136, Short.MAX_VALUE)
+					.addComponent(btnOk)
+					.addGap(128))
 		);
 		groupLayout.setVerticalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
@@ -65,7 +69,7 @@ public class AboutFrame extends JFrame {
 					.addComponent(lblCyounescomBbabiccom)
 					.addPreferredGap(ComponentPlacement.UNRELATED)
 					.addComponent(btnOk)
-					.addContainerGap(73, Short.MAX_VALUE))
+					.addContainerGap(19, Short.MAX_VALUE))
 		);
 		getContentPane().setLayout(groupLayout);
 

@@ -1,4 +1,4 @@
-package jmbs.client;
+package jmbs.client.Graphics;
 
 import java.awt.FlowLayout;
 
@@ -16,7 +16,8 @@ import java.awt.event.ActionEvent;
 public class NextVersion extends JDialog {
 
 	/**
-	 * 
+	 * this dialog is temporary , i use it to say to the user that the
+	 * feature which you request is not available for the moment
 	 */
 	private static final long serialVersionUID = 7095502745092240625L;
 	private final JPanel contentPanel = new JPanel();

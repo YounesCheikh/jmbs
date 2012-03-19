@@ -1,4 +1,4 @@
-package jmbs.client;
+package jmbs.client.Graphics;
 
 import javax.swing.JFrame;
 
@@ -13,14 +13,17 @@ public class ConnectionFrame extends JFrame {
 
 	/**
 	 * Create the frame.
+	 * @param MainWindow , need this to display it after a successed connection
 	 */
-	public ConnectionFrame() {
+	public ConnectionFrame(MainWindow w) {
+		setResizable(false);
 		this.setTitle("Connect to JMBS!");
-		this.setSize(300, 240);
-		//this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.setSize(320, 240);
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
 		this.setLocationRelativeTo(null);
 		
-		ConnectionPanel cp = new ConnectionPanel();
+		ConnectionPanel cp = new ConnectionPanel(w,this);
 		this.getContentPane().add(cp);
 		//this.setVisible(true);
 	}

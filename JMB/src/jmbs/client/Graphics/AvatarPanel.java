@@ -1,4 +1,4 @@
-package jmbs.client;
+package jmbs.client.Graphics;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -10,15 +10,16 @@ public class AvatarPanel extends JPanel {
 
 	/**
 	 * a panel to display the profile picture of users!
+	 * this feature is disabled currently.
 	 */
 	private static final long serialVersionUID = -8055653215659767292L;
-
+	private JLabel imgLabel ;
 	/**
 	 * Create the panel.
 	 */
-	public AvatarPanel() {
+	public AvatarPanel(String imgUrl) {
 		
-		JLabel imgLabel = new JLabel(new ImageIcon("avatar.jpg")); 
+		imgLabel = new JLabel(new ImageIcon(imgUrl)); 
 		imgLabel.setBounds(0, 0, 96, 96);
 		
 		GroupLayout gl_imgPanel = new GroupLayout(this);
@@ -32,5 +33,6 @@ public class AvatarPanel extends JPanel {
 		);
 		this.setLayout(gl_imgPanel);
 	}
+	
 
 }

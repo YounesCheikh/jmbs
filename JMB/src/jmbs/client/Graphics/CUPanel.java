@@ -1,4 +1,4 @@
-package jmbs.client;
+package jmbs.client.Graphics;
 
 /*
  * GridBagLayoutDemo.java requires no other files.
@@ -19,9 +19,11 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
+import jmbs.client.HashPassword;
+
 public class CUPanel extends JPanel {
 	/**
-	 * 
+	 * this is not enabled currently
 	 */
 	private static final long serialVersionUID = -1280790436758795330L;
 

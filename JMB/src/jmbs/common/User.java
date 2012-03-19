@@ -7,7 +7,6 @@ import java.util.ArrayList;
  * Represents a user.
  */
 public class User {
-
 	private String name;
 	private String fname;
 	private String mail;
