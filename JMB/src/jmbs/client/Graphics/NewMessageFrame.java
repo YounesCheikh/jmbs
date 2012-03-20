@@ -18,7 +18,12 @@ import java.sql.Date;
 import jmbs.common.Message;
 import jmbs.common.User;
 import java.awt.Color;
+import java.awt.Point;
+
 import javax.swing.border.TitledBorder;
+import java.awt.event.MouseMotionAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseAdapter;
 public class NewMessageFrame extends JFrame {
 	
 	
@@ -30,14 +35,32 @@ public class NewMessageFrame extends JFrame {
 	private JPanel contentPane;
 	private JTextArea textArea;
 	private String newMsgStr;
-
+	private static Point point = new Point();
 	/**
 	 * Create the frame.
 	 */
 	public NewMessageFrame(final TimeLinePanel tlpanel) {
+		
+		addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				point.x = e.getX();
+		        point.y = e.getY();
+			}
+		});
+		
+		addMouseMotionListener(new MouseMotionAdapter() {
+			@Override
+			public void mouseDragged(MouseEvent e) {
+				Point p = getLocation();
+		        setLocation(p.x + e.getX() - point.x, p.y + e.getY() - point.y);
+			}
+		});
+		
 		newMsgStr = new String();
 		setTitle("Write new message");
 		setAlwaysOnTop(true);
+		setUndecorated(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 320, 220);
 		contentPane = new JPanel();
@@ -58,14 +81,19 @@ public class NewMessageFrame extends JFrame {
 			}
 		});
 		
-		JProgressBar progressBar = new JProgressBar();
+		JButton btnCancel = new JButton("Cancel");
+		btnCancel.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				setVisible(false);
+			}
+		});
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
 			gl_contentPane.createParallelGroup(Alignment.TRAILING)
 				.addGroup(gl_contentPane.createSequentialGroup()
 					.addContainerGap()
-					.addComponent(progressBar, GroupLayout.DEFAULT_SIZE, 223, Short.MAX_VALUE)
-					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(btnCancel, GroupLayout.PREFERRED_SIZE, 75, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED, 148, Short.MAX_VALUE)
 					.addComponent(btnSend)
 					.addContainerGap())
 				.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 310, Short.MAX_VALUE)
@@ -75,9 +103,9 @@ public class NewMessageFrame extends JFrame {
 				.addGroup(gl_contentPane.createSequentialGroup()
 					.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 156, GroupLayout.PREFERRED_SIZE)
 					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
-						.addComponent(progressBar, GroupLayout.DEFAULT_SIZE, 23, Short.MAX_VALUE)
-						.addComponent(btnSend, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+						.addComponent(btnSend, GroupLayout.DEFAULT_SIZE, 42, Short.MAX_VALUE)
+						.addComponent(btnCancel, GroupLayout.PREFERRED_SIZE, 42, GroupLayout.PREFERRED_SIZE))
 					.addContainerGap())
 		);
 		
