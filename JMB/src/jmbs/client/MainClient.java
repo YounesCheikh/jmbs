@@ -4,7 +4,6 @@ import java.awt.EventQueue;
 
 import jmbs.client.Graphics.ConnectionFrame;
 import jmbs.client.Graphics.MainWindow;
-import jmbs.common.User;
 
 public class MainClient {
 
@@ -16,13 +15,10 @@ public class MainClient {
 	 * The Connection Window
 	 */
 	private static ConnectionFrame cf;
-	private static User currentUser;
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					// In the next time we'ill create this user after connection
-					currentUser = new User("Younes", "CHEIKH", "younes.cheikh@gmail.com", 3);
 					window = new MainWindow();
 					/*
 					 * We start by displaying the connection Frame
