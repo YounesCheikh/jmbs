@@ -2,6 +2,14 @@ package jmbs.common;
 
 import java.sql.Date;
 
+/**
+ * 
+ * @author Benjamin BABIC
+ * 
+ * This class, belongs to the jmbs.common package because it will be used on both sides, client and server.
+ * It represents a message. 
+ *
+ */
 public class Message {
 
 	private int id;
@@ -9,12 +17,9 @@ public class Message {
 	private String message;
 	private Date datetime;
 	private String title;
-
-	public Message() {
-		
-	}
+	
 	/**
-	 * Creates a message knowing all informations.
+	 * Creates a message knowing all informations including the id (must be used to create a message already set in the database).
 	 * 
 	 * @param id
 	 *            (int) message id given by the db
@@ -36,7 +41,7 @@ public class Message {
 	}
 
 	/**
-	 * Creates a message knowing all informations.
+	 * Creates a message knowing all informations but the id.
 	 * 
 	 * @param o
 	 *            (User) Owner of the message
