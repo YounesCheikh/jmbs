@@ -65,14 +65,15 @@ public class UserDAO extends DAO {
 	}
 
 	// TODO create a method which will get the users teams
+
 	/**
 	 * Returns all the projects a user is involved in.
 	 * 
 	 * @return Array of Projects
 	 */
-	public ArrayList<Project> getProjects(User u) {
+	public ArrayList<Project> getProjects(int userId) {
 		ArrayList<Project> p = new ArrayList<Project>();
-		ResultSet res = send("SELECT partiNamecipate.idproject,name FROM participate,project WHERE participate.iduser=" + u.getId() + " AND participate.idproject=project.idproject;");
+		ResultSet res = send("SELECT partiNamecipate.idproject,name FROM participate,project WHERE participate.iduser=" + userId + " AND participate.idproject=project.idproject;");
 
 		try {
 			p.add(new Project(res.getString("name"), res.getInt("idproject")));
@@ -84,7 +85,6 @@ public class UserDAO extends DAO {
 		} catch (SQLException e) {
 			System.out.println("haha Database acess error ! ");
 		}
-
 		try {
 			res.close();
 		} catch (SQLException e) {
@@ -94,7 +94,64 @@ public class UserDAO extends DAO {
 		return p;
 	}
 
-	// TODO add an option to list Users by second names...
+	// TODO: Select the user directly from the database to avoid making an other
+	// request on the db ( getUser )
+	/**
+	 * Returns all the users a user follows
+	 * 
+	 * @return Array of User
+	 */
+	public ArrayList<User> getFollowed(int userId) {
+		ArrayList<User> f = new ArrayList<User>();
+		ResultSet res = send("SELECT followed FROM follows WHERE follower" + userId + ";");
+
+		try {
+			f.add(this.getUser(res.getInt("id")));
+			while (!res.isLast()) {
+				res.next();
+				f.add(this.getUser(res.getInt("id")));
+			}
+
+		} catch (SQLException e) {
+			System.out.println("Database acess error ! ");
+		}
+		try {
+			res.close();
+		} catch (SQLException e) {
+			System.out.println("Database acess error !\n Unable to close connection !");
+		}
+
+		return f;
+	}
+
+	/**
+	 * Returns all the followers of the user
+	 * 
+	 * @return Array of User
+	 */
+	public ArrayList<User> getFollowers(int userId) {
+		ArrayList<User> f = new ArrayList<User>();
+		ResultSet res = send("SELECT follower FROM follows WHERE followed" + userId + ";");
+
+		try {
+			f.add(this.getUser(res.getInt("id")));
+			while (!res.isLast()) {
+				res.next();
+				f.add(this.getUser(res.getInt("id")));
+			}
+
+		} catch (SQLException e) {
+			System.out.println("Database acess error ! ");
+		}
+		try {
+			res.close();
+		} catch (SQLException e) {
+			System.out.println("Database acess error !\n Unable to close connection !");
+		}
+
+		return f;
+	}
+
 	/**
 	 * Find all users which names are containing uName.
 	 * 
@@ -102,12 +159,48 @@ public class UserDAO extends DAO {
 	 *            part of the searched name.
 	 * @return Array of User
 	 */
-	public ArrayList<User> findUsers(String uName) {
+	public ArrayList<User> findUsersByName(String uName) {
 		ArrayList<User> u = new ArrayList<User>();
 		int userid = 0;
 		ResultSet res = send("SELECT * FROM users WHERE name LIKE '%" + uName + "%';");
 		try {
 			if (res.getString("name").contains(uName)) {
+				userid = res.getInt("iduser");
+				u.add(new User(res.getString("name"), res.getString("forename"), res.getString("email"), userid));
+			}
+			while (!res.isLast()) {
+				res.next();
+				if (res.getString("name").contains(uName)) {
+					userid = res.getInt("iduser");
+					u.add(new User(res.getString("name"), res.getString("forename"), res.getString("email"), userid));
+				}
+			}
+		} catch (SQLException e) {
+			System.out.println("No users found with name containing " + uName);
+		}
+
+		try {
+			res.close();
+		} catch (SQLException e) {
+			System.out.println("Database acess error !\n Unable to close connection !");
+		}
+
+		return u;
+	}
+
+	/**
+	 * Find all users which second names are containing uName.
+	 * 
+	 * @param uName
+	 *            part of the searched second name.
+	 * @return Array of User
+	 */
+	public ArrayList<User> findUsersByFName(String uName) {
+		ArrayList<User> u = new ArrayList<User>();
+		int userid = 0;
+		ResultSet res = send("SELECT * FROM users WHERE forename LIKE '%" + uName + "%';");
+		try {
+			if (res.getString("forename").contains(uName)) {
 				userid = res.getInt("iduser");
 				u.add(new User(res.getString("name"), res.getString("forename"), res.getString("email"), userid));
 			}
@@ -191,7 +284,5 @@ public class UserDAO extends DAO {
 		}
 		return ret;
 	}
-	
-	
 
 }
