@@ -20,6 +20,9 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
 import jmbs.client.HashPassword;
+import jmbs.common.User;
+
+
 
 public class CUPanel extends JPanel {
 	/**
@@ -79,13 +82,13 @@ public class CUPanel extends JPanel {
 
 	public class ButtonListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			jmbs.common.User u = submit(jtName.getText(), jtFName.getText(), jtMail.getText(), new HashPassword(passToString(jpfPass.getPassword())).getHashed());
+			User u = submit(jtName.getText(), jtFName.getText(), jtMail.getText(), new HashPassword(passToString(jpfPass.getPassword())).getHashed());
 			System.out.println(u.toString() + new HashPassword(passToString(jpfPass.getPassword())).getHashed());
 			System.out.println(new HashPassword("coucou").getHashed());
 		}
 
-		public jmbs.common.User submit(String name, String fname, String mail, String psw) {
-			return new jmbs.common.User(name, fname, mail);
+		public User submit(String name, String fname, String mail, String psw) {
+			return new User(name, fname, mail);
 		}
 
 		private String passToString(char[] pass) {

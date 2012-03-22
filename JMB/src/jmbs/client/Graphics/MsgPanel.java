@@ -5,11 +5,13 @@ import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
 
-import jmbs.common.Message;
 import javax.swing.JEditorPane;
 import java.awt.Color;
 
 import javax.swing.UIManager;
+
+import jmbs.common.Message;
+
 
 public class MsgPanel extends JPanel {
 

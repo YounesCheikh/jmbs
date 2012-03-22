@@ -1,23 +1,52 @@
+/*
+ * This file is a part of the RMI Plugin for Eclipse tutorials.
+ * Copyright (C) 2002-7 Genady Beryozkin
+ */
 package jmbs.server;
 
+import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
+import java.rmi.server.UnicastRemoteObject;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.ArrayList;
 
-import jmbs.common.Project;
+import jmbs.common.RemoteServer;
 import jmbs.common.User;
 
-public class Requests {
+
+public class Requests extends UnicastRemoteObject implements RemoteServer {
+
+	private String name;
+
+	private static final long serialVersionUID = 5885886202424414094L;
+
+	public Requests(String name) throws RemoteException {
+		this.name = name;
+		try {
+			Registry registry = LocateRegistry.getRegistry();
+			registry.rebind(this.name, this);
+		} catch (RemoteException e) {
+			System.err.println("Something wrong happended on the remote end");
+			e.printStackTrace();
+			System.exit(-1); // can't just return, rmi threads may not exit
+		}
+		System.out.println("The print server is ready");
+	}
+
+	public int somme(int x, int y) throws RemoteException {
+		return x + y;
+	}
 
 	/**
 	 * 
 	 * @param em
-	 *            user's email
+	 *            - user's email
 	 * @param psw
-	 *            user's password
+	 *            - user's password
 	 * @return the user if pass and email match null if not
 	 */
-	public User connectUser(String em, String psw) {
+	public User connectUser(String em, String psw) throws RemoteException{
 		Connection con = new Connect().getConnection();
 		UserDAO udao = new UserDAO(con);
 		User u = udao.getUser(em);
@@ -25,7 +54,8 @@ public class Requests {
 		try {
 			con.close();
 		} catch (SQLException e) {
-			System.out.println("Database access error !\n Unable to close connection !");
+			System.out
+					.println("Database access error !\n Unable to close connection !");
 		}
 
 		if (b)
@@ -33,73 +63,4 @@ public class Requests {
 		return null;
 	}
 
-	/* DECOMENTER CI DESSOUS POUR AJOUTER L'OPTION SUIVANTE: PROGRAMMEUR COTE CLIENT FLEMMARD. */
-	/*public ArrayList<User> getFollowers(User u) {
-		Connection con = new Connect().getConnection();
-		UserDAO udao = new UserDAO(con);
-		ArrayList<User> ua = udao.getFollowers(u.getId());
-
-		return ua;
-
-	}
-
-	public ArrayList<User> getFollowed(User u) {
-		Connection con = new Connect().getConnection();
-		UserDAO udao = new UserDAO(con);
-		ArrayList<User> ua = udao.getFollowed(u.getId());
-
-		return ua;
-	}
-
-	public ArrayList<Project> getProjects(User u) {
-		Connection con = new Connect().getConnection();
-		UserDAO udao = new UserDAO(con);
-		ArrayList<Project> pa = udao.getProjects(u.getId());
-
-		return pa;
-	}
-
-	public ArrayList<User> getUsers(Project p) {
-		Connection con = new Connect().getConnection();
-		ProjectDAO pdao = new ProjectDAO(con);
-		ArrayList<User> ua = pdao.getUsers(p.getId());
-
-		return ua;
-	}
-	*/
-
-	public ArrayList<User> getFollowers(int userId) {
-		Connection con = new Connect().getConnection();
-		UserDAO udao = new UserDAO(con);
-		ArrayList<User> ua = udao.getFollowers(userId);
-
-		return ua;
-
-	}
-
-	public ArrayList<User> getFollowed(int userId) {
-		Connection con = new Connect().getConnection();
-		UserDAO udao = new UserDAO(con);
-		ArrayList<User> ua = udao.getFollowed(userId);
-
-		return ua;
-	}
-
-	public ArrayList<Project> getProjects(int userId) {
-		Connection con = new Connect().getConnection();
-		UserDAO udao = new UserDAO(con);
-		ArrayList<Project> pa = udao.getProjects(userId);
-
-		return pa;
-	}
-
-	public ArrayList<User> getUsers(int projectId) {
-		Connection con = new Connect().getConnection();
-		ProjectDAO pdao = new ProjectDAO(con);
-		ArrayList<User> ua = pdao.getUsers(projectId);
-
-		return ua;
-	}
-
-	
 }

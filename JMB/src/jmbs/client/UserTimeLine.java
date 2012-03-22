@@ -1,8 +1,10 @@
 package jmbs.client;
 
 import java.util.ArrayList;
+
 import jmbs.common.Message;
 import jmbs.common.User;
+
 
 public class UserTimeLine {
 	/**

@@ -5,7 +5,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import jmbs.common.*;
+import jmbs.common.Project;
+import jmbs.common.User;
+
+
 
 public class ProjectDAO extends DAO {
 

@@ -13,10 +13,9 @@ public class User {
 	private int id;
 	// these attributes are not created by default because they are mostly
 	// unused or could trigger unwanted chained db access and object creation
-	private int accesslevel = 0; // unused for now
+	private int accesslevel = 0;
 	private ArrayList<Project> projects = null;
 	private ArrayList<User> follows = null;
-	private ArrayList<User> followers = null;
 
 	/**
 	 * Creates a user from given informations. Some attributes are not created
@@ -63,11 +62,10 @@ public class User {
 	public String getName() {
 		return name;
 	}
-
+	
 	public String getFullName() {
-		return (name + " " + fname);
+		return (name+" "+fname);
 	}
-
 	/**
 	 * @param name
 	 *            the name to set
@@ -166,21 +164,6 @@ public class User {
 		this.follows = follows;
 	}
 
-	/**
-	 * @return the followers
-	 */
-	public ArrayList<User> getFollowers() {
-		return followers;
-	}
-
-	/**
-	 * @param followers
-	 *            the followers to set
-	 */
-	public void setFollowers(ArrayList<User> followers) {
-		this.followers = followers;
-	}
-
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -188,7 +171,7 @@ public class User {
 	 */
 	@Override
 	public String toString() {
-		return "" + name + " " + fname + "\n";
+		return "\nName: " + name + "\nForename: " + fname + "\nEmail: " + mail + "\n";
 	}
 
 	/*

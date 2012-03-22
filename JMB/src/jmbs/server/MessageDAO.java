@@ -6,6 +6,8 @@ import java.sql.SQLException;
 
 import jmbs.common.Message;
 
+
+
 public class MessageDAO extends DAO{
 
 	public MessageDAO(Connection c) {

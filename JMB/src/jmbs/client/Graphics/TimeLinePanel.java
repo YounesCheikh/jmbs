@@ -6,6 +6,7 @@ import java.awt.GridBagLayout;
 import java.sql.Date;
 
 import javax.swing.JPanel;
+
 import jmbs.common.Message;
 import jmbs.common.User;
 
