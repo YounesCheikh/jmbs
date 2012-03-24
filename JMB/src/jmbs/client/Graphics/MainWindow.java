@@ -50,6 +50,7 @@ public class MainWindow {
 		frmJmbsClient.setBounds(100, 100, 365, 600);
 		frmJmbsClient.setMinimumSize(new Dimension(365, 560));
 		frmJmbsClient.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frmJmbsClient.setLocationRelativeTo(null);
 		//frmJmbsClient.setVisible(true);
 		
 		JMenuBar menuBar = new JMenuBar();

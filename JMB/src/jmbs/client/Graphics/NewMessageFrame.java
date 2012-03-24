@@ -44,7 +44,7 @@ public class NewMessageFrame extends JFrame {
 	 * Create the frame.
 	 */
 	public NewMessageFrame(final TimeLinePanel tlpanel) {
-
+		setLocationRelativeTo(null);
 		addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
@@ -80,25 +80,39 @@ public class NewMessageFrame extends JFrame {
 		JButton btnSend = new JButton("Send");
 		btnSend.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				newMsgStr = textArea.getText().replaceAll("'", "\\\\'"); // Replace the single quote with back slash for sql.
 
-				Message m = new Message(new CurrentUser().get(), "", newMsgStr, new Date(
-						new java.util.Date().getTime()));
-				boolean sendSuccessed = false;
-				try {
-					sendSuccessed = new ClientRequests().getConnection()
-							.addMessage(m);
-				} catch (RemoteException e1) {
-					// TODO Auto-generated catch block
-					//e1.printStackTrace();
-					System.out.print("Can't send to server!\n" + e1.getMessage());
-				}
-				if (sendSuccessed) {
-					
-					tlpanel.putMessage(new MsgPanel(new Message(new CurrentUser().get(), "", textArea.getText(), new Date(
-									new java.util.Date().getTime()))));
-					textArea.setText("");
-					setVisible(false);
+				if (textArea.getText().length() > 0) {
+					// Replace
+					// the
+					// single
+					// quote
+					// with
+					// back
+					// slash
+					// for
+					// sql.
+					newMsgStr = textArea.getText().replaceAll("'", "\\\\'");
+					Message m = new Message(new CurrentUser().get(), "",
+							newMsgStr, new Date(new java.util.Date().getTime()));
+					boolean sendSuccessed = false;
+					try {
+						sendSuccessed = new ClientRequests().getConnection()
+								.addMessage(m);
+					} catch (RemoteException e1) {
+						// TODO Auto-generated catch block
+						// e1.printStackTrace();
+						System.out.print("Can't send to server!\n"
+								+ e1.getMessage());
+					}
+					if (sendSuccessed) {
+
+						tlpanel.putMessage(new MsgPanel(new Message(
+								new CurrentUser().get(), "",
+								textArea.getText(), new Date(
+										new java.util.Date().getTime()))));
+						textArea.setText("");
+						setVisible(false);
+					}
 				}
 			}
 		});

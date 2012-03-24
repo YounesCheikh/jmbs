@@ -24,4 +24,5 @@ public interface RemoteServer extends Remote {
 	 
 	 public boolean addMessage(Message m ) throws RemoteException;
 	 
+	 public boolean createUser(User u, String hashedpassword) throws RemoteException;
 }

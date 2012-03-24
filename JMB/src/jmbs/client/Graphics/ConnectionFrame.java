@@ -17,8 +17,9 @@ public class ConnectionFrame extends JFrame {
 	 */
 	public ConnectionFrame(MainWindow w) {
 		setResizable(false);
+		setLocationRelativeTo(null);
 		this.setTitle("Connect to JMBS!");
-		this.setSize(430, 410);
+		this.setSize(430, 430);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		this.setLocationRelativeTo(null);

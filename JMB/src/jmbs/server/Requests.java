@@ -80,10 +80,17 @@ public class Requests extends UnicastRemoteObject implements RemoteServer {
 		retVal = new MessageDAO(new Connect().getConnection()).addMessage(m);
 
 		return retVal;
-		// return false;
-		// new Message(new User("", "", "", 1), "",
-		// "Hi, this is the third msg sent from server for test", new Date(new
-		// java.util.Date().getTime()));
+	}
+
+	public boolean createUser(User u, String hashedpassword)
+			throws RemoteException {
+		boolean retVal = false;
+		Connection con = new Connect().getConnection();
+		UserDAO udao = new UserDAO(con);
+		if (!udao.checkMail(u.getMail())) {
+			retVal = udao.addUser(u, hashedpassword);
+		}
+		return retVal;
 	}
 
 }

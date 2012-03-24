@@ -29,6 +29,8 @@ public class NextVersion extends JDialog {
 	 */
 	public NextVersion() {
 		setBounds(100, 100, 450, 189);
+		setLocationRelativeTo(null);
+		setResizable(false);
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		{
 			lblWeAreVery = new JLabel("We are very very very very very very very very very Sorry!");

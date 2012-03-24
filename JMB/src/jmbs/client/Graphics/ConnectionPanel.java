@@ -24,6 +24,7 @@ import jmbs.client.CurrentUser;
 import jmbs.client.HashPassword;
 import jmbs.common.User;
 import javax.swing.JSeparator;
+import javax.swing.SwingConstants;
 
 public class ConnectionPanel extends JPanel {
 
@@ -34,6 +35,7 @@ public class ConnectionPanel extends JPanel {
 	private JTextField emailTextField;
 	private JPasswordField passwordField;
 	private JLabel respLabel; /* this will be used to say to the user if there is a wrong password or email */
+	private RegisterFrame rframe;
 	/**
 	 * the main window
 	 */
@@ -53,6 +55,7 @@ public class ConnectionPanel extends JPanel {
 	public ConnectionPanel(MainWindow w, ConnectionFrame cf) {
 		this.w = w;
 		this.cf = cf;
+		
 		JLabel lblConnectToJmbs = new JLabel("Connect to JMBS");
 		lblConnectToJmbs.setFont(new Font("Dialog", Font.BOLD, 16));
 		
@@ -88,50 +91,66 @@ public class ConnectionPanel extends JPanel {
 		
 		JSeparator separator = new JSeparator();
 		
-		JLabel lblRegister = new JLabel("<html>don't have account? <a href=\"http://google.com\">register</a> </html>");
+		JLabel lblRegister = new JLabel("don't have account?");
 		
 		ImagePanel logopanel = new ImagePanel("./src/jmbs/client/img/jmbslogo_small.png");
+		
+		JButton btnRegister = new JButton("Register");
+		btnRegister.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				rframe = new RegisterFrame();
+				rframe.setVisible(true);
+			}
+		});
+		btnRegister.setHorizontalAlignment(SwingConstants.LEFT);
+		btnRegister.setForeground(Color.BLUE);
+		btnRegister.setFont(new Font("Lucida Grande", Font.PLAIN, 14));
+		btnRegister.setBorderPainted(false);
 		GroupLayout groupLayout = new GroupLayout(this);
 		groupLayout.setHorizontalGroup(
-			groupLayout.createParallelGroup(Alignment.LEADING)
+			groupLayout.createParallelGroup(Alignment.TRAILING)
 				.addGroup(groupLayout.createSequentialGroup()
 					.addContainerGap()
 					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 						.addGroup(groupLayout.createSequentialGroup()
-							.addComponent(chckbxRememberMe)
-							.addGap(144))
-						.addGroup(groupLayout.createSequentialGroup()
 							.addComponent(lblPassword)
 							.addGap(34)
-							.addComponent(passwordField, GroupLayout.DEFAULT_SIZE, 311, Short.MAX_VALUE)
-							.addContainerGap())
-						.addGroup(groupLayout.createSequentialGroup()
-							.addComponent(lblEmailAdress)
-							.addGap(12)
-							.addComponent(emailTextField, GroupLayout.DEFAULT_SIZE, 311, Short.MAX_VALUE)
+							.addComponent(passwordField, GroupLayout.DEFAULT_SIZE, 314, Short.MAX_VALUE)
 							.addContainerGap())
 						.addGroup(groupLayout.createSequentialGroup()
 							.addGap(146)
-							.addComponent(lblConnectToJmbs, GroupLayout.DEFAULT_SIZE, 144, Short.MAX_VALUE)
+							.addComponent(lblConnectToJmbs, GroupLayout.DEFAULT_SIZE, 147, Short.MAX_VALUE)
 							.addGap(124))))
 				.addGroup(groupLayout.createSequentialGroup()
 					.addGap(81)
-					.addComponent(lblRegister, GroupLayout.DEFAULT_SIZE, 219, Short.MAX_VALUE)
-					.addGap(18)
+					.addComponent(lblRegister)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(btnRegister, GroupLayout.PREFERRED_SIZE, 104, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 					.addComponent(btnConnect)
 					.addContainerGap())
 				.addGroup(groupLayout.createSequentialGroup()
+					.addContainerGap()
+					.addComponent(separator, GroupLayout.DEFAULT_SIZE, 411, Short.MAX_VALUE)
+					.addContainerGap())
+				.addGroup(groupLayout.createSequentialGroup()
+					.addContainerGap()
+					.addComponent(respLabel, GroupLayout.DEFAULT_SIZE, 411, Short.MAX_VALUE)
+					.addContainerGap())
+				.addGroup(groupLayout.createSequentialGroup()
+					.addContainerGap(155, Short.MAX_VALUE)
+					.addComponent(chckbxRememberMe)
+					.addGap(147))
+				.addGroup(groupLayout.createSequentialGroup()
+					.addContainerGap()
+					.addComponent(lblEmailAdress)
+					.addGap(12)
+					.addComponent(emailTextField, GroupLayout.DEFAULT_SIZE, 314, Short.MAX_VALUE)
+					.addContainerGap())
+				.addGroup(Alignment.LEADING, groupLayout.createSequentialGroup()
 					.addGap(161)
-					.addComponent(logopanel, GroupLayout.DEFAULT_SIZE, 115, Short.MAX_VALUE)
+					.addComponent(logopanel, GroupLayout.DEFAULT_SIZE, 118, Short.MAX_VALUE)
 					.addGap(144))
-				.addGroup(groupLayout.createSequentialGroup()
-					.addContainerGap()
-					.addComponent(separator, GroupLayout.DEFAULT_SIZE, 408, Short.MAX_VALUE)
-					.addContainerGap())
-				.addGroup(groupLayout.createSequentialGroup()
-					.addContainerGap()
-					.addComponent(respLabel, GroupLayout.DEFAULT_SIZE, 408, Short.MAX_VALUE)
-					.addContainerGap())
 		);
 		groupLayout.setVerticalGroup(
 			groupLayout.createParallelGroup(Alignment.TRAILING)
@@ -139,22 +158,27 @@ public class ConnectionPanel extends JPanel {
 					.addGap(17)
 					.addComponent(lblConnectToJmbs)
 					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(logopanel, GroupLayout.DEFAULT_SIZE, 107, Short.MAX_VALUE)
-					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(logopanel, GroupLayout.PREFERRED_SIZE, 136, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.UNRELATED)
 					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
 						.addComponent(emailTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addComponent(lblEmailAdress))
-					.addGap(18)
-					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-						.addComponent(passwordField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(lblPassword))
-					.addGap(18)
-					.addComponent(chckbxRememberMe)
-					.addGap(24)
-					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-						.addComponent(btnConnect)
-						.addComponent(lblRegister))
-					.addGap(28)
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addGroup(groupLayout.createSequentialGroup()
+							.addGap(45)
+							.addComponent(chckbxRememberMe)
+							.addPreferredGap(ComponentPlacement.UNRELATED)
+							.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+								.addComponent(btnConnect)
+								.addComponent(lblRegister)
+								.addComponent(btnRegister)))
+						.addGroup(groupLayout.createSequentialGroup()
+							.addPreferredGap(ComponentPlacement.UNRELATED)
+							.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+								.addComponent(lblPassword)
+								.addComponent(passwordField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))))
+					.addGap(31)
 					.addComponent(separator, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(respLabel, GroupLayout.DEFAULT_SIZE, 24, Short.MAX_VALUE)

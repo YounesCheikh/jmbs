@@ -21,6 +21,7 @@ public class AboutFrame extends JFrame {
 	 * Create the frame.
 	 */
 	public AboutFrame() {
+		setLocationRelativeTo(null);
 		setAlwaysOnTop(true);
 		setResizable(false);
 		setTitle("About JMBS");

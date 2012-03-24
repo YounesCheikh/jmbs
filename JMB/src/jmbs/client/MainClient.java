@@ -8,7 +8,6 @@ import java.awt.EventQueue;
 import jmbs.client.Graphics.ConnectionFrame;
 import jmbs.client.Graphics.MainWindow;
 
-
 public class MainClient {
 
 	/**
@@ -29,13 +28,14 @@ public class MainClient {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					
+
 					cf = new ConnectionFrame(window);
+					// Dispaly the connection frame
 					cf.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-				
+
 			}
 		});
 
