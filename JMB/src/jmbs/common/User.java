@@ -1,12 +1,21 @@
 package jmbs.common;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 // TODO: create jdoc explanations like in jmbs.common.Project 
 /**
  * Represents a user.
  */
-public class User {
+public class User implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -379020318303370555L;
+	/**
+	 * 
+	 */
+	
 	private String name;
 	private String fname;
 	private String mail;

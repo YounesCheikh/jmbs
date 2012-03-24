@@ -1,8 +1,14 @@
 package jmbs.common;
 
+import java.io.Serializable;
 import java.sql.Date;
 
-public class Message {
+public class Message implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -7540214815650154118L;
 
 	private int id;
 	private User owner;
@@ -11,8 +17,9 @@ public class Message {
 	private String title;
 
 	public Message() {
-		
+
 	}
+
 	/**
 	 * Creates a message knowing all informations.
 	 * 

@@ -22,7 +22,8 @@ public abstract class DAO {
 			result = state.executeQuery(request);
 			result.absolute(1);
 		} catch (SQLException e){
-			System.out.println( "Unable set the connection to the database!" );
+			if(e.getErrorCode() != 0)
+				System.out.println( "Unable set the connection to the database!");
 			result = null;
 		}
 		return result;

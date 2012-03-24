@@ -15,7 +15,13 @@ import java.rmi.RemoteException;
  * @author Genady Beryozkin, rmi-info@genady.net
  */
 public interface RemoteServer extends Remote {
+	
 	 public int somme(int x, int y) throws RemoteException;
+	 
 	 public User connectUser(String em, String psw) throws RemoteException;
-    
+ 
+	 public String getDemoMethod() throws RemoteException;
+	 
+	 public boolean addMessage(Message m ) throws RemoteException;
+	 
 }

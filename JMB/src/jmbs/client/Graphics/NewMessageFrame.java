@@ -12,6 +12,7 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.ScrollPaneConstants;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.rmi.RemoteException;
 import java.sql.Date;
 
 import java.awt.Color;
@@ -19,13 +20,13 @@ import java.awt.Point;
 
 import javax.swing.border.TitledBorder;
 
-
 import java.awt.event.MouseMotionAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseAdapter;
 
+import jmbs.client.ClientRequests;
+import jmbs.client.CurrentUser;
 import jmbs.common.Message;
-import jmbs.common.User;
 
 public class NewMessageFrame extends JFrame {
 
@@ -79,11 +80,26 @@ public class NewMessageFrame extends JFrame {
 		JButton btnSend = new JButton("Send");
 		btnSend.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				newMsgStr = new String(textArea.getText());
-				textArea.setText("");
-				tlpanel.putMessage(new MsgPanel(new Message(new User("Younes",
-						"CHEIKH", "test@test.com"), "", newMsgStr, new Date(0))));
-				setVisible(false);
+				newMsgStr = textArea.getText().replaceAll("'", "\\\\'"); // Replace the single quote with back slash for sql.
+
+				Message m = new Message(new CurrentUser().get(), "", newMsgStr, new Date(
+						new java.util.Date().getTime()));
+				boolean sendSuccessed = false;
+				try {
+					sendSuccessed = new ClientRequests().getConnection()
+							.addMessage(m);
+				} catch (RemoteException e1) {
+					// TODO Auto-generated catch block
+					//e1.printStackTrace();
+					System.out.print("Can't send to server!\n" + e1.getMessage());
+				}
+				if (sendSuccessed) {
+					
+					tlpanel.putMessage(new MsgPanel(new Message(new CurrentUser().get(), "", textArea.getText(), new Date(
+									new java.util.Date().getTime()))));
+					textArea.setText("");
+					setVisible(false);
+				}
 			}
 		});
 

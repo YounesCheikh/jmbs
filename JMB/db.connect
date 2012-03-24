@@ -1,6 +1,6 @@
 [Configuration]
-Url=jdbc:postgresql://localhost:5432/javaproject
+Url=jdbc:postgresql://localhost:5432/jmbs
 Driver=org.postgresql.Driver
-Login=ben
-Password=12556633
+Login=postgres
+Password=postgres
 

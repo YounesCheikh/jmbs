@@ -10,10 +10,11 @@ import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Date;
 
+import jmbs.common.Message;
 import jmbs.common.RemoteServer;
 import jmbs.common.User;
-
 
 public class Requests extends UnicastRemoteObject implements RemoteServer {
 
@@ -46,10 +47,14 @@ public class Requests extends UnicastRemoteObject implements RemoteServer {
 	 *            - user's password
 	 * @return the user if pass and email match null if not
 	 */
-	public User connectUser(String em, String psw) throws RemoteException{
+	public User connectUser(String em, String psw) throws RemoteException {
+
 		Connection con = new Connect().getConnection();
 		UserDAO udao = new UserDAO(con);
 		User u = udao.getUser(em);
+		if (u == null)
+			return new User(null, null, null, -1);
+
 		boolean b = udao.checkPassword(u, psw);
 		try {
 			con.close();
@@ -60,7 +65,25 @@ public class Requests extends UnicastRemoteObject implements RemoteServer {
 
 		if (b)
 			return u;
-		return null;
+
+		return new User(null, null, null, -2);
+	}
+
+	@Override
+	public String getDemoMethod() throws RemoteException {
+		return new Date().toString();
+	}
+
+	public boolean addMessage(Message m) throws RemoteException {
+		boolean retVal = false;
+
+		retVal = new MessageDAO(new Connect().getConnection()).addMessage(m);
+
+		return retVal;
+		// return false;
+		// new Message(new User("", "", "", 1), "",
+		// "Hi, this is the third msg sent from server for test", new Date(new
+		// java.util.Date().getTime()));
 	}
 
 }

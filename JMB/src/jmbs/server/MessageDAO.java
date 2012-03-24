@@ -34,5 +34,21 @@ public class MessageDAO extends DAO{
 		return m;
 	}
 	
+	
+	public boolean addMessage(Message m) {
+		boolean retVal = false;
+		String query=new String();
+		query+="INSERT INTO message(content, \"time\", iduser) ";
+	    query+="VALUES ('"+m.getMessage()+"', '"+m.getDatetime()+"', "+m.getOwner().getId()+");";
+	    try {
+	    	send(query);
+	    	retVal = true;
+	    } catch (Exception e) {
+	    	System.out.println("Error while adding msg to DB!");
+	    	return false;
+	    }
+	    
+		return retVal;
+	}
 
 }

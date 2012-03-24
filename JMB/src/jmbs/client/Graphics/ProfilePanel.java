@@ -13,6 +13,9 @@ import javax.swing.JTextField;
 import javax.swing.JPasswordField;
 import javax.swing.JButton;
 
+import jmbs.client.CurrentUser;
+import jmbs.common.User;
+
 public class ProfilePanel extends JPanel {
 	/**
 	 * 
@@ -30,6 +33,8 @@ public class ProfilePanel extends JPanel {
 	 * Create the panel.
 	 */
 	public ProfilePanel() {
+		
+		User u = new CurrentUser().get();
 		
 		JLabel lblName = new JLabel("Name:");
 		
@@ -54,13 +59,13 @@ public class ProfilePanel extends JPanel {
 		
 		JLabel lblConfirmPassword = new JLabel("Confirm Password:");
 		
-		nameTextField = new JTextField();
+		nameTextField = new JTextField(u.getName());
 		nameTextField.setColumns(10);
 		
-		fnameTextField = new JTextField();
+		fnameTextField = new JTextField(u.getFname());
 		fnameTextField.setColumns(10);
 		
-		emailTextField = new JTextField();
+		emailTextField = new JTextField(u.getMail());
 		emailTextField.setColumns(10);
 		
 		passwordField = new JPasswordField();

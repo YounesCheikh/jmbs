@@ -22,7 +22,7 @@ public class MsgPanel extends JPanel {
 	/**
 	 * new panel to show user's profile picture.
 	 */
-	private AvatarPanel imgPanel;
+	private ImagePanel imgPanel;
 	/**
 	 * Create the panel.
 	 */
@@ -31,7 +31,7 @@ public class MsgPanel extends JPanel {
 		//this.setMaximumSize(getMaximumSize());
 		setBorder(UIManager.getBorder("SplitPaneDivider.horizontalGradientVariant"));
 		
-		imgPanel = new AvatarPanel("avatar.jpg");
+		imgPanel = new ImagePanel("./src/jmbs/client/img/avatar.jpg",69,69);
 		
 		
 		JPanel txtPanel = new JPanel();
