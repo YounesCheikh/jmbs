@@ -6,8 +6,6 @@ import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
 
 import javax.swing.JEditorPane;
-import java.awt.Color;
-
 import javax.swing.UIManager;
 
 import jmbs.common.Message;
@@ -29,7 +27,7 @@ public class MsgPanel extends JPanel {
 	public MsgPanel(Message m) {
 		//this.setPreferredSize(new Dimension(400,400));
 		//this.setMaximumSize(getMaximumSize());
-		setBorder(UIManager.getBorder("SplitPaneDivider.horizontalGradientVariant"));
+		setBorder(UIManager.getBorder("TitledBorder.aquaVariant"));
 		
 		imgPanel = new ImagePanel("./src/jmbs/client/img/avatar.jpg",69,69);
 		
@@ -64,7 +62,7 @@ public class MsgPanel extends JPanel {
 		msgEditorPane.setText(text);
 		//msgEditorPane.setText("<html><body><strong>"+m.getOwner().getFullName()+"</strong><br />"+"<p>"+m.getMessage()+"</p><br />");
 		//msgEditorPane.setText(msgEditorPane.getText()+"<p >19/03/2012 23:30:12</p>"+"</body></html>");
-		msgEditorPane.setBackground(new Color(245, 245, 245));
+		msgEditorPane.setBackground(UIManager.getColor("Button.background"));
 		GroupLayout gl_txtPanel = new GroupLayout(txtPanel);
 		gl_txtPanel.setHorizontalGroup(
 			gl_txtPanel.createParallelGroup(Alignment.LEADING)

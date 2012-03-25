@@ -1,5 +1,6 @@
 package jmbs.server;
 
+import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -9,8 +10,12 @@ import java.sql.Statement;
  * Contains all the possible ways to set a request to the db.
  * 
  */
-public abstract class DAO {
+public abstract class DAO implements Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -1746724303428703866L;
 	private Connection con;
 
 	protected ResultSet send(String request)

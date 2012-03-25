@@ -25,7 +25,9 @@ public class AboutFrame extends JFrame {
 		setAlwaysOnTop(true);
 		setResizable(false);
 		setTitle("About JMBS");
-		setBounds(100, 100, 339, 246);
+		//setBounds(100, 100, 339, 246);
+		setSize(340, 246);
+		setLocationRelativeTo(new MainWindow().getFrame());
 		
 		JLabel lblHiThis = new JLabel("Hi , this program is blablablablablaal");
 		

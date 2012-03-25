@@ -14,8 +14,8 @@ public class MainServer {
 
 	/**
 	 * @param args
+	 * @throws SQLException
 	 */
-
 	public static void main(String[] args) throws SQLException {
 
 		try {
@@ -25,23 +25,6 @@ public class MainServer {
 			e.printStackTrace();
 		}
 
-		/*
-		 * User u; Connection con = new Connect().getConnection(); UserDAO udao
-		 * = new UserDAO(con);
-		 * 
-		 * 
-		 * u = udao.getUser("younes.cheikh@gmail.com");
-		 * u.setProjects(udao.getProjects(u));
-		 * 
-		 * System.out.println(u); System.out.println(u.getProjects());
-		 * 
-		 * //ArrayList<User> user; //user = udao.findUsers("user");
-		 * 
-		 * System.out.println(udao.checkPassword(u,"user5pass"));
-		 * //System.out.println(user);
-		 * 
-		 * con.close();
-		 */
 	}
 
 }

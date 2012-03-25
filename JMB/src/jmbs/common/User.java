@@ -15,7 +15,7 @@ public class User implements Serializable {
 	/**
 	 * 
 	 */
-	
+
 	private String name;
 	private String fname;
 	private String mail;
@@ -23,8 +23,8 @@ public class User implements Serializable {
 	// these attributes are not created by default because they are mostly
 	// unused or could trigger unwanted chained db access and object creation
 	private int accesslevel = 0;
-	private ArrayList<Project> projects = null;
-	private ArrayList<User> follows = null;
+	private ArrayList<Project> projects = new ArrayList<Project>();
+	private ArrayList<User> follows = new ArrayList<User>();
 
 	/**
 	 * Creates a user from given informations. Some attributes are not created
@@ -71,10 +71,11 @@ public class User implements Serializable {
 	public String getName() {
 		return name;
 	}
-	
+
 	public String getFullName() {
-		return (name+" "+fname);
+		return (name + " " + fname);
 	}
+
 	/**
 	 * @param name
 	 *            the name to set
@@ -180,7 +181,8 @@ public class User implements Serializable {
 	 */
 	@Override
 	public String toString() {
-		return "\nName: " + name + "\nForename: " + fname + "\nEmail: " + mail + "\n";
+		return "\nName: " + name + "\nForename: " + fname + "\nEmail: " + mail
+				+ "\n";
 	}
 
 	/*

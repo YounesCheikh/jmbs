@@ -27,7 +27,8 @@ public class ClientRequests {
 
 			} catch (Exception e) {
 				// Something wrong here
-				e.printStackTrace();
+				//e.printStackTrace();
+				System.out.println("Connection to server impossible\n" + e.getMessage());
 			}
 		}
 	}

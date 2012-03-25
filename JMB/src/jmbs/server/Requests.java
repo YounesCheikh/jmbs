@@ -10,6 +10,7 @@ import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Date;
 
 import jmbs.common.Message;
@@ -32,20 +33,11 @@ public class Requests extends UnicastRemoteObject implements RemoteServer {
 			e.printStackTrace();
 			System.exit(-1); // can't just return, rmi threads may not exit
 		}
-		System.out.println("The print server is ready");
+		System.out.println("The JMBS server is ready");
 	}
 
-	public int somme(int x, int y) throws RemoteException {
-		return x + y;
-	}
-
-	/**
-	 * 
-	 * @param em
-	 *            - user's email
-	 * @param psw
-	 *            - user's password
-	 * @return the user if pass and email match null if not
+	/* (non-Javadoc)
+	 * @see jmbs.common.RemoteServer#connectUser(java.lang.String, java.lang.String)
 	 */
 	public User connectUser(String em, String psw) throws RemoteException {
 
@@ -57,23 +49,25 @@ public class Requests extends UnicastRemoteObject implements RemoteServer {
 
 		boolean b = udao.checkPassword(u, psw);
 		try {
+			if (b) {
+				udao.setFollowingList(u);
+			}
 			con.close();
 		} catch (SQLException e) {
 			System.out
 					.println("Database access error !\n Unable to close connection !");
 		}
 
-		if (b)
+		if (b) {
 			return u;
+		}
 
 		return new User(null, null, null, -2);
 	}
 
-	@Override
-	public String getDemoMethod() throws RemoteException {
-		return new Date().toString();
-	}
-
+	/* (non-Javadoc)
+	 * @see jmbs.common.RemoteServer#addMessage(jmbs.common.Message)
+	 */
 	public boolean addMessage(Message m) throws RemoteException {
 		boolean retVal = false;
 
@@ -82,6 +76,9 @@ public class Requests extends UnicastRemoteObject implements RemoteServer {
 		return retVal;
 	}
 
+	/* (non-Javadoc)
+	 * @see jmbs.common.RemoteServer#createUser(jmbs.common.User, java.lang.String)
+	 */
 	public boolean createUser(User u, String hashedpassword)
 			throws RemoteException {
 		boolean retVal = false;
@@ -91,6 +88,54 @@ public class Requests extends UnicastRemoteObject implements RemoteServer {
 			retVal = udao.addUser(u, hashedpassword);
 		}
 		return retVal;
+	}
+
+	/* (non-Javadoc)
+	 * @see jmbs.common.RemoteServer#searchFor(java.lang.String)
+	 */
+	public ArrayList<User> searchFor(String userName) throws RemoteException {
+		Connection con = new Connect().getConnection();
+		UserDAO udao = new UserDAO(con);
+		return udao.findUsers(userName);
+	}
+
+	/* (non-Javadoc)
+	 * @see jmbs.common.RemoteServer#follow(int, int)
+	 */
+	public boolean follow(int idfollower, int idfollowed)
+			throws RemoteException {
+		Connection con = new Connect().getConnection();
+		UserDAO udao = new UserDAO(con);
+		return udao.follow(idfollower, idfollowed);
+	}
+
+	/* (non-Javadoc)
+	 * @see jmbs.common.RemoteServer#unFollow(int, int)
+	 */
+	public boolean unFollow(int idfollower, int idfollowed)
+			throws RemoteException {
+		Connection con = new Connect().getConnection();
+		UserDAO udao = new UserDAO(con);
+		return udao.unFollow(idfollower, idfollowed);
+	}
+
+	/* (non-Javadoc)
+	 * @see jmbs.common.RemoteServer#getFollowers(jmbs.common.User)
+	 */
+	public ArrayList<User> getFollowers(User u) throws RemoteException {
+		Connection con = new Connect().getConnection();
+		UserDAO udao = new UserDAO(con);
+		return udao.getFollowersList(u);
+	}
+
+	/* (non-Javadoc)
+	 * @see jmbs.common.RemoteServer#getLatestTL(int, int)
+	 */
+	public ArrayList<Message> getLatestTL(int iduser, int idlastmessage)
+			throws RemoteException {
+		Connection con = new Connect().getConnection();
+		MessageDAO mdao = new MessageDAO(con);
+		return mdao.getLatestsMessages(iduser, idlastmessage);
 	}
 
 }

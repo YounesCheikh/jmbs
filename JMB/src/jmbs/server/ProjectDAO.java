@@ -12,6 +12,11 @@ import jmbs.common.User;
 
 public class ProjectDAO extends DAO {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -1449738022340494222L;
+
 	public ProjectDAO(Connection c) {
 		super(c);
 	}

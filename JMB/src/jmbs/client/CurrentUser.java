@@ -37,5 +37,9 @@ public class CurrentUser implements Serializable {
 		CurrentUser.u = u;
 	}
 	
+	public void disconnect() {
+		set(null);
+	}
+	
 	
 }

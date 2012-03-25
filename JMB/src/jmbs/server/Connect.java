@@ -5,8 +5,9 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 /**
- * Class connect using the singleton Configuration to set a connection to the database.
- *
+ * Class connect using the singleton Configuration to set a connection to the
+ * database.
+ * 
  */
 public class Connect {
 
@@ -20,7 +21,8 @@ public class Connect {
 		Configuration conf = Configuration.getInstance();
 		try {
 			Class.forName(conf.getDriver());
-			connection = DriverManager.getConnection(conf.getUrl(), conf.getLogin(), conf.getPassword());
+			connection = DriverManager.getConnection(conf.getUrl(),
+					conf.getLogin(), conf.getPassword());
 		} catch (SQLException e) {
 			System.out.println("Url: " + conf.getUrl());
 			System.out.print(" Unable set the connection!");
@@ -33,6 +35,7 @@ public class Connect {
 	/**
 	 * Returns the Connection.<br>
 	 * NOTE: it must be closed after using.
+	 * 
 	 * @return java.sql.Connection
 	 */
 	public Connection getConnection() {

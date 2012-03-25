@@ -10,6 +10,11 @@ import jmbs.common.User;
 
 public class UserDAO extends DAO {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1371248166710891652L;
+
 	public UserDAO(Connection c) {
 		super(c);
 	}
@@ -154,6 +159,7 @@ public class UserDAO extends DAO {
 	 * @param pass
 	 *            String containing password
 	 * @return true - if the password matches
+	 * 
 	 */
 	public boolean checkPassword(User u, String pass) {
 		boolean ret = false;
@@ -210,6 +216,12 @@ public class UserDAO extends DAO {
 		return ret;
 	}
 	
+	/**
+	 * add new user in the DB
+	 * @param u the new user
+	 * @param pass the hashed password
+	 * @return true if editing DB successed
+	 */
 	public boolean addUser(User u, String pass) {
 		boolean retVal = false;
 		String query=new String();
@@ -225,5 +237,132 @@ public class UserDAO extends DAO {
 	    
 		return retVal;
 	}
+	
+	/**
+	 * user follows other user in DB
+	 * @param idFollower
+	 * @param idFollowed
+	 * @return true if DB was editing DB successed
+	 */
+	public boolean follow(int idFollower, int idFollowed) {
+		boolean retVal = false;
+		String query=new String();
+		/*
+		 * INSERT INTO follows(
+            follower, followed) VALUES (?, ?);
+		 * 
+		 */
+		query+="INSERT INTO follows(follower, followed ) ";
+	    query+="VALUES ("+idFollower+","+idFollowed+");"; 
+	    try {
+	    	send(query);
+	    	retVal = true;
+	    } catch (Exception e) {
+	    	System.out.println("Error while adding User to DB!");
+	    	return false;
+	    }
+	    
+		return retVal;
+	}
+	
+	/**
+	 * user unfollows other user from DB
+	 * @param idFollower
+	 * @param idFollowed
+	 * @return true if DB was editing DB successed
+	 */
+	public boolean unFollow(int idFollower, int idFollowed) {
+		boolean retVal = false;
+		String query=new String();
+		/*
+		 DELETE FROM follows
+ 			WHERE follower=1 and followed=2;
+		 */
+		query+="DELETE FROM follows ";
+	    query+="WHERE follower="+idFollower+" and followed="+idFollowed+" ;"; 
+	    try {
+	    	send(query);
+	    	retVal = true;
+	    } catch (Exception e) {
+	    	System.out.println("Error while adding User to DB!");
+	    	return false;
+	    }
+		return retVal;
+	}
+	
+	/**
+	 * search on the DB for all users who the user follows, and set his follows list
+	 * @param user
+	 * @return list of users
+	 */
+	public ArrayList<User> setFollowingList(User user) {
+		ArrayList<User> u = new ArrayList<User>();
+		String query=new String();
+		query+="SELECT iduser,name,forename,email FROM users,follows WHERE ";
+		query+="follows.follower = "+user.getId()+" and follows.followed=users.iduser;";
+		ResultSet res = send(query);
+		try {
+			u.add(new User(res.getString("name"),
+					res.getString("forename"), res.getString("email"),
+					res.getInt("iduser")));
+			
+			while (!res.isLast()) {
+				res.next();
+				u.add(new User(res.getString("name"),
+						res.getString("forename"), res.getString("email"),
+						res.getInt("iduser")));
+				}
+			user.setFollows(u);
+			System.out.println("<html><b>follows "+u.size()+" persons!:</b></html>");
+			for(User uu: u) {
+				System.out.println(uu.getName());
+			}
+			
+		} catch (SQLException e) {
+			System.out.println("this user doesn't start following yet! ");
+		}
 
+		try {
+			res.close();
+		} catch (SQLException e) {
+			System.out
+					.println("Database acess error !\n Unable to close connection !");
+		}
+		return u;
+	}
+	
+	/**
+	 * this methode search on the DB for all users who follow the user entred as paramter
+	 * @param user
+	 * @return ArrayList<User>
+	 */
+	public ArrayList<User> getFollowersList(User user) {
+		ArrayList<User> u = new ArrayList<User>();
+		String query=new String();
+		query+="SELECT iduser,name,forename,email FROM users,follows WHERE ";
+		query+="follows.followed = "+user.getId()+" and follows.follower=users.iduser;";
+		ResultSet res = send(query);
+		try {
+			u.add(new User(res.getString("name"),
+					res.getString("forename"), res.getString("email"),
+					res.getInt("iduser")));
+			
+			while (!res.isLast()) {
+				res.next();
+				u.add(new User(res.getString("name"),
+						res.getString("forename"), res.getString("email"),
+						res.getInt("iduser")));
+				}
+			System.out.println("has "+u.size()+" followers!");
+		} catch (SQLException e) {
+			System.out.println("this user doesn't start following yet! ");
+		}
+		try {
+			res.close();
+		} catch (SQLException e) {
+			System.out
+					.println("Database acess error !\n Unable to close connection !");
+		}
+		return u;
+	}
 }
