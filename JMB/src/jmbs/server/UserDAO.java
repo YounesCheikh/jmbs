@@ -32,17 +32,15 @@ public class UserDAO extends DAO {
 
 		try {
 
-			u = new User(res.getString("name"), res.getString("forename"),
-					res.getString("email"), userid);
+			u = new User(res.getString("name"), res.getString("forename"), res.getString("email"), userid);
 		} catch (SQLException e) {
-			System.out.println("No users for id=" + userid + " !");
+			System.out.println("No users with id equal to " + userid + " !");
 		}
 
 		try {
 			res.close();
 		} catch (SQLException e) {
-			System.out
-					.println("Database acess error !\n Unable to close connection !");
+			System.err.println("Database acess error !\n Unable to close connection !\n");
 		}
 		return u;
 	}
@@ -59,23 +57,19 @@ public class UserDAO extends DAO {
 		ResultSet res = send("SELECT * FROM users WHERE email='" + em + "';");
 		try {
 			userid = res.getInt("iduser");
-			u = new User(res.getString("name"), res.getString("forename"),
-					res.getString("email"), userid);
+			u = new User(res.getString("name"), res.getString("forename"), res.getString("email"), userid);
 		} catch (SQLException e) {
-			System.out.println("No usersName for with " + em
-					+ " as email adress !");
+			System.err.println("No user with " + em + " as email adress !\n");
 		}
 
 		try {
 			res.close();
 		} catch (SQLException e) {
-			System.out
-					.println("Database acess error !\n Unable to close connection !");
+			System.err.println("Database acess error !\n Unable to close connection !\n");
 		}
 		return u;
 	}
 
-	// TODO create a method which will get the users teams
 	/**
 	 * Returns all the projects a user is involved in.
 	 * 
@@ -83,26 +77,25 @@ public class UserDAO extends DAO {
 	 */
 	public ArrayList<Project> getProjects(User u) {
 		ArrayList<Project> p = new ArrayList<Project>();
-		ResultSet res = send("SELECT partiNamecipate.idproject,name FROM participate,project WHERE participate.iduser="
-				+ u.getId() + " AND participate.idproject=project.idproject;");
+		ResultSet res = send("SELECT partiNamecipate.idproject,name FROM participate,project WHERE participate.iduser=" + u.getId() + " AND participate.idproject=project.idproject;");
 
 		try {
 			p.add(new Project(res.getString("name"), res.getInt("idproject")));
 			while (!res.isLast()) {
 				res.next();
-				p.add(new Project(res.getString("name"), res
-						.getInt("idproject")));
+				p.add(new Project(res.getString("name"), res.getInt("idproject")));
 			}
 
 		} catch (SQLException e) {
-			System.out.println("haha Database acess error ! ");
+			System.err.println("This user has no projects/n ");
+			// TODO determine if this error is due to a wrong user name or a
+			// lack of projects.
 		}
 
 		try {
 			res.close();
 		} catch (SQLException e) {
-			System.out
-					.println("Database acess error !\n Unable to close connection !");
+			System.err.println("Database acess error !\n Unable to close connection !\n");
 		}
 
 		return p;
@@ -119,33 +112,27 @@ public class UserDAO extends DAO {
 	public ArrayList<User> findUsers(String uName) {
 		ArrayList<User> u = new ArrayList<User>();
 		int userid = 0;
-		ResultSet res = send("SELECT * FROM users WHERE name LIKE '%" + uName
-				+ "%';");
+		ResultSet res = send("SELECT * FROM users WHERE name LIKE '%" + uName + "%';");
 		try {
 			if (res.getString("name").contains(uName)) {
 				userid = res.getInt("iduser");
-				u.add(new User(res.getString("name"),
-						res.getString("forename"), res.getString("email"),
-						userid));
+				u.add(new User(res.getString("name"), res.getString("forename"), res.getString("email"), userid));
 			}
 			while (!res.isLast()) {
 				res.next();
 				if (res.getString("name").contains(uName)) {
 					userid = res.getInt("iduser");
-					u.add(new User(res.getString("name"), res
-							.getString("forename"), res.getString("email"),
-							userid));
+					u.add(new User(res.getString("name"), res.getString("forename"), res.getString("email"), userid));
 				}
 			}
 		} catch (SQLException e) {
-			System.out.println("No users found with name containing " + uName);
+			System.err.println("No users found with name containing " + uName + "\n");
 		}
 
 		try {
 			res.close();
 		} catch (SQLException e) {
-			System.out
-					.println("Database acess error !\n Unable to close connection !");
+			System.err.println("Database acess error !\n Unable to close connection !\n");
 		}
 
 		return u;
@@ -163,13 +150,12 @@ public class UserDAO extends DAO {
 	 */
 	public boolean checkPassword(User u, String pass) {
 		boolean ret = false;
-		ResultSet res = send("SELECT pass FROM users WHERE iduser ='"
-				+ u.getId() + "';");
+		ResultSet res = send("SELECT pass FROM users WHERE iduser ='" + u.getId() + "';");
 
 		try {
 			ret = res.getString("pass").equals(pass);
 		} catch (SQLException e) {
-			System.out.println("Invalid user.");
+			System.err.println("Invalid user.\n");
 		}
 
 		return ret;
@@ -185,13 +171,11 @@ public class UserDAO extends DAO {
 	 */
 	public boolean checkMail(String em) {
 		boolean ret = false;
-		ResultSet res = send("SELECT email FROM users WHERE email ='" + em
-				+ "';");
+		ResultSet res = send("SELECT email FROM users WHERE email ='" + em + "';");
 
 		try {
 			ret = res.getString("email").equals(em);
-		} catch (SQLException e) {
-			System.out.println("Unused email.");
+		} catch (SQLException e) { // Unused email
 			ret = false;
 		}
 		return ret;
@@ -204,164 +188,126 @@ public class UserDAO extends DAO {
 	 */
 	public boolean exists(User u) {
 		boolean ret = false;
-		ResultSet res = send("SELECT * FROM users WHERE iduser ='" + u.getId()
-				+ "';");
+		ResultSet res = send("SELECT * FROM users WHERE iduser ='" + u.getId() + "';");
 
 		try {
 			ret = res.getString("email").equals(u.getMail());
-		} catch (SQLException e) {
-			System.out.println("Invalid user.");
+		} catch (SQLException e) { // user does not exist
 			ret = false;
 		}
 		return ret;
 	}
-	
+
 	/**
-	 * add new user in the DB
-	 * @param u the new user
-	 * @param pass the hashed password
-	 * @return true if editing DB successed
+	 * Adds a new user in the Database.
+	 * 
+	 * @param u
+	 *            the new user
+	 * @param pass
+	 *            the hashed password
+	 * @return true if editing DB succeeded
 	 */
 	public boolean addUser(User u, String pass) {
-		boolean retVal = false;
-		String query=new String();
-		query+="INSERT INTO users(name, forename, email, pass ) ";
-	    query+="VALUES ('"+u.getName()+"', '"+u.getFname()+"', '"+u.getMail()+"', '"+pass+"');"; 
-	    try {
-	    	send(query);
-	    	retVal = true;
-	    } catch (Exception e) {
-	    	System.out.println("Error while adding User to DB!");
-	    	return false;
-	    }
-	    
-		return retVal;
+		boolean ret = false;
+		String query = "INSERT INTO users(name, forename, email, pass) VALUES ('" + u.getName() + "', '" + u.getFname() + "', '" + u.getMail() + "', '" + pass + "');";
+		ResultSet res = send(query);
+
+		if (res != null)
+			ret = true;
+
+		return ret;
 	}
-	
+
 	/**
-	 * user follows other user in DB
+	 * Set an user to follow an other user.
+	 * 
 	 * @param idFollower
 	 * @param idFollowed
-	 * @return true if DB was editing DB successed
+	 * @return true if DB was editing DB succeeded
 	 */
 	public boolean follow(int idFollower, int idFollowed) {
-		boolean retVal = false;
-		String query=new String();
-		/*
-		 * INSERT INTO follows(
-            follower, followed) VALUES (?, ?);
-		 * 
-		 */
-		query+="INSERT INTO follows(follower, followed ) ";
-	    query+="VALUES ("+idFollower+","+idFollowed+");"; 
-	    try {
-	    	send(query);
-	    	retVal = true;
-	    } catch (Exception e) {
-	    	System.out.println("Error while adding User to DB!");
-	    	return false;
-	    }
-	    
-		return retVal;
+		boolean ret = false;
+		String query = "INSERT INTO follows(follower, followed ) VALUES (" + idFollower + "," + idFollowed + ");";
+		ResultSet res = send(query);
+
+		if (res != null)
+			ret = true;
+
+		return ret;
 	}
-	
+
 	/**
-	 * user unfollows other user from DB
+	 * Set a user to stop following an other user.
+	 * 
 	 * @param idFollower
 	 * @param idFollowed
-	 * @return true if DB was editing DB successed
+	 * @return true if DB was editing DB succeeded
 	 */
 	public boolean unFollow(int idFollower, int idFollowed) {
-		boolean retVal = false;
-		String query=new String();
-		/*
-		 DELETE FROM follows
- 			WHERE follower=1 and followed=2;
-		 */
-		query+="DELETE FROM follows ";
-	    query+="WHERE follower="+idFollower+" and followed="+idFollowed+" ;"; 
-	    try {
-	    	send(query);
-	    	retVal = true;
-	    } catch (Exception e) {
-	    	System.out.println("Error while adding User to DB!");
-	    	return false;
-	    }
-		return retVal;
+		boolean ret = false;
+		String query = "DELETE FROM follows WHERE follower=" + idFollower + " and followed=" + idFollowed + " ;";
+		ResultSet res = send(query);
+
+		if (res != null)
+			ret = true;
+
+		return ret;
 	}
-	
+
 	/**
-	 * search on the DB for all users who the user follows, and set his follows list
+	 * Returns all the users a user is following
+	 * 
 	 * @param user
 	 * @return list of users
 	 */
-	public ArrayList<User> setFollowingList(User user) {
+	public ArrayList<User> getFollowed(User user) {
 		ArrayList<User> u = new ArrayList<User>();
-		String query=new String();
-		query+="SELECT iduser,name,forename,email FROM users,follows WHERE ";
-		query+="follows.follower = "+user.getId()+" and follows.followed=users.iduser;";
+		String query = "SELECT iduser,name,forename,email FROM users,follows WHERE follows.follower = " + user.getId() + " and follows.followed=users.iduser;";
 		ResultSet res = send(query);
+
 		try {
-			u.add(new User(res.getString("name"),
-					res.getString("forename"), res.getString("email"),
-					res.getInt("iduser")));
-			
+			u.add(new User(res.getString("name"), res.getString("forename"), res.getString("email"), res.getInt("iduser")));
+
 			while (!res.isLast()) {
 				res.next();
-				u.add(new User(res.getString("name"),
-						res.getString("forename"), res.getString("email"),
-						res.getInt("iduser")));
-				}
-			user.setFollows(u);
-			System.out.println("<html><b>follows "+u.size()+" persons!:</b></html>");
-			for(User uu: u) {
-				System.out.println(uu.getName());
+				u.add(new User(res.getString("name"), res.getString("forename"), res.getString("email"), res.getInt("iduser")));
 			}
-			
 		} catch (SQLException e) {
-			System.out.println("this user doesn't start following yet! ");
+			System.err.println(user.getFname() + " does not follow anyone yet! \n");
 		}
 
 		try {
 			res.close();
 		} catch (SQLException e) {
-			System.out
-					.println("Database acess error !\n Unable to close connection !");
+			System.err.println("Database acess error !\n Unable to close connection !\n");
 		}
 		return u;
 	}
-	
+
 	/**
-	 * this methode search on the DB for all users who follow the user entred as paramter
+	 * Returns all the user followers.
+	 * 
 	 * @param user
 	 * @return ArrayList<User>
 	 */
-	public ArrayList<User> getFollowersList(User user) {
+	public ArrayList<User> getFollowers(User user) {
 		ArrayList<User> u = new ArrayList<User>();
-		String query=new String();
-		query+="SELECT iduser,name,forename,email FROM users,follows WHERE ";
-		query+="follows.followed = "+user.getId()+" and follows.follower=users.iduser;";
+		String query = "SELECT iduser,name,forename,email FROM users,follows WHERE follows.followed = " + user.getId() + " and follows.follower=users.iduser;";
 		ResultSet res = send(query);
 		try {
-			u.add(new User(res.getString("name"),
-					res.getString("forename"), res.getString("email"),
-					res.getInt("iduser")));
-			
+			u.add(new User(res.getString("name"), res.getString("forename"), res.getString("email"), res.getInt("iduser")));
+
 			while (!res.isLast()) {
 				res.next();
-				u.add(new User(res.getString("name"),
-						res.getString("forename"), res.getString("email"),
-						res.getInt("iduser")));
-				}
-			System.out.println("has "+u.size()+" followers!");
+				u.add(new User(res.getString("name"), res.getString("forename"), res.getString("email"), res.getInt("iduser")));
+			}
 		} catch (SQLException e) {
-			System.out.println("this user doesn't start following yet! ");
+			System.err.println(user.getFname() + " is not followed by anyone yet! \n");
 		}
 		try {
 			res.close();
 		} catch (SQLException e) {
-			System.out
-					.println("Database acess error !\n Unable to close connection !");
+			System.err.println("Database acess error !\n Unable to close connection !\n");
 		}
 		return u;
 	}
