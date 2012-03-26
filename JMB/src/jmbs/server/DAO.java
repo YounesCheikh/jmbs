@@ -79,6 +79,7 @@ public abstract class DAO implements Serializable {
 		ResultSet res = null;
 		try {
 			res = stmt.executeQuery();
+			res.absolute(1);
 			stmt.close();
 			stmt = null;
 		} catch (SQLException e) {
