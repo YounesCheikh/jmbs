@@ -170,11 +170,11 @@ public class UserDAO extends DAO {
 	 * @return true if the email is used.
 	 */
 	public boolean checkMail(String em) {
-		boolean ret = false;
+		boolean ret = true;
 		ResultSet res = send("SELECT email FROM users WHERE email ='" + em + "';");
 
 		try {
-			ret = res.getString("email").equals(em);
+			res.getString("email");
 		} catch (SQLException e) { // Unused email
 			ret = false;
 		}
