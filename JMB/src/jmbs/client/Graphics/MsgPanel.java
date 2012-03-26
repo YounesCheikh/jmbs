@@ -9,7 +9,6 @@ import javax.swing.JEditorPane;
 import javax.swing.UIManager;
 
 import jmbs.common.Message;
-import java.awt.Color;
 
 
 public class MsgPanel extends JPanel {
