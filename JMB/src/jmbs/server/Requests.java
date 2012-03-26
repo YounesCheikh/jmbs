@@ -92,8 +92,7 @@ public class Requests extends UnicastRemoteObject implements RemoteServer {
 		UserDAO udao = new UserDAO(con);
 		
 		if (!udao.checkMail(u.getMail())) {
-			udao.addUser(u, hashedPassword);
-			ret = true;
+			ret = udao.addUser(u, hashedPassword);
 		}
 		
 		try {
