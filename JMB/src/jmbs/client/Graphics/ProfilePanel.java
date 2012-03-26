@@ -15,6 +15,7 @@ import javax.swing.JButton;
 
 import jmbs.client.CurrentUser;
 import jmbs.common.User;
+import net.miginfocom.swing.MigLayout;
 
 public class ProfilePanel extends JPanel {
 	/**
@@ -59,21 +60,6 @@ public class ProfilePanel extends JPanel {
 		
 		JLabel lblConfirmPassword = new JLabel("Confirm Password:");
 		
-		nameTextField = new JTextField(u.getName());
-		nameTextField.setColumns(10);
-		
-		fnameTextField = new JTextField(u.getFname());
-		fnameTextField.setColumns(10);
-		
-		emailTextField = new JTextField(u.getMail());
-		emailTextField.setColumns(10);
-		
-		passwordField = new JPasswordField();
-		
-		newpasswordField = new JPasswordField();
-		
-		confirmpasswordField = new JPasswordField();
-		
 		JPanel panel = new JPanel();
 		panel.setBackground(Color.GRAY);
 		
@@ -86,113 +72,42 @@ public class ProfilePanel extends JPanel {
 		
 		textField = new JTextField();
 		textField.setColumns(10);
-		GroupLayout groupLayout = new GroupLayout(this);
-		groupLayout.setHorizontalGroup(
-			groupLayout.createParallelGroup(Alignment.TRAILING)
-				.addGroup(groupLayout.createSequentialGroup()
-					.addGap(84)
-					.addComponent(lblPublicInformations)
-					.addContainerGap(50, Short.MAX_VALUE))
-				.addGroup(groupLayout.createSequentialGroup()
-					.addGap(82)
-					.addComponent(lblChangePassword, GroupLayout.PREFERRED_SIZE, 163, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(75, Short.MAX_VALUE))
-				.addGroup(Alignment.LEADING, groupLayout.createSequentialGroup()
-					.addContainerGap()
-					.addComponent(lblOldPassword)
-					.addGap(48)
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING, false)
-						.addComponent(newpasswordField, GroupLayout.PREFERRED_SIZE, 127, GroupLayout.PREFERRED_SIZE)
-						.addComponent(passwordField, GroupLayout.PREFERRED_SIZE, 127, GroupLayout.PREFERRED_SIZE))
-					.addGap(50))
-				.addGroup(Alignment.LEADING, groupLayout.createSequentialGroup()
-					.addContainerGap()
-					.addComponent(lblNewPassword)
-					.addContainerGap(220, Short.MAX_VALUE))
-				.addGroup(Alignment.LEADING, groupLayout.createSequentialGroup()
-					.addGap(122)
-					.addComponent(lblProfilePicture)
-					.addContainerGap(83, Short.MAX_VALUE))
-				.addGroup(Alignment.LEADING, groupLayout.createSequentialGroup()
-					.addGap(9)
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING, false)
-							.addComponent(separator, Alignment.LEADING)
-							.addGroup(Alignment.LEADING, groupLayout.createSequentialGroup()
-								.addPreferredGap(ComponentPlacement.RELATED)
-								.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-									.addComponent(lblName)
-									.addComponent(lblLastName)
-									.addComponent(lblEmailAdress))
-								.addGap(48)
-								.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-									.addComponent(emailTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-									.addComponent(fnameTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-									.addComponent(nameTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))))
-						.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
-							.addGroup(Alignment.LEADING, groupLayout.createSequentialGroup()
-								.addComponent(panel, GroupLayout.PREFERRED_SIZE, 96, GroupLayout.PREFERRED_SIZE)
-								.addPreferredGap(ComponentPlacement.UNRELATED)
-								.addGroup(groupLayout.createParallelGroup(Alignment.LEADING, false)
-									.addComponent(textField)
-									.addComponent(btnUploadNewPhoto, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-							.addGroup(Alignment.LEADING, groupLayout.createParallelGroup(Alignment.TRAILING, false)
-								.addComponent(separator_1, Alignment.LEADING)
-								.addGroup(Alignment.LEADING, groupLayout.createSequentialGroup()
-									.addComponent(lblConfirmPassword)
-									.addGap(18)
-									.addComponent(confirmpasswordField, 128, 128, 128)))))
-					.addContainerGap(20, Short.MAX_VALUE))
-		);
-		groupLayout.setVerticalGroup(
-			groupLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(groupLayout.createSequentialGroup()
-					.addGap(8)
-					.addComponent(lblPublicInformations)
-					.addGap(12)
-					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-						.addComponent(lblName)
-						.addComponent(nameTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-						.addComponent(lblLastName)
-						.addComponent(fnameTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addGap(12)
-					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-						.addComponent(lblEmailAdress)
-						.addComponent(emailTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(separator, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(lblChangePassword)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-						.addComponent(lblOldPassword)
-						.addComponent(passwordField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-						.addComponent(lblNewPassword)
-						.addComponent(newpasswordField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-						.addComponent(lblConfirmPassword)
-						.addComponent(confirmpasswordField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addComponent(separator_1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(lblProfilePicture)
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addGroup(groupLayout.createSequentialGroup()
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(panel, GroupLayout.PREFERRED_SIZE, 101, GroupLayout.PREFERRED_SIZE))
-						.addGroup(groupLayout.createSequentialGroup()
-							.addGap(14)
-							.addComponent(btnUploadNewPhoto)
-							.addPreferredGap(ComponentPlacement.UNRELATED)
-							.addComponent(textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
-					.addContainerGap(9, Short.MAX_VALUE))
-		);
-		setLayout(groupLayout);
+		setLayout(new MigLayout("", "[73px][3px][23px][12px][10px][grow,fill][15px][134px]", "[20px][28px][28px][28px][12px][20px][28px][28px][28px][12px][20px][37px][12px][52px]"));
+		add(lblPublicInformations, "cell 2 0 6 1,alignx left,aligny top");
+		
+		nameTextField = new JTextField(u.getName());
+		nameTextField.setColumns(20);
+		add(nameTextField, "cell 5 1 2 1,growx,aligny top");
+		
+		fnameTextField = new JTextField(u.getFname());
+		fnameTextField.setColumns(10);
+		add(fnameTextField, "cell 5 2 2 1,growx,aligny top");
+		
+		emailTextField = new JTextField(u.getMail());
+		emailTextField.setColumns(10);
+		add(emailTextField, "cell 5 3 2 1,growx,aligny top");
+		add(lblChangePassword, "cell 2 5 6 1,alignx left,aligny top");
+		add(lblOldPassword, "cell 0 6 3 1,alignx left,aligny center");
+		
+		passwordField = new JPasswordField();
+		add(passwordField, "cell 5 6 2 1,growx,aligny top");
+		add(lblNewPassword, "cell 0 7 3 1,alignx left,aligny center");
+		
+		newpasswordField = new JPasswordField();
+		add(newpasswordField, "cell 5 7 2 1,growx,aligny top");
+		
+		confirmpasswordField = new JPasswordField();
+		add(confirmpasswordField, "cell 5 8 2 1,growx,aligny top");
+		add(lblProfilePicture, "cell 4 10 4 1,alignx left,aligny top");
+		add(separator, "cell 0 4 8 1,growx,aligny top");
+		add(lblName, "cell 0 1,alignx left,aligny center");
+		add(lblLastName, "cell 0 2,alignx right,aligny center");
+		add(lblEmailAdress, "cell 0 3 3 1,alignx left,aligny center");
+		add(panel, "cell 0 11 3 3,grow");
+		add(textField, "cell 4 13 3 1,growx,aligny top");
+		add(btnUploadNewPhoto, "cell 4 11 4 1,alignx left,aligny bottom");
+		add(separator_1, "cell 0 9 8 1,growx,aligny top");
+		add(lblConfirmPassword, "cell 0 8 5 1,alignx left,aligny center");
 
 	}
 }

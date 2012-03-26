@@ -4,7 +4,6 @@
  */
 package jmbs.client;
 
-import java.awt.EventQueue;
 import jmbs.client.Graphics.ConnectionFrame;
 import jmbs.client.Graphics.MainWindow;
 
@@ -25,7 +24,7 @@ public class MainClient {
 
 	public static void main(String[] args) {
 
-		EventQueue.invokeLater(new Runnable() {
+		javax.swing.SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 				try {
 

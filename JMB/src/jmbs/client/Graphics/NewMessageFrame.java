@@ -5,10 +5,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JTextArea;
 import javax.swing.JButton;
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
 import javax.swing.JScrollPane;
-import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.ScrollPaneConstants;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -27,6 +24,10 @@ import java.awt.event.MouseAdapter;
 import jmbs.client.ClientRequests;
 import jmbs.client.CurrentUser;
 import jmbs.common.Message;
+import net.miginfocom.swing.MigLayout;
+import javax.swing.JLabel;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class NewMessageFrame extends JFrame {
 
@@ -39,6 +40,7 @@ public class NewMessageFrame extends JFrame {
 	private JTextArea textArea;
 	private String newMsgStr;
 	private static Point point = new Point();
+	private JLabel lblNbchars;
 
 	/**
 	 * Create the frame.
@@ -117,49 +119,33 @@ public class NewMessageFrame extends JFrame {
 			}
 		});
 
-		JButton btnCancel = new JButton("Cancel");
-		btnCancel.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				setVisible(false);
+		textArea = new JTextArea();
+		textArea.setWrapStyleWord(true);
+		textArea.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyTyped(KeyEvent e) {
+				if(textArea.getText().equals("")) lblNbchars.setText("0");
+				else lblNbchars.setText(""+(textArea.getText().length()+1));
+				lblNbchars.updateUI();
 			}
 		});
-		GroupLayout gl_contentPane = new GroupLayout(contentPane);
-		gl_contentPane.setHorizontalGroup(gl_contentPane
-				.createParallelGroup(Alignment.TRAILING)
-				.addGroup(
-						gl_contentPane
-								.createSequentialGroup()
-								.addContainerGap()
-								.addComponent(btnCancel,
-										GroupLayout.PREFERRED_SIZE, 75,
-										GroupLayout.PREFERRED_SIZE)
-								.addPreferredGap(ComponentPlacement.RELATED,
-										148, Short.MAX_VALUE)
-								.addComponent(btnSend).addContainerGap())
-				.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 310,
-						Short.MAX_VALUE));
-		gl_contentPane.setVerticalGroup(gl_contentPane.createParallelGroup(
-				Alignment.TRAILING).addGroup(
-				gl_contentPane
-						.createSequentialGroup()
-						.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE,
-								156, GroupLayout.PREFERRED_SIZE)
-						.addPreferredGap(ComponentPlacement.RELATED)
-						.addGroup(
-								gl_contentPane
-										.createParallelGroup(Alignment.LEADING)
-										.addComponent(btnSend,
-												GroupLayout.DEFAULT_SIZE, 42,
-												Short.MAX_VALUE)
-										.addComponent(btnCancel,
-												GroupLayout.PREFERRED_SIZE, 42,
-												GroupLayout.PREFERRED_SIZE))
-						.addContainerGap()));
-
-		textArea = new JTextArea();
+		textArea.setLineWrap(true);
 		textArea.setBackground(new Color(245, 245, 245));
 		scrollPane.setViewportView(textArea);
-		contentPane.setLayout(gl_contentPane);
+		contentPane.setLayout(new MigLayout("", "[81px][148px][81px]", "[156px][42px]"));
+		
+				JButton btnCancel = new JButton("Cancel");
+				btnCancel.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						setVisible(false);
+					}
+				});
+				
+				lblNbchars = new JLabel(""+(textArea.getText().length()));
+				contentPane.add(lblNbchars, "cell 0 1");
+				contentPane.add(btnCancel, "cell 1 1,alignx right,growy");
+		contentPane.add(btnSend, "cell 2 1,grow");
+		contentPane.add(scrollPane, "cell 0 0 3 1,grow");
 	}
 
 	/**

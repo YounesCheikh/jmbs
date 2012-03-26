@@ -9,6 +9,7 @@ import javax.swing.JEditorPane;
 import javax.swing.UIManager;
 
 import jmbs.common.Message;
+import java.awt.Color;
 
 
 public class MsgPanel extends JPanel {
@@ -25,15 +26,14 @@ public class MsgPanel extends JPanel {
 	 * Create the panel.
 	 */
 	public MsgPanel(Message m) {
-		//this.setPreferredSize(new Dimension(400,400));
-		//this.setMaximumSize(getMaximumSize());
-		//setVisible(true);
+
 		setBorder(UIManager.getBorder("TitledBorder.aquaVariant"));
 		
 		imgPanel = new ImagePanel("./src/jmbs/client/img/avatar.jpg",69,69);
 		
 		
 		JPanel txtPanel = new JPanel();
+		txtPanel.setBackground(UIManager.getColor("Spinner.background"));
 		GroupLayout groupLayout = new GroupLayout(this);
 		groupLayout.setHorizontalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
