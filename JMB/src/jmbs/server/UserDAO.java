@@ -126,13 +126,13 @@ public class UserDAO extends DAO {
 				}
 			}
 		} catch (SQLException e) {
-			System.err.println("No users found with name containing " + uName + "\n");
+			System.err.println("No users found with name containing " + uName);
 		}
 
 		try {
 			res.close();
 		} catch (SQLException e) {
-			System.err.println("Database acess error !\n Unable to close connection !\n");
+			System.err.println("Database acess error !\n Unable to close connection !");
 		}
 
 		return u;
@@ -225,7 +225,7 @@ public class UserDAO extends DAO {
 	 * @param idFollowed
 	 * @return true if DB was editing DB succeeded
 	 */
-	public boolean follow(int idFollower, int idFollowed) {
+	public boolean follows(int idFollower, int idFollowed) {
 		boolean ret = false;
 		String query = "INSERT INTO follows(follower, followed ) VALUES (" + idFollower + "," + idFollowed + ");";
 		ResultSet res = send(query);

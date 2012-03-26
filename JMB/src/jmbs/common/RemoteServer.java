@@ -31,7 +31,7 @@ public interface RemoteServer extends Remote {
 	 * @return true if adding message is successed
 	 * @throws RemoteException
 	 */
-	public boolean addMessage(Message m) throws RemoteException;
+	public int addMessage(Message m) throws RemoteException;
 
 	/**
 	 * Creat new user on DB
@@ -58,7 +58,7 @@ public interface RemoteServer extends Remote {
 	 * @return true if editing on the DB is successed
 	 * @throws RemoteException
 	 */
-	public boolean follow(int idfollower, int idfollowed)
+	public boolean follows(int idfollower, int idfollowed)
 			throws RemoteException;
 
 	/**

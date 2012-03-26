@@ -8,9 +8,7 @@ import java.util.ArrayList;
  * Represents a user.
  */
 public class User implements Serializable {
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = -379020318303370555L;
 	/**
 	 * 
@@ -26,6 +24,12 @@ public class User implements Serializable {
 	private ArrayList<Project> projects = new ArrayList<Project>();
 	private ArrayList<User> follows = new ArrayList<User>();
 
+	
+	public User()
+	{
+		this.id = -1;
+	}
+	
 	/**
 	 * Creates a user from given informations. Some attributes are not created
 	 * by default because they are mostly unused or could trigger unwanted

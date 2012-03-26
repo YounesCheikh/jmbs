@@ -28,7 +28,7 @@ public abstract class DAO implements Serializable {
 			result.absolute(1);
 		} catch (SQLException e){
 			if(e.getErrorCode() != 0)
-				System.out.println( "Unable set the connection to the database!");
+			System.err.println("Unable set the connection to the database!/n");
 			result = null;
 		}
 		return result;

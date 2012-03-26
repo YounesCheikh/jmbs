@@ -14,7 +14,6 @@ public class Message implements Serializable {
 	private User owner;
 	private String message;
 	private Date datetime;
-	private String title;
 
 	public Message() {
 
@@ -34,12 +33,11 @@ public class Message implements Serializable {
 	 * @param t
 	 *            (String) title of the message
 	 */
-	public Message(int id, User o, String t, String m, Date dt) {
+	public Message(int id, User o, String m, Date dt) {
 		this.id = id;
 		this.datetime = dt;
 		this.message = m;
 		this.owner = o;
-		this.title = t;
 	}
 
 	/**
@@ -54,12 +52,11 @@ public class Message implements Serializable {
 	 * @param t
 	 *            (String) title of the message
 	 */
-	public Message(User o, String t, String m, Date dt) {
+	public Message(User o, String m, Date dt) {
 		this.id = 0;
 		this.datetime = dt;
 		this.message = m;
 		this.owner = o;
-		this.title = t;
 	}
 
 	/**
@@ -120,21 +117,6 @@ public class Message implements Serializable {
 	 */
 	public void setDatetime(Date datetime) {
 		this.datetime = datetime;
-	}
-
-	/**
-	 * @return the title
-	 */
-	public String getTitle() {
-		return title;
-	}
-
-	/**
-	 * @param title
-	 *            the title to set
-	 */
-	public void setTitle(String title) {
-		this.title = title;
 	}
 
 }

@@ -1,7 +1,3 @@
-/*
- * This file is a part of the RMI Plugin for Eclipse tutorials.
- * Copyright (C) 2002-7 Genady Beryozkin
- */
 package jmbs.server;
 
 import java.rmi.RemoteException;
@@ -11,7 +7,6 @@ import java.rmi.server.UnicastRemoteObject;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Date;
 
 import jmbs.common.Message;
 import jmbs.common.RemoteServer;
@@ -29,113 +24,174 @@ public class Requests extends UnicastRemoteObject implements RemoteServer {
 			Registry registry = LocateRegistry.getRegistry();
 			registry.rebind(this.name, this);
 		} catch (RemoteException e) {
-			System.err.println("Something wrong happended on the remote end");
+			System.err.println("Unexcepted remote error.");
 			e.printStackTrace();
 			System.exit(-1); // can't just return, rmi threads may not exit
 		}
-		System.out.println("The JMBS server is ready");
+		System.out.println("The JMBS server loaded and ready to use.");
 	}
-
-	/* (non-Javadoc)
-	 * @see jmbs.common.RemoteServer#connectUser(java.lang.String, java.lang.String)
+	
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see jmbs.common.RemoteServer#connectUser(java.lang.String,
+	 * java.lang.String)
 	 */
 	public User connectUser(String em, String psw) throws RemoteException {
 
 		Connection con = new Connect().getConnection();
 		UserDAO udao = new UserDAO(con);
+		User returnUser = new User(); 
 		User u = udao.getUser(em);
-		if (u == null)
-			return new User(null, null, null, -1);
-
-		boolean b = udao.checkPassword(u, psw);
-		try {
-			if (b) {
-				udao.setFollowingList(u);
+		
+		if (u != null){
+			boolean b = udao.checkPassword(u, psw);
+			if (b) { // if password is correct
+			u.setFollows(udao.getFollowed(u)); 
+			returnUser = u;
 			}
+		}
+		
+		try {
 			con.close();
 		} catch (SQLException e) {
-			System.out
-					.println("Database access error !\n Unable to close connection !");
+			System.err.println("Database access error !\n Unable to close connection !");
 		}
 
-		if (b) {
-			return u;
-		}
-
-		return new User(null, null, null, -2);
+		return returnUser;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see jmbs.common.RemoteServer#addMessage(jmbs.common.Message)
 	 */
-	public boolean addMessage(Message m) throws RemoteException {
-		boolean retVal = false;
+	public int addMessage(Message m) throws RemoteException {
+		Connection con = new Connect().getConnection();
+		MessageDAO mdao = new MessageDAO(con);
+		int ret = mdao.addMessage(m);
 
-		retVal = new MessageDAO(new Connect().getConnection()).addMessage(m);
-
-		return retVal;
+		try {
+			con.close();
+		} catch (SQLException e) {
+			System.err.println("Database access error !\n Unable to close connection !");
+		}
+		return ret;
 	}
 
-	/* (non-Javadoc)
-	 * @see jmbs.common.RemoteServer#createUser(jmbs.common.User, java.lang.String)
+	//TODO send a mail and check if used.
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see jmbs.common.RemoteServer#createUser(jmbs.common.User,
+	 * java.lang.String)
 	 */
-	public boolean createUser(User u, String hashedpassword)
-			throws RemoteException {
-		boolean retVal = false;
+	public boolean createUser(User u, String hashedPassword) throws RemoteException {
+		boolean ret = false;
 		Connection con = new Connect().getConnection();
 		UserDAO udao = new UserDAO(con);
+		
 		if (!udao.checkMail(u.getMail())) {
-			retVal = udao.addUser(u, hashedpassword);
+			ret = udao.addUser(u, hashedPassword);
 		}
-		return retVal;
+		
+		try {
+			con.close();
+		} catch (SQLException e) {
+			System.err.println("Database access error !\n Unable to close connection !");
+		}
+		return ret;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see jmbs.common.RemoteServer#searchFor(java.lang.String)
 	 */
 	public ArrayList<User> searchFor(String userName) throws RemoteException {
 		Connection con = new Connect().getConnection();
 		UserDAO udao = new UserDAO(con);
-		return udao.findUsers(userName);
+		ArrayList<User> u = udao.findUsers(userName);
+		
+		try {
+			con.close();
+		} catch (SQLException e) {
+			System.err.println("Database access error !\n Unable to close connection !");
+		}
+		return u;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see jmbs.common.RemoteServer#follow(int, int)
 	 */
-	public boolean follow(int idfollower, int idfollowed)
-			throws RemoteException {
+	public boolean follows(int idfollower, int idfollowed) throws RemoteException {
 		Connection con = new Connect().getConnection();
 		UserDAO udao = new UserDAO(con);
-		return udao.follow(idfollower, idfollowed);
+		boolean rb = udao.follows(idfollower, idfollowed);
+		
+		try {
+			con.close();
+		} catch (SQLException e) {
+			System.err.println("Database access error !\n Unable to close connection !");
+		}
+		return rb;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see jmbs.common.RemoteServer#unFollow(int, int)
 	 */
-	public boolean unFollow(int idfollower, int idfollowed)
-			throws RemoteException {
+	public boolean unFollow(int idfollower, int idfollowed) throws RemoteException {
 		Connection con = new Connect().getConnection();
 		UserDAO udao = new UserDAO(con);
-		return udao.unFollow(idfollower, idfollowed);
+		boolean rb = udao.unFollow(idfollower, idfollowed);
+		
+		try {
+			con.close();
+		} catch (SQLException e) {
+			System.err.println("Database access error !\n Unable to close connection !");
+		}
+		return rb;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see jmbs.common.RemoteServer#getFollowers(jmbs.common.User)
 	 */
 	public ArrayList<User> getFollowers(User u) throws RemoteException {
 		Connection con = new Connect().getConnection();
 		UserDAO udao = new UserDAO(con);
-		return udao.getFollowersList(u);
+		ArrayList<User> ra =udao.getFollowed(u);
+		
+		try {
+			con.close();
+		} catch (SQLException e) {
+			System.err.println("Database access error !\n Unable to close connection !");
+		}
+		return ra;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see jmbs.common.RemoteServer#getLatestTL(int, int)
 	 */
-	public ArrayList<Message> getLatestTL(int iduser, int idlastmessage)
-			throws RemoteException {
+	public ArrayList<Message> getLatestTL(int iduser, int idlastmessage) throws RemoteException {
 		Connection con = new Connect().getConnection();
 		MessageDAO mdao = new MessageDAO(con);
-		return mdao.getLatestsMessages(iduser, idlastmessage);
+		ArrayList<Message> ra = mdao.getMessages(iduser, idlastmessage);
+		
+		try {
+			con.close();
+		} catch (SQLException e) {
+			System.err.println("Database access error !\n Unable to close connection !");
+		}
+		return ra;
+		
 	}
 
 }
