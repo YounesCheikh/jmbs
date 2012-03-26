@@ -76,7 +76,7 @@ public class MessageDAO extends DAO {
 	 * @return true if message m is added successful to the DB
 	 */
 	public int addMessage(Message m) {
-		int messageId = 0;
+		int messageId = -1;
 		String query = "INSERT INTO message(content, \"time\", iduser) VALUES ('" + m.getMessage() + "', '" + m.getDatetime() + "', " + m.getOwner().getId() + ");";
 		ResultSet res = send(query);
 		
