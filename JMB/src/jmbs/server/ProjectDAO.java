@@ -28,8 +28,12 @@ public class ProjectDAO extends DAO {
 	 */
 	public ArrayList<User> getUsers(int id) {
 		ArrayList<User> u = new ArrayList<User>();
-		ResultSet res = send("SELECT participate.name,user.* FROM participate,user WHERE participate.idproject=" + id + " AND user.name=idproject.name;");
 		int userid = 0;
+		
+		set("SELECT participate.name,user.* FROM participate,user WHERE participate.idproject=? AND user.name=idproject.name;");
+		setInt(1, id);
+		ResultSet res = executeQuery();
+
 		try {
 			userid = res.getInt("iduser");
 			u.add(new User(res.getString("name"), res.getString("forename"), res.getString("email"), userid));
@@ -60,8 +64,11 @@ public class ProjectDAO extends DAO {
 	 *            id of the project
 	 */
 	public Project findProject(int id) {
-		ResultSet res = send("SELECT * FROM project WHERE idproject=" + id + ";");
 		Project p = null;
+		
+		set("SELECT * FROM project WHERE idproject=? ;");
+		setInt(1, id);
+		ResultSet res = executeQuery();
 
 		try {
 			p = new Project(res.getString("name"), res.getInt("idproject"));

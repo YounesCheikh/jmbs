@@ -6,7 +6,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import jmbs.common.Message;
-import jmbs.common.User;
 
 public class MessageDAO extends DAO {
 
@@ -25,14 +24,17 @@ public class MessageDAO extends DAO {
 	 */
 	public Message getMessage(int id) {
 		Message m = null;
-		ResultSet res = send("SELECT * FROM message WHERE idmessage=" + id + ";");
+
+		set("SELECT * FROM message WHERE idmessage=?;");
+		setInt(1, id);
+		ResultSet res = executeQuery();
+
 		UserDAO uDAO = new UserDAO(this.getConnection());
 
 		try {
-
 			m = new Message(res.getInt("idmessage"), uDAO.getUser(res.getInt("iduser")), res.getString("content"), res.getDate("time"));
 		} catch (SQLException e) {
-			System.out.println("No messages for id=" + id + " !");
+			System.out.println("No messages for id " + id + " !");
 		}
 		try {
 			res.close();
@@ -42,30 +44,35 @@ public class MessageDAO extends DAO {
 
 		return m;
 	}
-	
+
 	/*
-	 * @return null if there a no message by the user u, else return the message.
+	 * @return null if there a no message by the user u, else return the
+	 * message.
 	 */
 	public Message getLastMessage(int iduser) // TODO javadoc.
 	{
 		Message m = null;
-		ResultSet res = send("SELECT * FROM message WHERE iduser=" + iduser + " ORDER BY idmessage DESC;"); //TODO: test it ! 
+		set("SELECT * FROM message WHERE iduser=? ORDER BY idmessage DESC;");
+		setInt(1, iduser);
+		ResultSet res = executeQuery();
+
+		// TODO: test it !
 		UserDAO uDAO = new UserDAO(this.getConnection());
-		
+
 		try {
 			m = new Message(res.getInt("idmessage"), uDAO.getUser(res.getInt("iduser")), res.getString("content"), res.getDate("time"));
 		} catch (SQLException e) {
-			System.err.println("No messages by " + uDAO.getUser(iduser).getFname() + " !"); // :) 
+			System.err.println("No messages by " + uDAO.getUser(iduser).getFname() + " !"); // :)
 		}
-		
+
 		try {
 			res.close();
 		} catch (SQLException e) {
 			System.err.println("Database acess error !\n Unable to close connection !");
-		}	
-		
+		}
+
 		return m;
-		
+
 	}
 
 	/**
@@ -77,12 +84,15 @@ public class MessageDAO extends DAO {
 	 */
 	public int addMessage(Message m) {
 		int messageId = -1;
-		String query = "INSERT INTO message(content, \"time\", iduser) VALUES ('addslashes(" + m.getMessage() + ")', '" + m.getDatetime() + "', " + m.getOwner().getId() + ");";
-		ResultSet res = send(query);
+		set("INSERT INTO message(content, \"time\", iduser) VALUES (?,?,?);");
+		setString(1, m.getMessage());
+		setDate(2,m.getDatetime());
+		setInt(3,m.getOwner().getId());
+		ResultSet res = executeQuery();
 		
 		if (res != null)
-			messageId = getLastMessage(m.getOwner().getId()).getId(); // id of the last message sent to database by the user. (here, this message's id)
-
+			messageId = getLastMessage(m.getOwner().getId()).getId();
+		// id of the last message sent to database by the user.
 		return messageId;
 	}
 
@@ -94,10 +104,15 @@ public class MessageDAO extends DAO {
 	public ArrayList<Message> getMessages(int iduser, int idlastmessage) {
 		Connection con = new Connect().getConnection();
 		ArrayList<Message> msgList = new ArrayList<Message>();
-		String query = "SELECT idmessage, content, \"time\", iduser FROM message,follows WHERE (((follows.followed = message.iduser AND follows.follower = " + iduser + ") OR message.iduser=" + iduser + ") AND idmessage>" + idlastmessage + ") GROUP BY idmessage ORDER BY idmessage;";
-		ResultSet res = send(query);
-		UserDAO udao = new UserDAO(con);
 		
+		set("INSERT INTO message(content, \"time\", iduser FROM message,follows WHERE (((follows.followed = message.iduser AND follows.follower=?) OR message.iduser=?) AND idmessage>? GROUP BY idmessage ORDER BY idmessage;");
+		setInt(1, iduser);
+		setInt(2,iduser);
+		setInt(3,idlastmessage);
+		ResultSet res = executeQuery();
+		
+		UserDAO udao = new UserDAO(con);
+
 		try {
 			msgList.add(new Message(res.getInt("idmessage"), udao.getUser(res.getInt("iduser")), res.getString("content"), res.getDate("time")));
 			while (!res.isLast()) {

@@ -2,6 +2,8 @@ package jmbs.server;
 
 import java.io.Serializable;
 import java.sql.Connection;
+import java.sql.Date;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -16,7 +18,8 @@ public abstract class DAO implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = -1746724303428703866L;
-	private Connection con;
+	private Connection con = null;
+	PreparedStatement stmt = null;
 
 	protected ResultSet send(String request)
 	{
@@ -33,6 +36,57 @@ public abstract class DAO implements Serializable {
 		}
 		return result;
 	}	
+	
+	protected void set(String request)
+	{
+		try {
+			stmt = con.prepareStatement(request);
+		} catch (SQLException e) {
+			System.err.println("Unable to execute querry: "+ request);
+		
+		}
+	}
+	
+	protected void setString (int index,String s)
+	{
+		try {
+			stmt.setString(index,s);
+		} catch (SQLException e) {
+			System.err.println("Unable to set string: "+ s);
+		}
+	}
+	
+	protected void setInt (int index,int i)
+	{
+		try {
+			stmt.setInt(index, i);
+		} catch (SQLException e) {
+			System.err.println("Unable to set int: "+ i);
+		}
+	}
+	
+	protected void setDate(int index,Date dt)
+	{
+		try {
+			stmt.setDate(index,dt);
+		} catch (SQLException e) {
+			System.err.println("Unable to set date: "+ dt);
+		}
+	}
+	
+	protected ResultSet executeQuery() 
+	{
+		ResultSet res = null;
+		try {
+			res = stmt.executeQuery();
+			stmt.close();
+			stmt = null;
+		} catch (SQLException e) {
+			System.err.println("Unable to execute querry");
+		}
+		
+		return res;
+	}
 	
 	public DAO(Connection c)
 	{

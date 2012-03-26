@@ -28,10 +28,11 @@ public class UserDAO extends DAO {
 	public User getUser(int userid) {
 
 		User u = null;
-		ResultSet res = send("SELECT * FROM users WHERE iduser=" + userid + ";");
+		set("SELECT * FROM users WHERE iduser=?;");
+		setInt(1, userid);
+		ResultSet res = executeQuery();
 
 		try {
-
 			u = new User(res.getString("name"), res.getString("forename"), res.getString("email"), userid);
 		} catch (SQLException e) {
 			System.out.println("No users with id equal to " + userid + " !");
@@ -40,7 +41,7 @@ public class UserDAO extends DAO {
 		try {
 			res.close();
 		} catch (SQLException e) {
-			System.err.println("Database acess error !\n Unable to close connection !\n");
+			System.err.println("Database acess error !\n Unable to close connection !");
 		}
 		return u;
 	}
@@ -54,7 +55,11 @@ public class UserDAO extends DAO {
 	public User getUser(String em) {
 		User u = null;
 		int userid = 0;
-		ResultSet res = send("SELECT * FROM users WHERE email='" + em + "';");
+		
+		set("SELECT * FROM users WHERE email=?;");
+		setString(1,em);
+		ResultSet res = executeQuery();
+		
 		try {
 			userid = res.getInt("iduser");
 			u = new User(res.getString("name"), res.getString("forename"), res.getString("email"), userid);
@@ -65,7 +70,7 @@ public class UserDAO extends DAO {
 		try {
 			res.close();
 		} catch (SQLException e) {
-			System.err.println("Database acess error !\n Unable to close connection !\n");
+			System.err.println("Database acess error !\n Unable to close connection !");
 		}
 		return u;
 	}
@@ -77,7 +82,10 @@ public class UserDAO extends DAO {
 	 */
 	public ArrayList<Project> getProjects(User u) {
 		ArrayList<Project> p = new ArrayList<Project>();
-		ResultSet res = send("SELECT partiNamecipate.idproject,name FROM participate,project WHERE participate.iduser=" + u.getId() + " AND participate.idproject=project.idproject;");
+		
+		set("SELECT partiNamecipate.idproject,name FROM participate,project WHERE participate.iduser=? AND participate.idproject=project.idproject;");
+		setInt(1,u.getId());
+		ResultSet res = executeQuery();
 
 		try {
 			p.add(new Project(res.getString("name"), res.getInt("idproject")));
@@ -95,13 +103,14 @@ public class UserDAO extends DAO {
 		try {
 			res.close();
 		} catch (SQLException e) {
-			System.err.println("Database acess error !\n Unable to close connection !\n");
+			System.err.println("Database acess error !\n Unable to close connection !");
 		}
 
 		return p;
 	}
 
 	// TODO add an option to list Users by second names...
+	// TODO don't consider upper case...
 	/**
 	 * Find all users which names are containing uName.
 	 * 
@@ -112,7 +121,11 @@ public class UserDAO extends DAO {
 	public ArrayList<User> findUsers(String uName) {
 		ArrayList<User> u = new ArrayList<User>();
 		int userid = 0;
-		ResultSet res = send("SELECT * FROM users WHERE name LIKE '%" + uName + "%';");
+		
+		set("SELECT * FROM users WHERE name LIKE '%?%';");
+		setString(1,uName);
+		ResultSet res = executeQuery();
+
 		try {
 			if (res.getString("name").contains(uName)) {
 				userid = res.getInt("iduser");
@@ -150,12 +163,16 @@ public class UserDAO extends DAO {
 	 */
 	public boolean checkPassword(User u, String pass) {
 		boolean ret = false;
-		ResultSet res = send("SELECT pass FROM users WHERE iduser ='" + u.getId() + "';");
+		
+		set("SELECT pass FROM users WHERE iduser =?;");
+		setInt(1,u.getId());
+		ResultSet res = executeQuery();
 
 		try {
 			ret = res.getString("pass").equals(pass);
+			// TODO add connection log.
 		} catch (SQLException e) {
-			System.err.println("Invalid user.\n");
+			System.err.println("Invalid User.\n");
 		}
 
 		return ret;
@@ -171,7 +188,10 @@ public class UserDAO extends DAO {
 	 */
 	public boolean checkMail(String em) {
 		boolean ret = true;
-		ResultSet res = send("SELECT email FROM users WHERE email ='" + em + "';");
+		
+		set("SELECT email FROM users WHERE email =?;");
+		setString(1,em);
+		ResultSet res = executeQuery();
 
 		try {
 			res.getString("email");
@@ -188,7 +208,10 @@ public class UserDAO extends DAO {
 	 */
 	public boolean exists(User u) {
 		boolean ret = false;
-		ResultSet res = send("SELECT * FROM users WHERE iduser ='" + u.getId() + "';");
+		
+		set("SELECT * FROM users WHERE iduser=?;");
+		setInt(1,u.getId());
+		ResultSet res = executeQuery();
 
 		try {
 			ret = res.getString("email").equals(u.getMail());
@@ -208,14 +231,14 @@ public class UserDAO extends DAO {
 	 * @return true if editing DB succeeded
 	 */
 	public boolean addUser(User u, String pass) {
-		boolean ret = false;
-		String query = "INSERT INTO users(name, forename, email, pass) VALUES ('" + u.getName() + "', '" + u.getFname() + "', '" + u.getMail() + "', '" + pass + "');";
-		ResultSet res = send(query);
+		set("INSERT INTO users(name, forename, email, pass) VALUES (?,?,?,?);");
+		setString(1,u.getName());
+		setString(2,u.getFname());
+		setString(3,u.getMail());
+		setString(4,pass);
+		ResultSet res = executeQuery();
 
-		if (res != null)
-			ret = true;
-
-		return ret;
+		return (res != null);
 	}
 
 	/**
@@ -226,14 +249,13 @@ public class UserDAO extends DAO {
 	 * @return true if DB was editing DB succeeded
 	 */
 	public boolean follows(int idFollower, int idFollowed) {
-		boolean ret = false;
-		String query = "INSERT INTO follows(follower, followed ) VALUES (" + idFollower + "," + idFollowed + ");";
-		ResultSet res = send(query);
+		
+		set("INSERT INTO follows(follower, followed) VALUES (?,?);");
+		setInt(1,idFollower);
+		setInt(2,idFollowed);
+		ResultSet res = executeQuery();
 
-		if (res != null)
-			ret = true;
-
-		return ret;
+		return (res != null);
 	}
 
 	/**
@@ -244,14 +266,13 @@ public class UserDAO extends DAO {
 	 * @return true if DB was editing DB succeeded
 	 */
 	public boolean unFollow(int idFollower, int idFollowed) {
-		boolean ret = false;
-		String query = "DELETE FROM follows WHERE follower=" + idFollower + " and followed=" + idFollowed + " ;";
-		ResultSet res = send(query);
 
-		if (res != null)
-			ret = true;
+		set("DELETE FROM follows WHERE follower=? and followed=?;");
+		setInt(1,idFollower);
+		setInt(2,idFollowed);
+		ResultSet res = executeQuery();
 
-		return ret;
+		return (res != null);
 	}
 
 	/**
@@ -262,8 +283,10 @@ public class UserDAO extends DAO {
 	 */
 	public ArrayList<User> getFollowed(User user) {
 		ArrayList<User> u = new ArrayList<User>();
-		String query = "SELECT iduser,name,forename,email FROM users,follows WHERE follows.follower = " + user.getId() + " and follows.followed=users.iduser;";
-		ResultSet res = send(query);
+		
+		set("SELECT iduser,name,forename,email FROM users,follows WHERE follows.follower =? and follows.followed=users.iduser;");
+		setInt(1,user.getId());
+		ResultSet res = executeQuery();
 
 		try {
 			u.add(new User(res.getString("name"), res.getString("forename"), res.getString("email"), res.getInt("iduser")));
@@ -273,13 +296,13 @@ public class UserDAO extends DAO {
 				u.add(new User(res.getString("name"), res.getString("forename"), res.getString("email"), res.getInt("iduser")));
 			}
 		} catch (SQLException e) {
-			System.err.println(user.getFname() + " does not follow anyone yet! \n");
+			System.err.println(user.getFname() + " does not follow anyone yet!");
 		}
 
 		try {
 			res.close();
 		} catch (SQLException e) {
-			System.err.println("Database acess error !\n Unable to close connection !\n");
+			System.err.println("Database acess error !\n Unable to close connection !");
 		}
 		return u;
 	}
@@ -292,8 +315,11 @@ public class UserDAO extends DAO {
 	 */
 	public ArrayList<User> getFollowers(User user) {
 		ArrayList<User> u = new ArrayList<User>();
-		String query = "SELECT iduser,name,forename,email FROM users,follows WHERE follows.followed = " + user.getId() + " and follows.follower=users.iduser;";
-		ResultSet res = send(query);
+		
+		set("SELECT iduser,name,forename,email FROM users,follows WHERE follows.followed =? and follows.follower=users.iduser;");
+		setInt(1,user.getId());
+		ResultSet res = executeQuery();
+		
 		try {
 			u.add(new User(res.getString("name"), res.getString("forename"), res.getString("email"), res.getInt("iduser")));
 
@@ -302,12 +328,12 @@ public class UserDAO extends DAO {
 				u.add(new User(res.getString("name"), res.getString("forename"), res.getString("email"), res.getInt("iduser")));
 			}
 		} catch (SQLException e) {
-			System.err.println(user.getFname() + " is not followed by anyone yet! \n");
+			System.err.println(user.getFname() + " is not followed by anyone yet!");
 		}
 		try {
 			res.close();
 		} catch (SQLException e) {
-			System.err.println("Database acess error !\n Unable to close connection !\n");
+			System.err.println("Database acess error !\n Unable to close connection !");
 		}
 		return u;
 	}
