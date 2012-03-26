@@ -166,7 +166,7 @@ public class Requests extends UnicastRemoteObject implements RemoteServer {
 	public ArrayList<User> getFollowers(User u) throws RemoteException {
 		Connection con = new Connect().getConnection();
 		UserDAO udao = new UserDAO(con);
-		ArrayList<User> ra =udao.getFollowed(u);
+		ArrayList<User> ra =udao.getFollowers(u);
 		
 		try {
 			con.close();
