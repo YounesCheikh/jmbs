@@ -1,10 +1,7 @@
 package jmbs.client.Graphics;
 
 import javax.swing.JPanel;
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
 import javax.swing.JLabel;
-import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.BorderFactory;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
@@ -20,6 +17,7 @@ import java.awt.event.ActionEvent;
 import jmbs.client.ClientRequests;
 import jmbs.client.HashPassword;
 import jmbs.common.User;
+import net.miginfocom.swing.MigLayout;
 
 public class RegisterPanel extends JPanel {
 	/**
@@ -160,234 +158,24 @@ public class RegisterPanel extends JPanel {
 
 		ImagePanel panel = new ImagePanel(
 				"./src/jmbs/client/img/jmbslogo_small.png");
-		GroupLayout groupLayout = new GroupLayout(this);
-		groupLayout
-				.setHorizontalGroup(groupLayout
-						.createParallelGroup(Alignment.LEADING)
-						.addGroup(
-								groupLayout
-										.createSequentialGroup()
-										.addGroup(
-												groupLayout
-														.createParallelGroup(
-																Alignment.LEADING)
-														.addGroup(
-																groupLayout
-																		.createSequentialGroup()
-																		.addContainerGap()
-																		.addComponent(
-																				lblResp,
-																				GroupLayout.DEFAULT_SIZE,
-																				448,
-																				Short.MAX_VALUE))
-														.addGroup(
-																groupLayout
-																		.createSequentialGroup()
-																		.addGap(7)
-																		.addComponent(
-																				separator,
-																				GroupLayout.DEFAULT_SIZE,
-																				447,
-																				Short.MAX_VALUE))
-														.addGroup(
-																groupLayout
-																		.createSequentialGroup()
-																		.addGap(15)
-																		.addGroup(
-																				groupLayout
-																						.createParallelGroup(
-																								Alignment.LEADING,
-																								false)
-																						.addGroup(
-																								groupLayout
-																										.createSequentialGroup()
-																										.addComponent(
-																												lblPassword)
-																										.addGap(73)
-																										.addComponent(
-																												passwordField))
-																						.addGroup(
-																								groupLayout
-																										.createSequentialGroup()
-																										.addComponent(
-																												lblConfirmPassword)
-																										.addGap(18)
-																										.addGroup(
-																												groupLayout
-																														.createParallelGroup(
-																																Alignment.LEADING,
-																																false)
-																														.addGroup(
-																																Alignment.TRAILING,
-																																groupLayout
-																																		.createSequentialGroup()
-																																		.addComponent(
-																																				btnCancel)
-																																		.addPreferredGap(
-																																				ComponentPlacement.RELATED,
-																																				GroupLayout.DEFAULT_SIZE,
-																																				Short.MAX_VALUE)
-																																		.addComponent(
-																																				btnRegister))
-																														.addComponent(
-																																confirmPasswordField,
-																																GroupLayout.PREFERRED_SIZE,
-																																235,
-																																GroupLayout.PREFERRED_SIZE)))
-																						.addComponent(
-																								separator_1)
-																						.addGroup(
-																								groupLayout
-																										.createSequentialGroup()
-																										.addComponent(
-																												lblEmailAddress)
-																										.addGap(43)
-																										.addComponent(
-																												emailTextField))
-																						.addGroup(
-																								groupLayout
-																										.createSequentialGroup()
-																										.addComponent(
-																												lblLastName)
-																										.addGap(66)
-																										.addComponent(
-																												fnameTextField))
-																						.addGroup(
-																								groupLayout
-																										.createSequentialGroup()
-																										.addComponent(
-																												lblFirstName)
-																										.addGap(64)
-																										.addGroup(
-																												groupLayout
-																														.createParallelGroup(
-																																Alignment.LEADING)
-																														.addComponent(
-																																nameTextField)
-																														.addGroup(
-																																groupLayout
-																																		.createParallelGroup(
-																																				Alignment.TRAILING,
-																																				false)
-																																		.addComponent(
-																																				panel,
-																																				Alignment.LEADING,
-																																				GroupLayout.DEFAULT_SIZE,
-																																				GroupLayout.DEFAULT_SIZE,
-																																				Short.MAX_VALUE)
-																																		.addComponent(
-																																				lblWelcomeToJmbs,
-																																				Alignment.LEADING,
-																																				GroupLayout.DEFAULT_SIZE,
-																																				GroupLayout.DEFAULT_SIZE,
-																																				Short.MAX_VALUE)))))
-																		.addPreferredGap(
-																				ComponentPlacement.RELATED,
-																				68,
-																				Short.MAX_VALUE)))
-										.addContainerGap()));
-		groupLayout
-				.setVerticalGroup(groupLayout
-						.createParallelGroup(Alignment.LEADING)
-						.addGroup(
-								Alignment.TRAILING,
-								groupLayout
-										.createSequentialGroup()
-										.addContainerGap()
-										.addComponent(lblWelcomeToJmbs)
-										.addPreferredGap(
-												ComponentPlacement.RELATED)
-										.addComponent(panel,
-												GroupLayout.DEFAULT_SIZE, 106,
-												Short.MAX_VALUE)
-										.addPreferredGap(
-												ComponentPlacement.RELATED)
-										.addGroup(
-												groupLayout
-														.createParallelGroup(
-																Alignment.BASELINE)
-														.addComponent(
-																lblFirstName)
-														.addComponent(
-																nameTextField,
-																GroupLayout.PREFERRED_SIZE,
-																GroupLayout.DEFAULT_SIZE,
-																GroupLayout.PREFERRED_SIZE))
-										.addPreferredGap(
-												ComponentPlacement.RELATED)
-										.addGroup(
-												groupLayout
-														.createParallelGroup(
-																Alignment.BASELINE)
-														.addComponent(
-																lblLastName)
-														.addComponent(
-																fnameTextField,
-																GroupLayout.PREFERRED_SIZE,
-																GroupLayout.DEFAULT_SIZE,
-																GroupLayout.PREFERRED_SIZE))
-										.addGap(18)
-										.addGroup(
-												groupLayout
-														.createParallelGroup(
-																Alignment.BASELINE)
-														.addComponent(
-																lblEmailAddress)
-														.addComponent(
-																emailTextField,
-																GroupLayout.PREFERRED_SIZE,
-																GroupLayout.DEFAULT_SIZE,
-																GroupLayout.PREFERRED_SIZE))
-										.addPreferredGap(
-												ComponentPlacement.RELATED)
-										.addComponent(separator_1,
-												GroupLayout.PREFERRED_SIZE,
-												GroupLayout.DEFAULT_SIZE,
-												GroupLayout.PREFERRED_SIZE)
-										.addPreferredGap(
-												ComponentPlacement.RELATED)
-										.addGroup(
-												groupLayout
-														.createParallelGroup(
-																Alignment.BASELINE)
-														.addComponent(
-																passwordField,
-																GroupLayout.PREFERRED_SIZE,
-																GroupLayout.DEFAULT_SIZE,
-																GroupLayout.PREFERRED_SIZE)
-														.addComponent(
-																lblPassword))
-										.addPreferredGap(
-												ComponentPlacement.RELATED)
-										.addGroup(
-												groupLayout
-														.createParallelGroup(
-																Alignment.BASELINE)
-														.addComponent(
-																confirmPasswordField,
-																GroupLayout.PREFERRED_SIZE,
-																GroupLayout.DEFAULT_SIZE,
-																GroupLayout.PREFERRED_SIZE)
-														.addComponent(
-																lblConfirmPassword))
-										.addGap(18)
-										.addGroup(
-												groupLayout
-														.createParallelGroup(
-																Alignment.BASELINE)
-														.addComponent(
-																btnRegister)
-														.addComponent(btnCancel))
-										.addPreferredGap(
-												ComponentPlacement.RELATED)
-										.addComponent(separator,
-												GroupLayout.PREFERRED_SIZE, 12,
-												GroupLayout.PREFERRED_SIZE)
-										.addPreferredGap(
-												ComponentPlacement.RELATED)
-										.addComponent(lblResp)
-										.addContainerGap()));
-		setLayout(groupLayout);
+		setLayout(new MigLayout("", "[127px][18px][139px][1px][163px]", "[20px][156px][18px][18px][18px][12px][18px][18px][29px][12px][16px]"));
+		add(lblResp, "cell 0 10 5 1,growx,aligny top");
+		add(separator, "cell 0 9 5 1,growx,aligny top");
+		add(lblPassword, "cell 0 6,alignx left,aligny center");
+		add(passwordField, "cell 2 6 3 1,growx,aligny top");
+		add(lblConfirmPassword, "cell 0 7,alignx right,aligny center");
+		add(btnCancel, "cell 2 8,alignx left,aligny top");
+		add(btnRegister, "cell 4 8,alignx left,aligny top");
+		add(confirmPasswordField, "cell 2 7 3 1,growx,aligny top");
+		add(separator_1, "cell 0 5 5 1,growx,aligny top");
+		add(lblEmailAddress, "cell 0 4,alignx left,aligny center");
+		add(emailTextField, "cell 2 4 3 1,growx,aligny top");
+		add(lblLastName, "cell 0 3,alignx left,aligny center");
+		add(fnameTextField, "cell 2 3 3 1,growx,aligny top");
+		add(lblFirstName, "cell 0 2,alignx left,aligny center");
+		add(nameTextField, "cell 2 2 3 1,growx,aligny top");
+		add(panel, "cell 2 1,grow");
+		add(lblWelcomeToJmbs, "cell 2 0,alignx left,aligny top");
 
 	}
 	

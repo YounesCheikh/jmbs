@@ -12,6 +12,7 @@ import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import net.miginfocom.swing.MigLayout;
 
 public class NextVersion extends JDialog {
 
@@ -28,6 +29,7 @@ public class NextVersion extends JDialog {
 	 * Create the dialog.
 	 */
 	public NextVersion() {
+		setTitle("In the next version");
 		setBounds(100, 100, 450, 189);
 		setLocationRelativeTo(null);
 		setResizable(false);
@@ -60,23 +62,7 @@ public class NextVersion extends JDialog {
 				buttonPane.add(cancelButton);
 			}
 		}
-		GroupLayout groupLayout = new GroupLayout(getContentPane());
-		groupLayout.setHorizontalGroup(
-			groupLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(groupLayout.createSequentialGroup()
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addComponent(contentPanel, GroupLayout.PREFERRED_SIZE, 450, GroupLayout.PREFERRED_SIZE)
-						.addComponent(buttonPane, GroupLayout.PREFERRED_SIZE, 450, GroupLayout.PREFERRED_SIZE))
-					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-		);
-		groupLayout.setVerticalGroup(
-			groupLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(groupLayout.createSequentialGroup()
-					.addComponent(contentPanel, GroupLayout.PREFERRED_SIZE, 121, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(buttonPane, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-					.addGap(207))
-		);
+		getContentPane().setLayout(new MigLayout("", "[450px]", "[121px][39px]"));
 		JLabel lblThisButtonWill = new JLabel("This button will be available in the next version!! O_o");
 		JLabel lblCloseThisAnd = new JLabel("Close this, and don't try to compile this program again!");
 		GroupLayout gl_contentPanel = new GroupLayout(contentPanel);
@@ -102,7 +88,8 @@ public class NextVersion extends JDialog {
 					.addContainerGap(19, Short.MAX_VALUE))
 		);
 		contentPanel.setLayout(gl_contentPanel);
-		getContentPane().setLayout(groupLayout);
+		getContentPane().add(contentPanel, "cell 0 0,growx,aligny top");
+		getContentPane().add(buttonPane, "cell 0 1,growx,aligny top");
 	}
 
 }
