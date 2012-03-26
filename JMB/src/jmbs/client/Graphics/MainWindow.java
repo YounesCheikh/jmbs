@@ -23,6 +23,8 @@ import jmbs.client.ClientRequests;
 import jmbs.client.CurrentUser;
 import jmbs.common.Message;
 import jmbs.common.User;
+import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.Alignment;
 
 public class MainWindow {
 
@@ -74,8 +76,8 @@ public class MainWindow {
 
 		frmJmbsClient.setTitle("JMBS Client");
 		// frmJmbsClient.setBounds(100, 100, 365, 600);
-		frmJmbsClient.setSize(370, 600);
-		frmJmbsClient.setMinimumSize(new Dimension(365, 560));
+		frmJmbsClient.setSize(440, 600);
+		frmJmbsClient.setMinimumSize(new Dimension(440, 560));
 		frmJmbsClient.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmJmbsClient.setLocationRelativeTo(null);
 		// frmJmbsClient.setVisible(true);
@@ -203,7 +205,6 @@ public class MainWindow {
 		frmJmbsClient.getContentPane().add(tabbedPane, BorderLayout.CENTER);
 
 		JPanel tlpanel = new JPanel();
-		tlpanel.setLayout(new BorderLayout(0, 0));
 		tlpanel.setToolTipText("TimeLine");
 		tabbedPane.addTab("TimeLine", null, tlpanel, null);
 
@@ -213,7 +214,21 @@ public class MainWindow {
 		tlscrollPane
 				.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		tlscrollPane.setViewportView(timelinepanel);
-		tlpanel.add(tlscrollPane);
+		GroupLayout gl_tlpanel = new GroupLayout(tlpanel);
+		gl_tlpanel.setHorizontalGroup(
+			gl_tlpanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_tlpanel.createSequentialGroup()
+					.addContainerGap()
+					.addComponent(tlscrollPane, GroupLayout.DEFAULT_SIZE, 312, Short.MAX_VALUE)
+					.addContainerGap())
+		);
+		gl_tlpanel.setVerticalGroup(
+			gl_tlpanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_tlpanel.createSequentialGroup()
+					.addComponent(tlscrollPane, GroupLayout.DEFAULT_SIZE, 529, Short.MAX_VALUE)
+					.addContainerGap())
+		);
+		tlpanel.setLayout(gl_tlpanel);
 
 		JPanel profpanel = new JPanel();
 		tabbedPane.addTab("Profile", null, profpanel, null);
