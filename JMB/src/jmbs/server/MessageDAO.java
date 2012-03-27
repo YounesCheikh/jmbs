@@ -26,7 +26,7 @@ public class MessageDAO extends DAO {
 		Message m = null;
 
 		set("SELECT * FROM message WHERE idmessage=?;");
-		setInt(1, id);
+		setInt(1,id);
 		ResultSet res = executeQuery();
 
 		UserDAO uDAO = new UserDAO(this.getConnection());
@@ -54,7 +54,7 @@ public class MessageDAO extends DAO {
 	{
 		Message m = null;
 		set("SELECT * FROM message WHERE iduser=? ORDER BY idmessage DESC;");
-		setInt(1, iduser);
+		setInt(1,iduser);
 		ResultSet res = executeQuery();
 
 		// TODO: test it !
@@ -87,7 +87,7 @@ public class MessageDAO extends DAO {
 	public int addMessage(Message m) {
 		int messageId = -1;
 		set("INSERT INTO message(content, \"time\", iduser) VALUES (?,?,?);");
-		setString(1, m.getMessage());
+		setString(1,m.getMessage());
 		setDate(2,m.getDatetime());
 		setInt(3,m.getOwner().getId());
 		ResultSet res = executeQuery();
@@ -108,8 +108,8 @@ public class MessageDAO extends DAO {
 		Connection con = new Connect().getConnection();
 		ArrayList<Message> msgList = new ArrayList<Message>();
 		
-		set("INSERT INTO message(content, \"time\", iduser FROM message,follows WHERE (((follows.followed = message.iduser AND follows.follower=?) OR message.iduser=?) AND idmessage>? GROUP BY idmessage ORDER BY idmessage;");
-		setInt(1, iduser);
+		set("SELECT (content, \"time\", iduser) FROM message,follows WHERE (((follows.followed = message.iduser AND follows.follower=?) OR message.iduser=?) AND idmessage>?) GROUP BY idmessage ORDER BY idmessage;");
+		setInt(1,iduser);
 		setInt(2,iduser);
 		setInt(3,idlastmessage);
 		ResultSet res = executeQuery();
