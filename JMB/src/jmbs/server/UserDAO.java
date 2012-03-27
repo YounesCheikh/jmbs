@@ -126,8 +126,9 @@ public class UserDAO extends DAO {
 		ArrayList<User> u = new ArrayList<User>();
 		int userid = 0;
 		
-		set("SELECT * FROM users WHERE name LIKE '%?%';");
-		setString(1,uName);
+		set("SELECT * FROM users WHERE name LIKE ?;");
+		setString(1,"%"+uName+"%");
+		
 		ResultSet res = executeQuery();
 
 		try {
@@ -143,7 +144,7 @@ public class UserDAO extends DAO {
 				}
 			}
 		} catch (SQLException e) {
-			System.err.println("No users found with name containing " + uName);
+			System.err.println("No users found with name containing  \"" + uName +"\"");
 		}
 
 		try {

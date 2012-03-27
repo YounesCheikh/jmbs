@@ -57,7 +57,7 @@ public abstract class DAO implements Serializable {
 		try {
 			stmt.setString(index,s);
 		} catch (SQLException e) {
-			System.err.println("Unable to set string: "+ s);
+			System.err.println("Unable to set string: \""+ s +"\"");
 		}
 	}
 	
