@@ -183,12 +183,9 @@ public class ConnectionPanel extends JPanel {
 					this.initMainWindow();
 					this.getMainWindow().getFrame().setVisible(true);
 					// System.out.println(new CurrentUser().get().toString());
-				} else if (u.getId() == -2) {
-					respLabel.setText("Wrong password, Please try again!");
-					respLabel.setForeground(new Color(200, 0, 0));
 				} else if (u.getId() == -1) {
 					respLabel
-							.setText("The email you entered does not belong to any account. ");
+							.setText("Wrong password or wrong email, Please try again!");
 					respLabel.setForeground(new Color(200, 0, 0));
 				}
 			} catch (RemoteException e) {

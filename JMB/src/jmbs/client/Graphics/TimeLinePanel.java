@@ -42,4 +42,8 @@ public class TimeLinePanel extends JPanel {
 	public int getLastIdMsg() {
 		return idLastMessage;
 	}
+	
+	public void setLastIdMsg(int id) {
+		idLastMessage = id;
+	}
 }

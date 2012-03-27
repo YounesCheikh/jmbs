@@ -54,7 +54,7 @@ public class FlwUsrPanel extends JPanel {
 					User current = new CurrentUser().get();
 
 					if (!current.getFollows().contains(u)) {
-						new ClientRequests().getConnection().follow(
+						new ClientRequests().getConnection().follows(
 								current.getId(), u.getId());
 						current.getFollows().add(u);
 					}

@@ -93,12 +93,13 @@ public class NewMessageFrame extends JFrame {
 					// slash
 					// for
 					// sql.
-					newMsgStr = textArea.getText().replaceAll("'", "\\\\'");
-					Message m = new Message(new CurrentUser().get(), "",
-							newMsgStr, new Date(new java.util.Date().getTime()));
-					boolean sendSuccessed = false;
+					newMsgStr = textArea.getText();//replaceAll("'", "$'$");
+					Message m = new Message(new CurrentUser().get(), newMsgStr,
+							new Date(new java.util.Date().getTime()));
+					Integer getIdMsg = 0;
 					try {
-						sendSuccessed = new ClientRequests().getConnection()
+
+						getIdMsg = new ClientRequests().getConnection()
 								.addMessage(m);
 					} catch (RemoteException e1) {
 						// TODO Auto-generated catch block
@@ -106,15 +107,16 @@ public class NewMessageFrame extends JFrame {
 						System.out.print("Can't send to server!\n"
 								+ e1.getMessage());
 					}
-					if (sendSuccessed) {
-
+					System.out.println(""+getIdMsg);
+					if (!getIdMsg.equals(-1)) {
 						tlpanel.putMessage(new MsgPanel(new Message(
-								new CurrentUser().get(), "",
-								textArea.getText(), new Date(
-										new java.util.Date().getTime()))));
+								new CurrentUser().get(), textArea.getText(),
+								new Date(new java.util.Date().getTime()))));
+						tlpanel.setLastIdMsg(getIdMsg);
 						textArea.setText("");
 						setVisible(false);
 					}
+
 				}
 			}
 		});
@@ -124,26 +126,29 @@ public class NewMessageFrame extends JFrame {
 		textArea.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyTyped(KeyEvent e) {
-				if(textArea.getText().equals("")) lblNbchars.setText("0");
-				else lblNbchars.setText(""+(textArea.getText().length()+1));
+				if (textArea.getText().equals(""))
+					lblNbchars.setText("0");
+				else
+					lblNbchars.setText("" + (textArea.getText().length() + 1));
 				lblNbchars.updateUI();
 			}
 		});
 		textArea.setLineWrap(true);
 		textArea.setBackground(new Color(245, 245, 245));
 		scrollPane.setViewportView(textArea);
-		contentPane.setLayout(new MigLayout("", "[81px][148px][81px]", "[156px][42px]"));
-		
-				JButton btnCancel = new JButton("Cancel");
-				btnCancel.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-						setVisible(false);
-					}
-				});
-				
-				lblNbchars = new JLabel(""+(textArea.getText().length()));
-				contentPane.add(lblNbchars, "cell 0 1");
-				contentPane.add(btnCancel, "cell 1 1,alignx right,growy");
+		contentPane.setLayout(new MigLayout("", "[81px][148px][81px]",
+				"[156px][42px]"));
+
+		JButton btnCancel = new JButton("Cancel");
+		btnCancel.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				setVisible(false);
+			}
+		});
+
+		lblNbchars = new JLabel("" + (textArea.getText().length()));
+		contentPane.add(lblNbchars, "cell 0 1");
+		contentPane.add(btnCancel, "cell 1 1,alignx right,growy");
 		contentPane.add(btnSend, "cell 2 1,grow");
 		contentPane.add(scrollPane, "cell 0 0 3 1,grow");
 	}
