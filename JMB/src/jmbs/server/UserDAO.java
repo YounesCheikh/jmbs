@@ -125,41 +125,41 @@ public class UserDAO extends DAO {
 	public ArrayList<User> findUsers(String uName, int param) {
 		ArrayList<User> u = new ArrayList<User>();
 		int userid = 0;
+		String errorMsg = new String();
 		
 		if (param == BY_NAME) 
 		{
 			set("SELECT * FROM users WHERE name LIKE ?;");
 			setString(1,"%"+uName+"%");
+			errorMsg="No users found with name containing  \"" + uName +"\"";
 		}
 		if (param == BY_FORNAME)
 		{
-			set("SELECT * FROM users WHERE forname LIKE ?;");
+			set("SELECT * FROM users WHERE forename LIKE ?;");
 			setString(1,"%"+uName+"%");
+			errorMsg="No users found with second name containing  \"" + uName +"\"";
 		}
 		if (param == BY_BOTH)
 		{
-			set("SELECT * FROM users WHERE name LIKE ? OR forname LIKE ?;");
+			set("SELECT * FROM users WHERE name LIKE ? OR forename LIKE ?;");
 			setString(1,"%"+uName+"%");
 			setString(2,"%"+uName+"%");
+			errorMsg="No users found with name or second name containing  \"" + uName +"\"";
 		}
 		
 		
 		ResultSet res = executeQuery();
 
 		try {
-			if (res.getString("name").contains(uName)) {
 				userid = res.getInt("iduser");
 				u.add(new User(res.getString("name"), res.getString("forename"), res.getString("email"), userid));
-			}
 			while (!res.isLast()) {
-				res.next();
-				if (res.getString("name").contains(uName)) {
+					res.next();
 					userid = res.getInt("iduser");
 					u.add(new User(res.getString("name"), res.getString("forename"), res.getString("email"), userid));
-				}
 			}
 		} catch (SQLException e) {
-			System.err.println("No users found with name containing  \"" + uName +"\"");
+			System.err.println(errorMsg);
 		}
 
 		try {
