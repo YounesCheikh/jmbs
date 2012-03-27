@@ -125,7 +125,6 @@ public class MessageDAO extends DAO {
 			}
 		} catch (SQLException e) {
 			System.out.println("There are no new messages !");
-			e.printStackTrace();
 		}
 		try {
 			res.close();
