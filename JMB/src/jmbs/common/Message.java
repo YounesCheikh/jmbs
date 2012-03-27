@@ -119,4 +119,14 @@ public class Message implements Serializable {
 		this.datetime = datetime;
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return ("\nSent by " + owner.getFname() + " at " + datetime + ": " + message + "");
+	}
+	
+
+
 }

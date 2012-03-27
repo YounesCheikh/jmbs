@@ -42,7 +42,7 @@ public class MessageDAO extends DAO {
 			System.err.println("Database acess error !\n Unable to close connection !");
 		}
 		
-		closeStatement();
+		
 		return m;
 	}
 
@@ -72,7 +72,7 @@ public class MessageDAO extends DAO {
 			System.err.println("Database acess error !\n Unable to close connection !");
 		}
 
-		closeStatement();
+		
 		return m;
 
 	}
@@ -90,12 +90,13 @@ public class MessageDAO extends DAO {
 		setString(1,m.getMessage());
 		setDate(2,m.getDatetime());
 		setInt(3,m.getOwner().getId());
-		ResultSet res = executeQuery();
+		boolean res = executeUpdate();
 		
-		if (res != null)
+		if (res)
 			messageId = getLastMessage(m.getOwner().getId()).getId();
 		// id of the last message sent to database by the user.
-		closeStatement();
+		
+		
 		return messageId;
 	}
 
@@ -108,7 +109,7 @@ public class MessageDAO extends DAO {
 		Connection con = new Connect().getConnection();
 		ArrayList<Message> msgList = new ArrayList<Message>();
 		
-		set("SELECT (content, \"time\", iduser) FROM message,follows WHERE (((follows.followed = message.iduser AND follows.follower=?) OR message.iduser=?) AND idmessage>?) GROUP BY idmessage ORDER BY idmessage;");
+		set("SELECT idmessage, content, \"time\", iduser FROM message,follows WHERE (((follows.followed = message.iduser AND follows.follower=?) OR message.iduser=?) AND idmessage>?) GROUP BY idmessage ORDER BY idmessage;");
 		setInt(1,iduser);
 		setInt(2,iduser);
 		setInt(3,idlastmessage);
@@ -124,6 +125,7 @@ public class MessageDAO extends DAO {
 			}
 		} catch (SQLException e) {
 			System.out.println("There are no new messages !");
+			e.printStackTrace();
 		}
 		try {
 			res.close();
@@ -131,7 +133,7 @@ public class MessageDAO extends DAO {
 			System.err.println("Database acess error !\n Unable to close connection !");
 		}
 		
-		closeStatement();
+		
 		return msgList;
 	}
 

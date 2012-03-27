@@ -53,7 +53,7 @@ public class ProjectDAO extends DAO {
 			System.out.println("Database acess error !\n Unable to close connection !");
 		}
 		
-		closeStatement();
+		
 		return u;
 	}
 
@@ -84,7 +84,7 @@ public class ProjectDAO extends DAO {
 			System.out.println("Database acess error !\n Unable to close connection !");
 		}
 
-		closeStatement();
+		
 		return p;
 	}
 

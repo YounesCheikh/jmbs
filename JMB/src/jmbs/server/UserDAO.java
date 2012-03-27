@@ -64,7 +64,6 @@ public class UserDAO extends DAO {
 		
 		try {
 			userid = res.getInt("iduser");
-			System.out.print(userid);
 			u = new User(res.getString("name"), res.getString("forename"), res.getString("email"), userid);
 		} catch (SQLException e) {
 			System.err.println("No user with " + em + " as email adress !\n");
@@ -76,7 +75,6 @@ public class UserDAO extends DAO {
 			System.err.println("Database acess error !\n Unable to close connection !");
 		}
 		
-		closeStatement();
 		return u;
 	}
 
@@ -111,7 +109,7 @@ public class UserDAO extends DAO {
 			System.err.println("Database acess error !\n Unable to close connection !");
 		}
 		
-		closeStatement();
+		
 		return p;
 	}
 
@@ -154,7 +152,6 @@ public class UserDAO extends DAO {
 			System.err.println("Database acess error !\n Unable to close connection !");
 		}
 
-		closeStatement();
 		return u;
 	}
 
@@ -182,7 +179,6 @@ public class UserDAO extends DAO {
 			System.err.println("Invalid User.\n");
 		}
 
-		closeStatement();
 		return ret;
 	}
 
@@ -206,8 +202,7 @@ public class UserDAO extends DAO {
 		} catch (SQLException e) { // Unused email
 			ret = false;
 		}
-		
-		closeStatement();
+
 		return ret;
 	}
 
@@ -228,8 +223,7 @@ public class UserDAO extends DAO {
 		} catch (SQLException e) { // user does not exist
 			ret = false;
 		}
-		
-		closeStatement();
+
 		return ret;
 	}
 
@@ -243,15 +237,18 @@ public class UserDAO extends DAO {
 	 * @return true if editing DB succeeded
 	 */
 	public boolean addUser(User u, String pass) {
-		set("INSERT INTO users(name, forename, email, pass) VALUES (?,?,?,?);");
-		setString(1,u.getName());
-		setString(2,u.getFname());
-		setString(3,u.getMail());
-		setString(4,pass);
-		ResultSet res = executeQuery();
+		if (!checkMail(u.getMail()))
+		{
+			set("INSERT INTO users(name, forename, email, pass) VALUES (?,?,?,?);");
+			setString(1,u.getName());
+			setString(2,u.getFname());
+			setString(3,u.getMail());
+			setString(4,pass);
+			return executeUpdate();
+		}
+		System.err.println("Email already used.");
 
-		closeStatement();
-		return (res != null);
+		return false;
 	}
 
 	/**
@@ -266,10 +263,9 @@ public class UserDAO extends DAO {
 		set("INSERT INTO follows(follower, followed) VALUES (?,?);");
 		setInt(1,idFollower);
 		setInt(2,idFollowed);
-		ResultSet res = executeQuery();
+		boolean res = executeUpdate();
 
-		closeStatement();
-		return (res != null);
+		return (res);
 	}
 
 	/**
@@ -284,10 +280,9 @@ public class UserDAO extends DAO {
 		set("DELETE FROM follows WHERE follower=? and followed=?;");
 		setInt(1,idFollower);
 		setInt(2,idFollowed);
-		ResultSet res = executeQuery();
+		boolean res = executeUpdate();
 
-		closeStatement();
-		return (res != null);
+		return (res);
 	}
 
 	/**
@@ -320,7 +315,6 @@ public class UserDAO extends DAO {
 			System.err.println("Database acess error !\n Unable to close connection !");
 		}
 		
-		closeStatement();
 		return u;
 	}
 
@@ -353,7 +347,6 @@ public class UserDAO extends DAO {
 			System.err.println("Database acess error !\n Unable to close connection !");
 		}
 		
-		closeStatement();
 		return u;
 	}
 }

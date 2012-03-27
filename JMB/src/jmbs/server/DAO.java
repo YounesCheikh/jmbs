@@ -87,18 +87,39 @@ public abstract class DAO implements Serializable {
 			res.absolute(1);
 		} catch (SQLException e) {
 			System.err.println("Unable to execute query.");
+			e.printStackTrace();
 		}
 
 		return res;
 	}
 	
+	protected boolean executeUpdate() 
+	{
+		boolean b;
+
+		try {
+			stmt.executeUpdate();
+			b = true;
+		} catch (SQLException e) {
+			System.err.println("Unable to execute query.");
+			e.printStackTrace();
+			b = false;
+		}
+		
+		return b;
+	}
+	
 	protected void closeStatement(){
 		try {
-			stmt.close();
+			if (stmt != null) {
+					stmt.close();
+					stmt = null;
+			}
 		} catch (SQLException e) {
+			e.printStackTrace();
 			System.err.println("Unable to close Statement !");
 		}
-		stmt = null;
+		
 	}
 	
 	public Connection getConnection()
