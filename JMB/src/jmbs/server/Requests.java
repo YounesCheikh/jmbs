@@ -108,10 +108,12 @@ public class Requests extends UnicastRemoteObject implements RemoteServer {
 	 * 
 	 * @see jmbs.common.RemoteServer#searchFor(java.lang.String)
 	 */
-	public ArrayList<User> searchFor(String userName) throws RemoteException {
+	public ArrayList<User> searchUser(String userName, int param) throws RemoteException {
 		Connection con = new Connect().getConnection();
 		UserDAO udao = new UserDAO(con);
-		ArrayList<User> u = udao.findUsers(userName);
+		
+		if (param != DAO.BY_NAME && param != DAO.BY_FORNAME && param != DAO.BY_BOTH) param = DAO.BY_BOTH; // default value
+		ArrayList<User> u = udao.findUsers(userName, param);
 		
 		try {
 			con.close();

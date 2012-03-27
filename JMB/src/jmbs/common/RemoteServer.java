@@ -49,7 +49,7 @@ public interface RemoteServer extends Remote {
 	 * @return a list of users who have name as the entred string
 	 * @throws RemoteException
 	 */
-	public ArrayList<User> searchFor(String userName) throws RemoteException;
+	public ArrayList<User> searchUser(String userName, int param) throws RemoteException;
 
 	/**
 	 * add relation on follows table in the DB 

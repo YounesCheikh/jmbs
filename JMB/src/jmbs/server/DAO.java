@@ -20,6 +20,9 @@ public abstract class DAO implements Serializable {
 	private static final long serialVersionUID = -1746724303428703866L;
 	private Connection con = null;
 	private PreparedStatement stmt = null;
+	public static final int BY_NAME = 1;
+	public static final int BY_FORNAME = 2;	
+	public static final int BY_BOTH = 3;
 	
 	public DAO(Connection c)
 	{

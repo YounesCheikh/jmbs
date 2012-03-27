@@ -122,12 +122,27 @@ public class UserDAO extends DAO {
 	 *            part of the searched name.
 	 * @return Array of User
 	 */
-	public ArrayList<User> findUsers(String uName) {
+	public ArrayList<User> findUsers(String uName, int param) {
 		ArrayList<User> u = new ArrayList<User>();
 		int userid = 0;
 		
-		set("SELECT * FROM users WHERE name LIKE ?;");
-		setString(1,"%"+uName+"%");
+		if (param == BY_NAME) 
+		{
+			set("SELECT * FROM users WHERE name LIKE ?;");
+			setString(1,"%"+uName+"%");
+		}
+		if (param == BY_FORNAME)
+		{
+			set("SELECT * FROM users WHERE forname LIKE ?;");
+			setString(1,"%"+uName+"%");
+		}
+		if (param == BY_BOTH)
+		{
+			set("SELECT * FROM users WHERE name LIKE ? OR forname LIKE ?;");
+			setString(1,"%"+uName+"%");
+			setString(2,"%"+uName+"%");
+		}
+		
 		
 		ResultSet res = executeQuery();
 
