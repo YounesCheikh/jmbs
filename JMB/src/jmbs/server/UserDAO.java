@@ -51,17 +51,20 @@ public class UserDAO extends DAO {
 	 * 
 	 * @param em
 	 *            email of the user.
+	 * @throws SQLException 
 	 */
 	public User getUser(String em) {
 		User u = null;
 		int userid = 0;
+		ResultSet res = null;
 		
-		set("SELECT * FROM users WHERE email=?;");
+		set("SELECT * FROM users WHERE email=? ;");
 		setString(1,em);
-		ResultSet res = executeQuery();
+		res = executeQuery();
 		
 		try {
 			userid = res.getInt("iduser");
+			System.out.print(userid);
 			u = new User(res.getString("name"), res.getString("forename"), res.getString("email"), userid);
 		} catch (SQLException e) {
 			System.err.println("No user with " + em + " as email adress !\n");
@@ -72,6 +75,8 @@ public class UserDAO extends DAO {
 		} catch (SQLException e) {
 			System.err.println("Database acess error !\n Unable to close connection !");
 		}
+		
+		closeStatement();
 		return u;
 	}
 
@@ -105,7 +110,8 @@ public class UserDAO extends DAO {
 		} catch (SQLException e) {
 			System.err.println("Database acess error !\n Unable to close connection !");
 		}
-
+		
+		closeStatement();
 		return p;
 	}
 
@@ -148,6 +154,7 @@ public class UserDAO extends DAO {
 			System.err.println("Database acess error !\n Unable to close connection !");
 		}
 
+		closeStatement();
 		return u;
 	}
 
@@ -175,6 +182,7 @@ public class UserDAO extends DAO {
 			System.err.println("Invalid User.\n");
 		}
 
+		closeStatement();
 		return ret;
 	}
 
@@ -198,6 +206,8 @@ public class UserDAO extends DAO {
 		} catch (SQLException e) { // Unused email
 			ret = false;
 		}
+		
+		closeStatement();
 		return ret;
 	}
 
@@ -218,6 +228,8 @@ public class UserDAO extends DAO {
 		} catch (SQLException e) { // user does not exist
 			ret = false;
 		}
+		
+		closeStatement();
 		return ret;
 	}
 
@@ -238,6 +250,7 @@ public class UserDAO extends DAO {
 		setString(4,pass);
 		ResultSet res = executeQuery();
 
+		closeStatement();
 		return (res != null);
 	}
 
@@ -255,6 +268,7 @@ public class UserDAO extends DAO {
 		setInt(2,idFollowed);
 		ResultSet res = executeQuery();
 
+		closeStatement();
 		return (res != null);
 	}
 
@@ -272,6 +286,7 @@ public class UserDAO extends DAO {
 		setInt(2,idFollowed);
 		ResultSet res = executeQuery();
 
+		closeStatement();
 		return (res != null);
 	}
 
@@ -304,6 +319,8 @@ public class UserDAO extends DAO {
 		} catch (SQLException e) {
 			System.err.println("Database acess error !\n Unable to close connection !");
 		}
+		
+		closeStatement();
 		return u;
 	}
 
@@ -335,6 +352,8 @@ public class UserDAO extends DAO {
 		} catch (SQLException e) {
 			System.err.println("Database acess error !\n Unable to close connection !");
 		}
+		
+		closeStatement();
 		return u;
 	}
 }

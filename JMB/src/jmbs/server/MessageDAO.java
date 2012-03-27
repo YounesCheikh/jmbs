@@ -41,7 +41,8 @@ public class MessageDAO extends DAO {
 		} catch (SQLException e) {
 			System.err.println("Database acess error !\n Unable to close connection !");
 		}
-
+		
+		closeStatement();
 		return m;
 	}
 
@@ -71,6 +72,7 @@ public class MessageDAO extends DAO {
 			System.err.println("Database acess error !\n Unable to close connection !");
 		}
 
+		closeStatement();
 		return m;
 
 	}
@@ -93,6 +95,7 @@ public class MessageDAO extends DAO {
 		if (res != null)
 			messageId = getLastMessage(m.getOwner().getId()).getId();
 		// id of the last message sent to database by the user.
+		closeStatement();
 		return messageId;
 	}
 
@@ -127,6 +130,8 @@ public class MessageDAO extends DAO {
 		} catch (SQLException e) {
 			System.err.println("Database acess error !\n Unable to close connection !");
 		}
+		
+		closeStatement();
 		return msgList;
 	}
 

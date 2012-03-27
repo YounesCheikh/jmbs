@@ -19,7 +19,12 @@ public abstract class DAO implements Serializable {
 	 */
 	private static final long serialVersionUID = -1746724303428703866L;
 	private Connection con = null;
-	PreparedStatement stmt = null;
+	private PreparedStatement stmt = null;
+	
+	public DAO(Connection c)
+	{
+		con = c;
+	}
 
 	protected ResultSet send(String request)
 	{
@@ -40,7 +45,7 @@ public abstract class DAO implements Serializable {
 	protected void set(String request)
 	{
 		try {
-			stmt = con.prepareStatement(request);
+			stmt = con.prepareStatement(request,ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_READ_ONLY);
 		} catch (SQLException e) {
 			System.err.println("Unable to execute querry: "+ request);
 		
@@ -80,18 +85,20 @@ public abstract class DAO implements Serializable {
 		try {
 			res = stmt.executeQuery();
 			res.absolute(1);
-			stmt.close();
-			stmt = null;
 		} catch (SQLException e) {
-			System.err.println("Unable to execute querry");
+			System.err.println("Unable to execute query.");
 		}
-		
+
 		return res;
 	}
 	
-	public DAO(Connection c)
-	{
-		con = c;
+	protected void closeStatement(){
+		try {
+			stmt.close();
+		} catch (SQLException e) {
+			System.err.println("Unable to close Statement !");
+		}
+		stmt = null;
 	}
 	
 	public Connection getConnection()
