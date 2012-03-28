@@ -118,15 +118,13 @@ public class MessageDAO extends DAO {
 		UserDAO udao = new UserDAO(con);
 
 		try {
-			if (maxMsg > 0)
-			{
-				msgList.add(new Message(res.getInt("idmessage"), udao.getUser(res.getInt("iduser")), res.getString("content"), res.getDate("time")));
-				maxMsg --;
+			if (maxMsg > 0) {
+				do {
+					msgList.add(new Message(res.getInt("idmessage"), udao.getUser(res.getInt("iduser")), res.getString("content"), res.getDate("time")));
+					maxMsg --;
+				} while (res.next() && maxMsg > 0);
 			}
-			while (res.next() && maxMsg > 0) {
-				msgList.add(new Message(res.getInt("idmessage"), udao.getUser(res.getInt("iduser")), res.getString("content"), res.getDate("time")));
-				maxMsg --;
-			}
+			
 		} catch (SQLException e) {
 			System.out.println("There are no new messages !");
 		}

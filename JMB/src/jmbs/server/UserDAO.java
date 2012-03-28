@@ -91,11 +91,9 @@ public class UserDAO extends DAO {
 		ResultSet res = executeQuery();
 
 		try {
-			p.add(new Project(res.getString("name"), res.getInt("idproject")));
-			while (!res.isLast()) {
-				res.next();
+			do {	
 				p.add(new Project(res.getString("name"), res.getInt("idproject")));
-			}
+			} while (res.next());
 
 		} catch (SQLException e) {
 			System.err.println("This user has no projects/n ");
@@ -146,18 +144,13 @@ public class UserDAO extends DAO {
 			setString(2,"%"+uName+"%");
 			errorMsg="No users found with name or second name containing  \"" + uName +"\"";
 		}
-		
-		
 		ResultSet res = executeQuery();
 
 		try {
-				userid = res.getInt("iduser");
-				u.add(new User(res.getString("name"), res.getString("forename"), res.getString("email"), userid));
-			while (!res.isLast()) {
-					res.next();
+			 do {
 					userid = res.getInt("iduser");
 					u.add(new User(res.getString("name"), res.getString("forename"), res.getString("email"), userid));
-			}
+			} while (res.next());
 		} catch (SQLException e) {
 			System.err.println(errorMsg);
 		}
@@ -315,12 +308,9 @@ public class UserDAO extends DAO {
 		ResultSet res = executeQuery();
 
 		try {
-			u.add(new User(res.getString("name"), res.getString("forename"), res.getString("email"), res.getInt("iduser")));
-
-			while (!res.isLast()) {
-				res.next();
+			do {
 				u.add(new User(res.getString("name"), res.getString("forename"), res.getString("email"), res.getInt("iduser")));
-			}
+			} while (res.next());
 		} catch (SQLException e) {
 			System.err.println(user.getFname() + " does not follow anyone yet!");
 		}
@@ -348,12 +338,9 @@ public class UserDAO extends DAO {
 		ResultSet res = executeQuery();
 		
 		try {
-			u.add(new User(res.getString("name"), res.getString("forename"), res.getString("email"), res.getInt("iduser")));
-
-			while (!res.isLast()) {
-				res.next();
+			do {
 				u.add(new User(res.getString("name"), res.getString("forename"), res.getString("email"), res.getInt("iduser")));
-			}
+			}while (res.next());
 		} catch (SQLException e) {
 			System.err.println(user.getFname() + " is not followed by anyone yet!");
 		}

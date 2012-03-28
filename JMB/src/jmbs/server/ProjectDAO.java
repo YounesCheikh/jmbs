@@ -35,13 +35,11 @@ public class ProjectDAO extends DAO {
 		ResultSet res = executeQuery();
 
 		try {
-			userid = res.getInt("iduser");
-			u.add(new User(res.getString("name"), res.getString("forename"), res.getString("email"), userid));
-			while (!res.isLast()) {
-				res.next();
+			do {
+				
 				userid = res.getInt("iduser");
 				u.add(new User(res.getString("name"), res.getString("forename"), res.getString("email"), userid));
-			}
+			}while (res.next());
 
 		} catch (SQLException e) {
 			System.out.println("Unable to find project with id=" + id + ".");
