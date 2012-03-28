@@ -182,10 +182,10 @@ public class Requests extends UnicastRemoteObject implements RemoteServer {
 	 * 
 	 * @see jmbs.common.RemoteServer#getLatestTL(int, int)
 	 */
-	public ArrayList<Message> getLatestTL(int iduser, int idlastmessage) throws RemoteException {
+	public ArrayList<Message> getLatestTL(int iduser, int idlastmessage, int maxMsg) throws RemoteException {
 		Connection con = new Connect().getConnection();
 		MessageDAO mdao = new MessageDAO(con);
-		ArrayList<Message> ra = mdao.getMessages(iduser, idlastmessage);
+		ArrayList<Message> ra = mdao.getMessages(iduser, idlastmessage, maxMsg);
 		
 		try {
 			con.close();

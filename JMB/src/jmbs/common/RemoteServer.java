@@ -85,6 +85,6 @@ public interface RemoteServer extends Remote {
 	 * @return list of messages
 	 * @throws RemoteException
 	 */
-	public ArrayList<Message> getLatestTL(int iduser, int idlastmessage) throws RemoteException;
+	public ArrayList<Message> getLatestTL(int iduser, int idlastmessage, int maxMsg) throws RemoteException;
 
 }

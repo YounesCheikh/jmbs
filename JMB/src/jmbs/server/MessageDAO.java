@@ -105,11 +105,11 @@ public class MessageDAO extends DAO {
 	 * @param idlastmessage
 	 * @return list of messages
 	 */
-	public ArrayList<Message> getMessages(int iduser, int idlastmessage) {
+	public ArrayList<Message> getMessages(int iduser, int idlastmessage, int maxMsg) {
 		Connection con = new Connect().getConnection();
 		ArrayList<Message> msgList = new ArrayList<Message>();
 		
-		set("SELECT idmessage, content, \"time\", iduser FROM message,follows WHERE (((follows.followed = message.iduser AND follows.follower=?) OR message.iduser=?) AND idmessage>?) GROUP BY idmessage ORDER BY idmessage;");
+		set("SELECT idmessage, content, \"time\", iduser FROM message,follows WHERE (((follows.followed = message.iduser AND follows.follower=?) OR message.iduser=?) AND idmessage>?) GROUP BY idmessage ORDER BY idmessage DESC;");
 		setInt(1,iduser);
 		setInt(2,iduser);
 		setInt(3,idlastmessage);
@@ -118,10 +118,14 @@ public class MessageDAO extends DAO {
 		UserDAO udao = new UserDAO(con);
 
 		try {
-			msgList.add(new Message(res.getInt("idmessage"), udao.getUser(res.getInt("iduser")), res.getString("content"), res.getDate("time")));
-			while (!res.isLast()) {
-				res.next();
+			if (maxMsg > 0)
+			{
 				msgList.add(new Message(res.getInt("idmessage"), udao.getUser(res.getInt("iduser")), res.getString("content"), res.getDate("time")));
+				maxMsg --;
+			}
+			while (res.next() && maxMsg > 0) {
+				msgList.add(new Message(res.getInt("idmessage"), udao.getUser(res.getInt("iduser")), res.getString("content"), res.getDate("time")));
+				maxMsg --;
 			}
 		} catch (SQLException e) {
 			System.out.println("There are no new messages !");
