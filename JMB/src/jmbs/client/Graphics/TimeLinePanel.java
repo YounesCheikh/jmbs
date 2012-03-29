@@ -27,7 +27,7 @@ public class TimeLinePanel extends JPanel {
 
 	public void putMessage(Component obj) {
 		// put new element and go to next row
-		this.add(obj, "wrap");
+		this.add(obj, "wrap",0);
 		this.updateUI();
 	}
 

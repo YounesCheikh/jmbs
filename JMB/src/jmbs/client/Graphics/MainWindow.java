@@ -126,6 +126,7 @@ public class MainWindow {
 
 		JScrollPane tlscrollPane = new JScrollPane();
 		tlscrollPane.setViewportBorder(null);
+		tlscrollPane.setAutoscrolls(true);
 		tlscrollPane.getVerticalScrollBar().setUnitIncrement(30);
 		tlscrollPane
 				.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);

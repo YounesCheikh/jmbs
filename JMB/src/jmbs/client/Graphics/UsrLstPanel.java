@@ -23,7 +23,7 @@ public class UsrLstPanel extends JPanel {
 
 	public void putUser(Component obj) {
 		// put new element and go to next row
-		this.add(obj, "wrap");
+		this.add(obj, "wrap",0);
 		this.updateUI();
 	}
 
