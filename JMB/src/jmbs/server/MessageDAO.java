@@ -26,7 +26,7 @@ public class MessageDAO extends DAO {
 		Message m = null;
 
 		set("SELECT * FROM message WHERE idmessage=?;");
-		setInt(1,id);
+		setInt(1, id);
 		ResultSet res = executeQuery();
 
 		UserDAO uDAO = new UserDAO(this.getConnection());
@@ -41,8 +41,7 @@ public class MessageDAO extends DAO {
 		} catch (SQLException e) {
 			System.err.println("Database acess error !\n Unable to close connection !");
 		}
-		
-		
+
 		return m;
 	}
 
@@ -54,7 +53,7 @@ public class MessageDAO extends DAO {
 	{
 		Message m = null;
 		set("SELECT * FROM message WHERE iduser=? ORDER BY idmessage DESC;");
-		setInt(1,iduser);
+		setInt(1, iduser);
 		ResultSet res = executeQuery();
 
 		// TODO: test it !
@@ -72,7 +71,6 @@ public class MessageDAO extends DAO {
 			System.err.println("Database acess error !\n Unable to close connection !");
 		}
 
-		
 		return m;
 
 	}
@@ -87,16 +85,15 @@ public class MessageDAO extends DAO {
 	public int addMessage(Message m) {
 		int messageId = -1;
 		set("INSERT INTO message(content, \"time\", iduser) VALUES (?,?,?);");
-		setString(1,m.getMessage());
-		setDate(2,m.getDatetime());
-		setInt(3,m.getOwner().getId());
+		setString(1, m.getMessage());
+		setDate(2, m.getDatetime());
+		setInt(3, m.getOwner().getId());
 		boolean res = executeUpdate();
-		
+
 		if (res)
 			messageId = getLastMessage(m.getOwner().getId()).getId();
 		// id of the last message sent to database by the user.
-		
-		
+
 		return messageId;
 	}
 
@@ -108,23 +105,29 @@ public class MessageDAO extends DAO {
 	public ArrayList<Message> getMessages(int iduser, int idlastmessage, int maxMsg) {
 		Connection con = new Connect().getConnection();
 		ArrayList<Message> msgList = new ArrayList<Message>();
-		
-		set("SELECT idmessage, content, \"time\", iduser FROM message,follows WHERE (((follows.followed = message.iduser AND follows.follower=?) OR message.iduser=?) AND idmessage>?) GROUP BY idmessage ORDER BY idmessage DESC;");
-		setInt(1,iduser);
-		setInt(2,iduser);
-		setInt(3,idlastmessage);
+
+		set("SELECT idmessage, content, \"time\", iduser FROM message,follows " +
+				"WHERE (((follows.followed = message.iduser AND follows.follower=?) " +
+				"OR message.iduser=?) AND idmessage>?) " +
+				"GROUP BY idmessage ORDER BY idmessage;");
+		setInt(1, iduser);
+		setInt(2, iduser);
+		setInt(3, idlastmessage);
 		ResultSet res = executeQuery();
-		
+
 		UserDAO udao = new UserDAO(con);
 
 		try {
 			if (maxMsg > 0) {
 				do {
 					msgList.add(new Message(res.getInt("idmessage"), udao.getUser(res.getInt("iduser")), res.getString("content"), res.getDate("time")));
-					maxMsg --;
-				} while (res.next() && maxMsg > 0);
+				} while (res.next());
+				//int i = 0;
+				while (msgList.size()>maxMsg) {
+					msgList.remove(0);
+				}
 			}
-			
+
 		} catch (SQLException e) {
 			System.out.println("There are no new messages !");
 		}
@@ -133,8 +136,7 @@ public class MessageDAO extends DAO {
 		} catch (SQLException e) {
 			System.err.println("Database acess error !\n Unable to close connection !");
 		}
-		
-		
+
 		return msgList;
 	}
 
