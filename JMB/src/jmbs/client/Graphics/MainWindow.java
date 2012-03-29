@@ -1,21 +1,16 @@
 package jmbs.client.Graphics;
 
 import javax.swing.JFrame;
-import javax.swing.JMenuBar;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
-import javax.swing.JSeparator;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.UIManager;
 import javax.swing.border.TitledBorder;
 import javax.swing.JScrollPane;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 
@@ -29,20 +24,47 @@ import javax.swing.GroupLayout.Alignment;
 public class MainWindow {
 
 	private static JFrame frmJmbsClient = null;
-	private TimeLinePanel timelinepanel;
-	private ProfilePanel ppanel;
-	private NewMessageFrame nmFrame;
-	private AboutFrame about;
-	private UsersFrame uFrame;
-	private ArrayList<Message> msgListTL;
+
+	public NewMessageFrame getNmFrame() {
+		return nmFrame;
+	}
+
+	public AboutFrame getAbout() {
+		return about;
+	}
+
+	public UsersFrame getuFrame() {
+		return uFrame;
+	}
+
+	public User getCurrentUser() {
+		return currentUser;
+	}
+
+	private static TimeLinePanel timelinepanel;
+	private static ProfilePanel ppanel;
+	private static NewMessageFrame nmFrame;
+	private static AboutFrame about;
+	private static UsersFrame uFrame;
+	public ArrayList<Message> getMsgListTL() {
+		return msgListTL;
+	}
+
+	private static ArrayList<Message> msgListTL;
 	private User currentUser = new CurrentUser().get();
+	private MainMenuBar menuBar;
+	private JTabbedPane tabbedPane;
+	private JPanel tlpanel;
+
+	public MainMenuBar getMenuBar() {
+		return menuBar;
+	}
 
 	/**
-	 * Create the application. TODO: create a new class for the menubar
+	 * Create the application.
 	 */
 	public MainWindow() {
 		if (frmJmbsClient == null) {
-
 			initialize();
 		}
 	}
@@ -59,15 +81,17 @@ public class MainWindow {
 	private void initialize() {
 		
 		frmJmbsClient = new JFrame();
+		
 		timelinepanel = new TimeLinePanel();
+		timelinepanel.setBorder(null);
+		
 		ppanel = new ProfilePanel();
 		nmFrame = new NewMessageFrame(timelinepanel);
 		about = new AboutFrame();
 		uFrame = new UsersFrame();
-
 		try {
 			msgListTL = new ClientRequests().getConnection().getLatestTL(
-					currentUser.getId(), 0);
+					currentUser.getId(), 0, 50);
 			timelinepanel.putList(msgListTL);
 		} catch (RemoteException e1) {
 			// TODO Auto-generated catch block
@@ -75,143 +99,31 @@ public class MainWindow {
 			System.out.println("Can't get last timeLine from server ");
 		}
 
-		frmJmbsClient.setTitle("JMBS Client");
+		frmJmbsClient.setTitle("JMBS Client : "+currentUser.getFullName());
 		// frmJmbsClient.setBounds(100, 100, 365, 600);
-		frmJmbsClient.setSize(440, 600);
-		frmJmbsClient.setMinimumSize(new Dimension(440, 560));
+		frmJmbsClient.setSize(480, 640);
+		frmJmbsClient.setMinimumSize(new Dimension(480, 600));
 		frmJmbsClient.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmJmbsClient.setLocationRelativeTo(null);
 		// frmJmbsClient.setVisible(true);
 
-		JMenuBar menuBar = new JMenuBar();
-		menuBar.setBackground(Color.LIGHT_GRAY);
+		menuBar = new MainMenuBar(this);
 		frmJmbsClient.setJMenuBar(menuBar);
-		;
-		// frmJmbsClient.getContentPane().add(menuBar, BorderLayout.NORTH);
-
-		JMenu mnJmbs = new JMenu("JMBS");
-		mnJmbs.setBackground(Color.LIGHT_GRAY);
-		menuBar.add(mnJmbs);
-
-		JMenuItem mntmNewMessage = new JMenuItem("New Message");
-		mntmNewMessage.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				// Open the new Frame to write a new message
-				nmFrame.setVisible(true);
-			}
-		});
-		mnJmbs.add(mntmNewMessage);
-
-		JMenuItem mntmRefresh = new JMenuItem("Refresh");
-		mntmRefresh.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				try {
-					msgListTL = new ClientRequests().getConnection()
-							.getLatestTL(currentUser.getId(),
-									timelinepanel.getLastIdMsg());
-					timelinepanel.putList(msgListTL);
-				} catch (RemoteException e1) {
-					// TODO Auto-generated catch block
-					// e1.printStackTrace();
-					System.out.println("Can't get last timeLine from server ");
-				}
-			}
-		});
-		mnJmbs.add(mntmRefresh);
-
-		JSeparator separator_4 = new JSeparator();
-		mnJmbs.add(separator_4);
-
-		JMenuItem mntmAboutJmbs = new JMenuItem("About JMBS");
-		mntmAboutJmbs.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				about.setVisible(true);
-			}
-		});
-		mnJmbs.add(mntmAboutJmbs);
-
-		JSeparator separator = new JSeparator();
-		mnJmbs.add(separator);
-
-		JMenuItem mntmPreferences = new JMenuItem("Preferences");
-		mnJmbs.add(mntmPreferences);
-
-		JMenuItem mntmEmptyCache = new JMenuItem("Empty cache");
-		mntmEmptyCache.setEnabled(false);
-		mnJmbs.add(mntmEmptyCache);
-
-		JSeparator separator_2 = new JSeparator();
-		mnJmbs.add(separator_2);
-
-		JMenuItem mntmHide = new JMenuItem("Hide");
-		mntmHide.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				frmJmbsClient.setState(JFrame.ICONIFIED);
-			}
-		});
-		mnJmbs.add(mntmHide);
-
-		JMenuItem mntmDisconnect = new JMenuItem("Disconnect");
-		mntmDisconnect.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				// Close all other jmbs frames
-
-				if (nmFrame.isVisible())
-					nmFrame.dispose();
-				if (uFrame.isVisible())
-					uFrame.dispose();
-				if (about.isVisible())
-					about.dispose();
-
-				frmJmbsClient.dispose();
-				new CurrentUser().disconnect();
-				ConnectionFrame cf = new ConnectionFrame(new MainWindow());
-				cf.setVisible(true);
-			}
-		});
-		mnJmbs.add(mntmDisconnect);
-
-		JSeparator separator_1 = new JSeparator();
-		mnJmbs.add(separator_1);
-
-		JMenuItem mntmQuit = new JMenuItem("Quit");
-		mntmQuit.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				System.exit(0);
-			}
-		});
-		mnJmbs.add(mntmQuit);
-
-		JMenu mnActivities = new JMenu("Activities");
-		mnActivities.setBackground(Color.LIGHT_GRAY);
-		menuBar.add(mnActivities);
-
-		JMenuItem mntmUsers = new JMenuItem("Users");
-		mntmUsers.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				// uFrame = new UsersFrame();
-				uFrame.setVisible(true);
-			}
-		});
-		mnActivities.add(mntmUsers);
-
-		JMenuItem mntmProjects = new JMenuItem("Projects");
-		mntmProjects.setEnabled(false);
-		mnActivities.add(mntmProjects);
-
-		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.LEFT);
+		tabbedPane = new JTabbedPane(JTabbedPane.LEFT);
+		
 		tabbedPane.setBorder(new TitledBorder(null, "", TitledBorder.LEADING,
 				TitledBorder.BELOW_BOTTOM, null, null));
 		tabbedPane.setToolTipText("JMBS");
 		frmJmbsClient.getContentPane().add(tabbedPane, BorderLayout.CENTER);
 
-		JPanel tlpanel = new JPanel();
+		tlpanel = new JPanel();
+		tlpanel.setBorder(null);
+		
 		tlpanel.setToolTipText("TimeLine");
 		tabbedPane.addTab("TimeLine", null, tlpanel, null);
 
 		JScrollPane tlscrollPane = new JScrollPane();
-		tlscrollPane.setViewportBorder(UIManager
-				.getBorder("InsetBorder.aquaVariant"));
+		tlscrollPane.setViewportBorder(null);
 		tlscrollPane
 				.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		tlscrollPane.setViewportView(timelinepanel);
@@ -236,8 +148,7 @@ public class MainWindow {
 		profpanel.setLayout(new BorderLayout(0, 0));
 
 		JScrollPane profilescrollPane = new JScrollPane();
-		profilescrollPane.setViewportBorder(UIManager
-				.getBorder("InsetBorder.aquaVariant"));
+		profilescrollPane.setViewportBorder(UIManager.getBorder("List.evenRowBackgroundPainter"));
 		profilescrollPane
 				.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		profilescrollPane.setViewportView(ppanel);
@@ -252,6 +163,26 @@ public class MainWindow {
 	 * @return the default timeline Panel
 	 */
 	public TimeLinePanel getTLPanel() {
-		return this.timelinepanel;
+		return MainWindow.timelinepanel;
+	}
+	
+	public void setColors(String name) {
+		ColorStyle cs = new ColorStyle(name);
+		ArrayList<Color> defaultColors = new ArrayList<Color>();
+		defaultColors.add(frmJmbsClient.getBackground());
+		defaultColors.add(frmJmbsClient.getContentPane().getBackground());
+		defaultColors.add(frmJmbsClient.getForeground());
+		defaultColors.add(frmJmbsClient.getContentPane().getForeground());
+		cs.setDefaultColors(defaultColors);
+		frmJmbsClient.setVisible(false);
+		frmJmbsClient.setBackground(cs.getWindowBackground()); // color 0
+		frmJmbsClient.getContentPane().setBackground(cs.getWindowBackground()); // Color 0
+		timelinepanel.setBackground(cs.getTimeLineBackground()); // Color 1
+		//tabbedPane.setBackground(cs.getWindowBackground()); // Color 0
+		//tlpanel.setBackground(cs.getWindowBackground()); // Color 0
+		for(Component c: timelinepanel.getComponents()) {
+			((MsgPanel) c).setColors(name);
+		}
+		frmJmbsClient.setVisible(true);
 	}
 }

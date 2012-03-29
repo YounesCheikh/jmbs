@@ -177,7 +177,7 @@ public class ConnectionPanel extends JPanel {
 						this.emailTextField.getText(),
 						new HashPassword(listToString(passwordField
 								.getPassword())).getHashed());
-				if (u.getId() != -1 && u.getId() != -2) {
+				if (u.getId() != -1) {
 					cf.dispose();
 					new CurrentUser(u);
 					this.initMainWindow();
@@ -189,15 +189,9 @@ public class ConnectionPanel extends JPanel {
 					respLabel.setForeground(new Color(200, 0, 0));
 				}
 			} catch (RemoteException e) {
-				// TODO Auto-generated catch block
-				// e.printStackTrace();
 				System.out.println("Connection to server impossible \n"
 						+ e.getMessage());
 			}
-
-			// putElement(0, 3, respLabel);
-			// System.out.println("Vrai");
-
 		}
 	}
 

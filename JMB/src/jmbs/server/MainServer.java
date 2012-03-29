@@ -3,7 +3,7 @@
  */
 package jmbs.server;
 
-import java.rmi.RemoteException;
+import java.awt.EventQueue;
 import java.sql.SQLException;
 
 /**
@@ -16,15 +16,16 @@ public class MainServer {
 	 * @param args
 	 * @throws SQLException
 	 */
-	public static void main(String[] args) throws SQLException {
-
-		try {
-			new Requests("serverjmbs");
-		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					ServerWindow window = new ServerWindow();
+					window.frmJmbsServerControl.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
 	}
-
 }

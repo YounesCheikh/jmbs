@@ -1,10 +1,7 @@
 package jmbs.client.Graphics;
 
 import javax.swing.JPanel;
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
 import javax.swing.JLabel;
-import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
 import java.awt.Font;
@@ -36,162 +33,96 @@ public class ProfilePanel extends JPanel {
 	public ProfilePanel() {
 		
 		JLabel lblName = new JLabel("Name:");
+		lblName.setBounds(9, 46, 40, 16);
 		
 		JLabel lblLastName = new JLabel("Last Name:");
+		lblLastName.setBounds(9, 86, 70, 16);
 		
 		JLabel lblEmailAdress = new JLabel("Email Adress:");
+		lblEmailAdress.setBounds(9, 126, 85, 16);
 		
 		JSeparator separator = new JSeparator();
+		separator.setBounds(9, 154, 267, 12);
 		
 		JLabel lblPublicInformations = new JLabel("Public Informations");
+		lblPublicInformations.setBounds(84, 8, 162, 20);
 		lblPublicInformations.setHorizontalAlignment(SwingConstants.CENTER);
 		lblPublicInformations.setFont(new Font("Lucida Grande", Font.BOLD, 16));
 		
 		JLabel lblChangePassword = new JLabel("Change Password");
+		lblChangePassword.setBounds(82, 172, 163, 20);
 		lblChangePassword.setForeground(Color.RED);
 		lblChangePassword.setHorizontalAlignment(SwingConstants.CENTER);
 		lblChangePassword.setFont(new Font("Lucida Grande", Font.BOLD, 16));
 		
 		JLabel lblOldPassword = new JLabel("Old Password:");
+		lblOldPassword.setBounds(6, 204, 89, 16);
 		
 		JLabel lblNewPassword = new JLabel("New Password:");
+		lblNewPassword.setBounds(6, 238, 94, 16);
 		
 		JLabel lblConfirmPassword = new JLabel("Confirm Password:");
+		lblConfirmPassword.setBounds(9, 272, 118, 16);
 		
 		nameTextField = new JTextField(currentUser.getName());
+		nameTextField.setBounds(142, 40, 180, 28);
 		nameTextField.setColumns(10);
 		
 		fnameTextField = new JTextField(currentUser.getFname());
+		fnameTextField.setBounds(142, 80, 180, 28);
 		fnameTextField.setColumns(10);
 		
 		emailTextField = new JTextField(currentUser.getMail());
+		emailTextField.setBounds(142, 120, 180, 28);
 		emailTextField.setColumns(10);
 		
 		passwordField = new JPasswordField();
+		passwordField.setBounds(142, 198, 180, 28);
 		
 		newpasswordField = new JPasswordField();
+		newpasswordField.setBounds(142, 232, 180, 28);
 		
 		confirmpasswordField = new JPasswordField();
+		confirmpasswordField.setBounds(142, 266, 180, 28);
 		
 		JPanel panel = new JPanel();
+		panel.setBounds(9, 350, 96, 101);
 		panel.setBackground(Color.GRAY);
 		
 		JSeparator separator_1 = new JSeparator();
+		separator_1.setBounds(9, 306, 264, 12);
 		
 		JLabel lblProfilePicture = new JLabel("Profile Picture");
+		lblProfilePicture.setBounds(122, 324, 115, 20);
 		lblProfilePicture.setFont(new Font("Lucida Grande", Font.BOLD, 16));
 		
 		JButton btnUploadNewPhoto = new JButton("Upload New Photo");
+		btnUploadNewPhoto.setBounds(117, 358, 159, 29);
 		
 		textField = new JTextField();
+		textField.setBounds(117, 399, 159, 28);
 		textField.setColumns(10);
-		GroupLayout groupLayout = new GroupLayout(this);
-		groupLayout.setHorizontalGroup(
-			groupLayout.createParallelGroup(Alignment.TRAILING)
-				.addGroup(groupLayout.createSequentialGroup()
-					.addGap(84)
-					.addComponent(lblPublicInformations)
-					.addContainerGap(50, Short.MAX_VALUE))
-				.addGroup(groupLayout.createSequentialGroup()
-					.addGap(82)
-					.addComponent(lblChangePassword, GroupLayout.PREFERRED_SIZE, 163, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(75, Short.MAX_VALUE))
-				.addGroup(Alignment.LEADING, groupLayout.createSequentialGroup()
-					.addContainerGap()
-					.addComponent(lblOldPassword)
-					.addGap(48)
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING, false)
-						.addComponent(newpasswordField, GroupLayout.PREFERRED_SIZE, 127, GroupLayout.PREFERRED_SIZE)
-						.addComponent(passwordField, GroupLayout.PREFERRED_SIZE, 127, GroupLayout.PREFERRED_SIZE))
-					.addGap(50))
-				.addGroup(Alignment.LEADING, groupLayout.createSequentialGroup()
-					.addContainerGap()
-					.addComponent(lblNewPassword)
-					.addContainerGap(220, Short.MAX_VALUE))
-				.addGroup(Alignment.LEADING, groupLayout.createSequentialGroup()
-					.addGap(122)
-					.addComponent(lblProfilePicture)
-					.addContainerGap(83, Short.MAX_VALUE))
-				.addGroup(Alignment.LEADING, groupLayout.createSequentialGroup()
-					.addGap(9)
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING, false)
-							.addComponent(separator, Alignment.LEADING)
-							.addGroup(Alignment.LEADING, groupLayout.createSequentialGroup()
-								.addPreferredGap(ComponentPlacement.RELATED)
-								.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-									.addComponent(lblName)
-									.addComponent(lblLastName)
-									.addComponent(lblEmailAdress))
-								.addGap(48)
-								.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-									.addComponent(emailTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-									.addComponent(fnameTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-									.addComponent(nameTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))))
-						.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
-							.addGroup(Alignment.LEADING, groupLayout.createSequentialGroup()
-								.addComponent(panel, GroupLayout.PREFERRED_SIZE, 96, GroupLayout.PREFERRED_SIZE)
-								.addPreferredGap(ComponentPlacement.UNRELATED)
-								.addGroup(groupLayout.createParallelGroup(Alignment.LEADING, false)
-									.addComponent(textField)
-									.addComponent(btnUploadNewPhoto, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-							.addGroup(Alignment.LEADING, groupLayout.createParallelGroup(Alignment.TRAILING, false)
-								.addComponent(separator_1, Alignment.LEADING)
-								.addGroup(Alignment.LEADING, groupLayout.createSequentialGroup()
-									.addComponent(lblConfirmPassword)
-									.addGap(18)
-									.addComponent(confirmpasswordField, 128, 128, 128)))))
-					.addContainerGap(20, Short.MAX_VALUE))
-		);
-		groupLayout.setVerticalGroup(
-			groupLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(groupLayout.createSequentialGroup()
-					.addGap(8)
-					.addComponent(lblPublicInformations)
-					.addGap(12)
-					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-						.addComponent(lblName)
-						.addComponent(nameTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-						.addComponent(lblLastName)
-						.addComponent(fnameTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addGap(12)
-					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-						.addComponent(lblEmailAdress)
-						.addComponent(emailTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(separator, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(lblChangePassword)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-						.addComponent(lblOldPassword)
-						.addComponent(passwordField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-						.addComponent(lblNewPassword)
-						.addComponent(newpasswordField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-						.addComponent(lblConfirmPassword)
-						.addComponent(confirmpasswordField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addComponent(separator_1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(lblProfilePicture)
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addGroup(groupLayout.createSequentialGroup()
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(panel, GroupLayout.PREFERRED_SIZE, 101, GroupLayout.PREFERRED_SIZE))
-						.addGroup(groupLayout.createSequentialGroup()
-							.addGap(14)
-							.addComponent(btnUploadNewPhoto)
-							.addPreferredGap(ComponentPlacement.UNRELATED)
-							.addComponent(textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
-					.addContainerGap(9, Short.MAX_VALUE))
-		);
-		setLayout(groupLayout);
+		setLayout(null);
+		add(lblPublicInformations);
+		add(lblChangePassword);
+		add(lblOldPassword);
+		add(newpasswordField);
+		add(passwordField);
+		add(lblNewPassword);
+		add(lblProfilePicture);
+		add(separator);
+		add(lblName);
+		add(lblLastName);
+		add(lblEmailAdress);
+		add(emailTextField);
+		add(fnameTextField);
+		add(nameTextField);
+		add(panel);
+		add(textField);
+		add(btnUploadNewPhoto);
+		add(separator_1);
+		add(lblConfirmPassword);
+		add(confirmpasswordField);
 
 	}
 }

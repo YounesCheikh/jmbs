@@ -15,20 +15,28 @@ import jmbs.common.User;
 public class Requests extends UnicastRemoteObject implements RemoteServer {
 
 	private String name;
-
+	private Registry registry;
 	private static final long serialVersionUID = 5885886202424414094L;
 
 	public Requests(String name) throws RemoteException {
 		this.name = name;
 		try {
-			Registry registry = LocateRegistry.getRegistry();
-			registry.rebind(this.name, this);
+			registry = LocateRegistry.getRegistry();
+			//registry.rebind(this.name, this);
 		} catch (RemoteException e) {
 			System.err.println("Unexcepted remote error.");
 			e.printStackTrace();
 			System.exit(-1); // can't just return, rmi threads may not exit
 		}
-		System.out.println("The JMBS server loaded and ready to use.");
+		//System.out.println("The JMBS server loaded and ready to use.");
+	}
+	
+	public String getName() {
+		return name;
+	}
+	
+	public Registry getRegistry() {
+		return registry;
 	}
 	
 	/*
