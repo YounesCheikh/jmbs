@@ -16,6 +16,7 @@ import java.util.ArrayList;
 
 import jmbs.client.ClientRequests;
 import jmbs.client.CurrentUser;
+import jmbs.client.SysConf;
 import jmbs.common.Message;
 import jmbs.common.User;
 import javax.swing.GroupLayout;
@@ -91,7 +92,7 @@ public class MainWindow {
 		uFrame = new UsersFrame();
 		try {
 			msgListTL = new ClientRequests().getConnection().getLatestTL(
-					currentUser.getId(), 0, 50);
+					currentUser.getId(), 0, ClientRequests.maxReceivedMsgs);
 			timelinepanel.putList(msgListTL);
 		} catch (RemoteException e1) {
 			// TODO Auto-generated catch block
@@ -104,8 +105,9 @@ public class MainWindow {
 		frmJmbsClient.setSize(480, 640);
 		frmJmbsClient.setMinimumSize(new Dimension(480, 600));
 		frmJmbsClient.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frmJmbsClient.setLocationRelativeTo(null);
+		//frmJmbsClient.setLocationRelativeTo(null);
 		// frmJmbsClient.setVisible(true);
+		new SysConf().centerThisFrame(frmJmbsClient);
 
 		menuBar = new MainMenuBar(this);
 		frmJmbsClient.setJMenuBar(menuBar);
@@ -124,6 +126,7 @@ public class MainWindow {
 
 		JScrollPane tlscrollPane = new JScrollPane();
 		tlscrollPane.setViewportBorder(null);
+		tlscrollPane.getVerticalScrollBar().setUnitIncrement(30);
 		tlscrollPane
 				.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		tlscrollPane.setViewportView(timelinepanel);

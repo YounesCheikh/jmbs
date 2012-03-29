@@ -10,6 +10,8 @@ import java.awt.event.MouseMotionAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseAdapter;
 
+import jmbs.client.SysConf;
+
 public class RegisterFrame extends JFrame {
 
 	/**
@@ -23,7 +25,8 @@ public class RegisterFrame extends JFrame {
 	 */
 	public RegisterFrame() {
 		
-		setLocationRelativeTo(null);
+		//setLocationRelativeTo(null);
+		new SysConf().centerThisFrame(this);
 		
 		addMouseListener(new MouseAdapter() {
 			@Override

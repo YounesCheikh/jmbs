@@ -17,6 +17,7 @@ import java.util.ArrayList;
 
 import jmbs.client.ClientRequests;
 import jmbs.client.CurrentUser;
+import jmbs.client.SysConf;
 import jmbs.common.User;
 import java.awt.Font;
 import javax.swing.JCheckBox;
@@ -46,12 +47,13 @@ public class UsersFrame extends JFrame {
 	public UsersFrame() {
 		setResizable(false);
 		setAlwaysOnTop(true);
-		setLocationRelativeTo(new MainWindow().getFrame());
+		//setLocationRelativeTo(new MainWindow().getFrame());
 		setLocationRelativeTo(nameTextField);
 		setTitle("Users management ");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		// setBounds(100, 100, 460, 420);
 		setSize(460, 420);
+		new SysConf().centerThisFrame(this);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));

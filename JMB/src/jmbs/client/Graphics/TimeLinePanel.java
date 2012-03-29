@@ -15,6 +15,7 @@ public class TimeLinePanel extends JPanel {
 	 */
 	private static final long serialVersionUID = -8369036368823849803L;
 	private static int idLastMessage = 0;
+	
 
 	/**
 	 * Create the panel.

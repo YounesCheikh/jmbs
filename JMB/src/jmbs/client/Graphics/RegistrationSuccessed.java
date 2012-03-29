@@ -14,6 +14,8 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
+import jmbs.client.SysConf;
+
 public class RegistrationSuccessed extends JDialog {
 
 	/**
@@ -27,8 +29,10 @@ public class RegistrationSuccessed extends JDialog {
 	 * Create the dialog.
 	 */
 	public RegistrationSuccessed(String userName) {
-		setLocationRelativeTo(null);
-		setBounds(100, 100, 450, 203);
+		//setLocationRelativeTo(null);
+		setSize(450, 200);
+		new SysConf().centerThisDialog(this);
+		//setBounds(100, 100, 450, 203);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);

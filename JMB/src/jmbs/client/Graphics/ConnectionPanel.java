@@ -19,9 +19,11 @@ import java.awt.event.ActionEvent;
 import jmbs.client.ClientRequests;
 import jmbs.client.CurrentUser;
 import jmbs.client.HashPassword;
+import jmbs.common.RemoteServer;
 import jmbs.common.User;
 import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
+
 import net.miginfocom.swing.MigLayout;
 
 public class ConnectionPanel extends JPanel {
@@ -91,8 +93,7 @@ public class ConnectionPanel extends JPanel {
 
 		JLabel lblRegister = new JLabel("don't have account?");
 
-		ImagePanel logopanel = new ImagePanel(
-				"./src/jmbs/client/img/jmbslogo_small.png");
+		ImagePanel logopanel = new ImagePanel("./src/jmbs/client/img/jmbslogo_small.png");
 
 		JButton btnRegister = new JButton("Register");
 		btnRegister.addActionListener(new ActionListener() {
@@ -138,9 +139,7 @@ public class ConnectionPanel extends JPanel {
 	 * @return true if the user has entred a right email adress
 	 */
 	private boolean verification(String mail) {
-		boolean correctMail = Pattern.matches(
-				"^[_a-z0-9-]+(\\.[_a-z0-9-]+)*@[a-z0-9-]+(\\.[a-z0-9-]+)+$",
-				mail);
+		boolean correctMail = Pattern.matches("^[_a-z0-9-]+(\\.[_a-z0-9-]+)*@[a-z0-9-]+(\\.[a-z0-9-]+)+$", mail);
 		return (correctMail);
 	}
 
@@ -160,6 +159,7 @@ public class ConnectionPanel extends JPanel {
 	 * this methode update the response Label 'respLabel'
 	 */
 	private void checkConnection() {
+		RemoteServer server = new ClientRequests().getConnection();
 		if (!verification(emailTextField.getText())) {
 			respLabel.setText("Enter a valide email please!");
 			respLabel.setForeground(Color.red);
@@ -173,24 +173,23 @@ public class ConnectionPanel extends JPanel {
 			respLabel.setForeground(new Color(0, 100, 0));
 
 			try {
-				User u = new ClientRequests().getConnection().connectUser(
-						this.emailTextField.getText(),
-						new HashPassword(listToString(passwordField
-								.getPassword())).getHashed());
-				if (u.getId() != -1) {
-					cf.dispose();
-					new CurrentUser(u);
-					this.initMainWindow();
-					this.getMainWindow().getFrame().setVisible(true);
-					// System.out.println(new CurrentUser().get().toString());
-				} else if (u.getId() == -1) {
-					respLabel
-							.setText("Wrong password or wrong email, Please try again!");
-					respLabel.setForeground(new Color(200, 0, 0));
+				if (server != null) {
+					User u = server.connectUser(this.emailTextField.getText(), new HashPassword(listToString(passwordField.getPassword())).getHashed());
+					if (u.getId() != -1) {
+						cf.dispose();
+						new CurrentUser(u);
+						this.initMainWindow();
+						this.getMainWindow().getFrame().setVisible(true);
+						// System.out.println(new
+						// CurrentUser().get().toString());
+					} else if (u.getId() == -1) {
+						respLabel.setText("Wrong password or wrong email, Please try again!");
+						respLabel.setForeground(new Color(200, 0, 0));
+					}
 				}
 			} catch (RemoteException e) {
-				System.out.println("Connection to server impossible \n"
-						+ e.getMessage());
+				//new SayToUser("coucou can't connect to server", true);
+				//System.out.println("Connection to server impossible \n" + e.getMessage());
 			}
 		}
 	}

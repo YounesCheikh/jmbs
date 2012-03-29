@@ -2,6 +2,8 @@ package jmbs.client.Graphics;
 
 import javax.swing.JFrame;
 
+import jmbs.client.SysConf;
+
 public class ConnectionFrame extends JFrame {
 
 	/**
@@ -22,7 +24,8 @@ public class ConnectionFrame extends JFrame {
 		this.setSize(430, 430);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-		this.setLocationRelativeTo(null);
+		//this.setLocationRelativeTo(null);
+		new SysConf().centerThisFrame(this);
 
 		ConnectionPanel cp = new ConnectionPanel(w, this);
 		this.getContentPane().add(cp);

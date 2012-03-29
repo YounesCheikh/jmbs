@@ -13,6 +13,8 @@ import javax.swing.JButton;
 import java.awt.Font;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 
 public class MsgPanel extends JPanel {
@@ -32,7 +34,7 @@ public class MsgPanel extends JPanel {
 	/**
 	 * Create the panel.
 	 */
-	public MsgPanel(Message m) {
+	public MsgPanel(final Message m) {
 		
 
 		setBorder(UIManager.getBorder("TitledBorder.aquaVariant"));
@@ -75,6 +77,11 @@ public class MsgPanel extends JPanel {
 		
 		
 		btnUser = new JButton(m.getOwner().getFullName());
+		btnUser.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				new ShowUserProfileFrm(m.getOwner());
+			}
+		});
 		btnUser.setHorizontalAlignment(SwingConstants.LEFT);
 		btnUser.setFont(new Font("Lucida Grande", Font.BOLD, 15));
 		btnUser.setBorderPainted(false);

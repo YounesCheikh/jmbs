@@ -9,6 +9,8 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
+import jmbs.client.SysConf;
+
 public class AboutFrame extends JFrame {
 
 	/**
@@ -27,8 +29,8 @@ public class AboutFrame extends JFrame {
 		setTitle("About JMBS");
 		//setBounds(100, 100, 339, 246);
 		setSize(340, 246);
-		setLocationRelativeTo(new MainWindow().getFrame());
-		
+		//setLocationRelativeTo(new MainWindow().getFrame());
+		new SysConf().centerThisFrame(this);
 		JLabel lblHiThis = new JLabel("Hi , this program is blablablablablaal");
 		
 		JLabel lblYounesBenjamin = new JLabel("Younes & Benjamin");

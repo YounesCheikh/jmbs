@@ -23,6 +23,7 @@ import java.awt.event.MouseAdapter;
 
 import jmbs.client.ClientRequests;
 import jmbs.client.CurrentUser;
+import jmbs.client.SysConf;
 import jmbs.common.Message;
 import net.miginfocom.swing.MigLayout;
 import javax.swing.JLabel;
@@ -46,7 +47,8 @@ public class NewMessageFrame extends JFrame {
 	 * Create the frame.
 	 */
 	public NewMessageFrame(final TimeLinePanel tlpanel) {
-		setLocationRelativeTo(null);
+		//setLocationRelativeTo(null);
+		new SysConf().centerThisFrame(this);
 		addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
