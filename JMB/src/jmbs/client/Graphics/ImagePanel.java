@@ -38,7 +38,8 @@ public class ImagePanel extends JPanel {
                         //g.drawImage(img, 0, 0, this.getWidth(), this.getHeight(), this);
                 } catch (IOException e) {
                         // TODO Auto-generated catch block
-                        e.printStackTrace();
+                        //e.printStackTrace();
+                	System.err.println("file of image not found\n"+this.filePath);
                 }
                 
         }

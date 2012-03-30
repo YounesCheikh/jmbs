@@ -32,7 +32,7 @@ public class MainMenuBar extends JMenuBar {
 	private JFrame frmJmbsClient;
 	private User currentUser = new CurrentUser().get();
 	private MyApplicationListener listener;
-	private Preferences prfrm;
+	private Preferences prfrm = new Preferences();;
 	private boolean isMac = new SysConf().isMac() ? true : false;
 
 	/**
@@ -74,8 +74,7 @@ public class MainMenuBar extends JMenuBar {
 		mntmRefresh.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					msgListTL = new ClientRequests().getConnection().
-							getLatestTL(currentUser.getId(), timelinepanel.getLastIdMsg(),ClientRequests.maxReceivedMsgs);
+					msgListTL = new ClientRequests().getConnection().getLatestTL(currentUser.getId(), timelinepanel.getLastIdMsg(), ClientRequests.maxReceivedMsgs);
 					timelinepanel.putList(msgListTL);
 				} catch (RemoteException e1) {
 					// TODO Auto-generated catch block
@@ -103,7 +102,7 @@ public class MainMenuBar extends JMenuBar {
 		JMenuItem mntmPreferences = new JMenuItem("Preferences");
 		mntmPreferences.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				prfrm = new Preferences();
+
 				prfrm.setVisible(true);
 			}
 		});
@@ -135,7 +134,7 @@ public class MainMenuBar extends JMenuBar {
 					uFrame.dispose();
 				if (about.isVisible())
 					about.dispose();
-				if(prfrm.isVisible())
+				if (prfrm.isVisible())
 					prfrm.dispose();
 
 				frmJmbsClient.dispose();

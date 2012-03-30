@@ -232,7 +232,8 @@ public class Preferences extends JFrame {
 		slider.setPaintLabels(true);
 		
 		labelprecent = new JLabel(slider.getValue()+"%");
-		labelprecent.setBounds(164, 107, 25, 16);
+		
+		labelprecent.setBounds(155, 107, 50, 16);
 		labelprecent.setEnabled(false);
 		
 		lblThemes = new JLabel("Themes:");
