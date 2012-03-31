@@ -35,7 +35,6 @@ public class MsgPanel extends JPanel {
 	 * Create the panel.
 	 */
 	public MsgPanel(final Message m) {
-		
 
 		setBorder(UIManager.getBorder("TitledBorder.aquaVariant"));
 		
@@ -43,25 +42,6 @@ public class MsgPanel extends JPanel {
 		
 		
 		txtPanel = new JPanel();
-		
-		GroupLayout groupLayout = new GroupLayout(this);
-		groupLayout.setHorizontalGroup(
-			groupLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(groupLayout.createSequentialGroup()
-					.addContainerGap()
-					.addComponent(imgPanel, GroupLayout.PREFERRED_SIZE, 69, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(txtPanel, GroupLayout.DEFAULT_SIZE, 241, Short.MAX_VALUE))
-		);
-		groupLayout.setVerticalGroup(
-			groupLayout.createParallelGroup(Alignment.TRAILING)
-				.addGroup(groupLayout.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
-						.addComponent(txtPanel, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 70, Short.MAX_VALUE)
-						.addComponent(imgPanel, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 70, Short.MAX_VALUE))
-					.addGap(0))
-		);
 		
 		msgEditorPane = new JEditorPane();
 		msgEditorPane.setBackground(UIManager.getColor("CheckBox.background"));
@@ -92,30 +72,47 @@ public class MsgPanel extends JPanel {
 		
 		GroupLayout gl_txtPanel = new GroupLayout(txtPanel);
 		gl_txtPanel.setHorizontalGroup(
-			gl_txtPanel.createParallelGroup(Alignment.TRAILING)
-				.addGroup(Alignment.LEADING, gl_txtPanel.createSequentialGroup()
+			gl_txtPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_txtPanel.createSequentialGroup()
 					.addComponent(btnUser)
 					.addContainerGap())
 				.addGroup(gl_txtPanel.createSequentialGroup()
-					.addContainerGap()
-					.addComponent(msgEditorPane, GroupLayout.DEFAULT_SIZE, 294, Short.MAX_VALUE)
-					.addContainerGap())
-				.addGroup(gl_txtPanel.createSequentialGroup()
-					.addContainerGap(123, Short.MAX_VALUE)
+					.addContainerGap(124, Short.MAX_VALUE)
 					.addComponent(lblPrinttime)
 					.addGap(19))
+				.addGroup(gl_txtPanel.createSequentialGroup()
+					.addContainerGap()
+					.addComponent(msgEditorPane, GroupLayout.PREFERRED_SIZE, 230, Short.MAX_VALUE)
+					.addGap(8))
 		);
 		gl_txtPanel.setVerticalGroup(
 			gl_txtPanel.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_txtPanel.createSequentialGroup()
 					.addComponent(btnUser)
 					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(msgEditorPane)
-					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(msgEditorPane, GroupLayout.DEFAULT_SIZE, 365, Short.MAX_VALUE)
+					.addGap(6)
 					.addComponent(lblPrinttime))
 		);
 		txtPanel.setLayout(gl_txtPanel);
-		
+		GroupLayout groupLayout = new GroupLayout(this);
+		groupLayout.setHorizontalGroup(
+			groupLayout.createParallelGroup(Alignment.LEADING)
+				.addGroup(groupLayout.createSequentialGroup()
+					.addComponent(imgPanel, GroupLayout.PREFERRED_SIZE, 69, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(txtPanel, GroupLayout.DEFAULT_SIZE, 246, Short.MAX_VALUE))
+		);
+		groupLayout.setVerticalGroup(
+			groupLayout.createParallelGroup(Alignment.LEADING)
+				.addGroup(groupLayout.createSequentialGroup()
+					.addGap(16)
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addComponent(txtPanel, GroupLayout.DEFAULT_SIZE, 79, Short.MAX_VALUE)
+						.addGroup(groupLayout.createSequentialGroup()
+							.addComponent(imgPanel, GroupLayout.DEFAULT_SIZE, 70, Short.MAX_VALUE)
+							.addGap(9))))
+		);
 		setLayout(groupLayout);
 	}
 	

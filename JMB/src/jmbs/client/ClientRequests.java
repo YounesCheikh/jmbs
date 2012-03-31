@@ -18,7 +18,7 @@ public class ClientRequests {
 	private static RemoteServer server = null;
 	private static String addressIP ;
 
-	private static String port ;
+	private static int port ;
 	private static String name ;
 	
 	public static int maxReceivedMsgs = 30;
@@ -37,9 +37,9 @@ public class ClientRequests {
 			try {
 				ClientRequests.addressIP = "127.0.0.1";
 				ClientRequests.name = "serverjmbs";
-				ClientRequests.port = "1099";
+				ClientRequests.port = 1099;
 				Registry registry = LocateRegistry
-						.getRegistry(addressIP);
+						.getRegistry(addressIP,port);
 				server = (RemoteServer) registry
 						.lookup(ClientRequests.name);
 
@@ -50,7 +50,7 @@ public class ClientRequests {
 		}
 	}
 	
-	public void setNewConfiguration(String ip, String port, String name) {
+	public void setNewConfiguration(String ip, int port, String name) {
 		ClientRequests.addressIP = ip;
 		ClientRequests.port = port;
 		ClientRequests.name = name;
@@ -68,11 +68,11 @@ public class ClientRequests {
 		ClientRequests.addressIP = addressIP;
 	}
 
-	public String getPort() {
+	public int getPort() {
 		return port;
 	}
 
-	public void setPort(String port) {
+	public void setPort(int port) {
 		ClientRequests.port = port;
 	}
 

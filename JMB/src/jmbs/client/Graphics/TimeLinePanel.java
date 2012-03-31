@@ -23,6 +23,7 @@ public class TimeLinePanel extends JPanel {
 	public TimeLinePanel() {
 		// Set maximum width possible with difault height
 		setLayout(new MigLayout("", "[grow 80,fill]", "[]"));
+		//add(new MsgPanel(new Message()), "wrap", 0);
 	}
 
 	public void putMessage(Component obj) {

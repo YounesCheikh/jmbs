@@ -108,7 +108,7 @@ public class Preferences extends JFrame {
 		portTextField = new JTextField();
 		portTextField.setBounds(135, 97, 134, 28);
 		portTextField.setColumns(10);
-		portTextField.setText(serverConfig.getPort());
+		portTextField.setText(""+serverConfig.getPort());
 		
 		btnOk = new JButton("OK");
 		btnOk.setEnabled(false);
