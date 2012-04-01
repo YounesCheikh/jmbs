@@ -85,16 +85,8 @@ public class NewMessageFrame extends JFrame {
 		btnSend.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
-				if (textArea.getText().length() > 0) {
-					// Replace
-					// the
-					// single
-					// quote
-					// with
-					// back
-					// slash
-					// for
-					// sql.
+				// prevent the to send the emepty and the very long messages (>600 chars) to the DB
+				if (textArea.getText().length() > 0 && textArea.getText().length()<=599) {
 					newMsgStr = textArea.getText();//replaceAll("'", "$'$");
 					Message m = new Message(new CurrentUser().get(), newMsgStr,
 							new Date(new java.util.Date().getTime()));
@@ -130,9 +122,12 @@ public class NewMessageFrame extends JFrame {
 			public void keyTyped(KeyEvent e) {
 				if (textArea.getText().equals(""))
 					lblNbchars.setText("0");
-				else
+				else {
+					if(textArea.getText().length()>=599) lblNbchars.setForeground(Color.RED);
+					else lblNbchars.setForeground(getForeground());
 					lblNbchars.setText("" + (textArea.getText().length() + 1));
 				lblNbchars.updateUI();
+				}
 			}
 		});
 		textArea.setLineWrap(true);
