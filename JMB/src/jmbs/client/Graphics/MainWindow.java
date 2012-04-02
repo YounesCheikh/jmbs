@@ -120,7 +120,7 @@ public class MainWindow {
 		// frmJmbsClient.setVisible(true);
 		new SysConf().centerThisFrame(frmJmbsClient);
 		menuBar = new MainMenuBar(this);
-		//frmJmbsClient.setJMenuBar(menuBar);
+		frmJmbsClient.setJMenuBar(menuBar);
 		tabbedPane = new JTabbedPane(JTabbedPane.LEFT);
 		tabbedPane.setBorder(new TitledBorder(null, "", TitledBorder.LEADING,
 				TitledBorder.BELOW_BOTTOM, null, null));
