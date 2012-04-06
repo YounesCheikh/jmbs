@@ -32,8 +32,13 @@ public class ImagePanel extends JPanel {
 	String filePath;
 	private int w = 0;
 	private int h = 0; /*w: Width ; h : Height */
+	private Image imm ;
 	public ImagePanel(String fileImage) {
 		this.filePath = fileImage;
+	}
+	
+	public ImagePanel(Image im) {
+		this.imm = im;
 	}
 	
 	public ImagePanel(String fileImage, int width, int height) {
@@ -49,7 +54,13 @@ public class ImagePanel extends JPanel {
 
 		public void paintComponent(Graphics g){
                 try {
-                        Image img = ImageIO.read(new File(this.filePath));
+                	Image img;
+                		if (imm==null) {
+                			img = ImageIO.read(new File(this.filePath));
+                		}
+                		else {
+                			img = imm;
+                		}
                         if (this.w == 0 || this.h==0)
                         	g.drawImage(img, 0, 0,img.getWidth(null),img.getHeight(null), this);
                         else 
