@@ -30,7 +30,7 @@ import java.util.ArrayList;
 public class User implements Serializable {
 
 	private static final long serialVersionUID = -379020318303370555L;
-	private static final String DEFAULT_PICTURE = "default_avatar.jpg";
+	public static final String DEFAULT_PICTURE = "avatar.jpg";
 
 	private String name;
 	private String fname;
