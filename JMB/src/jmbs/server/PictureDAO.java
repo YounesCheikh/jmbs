@@ -31,14 +31,19 @@ import jmbs.common.User;
 
 public class PictureDAO extends DAO {
 	private static final long serialVersionUID = -3486687583564090822L;
-	private final static String DEFAULT_SEPARATOR = File.pathSeparator ;
-	private final static String DEFAULT_PATH = "/";
+	private final static String DEFAULT_SEPARATOR = "/";
+	private final static String DEFAULT_PATH = ".";
 	private final static String DEFAULT_IMAGE_FORMAT = "jpg";
 	
 	public PictureDAO(Connection c) {
 		super(c);
 	}
 	
+	/**
+	 * Retruned image can be null ! 
+	 * @param path
+	 * @return
+	 */
 	public BufferedImage getPicture(String path){
 		BufferedImage img = null;
 		
@@ -50,7 +55,7 @@ public class PictureDAO extends DAO {
 		
 		return img;
 	}
-	
+
 	public String getRepertoryPath(int userid){
 		return (DEFAULT_PATH + DEFAULT_SEPARATOR + String.valueOf(userid) + DEFAULT_SEPARATOR);
 	}
@@ -63,6 +68,7 @@ public class PictureDAO extends DAO {
 		return path.substring(path.lastIndexOf(DEFAULT_SEPARATOR)+1);
 	}
 	
+	
 	public BufferedImage getAvatar(int iduser, String pic){
 		return (getPicture(getAvatarPath(iduser,pic)));
 	}
@@ -71,34 +77,50 @@ public class PictureDAO extends DAO {
 		return (getAvatar(u.getId(),u.getPic()));
 	}
 	
-	/**
-	 * Creates the image on the server.
-	 * 
-	 * @param u User who uploads the image
-	 * @param img Image to upload
-	 * @param nom Image name
-	 * @return true if the image was saved - false if not.
-	 */
-	public boolean setAvatar(User u, BufferedImage img, String nom){
-		String path = getRepertoryPath(u.getId()) + nom;
-		createUserRepertory(u.getId());
+
+	public boolean setAvatar(int userid, BufferedImage img, String nom, boolean overwrite){
+		String path = getRepertoryPath(userid) + nom;
+		createUserRepertory(userid);
 		boolean ret = false;
 		
 		File f = new File(path);
 		
-		try {
-			ImageIO.write(img, DEFAULT_IMAGE_FORMAT, f);
-			ret = true;
-		} catch (IOException e) {
-			System.out.println("Image cannot be saved");
+		if (!f.exists() || overwrite){
+			
+		
+			try {
+				ImageIO.write(img, DEFAULT_IMAGE_FORMAT, f);
+				ret = true;
+			} catch (IOException e) {
+				System.out.println("Image cannot be saved");
+			}
 		}
+		
 		return ret;
 	}
 	
+
+	/**
+	 * Creates the image on the server. if the user repertoire doesn't exist it will create it.
+	 * 
+	 * @param u User who uploads the image
+	 * @param img Image to upload
+	 * @param nom Image name
+	 * @param overwrite true to overwrite existing file false to return false if file already exists.
+	 * @return true if the image was saved - false if not.
+	 */
+	public boolean setAvatar(User u, BufferedImage img, String nom, boolean overwrite){
+		return setAvatar(u.getId(),img,nom,overwrite);
+	}
+
+
+	
+
 	public boolean createUserRepertory(User u){
 		return createUserRepertory(u.getId());
 	}
 	
+
 	public boolean createUserRepertory(int userid){
 		File f = new File(getRepertoryPath(userid));
 		boolean ret = false;
