@@ -41,4 +41,12 @@ CONSTRAINT fk_follower_user FOREIGN KEY (follower) REFERENCES users (iduser),
 CONSTRAINT fk_followed_user FOREIGN KEY (followed) REFERENCES users (iduser)
 );
 
+CREATE TABLE projects (
+	idproject serial,
+	name varchar(20),
+	
+CONSTRAINT pk_project PRIMARY_KEY (idproject)
+);
+
+
 
