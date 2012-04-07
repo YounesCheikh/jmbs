@@ -48,5 +48,14 @@ CREATE TABLE projects (
 CONSTRAINT pk_project PRIMARY_KEY (idproject)
 );
 
+CREATE TABLE participate (
+	idproject integer NOT NULL,
+	iduser integer NOT NULL,
+	authlvl integer,
+
+CONSTRAINT fk_part_user FOREIGN KEY (iduser) REFERENCES users (iduser), 
+CONSTRAINT fk_part_project FOREIGN KEY (idproject) REFERENCES projects (idprojects)
+);
+
 
 
