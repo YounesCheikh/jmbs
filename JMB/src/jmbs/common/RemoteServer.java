@@ -110,42 +110,56 @@ public interface RemoteServer extends Remote {
 	 */
 	public ArrayList<Message> getLatestTL(int iduser, int idlastmessage, int maxMsg) throws RemoteException;
 
-	// TODO the following methods:
 	/**
 	 * Search for projects have a name like 'likeName' in the DB 
 	 * @param likeName the name of project
 	 * @return a list of projects 
 	 * @throws RemoteException
 	 */
-	//public ArrayList<Project> searchForProject(String likeName) throws RemoteException ;
+	public ArrayList<Project> searchForProject(String likeName) throws RemoteException ;
+	
+	
 	
 	/**
-	 * participate a user into a project
+	 * participate a user into a project with the default authorization level
 	 * @param idUser user id
 	 * @param idProject project id
-	 * @return true if participation successed, else false
+	 * @return true if participation was set, else false
 	 * @throws RemoteException
 	 */
-	//public boolean participate(int idUser, int idProject) throws RemoteException ;
+	public boolean participate(int idUser, int idProject) throws RemoteException ;
+	
+	/**
+	 * participate a user into a project with the given authorization level
+	 * @param idUser user id
+	 * @param idProject project id
+	 * @param auth authorization level
+	 * @return true if participation was set, else false
+	 * @throws RemoteException
+	 */
+	public boolean participate(int idUser, int idProject, int auth) throws RemoteException ;
+
 	
 	/**
 	 * un participate user from project
 	 * @param idUser user ID
 	 * @param idProject project ID
-	 * @return true if un-participation successed<br />
+	 * @return true if participation was unset<br />
 	 * 			example: if user is not participated into project we return false
 	 * @throws RemoteException
 	 */
-	//public boolean unParticipate(int idUser, int idProject) throws RemoteException ; 
+	public boolean unParticipate(int idUser, int idProject) throws RemoteException ; 
+	
 	
 	/**
 	 * Create new project
-	 * @param idUser the creator of the project
+	 * @param name the project name
 	 * @return the created project
 	 * @throws RemoteException
 	 */
-	//public Project createProject(int idUser) throws RemoteException ;
+	public Project createProject(String name) throws RemoteException ;
 	
+	// TODO the following methods:
 	/**
 	 * or Remove project, to prevent the users to participate and write new messages in a closed project
 	 * @param idUser user id , to confirm that the owner who want to close his project

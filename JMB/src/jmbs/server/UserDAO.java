@@ -34,7 +34,8 @@ public class UserDAO extends DAO {
 	 * 
 	 */
 	private static final long serialVersionUID = 1371248166710891652L;
-
+	public static final int DEFAULT_AUTHORISATION_LEVEL = 0;
+	
 	public UserDAO(Connection c) {
 		super(c);
 	}
@@ -235,6 +236,7 @@ public class UserDAO extends DAO {
 		return ret;
 	}
 
+	//TODO: check if not useless.
 	/**
 	 * Says if the user exists in the database.
 	 * 
@@ -253,6 +255,22 @@ public class UserDAO extends DAO {
 			ret = false;
 		}
 
+		return ret;
+	}
+	
+	public boolean exists(int iduser){
+		set("SELECT email FROM users WHERE iduser=?");
+		setInt(1,iduser);
+		ResultSet res = executeQuery();
+		boolean ret = false;
+		
+		try {
+			res.getString("email");
+			ret = true;
+		} catch (SQLException e) { // user does not exist we can do something here if we really want to waste time ...
+			
+		}
+		
 		return ret;
 	}
 
@@ -288,13 +306,14 @@ public class UserDAO extends DAO {
 	 * @return true if DB was editing DB succeeded
 	 */
 	public boolean follows(int idFollower, int idFollowed) {
-		
-		set("INSERT INTO follows(follower, followed) VALUES (?,?);");
-		setInt(1,idFollower);
-		setInt(2,idFollowed);
-		boolean res = executeUpdate();
-
-		return (res);
+		if (this.exists(idFollower) && this.exists(idFollowed)){
+			set("INSERT INTO follows(follower, followed) VALUES (?,?);");
+			setInt(1,idFollower);
+			setInt(2,idFollowed);
+			boolean res = executeUpdate();
+			
+			return (res);
+		} else return false	;
 	}
 
 	/**
@@ -305,13 +324,12 @@ public class UserDAO extends DAO {
 	 * @return true if DB was editing DB succeeded
 	 */
 	public boolean unFollow(int idFollower, int idFollowed) {
-
-		set("DELETE FROM follows WHERE follower=? and followed=?;");
-		setInt(1,idFollower);
-		setInt(2,idFollowed);
-		boolean res = executeUpdate();
-
-		return (res);
+			set("DELETE FROM follows WHERE follower=? and followed=?;");
+			setInt(1,idFollower);
+			setInt(2,idFollowed);
+			boolean res = executeUpdate();
+			
+			return (res);
 	}
 
 	/**
@@ -371,5 +389,31 @@ public class UserDAO extends DAO {
 		}
 		
 		return u;
+	}
+	
+	
+	public boolean participate (int iduser, int idproject, int auth){
+		if (this.exists(iduser) && (new ProjectDAO(super.con)).exists(idproject)){ //if the project and the user exists.
+			set("INSERT INTO participate (iduser,idproject,authlvl) VALUES (?,?,?);");
+			setInt(1,iduser);
+			setInt(2,idproject);
+			setInt(3,auth);
+			boolean res = executeUpdate();
+		
+			return res;
+		} else return false;
+	}
+	
+	public boolean participate (int iduser, int idproject){
+		return this.participate(iduser, idproject,DEFAULT_AUTHORISATION_LEVEL);
+	}
+	
+	public boolean unParticipate (int iduser, int idproject){
+		set("DELETE FROM participate WHERE iduser=? and idproject=?;");
+		setInt(1,iduser);
+		setInt(2,idproject);
+		boolean res = executeUpdate();
+		
+		return (res);
 	}
 }

@@ -68,7 +68,7 @@ public class ProjectDAO extends DAO {
 		try {
 			res.close();
 		} catch (SQLException e) {
-			System.out.println("Database acess error !\n Unable to close connection !");
+			System.err.println("Database acess error !\n Unable to close connection !");
 		}
 		
 		
@@ -76,9 +76,7 @@ public class ProjectDAO extends DAO {
 	}
 
 	/**
-	 * find a project using his name. If the name exits in the db then it will
-	 * return the project. Else it will create a new one.<br>
-	 * Note: A project name must be unique.
+	 * find a project using his id. Returns null if there are no projects found for that id
 	 * 
 	 * @param id
 	 *            id of the project
@@ -104,6 +102,90 @@ public class ProjectDAO extends DAO {
 
 		
 		return p;
+	}
+	
+	
+	public Project findProject(String name){
+		Project p = null;
+		set("SELECT * FROM project WHERE name=? ;");
+		setString(1,name);
+		ResultSet res = executeQuery();
+		try {
+			p = new Project(res.getString("name"), res.getInt("idproject"));
+		}catch (SQLException e) {
+			System.out.println("Unable to find any project with name containg "+name);
+		}
+		
+		return p;
+	}
+	
+	
+	public ArrayList<Project> findProjects(String name){
+		ArrayList<Project> found = new ArrayList<Project>();
+		
+		set("SELECT * FROM project WHERE name LIKE ? ;");
+		setString(1,"%"+name+"%");
+		ResultSet res = executeQuery();
+		
+		try {
+			do {
+				found.add(new Project(res.getString("name"),res.getInt("idproject")));
+			} while (res.next());
+		}catch (SQLException e) {
+			System.out.println("Unable to find any project with name containg "+name);
+		}
+		
+		return found;
+	}
+	
+	
+	public boolean exists(int idprj){
+		// xpost from /UserDAO.
+		set("SELECT name FROM projects WHERE idproject=?");
+		setInt(1,idprj);
+		ResultSet res = executeQuery();
+		boolean ret = false;
+		
+		try {
+			res.getString("name");
+			ret = true;
+		} catch (SQLException e) { // project does not exist we can do something here if we really want to waste time ...
+		
+		}
+		
+		return ret;
+	}
+	
+	public boolean exists(String name){
+		// xpost from /UserDAO.
+		set("SELECT name FROM projects WHERE name=?");
+		setString(1,name);
+		ResultSet res = executeQuery();
+		boolean ret = false;
+		
+		try {
+			res.getInt("idproject");
+			ret = true;
+		} catch (SQLException e) { // project does not exist we can do something here if we really want to waste time ...
+		
+		}
+		
+		return ret;
+	}
+	
+	public Project createProject (String name){
+		Project ret = null;
+		boolean res = false;
+		
+		if (!this.exists(name)) {
+			set ("INSERT INTO project (name) VALUES (?)");
+			setString(1,name);
+			res = executeUpdate();
+			
+			if (res) ret = this.findProject(name);
+		}
+		
+		return ret;
 	}
 
 }

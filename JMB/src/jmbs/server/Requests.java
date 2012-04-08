@@ -29,6 +29,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import jmbs.common.Message;
+import jmbs.common.Project;
 import jmbs.common.RemoteServer;
 import jmbs.common.User;
 
@@ -221,7 +222,68 @@ public class Requests extends UnicastRemoteObject implements RemoteServer {
 			System.err.println("Database access error !\n Unable to close connection !");
 		}
 		return ra;
+	}
+	
+	public ArrayList<Project> searchForProject(String likeName) throws RemoteException {
+		Connection con = new Connect().getConnection();
+		ProjectDAO pdao = new ProjectDAO(con);
+		ArrayList<Project> found = pdao.findProjects(likeName);
 		
+		try {
+			con.close();
+		} catch (SQLException e) {
+			System.err.println("Database access error !\n Unable to close connection !");
+		}
+		
+		return found;
+	}
+	
+	public boolean participate (int iduser, int idproject, int auth){
+		Connection con = new Connect().getConnection();
+		UserDAO udao = new UserDAO(con);
+		boolean ret = false;
+		
+		ret = udao.participate(iduser, idproject, auth);
+		
+		try {
+			con.close();
+		} catch (SQLException e) {
+			System.err.println("Database access error !\n Unable to close connection !");
+		}
+		
+		return ret;
+	}
+	
+	public boolean participate (int iduser, int idproject){
+		return this.participate(iduser, idproject, UserDAO.DEFAULT_AUTHORISATION_LEVEL);
+	}
+	
+	public boolean unParticipate (int iduser, int idproject){
+		Connection con = new Connect().getConnection();
+		UserDAO udao = new UserDAO(con);
+		boolean ret = udao.unParticipate(iduser, idproject);
+		
+		try {
+			con.close();
+		} catch (SQLException e) {
+			System.err.println("Database access error !\n Unable to close connection !");
+		}
+		
+		return ret;							
+	}
+	
+	public Project createProject(String name){
+		Connection con = new Connect().getConnection();
+		ProjectDAO pdao = new ProjectDAO(con);
+		Project p = pdao.findProject(name);
+		
+		try {
+			con.close();
+		} catch (SQLException e) {
+			System.err.println("Database access error !\n Unable to close connection !");
+		}
+		
+		return p;
 	}
 
 }

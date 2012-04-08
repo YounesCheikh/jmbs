@@ -38,19 +38,17 @@ public abstract class DAO implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = -1746724303428703866L;
-	private Connection con = null;
+	protected Connection con = null;
 	private PreparedStatement stmt = null;
 	public static final int BY_NAME = 1;
 	public static final int BY_FORNAME = 2;	
 	public static final int BY_BOTH = 3;
 	
-	public DAO(Connection c)
-	{
+	public DAO(Connection c){
 		con = c;
 	}
 
-	protected ResultSet send(String request)
-	{
+	protected ResultSet send(String request){
 		
 		ResultSet result;
 		try {
@@ -65,8 +63,7 @@ public abstract class DAO implements Serializable {
 		return result;
 	}	
 	
-	protected void set(String request)
-	{
+	protected void set(String request){
 		try {
 			stmt = con.prepareStatement(request,ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_READ_ONLY);
 		} catch (SQLException e) {
@@ -75,8 +72,7 @@ public abstract class DAO implements Serializable {
 		}
 	}
 	
-	protected void setString (int index,String s)
-	{
+	protected void setString (int index,String s){
 		try {
 			stmt.setString(index,s);
 		} catch (SQLException e) {
@@ -84,8 +80,7 @@ public abstract class DAO implements Serializable {
 		}
 	}
 	
-	protected void setInt (int index,int i)
-	{
+	protected void setInt (int index,int i){
 		try {
 			stmt.setInt(index, i);
 		} catch (SQLException e) {
@@ -93,8 +88,7 @@ public abstract class DAO implements Serializable {
 		}
 	}
 	
-	protected void setDate(int index,Date dt)
-	{
+	protected void setDate(int index,Date dt){
 		try {
 			stmt.setDate(index,dt);
 		} catch (SQLException e) {
@@ -102,8 +96,7 @@ public abstract class DAO implements Serializable {
 		}
 	}
 	
-	protected ResultSet executeQuery() 
-	{
+	protected ResultSet executeQuery() {
 		ResultSet res = null;
 		try {
 			res = stmt.executeQuery();
@@ -116,8 +109,7 @@ public abstract class DAO implements Serializable {
 		return res;
 	}
 	
-	protected boolean executeUpdate() 
-	{
+	protected boolean executeUpdate() {
 		boolean b;
 
 		try {
@@ -145,8 +137,7 @@ public abstract class DAO implements Serializable {
 		
 	}
 	
-	public Connection getConnection()
-	{
+	public Connection getConnection(){
 		return con;
 	}
 }
