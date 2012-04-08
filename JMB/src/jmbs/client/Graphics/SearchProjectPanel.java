@@ -42,24 +42,24 @@ public class SearchProjectPanel extends JPanel {
 	public SearchProjectPanel() {
 		setLayout(new MigLayout("", "[grow 80,fill]", "[]"));
 		ArrayList<Project> plist = new ArrayList<Project>();
-		plist.add(new Project(""));
-		plist.add(new Project(""));
-		plist.add(new Project(""));
-		plist.add(new Project(""));
-		plist.add(new Project(""));
-		plist.add(new Project(""));
-		plist.add(new Project(""));
-		plist.add(new Project(""));
-		plist.add(new Project(""));
-		plist.add(new Project(""));
-		plist.add(new Project(""));
-		plist.add(new Project(""));
-		plist.add(new Project(""));
-		plist.add(new Project(""));
-		plist.add(new Project(""));
-		plist.add(new Project(""));
-		plist.add(new Project(""));
-		plist.add(new Project(""));
+		plist.add(new Project("",0));
+		plist.add(new Project("",0));
+		plist.add(new Project("",0));
+		plist.add(new Project("",0));
+		plist.add(new Project("",0));
+		plist.add(new Project("",0));
+		plist.add(new Project("",0));
+		plist.add(new Project("",0));
+		plist.add(new Project("",0));
+		plist.add(new Project("",0));
+		plist.add(new Project("",0));
+		plist.add(new Project("",0));
+		plist.add(new Project("",0));
+		plist.add(new Project("",0));
+		plist.add(new Project("",0));
+		plist.add(new Project("",0));
+		plist.add(new Project("",0));
+		plist.add(new Project("",0));
 		putList(plist);
 		
 		
