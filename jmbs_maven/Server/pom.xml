@@ -16,10 +16,15 @@
 
 	<dependencies>
 		<dependency>
-			<artifactId>RMI</artifactId>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.10</version>
+		</dependency>
+
+		<dependency>
 			<groupId>jmbs.common</groupId>
+			<artifactId>RMI</artifactId>
 			<version>${jmbs.version}</version>
-			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>postgresql</groupId>
@@ -40,14 +45,23 @@
 			<plugin>
 				<artifactId>maven-assembly-plugin</artifactId>
 				<configuration>
+				<argLine>-Djava.rmi.server.codebase=file:${project.build.outputDirectory}</argLine>
 					<archive>
 						<manifest>
 							<addClasspath>true</addClasspath>
 						</manifest>
 					</archive>
+
+					<additionalClasspathElements>
+						<additionalClasspathElement>${basedir}</additionalClasspathElement>
+					</additionalClasspathElements>
+
 					<descriptors>
 						<descriptor>src/assemble/exe.xml</descriptor>
 					</descriptors>
+					<descriptorRefs>
+						<descriptorRef>jar-with-dependencies</descriptorRef>
+					</descriptorRefs>
 					<archive>
 						<manifestFile>src/main/resources/META-INF/MANIFEST.MF</manifestFile>
 					</archive>

@@ -113,7 +113,7 @@ public class ConnectionPanel extends JPanel {
 
 		JLabel lblRegister = new JLabel("don't have account?");
 
-		ImagePanel logopanel = new ImagePanel("./src/jmbs/client/img/jmbslogo_small.png");
+		ImagePanel logopanel = new ImagePanel("/img/jmbslogo_small.png");
 
 		JButton btnRegister = new JButton("Register");
 		btnRegister.addActionListener(new ActionListener() {

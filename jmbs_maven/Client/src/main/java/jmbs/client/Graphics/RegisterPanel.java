@@ -172,7 +172,7 @@ public class RegisterPanel extends JPanel {
 		JLabel lblWelcomeToJmbs = new JLabel("Welcome to JMBS");
 		lblWelcomeToJmbs.setFont(new Font("Lucida Grande", Font.BOLD, 16));
 
-		ImagePanel panel = new ImagePanel("./src/jmbs/client/img/jmbslogo_small.png");
+		ImagePanel panel = new ImagePanel("/img/jmbslogo_small.png");
 		setLayout(new MigLayout("", "[127px][18px][139px][1px][163px]", "[20px][156px][18px][18px][18px][12px][18px][18px][29px][12px][16px]"));
 		add(lblResp, "cell 0 10 5 1,growx,aligny top");
 		add(separator, "cell 0 9 5 1,growx,aligny top");

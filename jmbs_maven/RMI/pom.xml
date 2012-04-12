@@ -21,9 +21,7 @@
             <configuration>
               <iiop>true</iiop>
               <verbose>true</verbose>
-              <includes>
-                <include>**/RemoteServer.class</include>
-              </includes>
+              <outputDirectory>${project.build.outputDirectory}</outputDirectory>
             </configuration>
           </execution>
         </executions>

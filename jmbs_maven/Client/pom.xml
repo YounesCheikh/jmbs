@@ -31,20 +31,36 @@
 			<artifactId>macify</artifactId>
 			<version>1.6</version>
 		</dependency>
-		
 	</dependencies>
+
 	<build>
 		<finalName>Client</finalName>
+
 		<plugins>
 			<plugin>
 				<artifactId>maven-assembly-plugin</artifactId>
-				<configuration>
+				<configuration>	
+					
+					<archive>
+						<manifest>
+							<addClasspath>true</addClasspath>
+						</manifest>
+					</archive>
+
+					<additionalClasspathElements>
+						<additionalClasspathElement> ${basedir}</additionalClasspathElement>
+					</additionalClasspathElements>
 					<descriptors>
 						<descriptor>src/assemble/exe.xml</descriptor>
 					</descriptors>
+					<descriptorRefs>
+						<descriptorRef>jar-with-dependencies</descriptorRef>
+					</descriptorRefs>
 					<archive>
 						<manifestFile>src/main/resources/META-INF/MANIFEST.MF</manifestFile>
 					</archive>
+					<argLine>-Djava.security.policy=${basedir}/src/main/resources/security.policy </argLine>
+					<argLine>-Djava.rmi.server.codebase=${project.build.outputDirectory} </argLine>
 				</configuration>
 			</plugin>
 		</plugins>

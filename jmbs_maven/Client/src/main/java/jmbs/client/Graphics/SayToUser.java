@@ -29,7 +29,6 @@ import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.ImageIcon;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
@@ -67,11 +66,11 @@ public class SayToUser extends JDialog {
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		JLabel lblNewLabel = new JLabel(msg);
 		
-		if (error) {
-			lblNewLabel.setIcon(new ImageIcon(SayToUser.class.getResource("/com/sun/java/swing/plaf/gtk/resources/gtk-dialog-error-6.png")));
-		} else {
-			lblNewLabel.setIcon(new ImageIcon(SayToUser.class.getResource("/com/sun/java/swing/plaf/gtk/resources/gtk-yes-4.png")));
-		}
+		//if (error) {
+		//	lblNewLabel.setIcon(new ImageIcon(SayToUser.class.getResource("/com/sun/java/swing/plaf/gtk/resources/gtk-dialog-error-6.png")));
+		//} else {
+		//	lblNewLabel.setIcon(new ImageIcon(SayToUser.class.getResource("/com/sun/java/swing/plaf/gtk/resources/gtk-yes-4.png")));
+		//}
 
 		GroupLayout gl_contentPanel = new GroupLayout(contentPanel);
 		gl_contentPanel.setHorizontalGroup(gl_contentPanel.createParallelGroup(Alignment.LEADING).addGroup(gl_contentPanel.createSequentialGroup().addGap(31).addComponent(lblNewLabel).addContainerGap(85, Short.MAX_VALUE)));

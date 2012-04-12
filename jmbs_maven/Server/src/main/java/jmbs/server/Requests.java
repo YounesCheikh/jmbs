@@ -27,7 +27,6 @@ import java.rmi.server.UnicastRemoteObject;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
-
 import jmbs.common.Message;
 import jmbs.common.RemoteServer;
 import jmbs.common.User;
