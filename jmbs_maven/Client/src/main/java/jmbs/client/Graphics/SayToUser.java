@@ -67,8 +67,8 @@ public class SayToUser extends JDialog {
 		JLabel lblNewLabel = new JLabel(msg);
 		
 		//if (error) {
-		//	lblNewLabel.setIcon(new ImageIcon(SayToUser.class.getResource("/com/sun/java/swing/plaf/gtk/resources/gtk-dialog-error-6.png")));
-		//} else {
+			//lblNewLabel.setIcon(new ImageIcon(SayToUser.class.getResource("/com/sun/java/swing/plaf/gtk/resources/gtk-dialog-error-6.png")));
+	//	} else {
 		//	lblNewLabel.setIcon(new ImageIcon(SayToUser.class.getResource("/com/sun/java/swing/plaf/gtk/resources/gtk-yes-4.png")));
 		//}
 

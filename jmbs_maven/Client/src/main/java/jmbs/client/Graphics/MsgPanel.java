@@ -58,7 +58,7 @@ public class MsgPanel extends JPanel {
 
 		setBorder(UIManager.getBorder("TitledBorder.aquaVariant"));
 		
-		imgPanel = new ImagePanel("./src/jmbs/client/img/avatar.jpg",69,69);
+		imgPanel = new ImagePanel("/img/avatar.jpg",69,69);
 		
 		
 		txtPanel = new JPanel();

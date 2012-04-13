@@ -101,7 +101,7 @@ public class Preferences extends JFrame {
 		new SysConf().centerThisFrame(this);
 		
 		JPanel generalPanel = new JPanel();
-		tabbedPane.addTab("General", new ImageIcon("/Users/ycheikh/Dev/JMB/src/jmbs/client/img/General-Alt.png"), generalPanel, null);
+		tabbedPane.addTab("General", new ImageIcon(getClass().getResource("/img/General-Alt.png")), generalPanel, null);
 		
 		lblNetwork = new JLabel("Network:");
 		lblNetwork.setBounds(6, 6, 64, 17);
@@ -183,7 +183,7 @@ public class Preferences extends JFrame {
 		generalPanel.add(separator_1);
 		
 		JPanel appearancePanel = new JPanel();
-		tabbedPane.addTab("appearance", new ImageIcon("/Users/ycheikh/Dev/JMB/src/jmbs/client/img/appearance.png"), appearancePanel, "appearance");
+		tabbedPane.addTab("appearance", new ImageIcon(getClass().getResource("/img/appearance.png")), appearancePanel, "appearance");
 		
 		JRadioButton rdbtnUseDefaultOptions = new JRadioButton("Use default options");
 		rdbtnUseDefaultOptions.setBounds(16, 19, 155, 23);

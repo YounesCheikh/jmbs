@@ -56,7 +56,7 @@ public class RegistrationSuccessed extends JDialog {
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
-		ImagePanel panel = new ImagePanel("./src/jmbs/client/img/success.png");
+		ImagePanel panel = new ImagePanel("/img/success.png");
 		JLabel lblCongrat = new JLabel("Congratulations!");
 		lblCongrat.setFont(new Font("Comic Sans MS", Font.PLAIN, 23));
 		lblCongrat.setForeground(new Color(0, 102, 0));
