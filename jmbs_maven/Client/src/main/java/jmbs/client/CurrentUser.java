@@ -25,18 +25,14 @@ import java.io.Serializable;
 
 import jmbs.common.User;
 
+	// TODO: This class will extends from User Class
 public class CurrentUser implements Serializable {
 	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 44433007358974855L;
 	private static User u = null;
 	
 	public CurrentUser(User receivedUser) {
-		if (get()==null) {
 			CurrentUser.set(receivedUser);
-		}
 	}
 	
 	public CurrentUser() {

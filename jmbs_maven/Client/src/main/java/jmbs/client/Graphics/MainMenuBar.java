@@ -23,20 +23,13 @@ package jmbs.client.Graphics;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.rmi.RemoteException;
-import java.util.ArrayList;
-
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JSeparator;
 
-import jmbs.client.ClientRequests;
-import jmbs.client.CurrentUser;
 import jmbs.client.SysConf;
-import jmbs.common.Message;
-import jmbs.common.User;
 
 public class MainMenuBar extends JMenuBar {
 
@@ -48,9 +41,7 @@ public class MainMenuBar extends JMenuBar {
 	private NewMessageFrame nmFrame;
 	private AboutFrame about;
 	private UsersFrame uFrame;
-	private ArrayList<Message> msgListTL;
 	private JFrame frmJmbsClient;
-	private User currentUser = new CurrentUser().get();
 	private MyApplicationListener listener;
 	private Preferences prfrm = new Preferences();;
 	private boolean isMac = new SysConf().isMac() ? true : false;
@@ -58,7 +49,7 @@ public class MainMenuBar extends JMenuBar {
 	/**
 	 * Create the panel.
 	 */
-	public MainMenuBar(MainWindow mw) {
+	public MainMenuBar(final MainWindow mw) {
 
 		if (isMac) {
 
@@ -71,7 +62,7 @@ public class MainMenuBar extends JMenuBar {
 		nmFrame = mw.getNmFrame();
 		about = mw.getAbout();
 		uFrame = mw.getuFrame();
-		msgListTL = mw.getMsgListTL();
+		mw.getMsgListTL();
 
 		setBackground(Color.LIGHT_GRAY);
 		// frmJmbsClient.setJMenuBar(this);
@@ -93,6 +84,8 @@ public class MainMenuBar extends JMenuBar {
 		JMenuItem mntmRefresh = new JMenuItem("Refresh");
 		mntmRefresh.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				mw.checkNewMessages(timelinepanel.getLastIdMsg());
+				/*
 				try {
 					msgListTL = new ClientRequests().getConnection().getLatestTL(currentUser.getId(), timelinepanel.getLastIdMsg(), ClientRequests.maxReceivedMsgs);
 					timelinepanel.putList(msgListTL);
@@ -101,6 +94,7 @@ public class MainMenuBar extends JMenuBar {
 					// e1.printStackTrace();
 					System.out.println("Can't get last timeLine from server ");
 				}
+				*/
 			}
 		});
 		mnFile.add(mntmRefresh);
@@ -158,7 +152,7 @@ public class MainMenuBar extends JMenuBar {
 					prfrm.dispose();
 
 				frmJmbsClient.dispose();
-				new CurrentUser().disconnect();
+				//new CurrentUser().disconnect();
 				ConnectionFrame cf = new ConnectionFrame(new MainWindow());
 				cf.setVisible(true);
 			}
@@ -190,7 +184,13 @@ public class MainMenuBar extends JMenuBar {
 		mnActivities.add(mntmUsers);
 
 		JMenuItem mntmProjects = new JMenuItem("Projects");
-		mntmProjects.setEnabled(false);
+		mntmProjects.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				mw.getTabbedPane().setSelectedComponent(mw.getProjectsPanel());
+			}
+		});
+		//mntmProjects.setEnabled(false);
 		mnActivities.add(mntmProjects);
 	}
 

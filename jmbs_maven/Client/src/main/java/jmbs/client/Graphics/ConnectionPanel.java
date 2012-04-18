@@ -199,7 +199,6 @@ public class ConnectionPanel extends JPanel {
 						cf.dispose();
 						new CurrentUser(u);
 						this.initMainWindow();
-						this.getMainWindow().getFrame().setVisible(true);
 						// System.out.println(new
 						// CurrentUser().get().toString());
 					} else if (u.getId() == -1) {
@@ -214,15 +213,31 @@ public class ConnectionPanel extends JPanel {
 		}
 	}
 
-	/**
-	 * @return return the main windows of this program
-	 */
-	private MainWindow getMainWindow() {
-		return w;
-	}
-
 	private void initMainWindow() {
-		this.w = new MainWindow();
+		this.w = new MainWindow(); // Initialize new Main Window
+		
+		// Setting the frame Title
+		this.w.getFrame().setTitle("JMBS Client : "+new CurrentUser().get().getFullName());
+		// Empty the List of messages if not
+		this.w.initMsgListTL();
+		// set the id of the last received message at 0
+		this.w.getTLPanel().setLastIdMsg(0);
+		// remove all the comptent from the timeline panel
+		this.w.getTLPanel().removeAll();
+		this.w.getTLPanel().updateUI();
+		// Repante and revalidate the timeline panel
+		this.w.getTLPanel().repaint();
+		this.w.getTLPanel().revalidate();
+		// Set the new User on the Main window as the Owner
+		this.w.setCurrentUser();
+		// check for new messages from the server and display them on the timeline panel
+		this.w.checkNewMessages(0);
+		// Resetting the profile panel 
+		this.w.resetProfilePanel();
+		// setting the menubar
+		this.w.setMenuBar();
+		 // Display the main frame
+		this.w.getFrame().setVisible(true);
 	}
 
 	private String listToString(char[] list) {
