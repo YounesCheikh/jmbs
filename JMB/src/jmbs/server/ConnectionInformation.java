@@ -5,10 +5,13 @@ import java.util.Calendar;
 
 public class ConnectionInformation {
 	
+	private static final int UNREGISTRED_USER = 0;
+	
 	private int numberOfAttemps = 0;
 	private Timestamp firstTry;
 	private Timestamp lastTry;
 	private String ip;
+	private int userId = UNREGISTRED_USER;
 	
 	/**
 	 * Created when the connection to the server is established before the user logs in.
@@ -59,5 +62,19 @@ public class ConnectionInformation {
 	 */
 	public String getIp() {
 		return ip;
+	}
+
+	/**
+	 * @return the userId
+	 */
+	public int getUserId() {
+		return userId;
+	}
+
+	/**
+	 * @param userId the userId to set
+	 */
+	public void setUserId(int userId) {
+		this.userId = userId;
 	}
 }

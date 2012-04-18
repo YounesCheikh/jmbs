@@ -192,7 +192,7 @@ public interface RemoteServer extends Remote {
 	 * Close the connection and return a boolean saying if the connection was closed or not.
 	 * @return boolean - true if the connection was closed - false if not
 	 */
-	public boolean close() throws RemoteException;
+	public boolean close(int userid) throws RemoteException;
 	
 	/**
 	 * Changes the password of the given user.
@@ -210,4 +210,9 @@ public interface RemoteServer extends Remote {
 	 * set connection to server
 	 */
 	public void connect();
+	
+	/**
+	 * logs out a user
+	 */
+	public void logOut(int iduser);
 }

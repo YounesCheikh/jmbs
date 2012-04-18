@@ -86,8 +86,6 @@ public class SecurityDAO extends DAO implements Security{
 		return executeUpdate();
 	}
 	
-	
-	
 	private boolean isBanEffective(BanInformation bi){
 		Timestamp currentTime = new Timestamp(Calendar.getInstance().getTimeInMillis());
 		return (!bi.isLifebaned() && currentTime.after(bi.getExpiration()));

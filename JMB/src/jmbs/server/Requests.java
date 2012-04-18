@@ -36,10 +36,8 @@ import jmbs.common.User;
 
 public class Requests extends UnicastRemoteObject implements RemoteServer {
 
-	private int userid = 0;
 	private String name;
 	private Registry registry;
-	private ConnectionInformation ci;
 	private Connection con = new Connect().getConnection();
 	private static final long serialVersionUID = 5885886202424414094L;
 
@@ -55,7 +53,7 @@ public class Requests extends UnicastRemoteObject implements RemoteServer {
 	
 	public void connect(){
 		try{
-			this.ci = new ConnectionInformation(getClientHost());// getting client ip adress
+			ConnectionInformation ci = new ConnectionInformation(getClientHost());// getting client ip adress
 			//Create connection informations
 			ServerMonitor.getInstance().addConnection(ci);
 			//Register CI in server monitor
@@ -80,22 +78,28 @@ public class Requests extends UnicastRemoteObject implements RemoteServer {
 	 */
 	public User connectUser(String em, String psw) throws RemoteException, SecurityException {
 		User returnUser = new User();//TODO: explain to youyou how to handle null objects ;)
+		ServerMonitor sm = ServerMonitor.getInstance();
+		String ip;
+		try {
+			ip = getClientHost();
+			if (sm.connectToAccount(sm.getConnectionInformations(ip).getIp())){ // Try to connect to an account from an ip (security check)		
+				UserDAO udao = new UserDAO(con); 
+				User u = udao.getUser(em);
 		
-		if (ServerMonitor.getInstance().connectToAccount(ci.getIp())){ // Try to connect to an account from an ip (security check)		
-			UserDAO udao = new UserDAO(con); 
-			User u = udao.getUser(em);
-		
-			if (u != null){
-				boolean b = udao.checkPassword(u, psw);
-				if (b) { // if password is correct
-					u.setFollows(udao.getFollowed(u)); 
-					returnUser = u;
-					ServerMonitor.getInstance().connectUserUnderIp(u.getId(),ci.getIp()); // add activated account to server Monitor
-					this.userid = u.getId();
+				if (u != null){
+					boolean b = udao.checkPassword(u, psw);
+					if (b) { // if password is correct
+						u.setFollows(udao.getFollowed(u)); 
+						returnUser = u;
+						ServerMonitor.getInstance().connectUserUnderIp(u.getId(),ip); // add activated account to server Monitor
+						sm.getConnectionInformations(ip).setUserId(u.getId());		
+					}
 				}
-			}
-		} else throw new SecurityException("You're not authorized to connect to the server because your ip has made too many unsuccessfull login attemps.\n");
 		
+			} else throw new SecurityException("You're not authorized to connect to the server because your ip has made too many unsuccessfull login attemps.\n");
+		} catch (ServerNotActiveException e) {
+			System.err.println("Unexcepted error !");
+		}
 		return returnUser;
 	}
 
@@ -234,19 +238,23 @@ public class Requests extends UnicastRemoteObject implements RemoteServer {
 		return p;
 	}
 	
-	public void logOut(){
-		ServerMonitor.getInstance().logOff(this.userid);
+	public void logOut(int userid){
+		ServerMonitor.getInstance().logOff(userid);
 	}
 	
-	public boolean close(){
+	public boolean close(int userid){
 		boolean b = false;
 		try {
-			ServerMonitor.getInstance().logOff(this.userid);
-			ServerMonitor.getInstance().closeConnection(ci.getIp());
+			String ip = getClientHost();
+			ServerMonitor sm = ServerMonitor.getInstance();
+			sm.logOff(userid);
+			sm.closeConnection(ip);
 			con.close();
 			b = true;
 		} catch (SQLException e) {
 			System.err.println("Database access error !\n Unable to close connection !");
+		} catch (ServerNotActiveException e) {
+			System.err.println("Unexcepted error !");
 		}
 		return b;
 	}

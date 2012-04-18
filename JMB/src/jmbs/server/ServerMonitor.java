@@ -1,6 +1,5 @@
 package jmbs.server;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public final class ServerMonitor {
@@ -21,6 +20,14 @@ public final class ServerMonitor {
 			}
 		}
 		return instance;
+	}
+	
+	public ConnectionInformation getConnectionInformations (int userid){
+		return (getConnectionInformations(activeAccounts.get(userid)));
+	}
+	
+	public ConnectionInformation getConnectionInformations (String ip){
+		return activeConnections.get(ip);
 	}
 
 	public boolean addConnection(ConnectionInformation ci) throws SecurityException{
