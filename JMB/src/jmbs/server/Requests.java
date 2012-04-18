@@ -36,6 +36,7 @@ import jmbs.common.User;
 
 public class Requests extends UnicastRemoteObject implements RemoteServer {
 
+	private int userid = 0;
 	private String name;
 	private Registry registry;
 	private ConnectionInformation ci;
@@ -46,16 +47,16 @@ public class Requests extends UnicastRemoteObject implements RemoteServer {
 		this.name = name;
 		try {
 			this.registry = LocateRegistry.getRegistry();
-			//this.ci = new ConnectionInformation(getClientHost());// getting client ip adress
+			this.ci = new ConnectionInformation(getClientHost());// getting client ip adress
 			//Create connection informations
-			//ServerMonitor.getInstance().addConnection(ci);
+			ServerMonitor.getInstance().addConnection(ci);
 			//Register CI in server monitor
 		} catch (RemoteException e) {
 			System.err.println("Unexcepted remote error.");
 			System.exit(-1); // can't just return, rmi threads may not exit
-		} /*catch (ServerNotActiveException e) {
+		} catch (ServerNotActiveException e) {
 			System.err.println("Unexcepted Error");
-		}*/
+		}
 	}
 	
 	public String getName() {
@@ -75,7 +76,7 @@ public class Requests extends UnicastRemoteObject implements RemoteServer {
 	public User connectUser(String em, String psw) throws RemoteException, SecurityException {
 		User returnUser = new User();//TODO: explain to youyou how to handle null objects ;)
 		
-		if (true/*ServerMonitor.getInstance().connectionAttempt(ci.getIp())*/){		
+		if (ServerMonitor.getInstance().connectToAccount(ci.getIp())){ // Try to connect to an account from an ip (security check)		
 			UserDAO udao = new UserDAO(con); 
 			User u = udao.getUser(em);
 		
@@ -84,6 +85,8 @@ public class Requests extends UnicastRemoteObject implements RemoteServer {
 				if (b) { // if password is correct
 					u.setFollows(udao.getFollowed(u)); 
 					returnUser = u;
+					ServerMonitor.getInstance().connectUserUnderIp(u.getId(),ci.getIp()); // add activated account to server Monitor
+					this.userid = u.getId();
 				}
 			}
 		} else throw new SecurityException("You're not authorized to connect to the server because your ip has made too many unsuccessfull login attemps.\n");
@@ -226,9 +229,15 @@ public class Requests extends UnicastRemoteObject implements RemoteServer {
 		return p;
 	}
 	
+	public void logOut(){
+		ServerMonitor.getInstance().logOff(this.userid);
+	}
+	
 	public boolean close(){
 		boolean b = false;
 		try {
+			ServerMonitor.getInstance().logOff(this.userid);
+			ServerMonitor.getInstance().closeConnection(ci.getIp());
 			con.close();
 			b = true;
 		} catch (SQLException e) {
