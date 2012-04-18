@@ -47,14 +47,19 @@ public class Requests extends UnicastRemoteObject implements RemoteServer {
 		this.name = name;
 		try {
 			this.registry = LocateRegistry.getRegistry();
+		} catch (RemoteException e) {
+			System.err.println("Unexcepted remote error.");
+			System.exit(-1); // can't just return, rmi threads may not exit
+		} 
+	}
+	
+	public void connect(){
+		try{
 			this.ci = new ConnectionInformation(getClientHost());// getting client ip adress
 			//Create connection informations
 			ServerMonitor.getInstance().addConnection(ci);
 			//Register CI in server monitor
-		} catch (RemoteException e) {
-			System.err.println("Unexcepted remote error.");
-			System.exit(-1); // can't just return, rmi threads may not exit
-		} catch (ServerNotActiveException e) {
+		}catch (ServerNotActiveException e) {
 			System.err.println("Unexcepted Error");
 		}
 	}
