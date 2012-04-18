@@ -16,7 +16,8 @@ CREATE TABLE users ( /* Table des utilisateurs */
 	forename varchar(20),
 	email varchar(200),
 	pass varchar(200),
-    picture varchar(200),
+    	picture varchar(200),
+	authlvl integer,
 
 CONSTRAINT pk_users PRIMARY KEY (iduser)
 );
@@ -45,9 +46,10 @@ CREATE TABLE projects (
 	idproject serial,
 	idowner integer NOT NULL,
 	name varchar(20),
+	status integer,
 	
-CONSTRAINT pk_projects PRIMARY_KEY (idproject),
-CONSTRAINT fk_projects_user FOREIGN KEY (idowner) REFERENCES users (iduser), 
+CONSTRAINT pk_projects PRIMARY KEY (idproject),
+CONSTRAINT fk_projects_user FOREIGN KEY (idowner) REFERENCES users (iduser)
 );
 
 CREATE TABLE participate (
@@ -55,9 +57,30 @@ CREATE TABLE participate (
 	iduser integer NOT NULL,
 	authlvl integer,
 
+CONSTRAINT pk_participate PRIMARY KEY (idproject,iduser),
 CONSTRAINT fk_part_user FOREIGN KEY (iduser) REFERENCES users (iduser), 
-CONSTRAINT fk_part_project FOREIGN KEY (idproject) REFERENCES projects (idprojects)
+CONSTRAINT fk_part_project FOREIGN KEY (idproject) REFERENCES projects (idproject)
 );
 
 
+
+CREATE TABLE connection (
+	idconnection serial,
+	ip varchar(20) NOT NULL,
+	iduser integer,
+	beginTime timestamp, /* connection begining time */
+	endTime timestamp,
+
+CONSTRAINT pk_connect PRIMARY KEY (idconnection),
+CONSTRAINT fk_connect_user FOREIGN KEY (iduser) REFERENCES users (iduser)
+);
+
+CREATE TABLE banned (
+	ip varchar(20) UNIQUE;
+	lifeban int;
+	expiration Timestamp;
+	reason varchar(500);
+
+CONSTRAINT pk_connect PRIMARY KEY (idconnection),
+);
 
