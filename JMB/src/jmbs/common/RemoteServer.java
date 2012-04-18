@@ -33,8 +33,9 @@ public interface RemoteServer extends Remote {
 	 *            - user's password
 	 * @return the user if pass and email match null if not
 	 * @throws RemoteException
+	 * @throws SecurityException if a user attempts to connect too many times
 	 */
-	public User connectUser(String em, String psw) throws RemoteException;
+	public User connectUser(String em, String psw) throws RemoteException, SecurityException;
 
 	/**
 	 * @param m
@@ -157,9 +158,9 @@ public interface RemoteServer extends Remote {
 	 * @return the created project
 	 * @throws RemoteException
 	 */
-	public Project createProject(String name) throws RemoteException ;
+	public Project createProject(String name,int iduser) throws RemoteException ;
 	
-	// TODO the following methods:
+	
 	/**
 	 * or Remove project, to prevent the users to participate and write new messages in a closed project
 	 * @param idUser user id , to confirm that the owner who want to close his project
@@ -167,7 +168,8 @@ public interface RemoteServer extends Remote {
 	 * @return true if project closed successfully 
 	 * @throws RemoteException
 	 */
-	//public boolean closeProject(int idUser, int idProject) throws RemoteException ;
+	public boolean closeProject(int idUser, int idProject) throws RemoteException ;
+	
 	
 	/**
 	 * search for projects where the user is participated
@@ -175,7 +177,7 @@ public interface RemoteServer extends Remote {
 	 * @return a list of projects
 	 * @throws RemoteException
 	 */
-	//public ArrayList<Project> getUserProjects (int idUser) throws RemoteException ;
+	public ArrayList<Project> getUserProjects (int idUser) throws RemoteException ;
 	
 	/**
 	 * search for all users have participated into a project
@@ -183,7 +185,11 @@ public interface RemoteServer extends Remote {
 	 * @return a list of users
 	 * @throws RemoteException
 	 */
-	//public ArrayList<User> getProjectUsers (int idProject) throws RemoteException ;
+	public ArrayList<User> getProjectUsers (int idProject) throws RemoteException ;
 	
-	
+	/**
+	 * Close the connection and return a boolean saying if the connection was closed or not.
+	 * @return boolean - true if the connection was closed - false if not
+	 */
+	public boolean close() throws RemoteException;
 }

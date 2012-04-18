@@ -43,6 +43,7 @@ public final class Configuration { /* Singleton pattern for configuration file. 
 	private static final String DEFAUlT_DRIVER = "org.postgresql.Driver";
 	private static final String DEFAULT_LOGIN = "postgres";
 	private static final String DEFAULT_PASSWORD = "postgres";
+	
 	private static Configuration instance = null;
 	private String url;
 	private String login;
@@ -61,11 +62,11 @@ public final class Configuration { /* Singleton pattern for configuration file. 
 		try {
 			in = new FileInputStream(CONFIGURATION_FILE_PATH);
 			prop.load(in);
-			in.close();
 			url = prop.getProperty("Url");
 			login = prop.getProperty("Login");
 			driver = prop.getProperty("Driver");
 			password = prop.getProperty("Password");
+			in.close();
 		} catch (FileNotFoundException e) { // Generating default configuration file if the file was not found.
 			System.out.println("Configuration file was not found. Default configuration file is beeing generated.");
 			File config = new File(CONFIGURATION_FILE_PATH);
@@ -76,6 +77,7 @@ public final class Configuration { /* Singleton pattern for configuration file. 
 				prop.setProperty("login", DEFAULT_LOGIN);
 				prop.setProperty("password", DEFAULT_PASSWORD);
 				prop.store(out, "[AUTO-GENERATED CONFIGURATION FILE]");
+				out.flush();
 				out.close();
 				System.out.println("Configuration file was sucessfully generated.");
 				getInstance();

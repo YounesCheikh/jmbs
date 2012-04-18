@@ -92,7 +92,7 @@ public class PictureDAO extends DAO {
 				ImageIO.write(img, DEFAULT_IMAGE_FORMAT, f);
 				ret = true;
 			} catch (IOException e) {
-				System.out.println("Image cannot be saved");
+				System.out.println("Image cannot be saved.");
 			}
 		}
 		

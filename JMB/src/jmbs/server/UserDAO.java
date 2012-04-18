@@ -34,7 +34,7 @@ public class UserDAO extends DAO {
 	 * 
 	 */
 	private static final long serialVersionUID = 1371248166710891652L;
-	public static final int DEFAULT_AUTHORISATION_LEVEL = 0;
+
 	
 	public UserDAO(Connection c) {
 		super(c);
@@ -99,21 +99,22 @@ public class UserDAO extends DAO {
 		return u;
 	}
 
+	
 	/**
 	 * Returns all the projects a user is involved in.
 	 * 
 	 * @return Array of Projects
 	 */
-	public ArrayList<Project> getProjects(User u) {
+	public ArrayList<Project> getProjects(int userid) {
 		ArrayList<Project> p = new ArrayList<Project>();
 		
 		set("SELECT partiNamecipate.idproject,name FROM participate,project WHERE participate.iduser=? AND participate.idproject=project.idproject;");
-		setInt(1,u.getId());
+		setInt(1,userid);
 		ResultSet res = executeQuery();
 
 		try {
 			do {	
-				p.add(new Project(res.getString("name"), res.getInt("idproject")));
+				p.add(new Project(res.getString("name"), res.getInt("idproject"), this.getUser(res.getInt("idowner"))));
 			} while (res.next());
 
 		} catch (SQLException e) {
@@ -130,6 +131,15 @@ public class UserDAO extends DAO {
 		
 		
 		return p;
+	}
+	
+	/**
+	 * Returns all the projects a user is involved in.
+	 * 
+	 * @return Array of Projects
+	 */
+	public ArrayList<Project> getProjects(User u) {
+		return getProjects(u.getId());
 	}
 
 	// TODO add an option to list Users by second names...
@@ -405,7 +415,7 @@ public class UserDAO extends DAO {
 	}
 	
 	public boolean participate (int iduser, int idproject){
-		return this.participate(iduser, idproject,DEFAULT_AUTHORISATION_LEVEL);
+		return this.participate(iduser, idproject,User.DEFAULT_AUTHORISATION_LEVEL);
 	}
 	
 	public boolean unParticipate (int iduser, int idproject){
@@ -415,5 +425,40 @@ public class UserDAO extends DAO {
 		boolean res = executeUpdate();
 		
 		return (res);
+	}
+	
+	public int getAccessLevel (int iduser, int idproject){
+		int ret = -1;
+		if (this.exists(iduser) && (new ProjectDAO(super.con)).exists(idproject)) {
+			set("SELECT authlvl FROM participate WHERE iduser=? AND idproject=?");
+			setInt(1,iduser);
+			setInt(2,idproject);
+			ResultSet res = executeQuery();
+		
+			try {
+				ret = res.getInt("authlvl");
+			} catch (SQLException e) {
+				System.err.println("Unexcepted error !");
+			}
+		}
+		
+		return ret;
+	}
+	
+	public int getAccessLevel (int iduser){
+		int ret = -1;
+		if (this.exists(iduser)) {
+			set("SELECT authlvl FROM user WHERE iduser=?");
+			setInt(1,iduser);
+			ResultSet res = executeQuery();
+		
+			try {
+				ret = res.getInt("authlvl");
+			} catch (SQLException e) {
+				System.err.println("Unexcepted error !");
+			}
+		}
+		
+		return ret;
 	}
 }

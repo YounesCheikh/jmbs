@@ -31,6 +31,7 @@ public class User implements Serializable {
 
 	private static final long serialVersionUID = -379020318303370555L;
 	public static final String DEFAULT_PICTURE = "avatar.jpg";
+	public static final int DEFAULT_AUTHORISATION_LEVEL = 0;
 
 	private String name;
 	private String fname;
@@ -38,7 +39,7 @@ public class User implements Serializable {
 	private int id;
 	// these attributes are not created by default because they are mostly
 	// unused or could trigger unwanted chained db access and object creation
-	private int accesslevel = 0;
+	private int accesslevel = DEFAULT_AUTHORISATION_LEVEL;
 	private ArrayList<Project> projects = new ArrayList<Project>();
 	private ArrayList<User> follows = new ArrayList<User>();
 	private String pic = new String();

@@ -23,6 +23,7 @@ package jmbs.server;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.rmi.server.ServerNotActiveException;
 import java.rmi.server.UnicastRemoteObject;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -37,19 +38,24 @@ public class Requests extends UnicastRemoteObject implements RemoteServer {
 
 	private String name;
 	private Registry registry;
+	private ConnectionInformation ci;
+	private Connection con = new Connect().getConnection();
 	private static final long serialVersionUID = 5885886202424414094L;
 
 	public Requests(String name) throws RemoteException {
 		this.name = name;
 		try {
-			registry = LocateRegistry.getRegistry();
-			//registry.rebind(this.name, this);
+			this.registry = LocateRegistry.getRegistry();
+			//this.ci = new ConnectionInformation(getClientHost());// getting client ip adress
+			//Create connection informations
+			//ServerMonitor.getInstance().addConnection(ci);
+			//Register CI in server monitor
 		} catch (RemoteException e) {
 			System.err.println("Unexcepted remote error.");
-			e.printStackTrace();
 			System.exit(-1); // can't just return, rmi threads may not exit
-		}
-		//System.out.println("The JMBS server loaded and ready to use.");
+		} /*catch (ServerNotActiveException e) {
+			System.err.println("Unexcepted Error");
+		}*/
 	}
 	
 	public String getName() {
@@ -66,27 +72,22 @@ public class Requests extends UnicastRemoteObject implements RemoteServer {
 	 * @see jmbs.common.RemoteServer#connectUser(java.lang.String,
 	 * java.lang.String)
 	 */
-	public User connectUser(String em, String psw) throws RemoteException {
-
-		Connection con = new Connect().getConnection();
-		UserDAO udao = new UserDAO(con);
-		User returnUser = new User(); 
-		User u = udao.getUser(em);
+	public User connectUser(String em, String psw) throws RemoteException, SecurityException {
+		User returnUser = new User();//TODO: explain to youyou how to handle null objects ;)
 		
-		if (u != null){
-			boolean b = udao.checkPassword(u, psw);
-			if (b) { // if password is correct
-			u.setFollows(udao.getFollowed(u)); 
-			returnUser = u;
+		if (true/*ServerMonitor.getInstance().connectionAttempt(ci.getIp())*/){		
+			UserDAO udao = new UserDAO(con); 
+			User u = udao.getUser(em);
+		
+			if (u != null){
+				boolean b = udao.checkPassword(u, psw);
+				if (b) { // if password is correct
+					u.setFollows(udao.getFollowed(u)); 
+					returnUser = u;
+				}
 			}
-		}
+		} else throw new SecurityException("You're not authorized to connect to the server because your ip has made too many unsuccessfull login attemps.\n");
 		
-		try {
-			con.close();
-		} catch (SQLException e) {
-			System.err.println("Database access error !\n Unable to close connection !");
-		}
-
 		return returnUser;
 	}
 
@@ -96,15 +97,9 @@ public class Requests extends UnicastRemoteObject implements RemoteServer {
 	 * @see jmbs.common.RemoteServer#addMessage(jmbs.common.Message)
 	 */
 	public int addMessage(Message m) throws RemoteException {
-		Connection con = new Connect().getConnection();
 		MessageDAO mdao = new MessageDAO(con);
 		int ret = mdao.addMessage(m);
 
-		try {
-			con.close();
-		} catch (SQLException e) {
-			System.err.println("Database access error !\n Unable to close connection !");
-		}
 		return ret;
 	}
 
@@ -117,18 +112,12 @@ public class Requests extends UnicastRemoteObject implements RemoteServer {
 	 */
 	public boolean createUser(User u, String hashedPassword) throws RemoteException {
 		boolean ret = false;
-		Connection con = new Connect().getConnection();
 		UserDAO udao = new UserDAO(con);
 		
 		if (!udao.checkMail(u.getMail())) {
 			ret = udao.addUser(u, hashedPassword);
 		}
 		
-		try {
-			con.close();
-		} catch (SQLException e) {
-			System.err.println("Database access error !\n Unable to close connection !");
-		}
 		return ret;
 	}
 
@@ -138,17 +127,11 @@ public class Requests extends UnicastRemoteObject implements RemoteServer {
 	 * @see jmbs.common.RemoteServer#searchFor(java.lang.String)
 	 */
 	public ArrayList<User> searchUser(String userName, int param) throws RemoteException {
-		Connection con = new Connect().getConnection();
 		UserDAO udao = new UserDAO(con);
 		
 		if (param != DAO.BY_NAME && param != DAO.BY_FORNAME && param != DAO.BY_BOTH) param = DAO.BY_BOTH; // default value
 		ArrayList<User> u = udao.findUsers(userName, param);
 		
-		try {
-			con.close();
-		} catch (SQLException e) {
-			System.err.println("Database access error !\n Unable to close connection !");
-		}
 		return u;
 	}
 
@@ -158,15 +141,9 @@ public class Requests extends UnicastRemoteObject implements RemoteServer {
 	 * @see jmbs.common.RemoteServer#follow(int, int)
 	 */
 	public boolean follows(int idfollower, int idfollowed) throws RemoteException {
-		Connection con = new Connect().getConnection();
 		UserDAO udao = new UserDAO(con);
 		boolean rb = udao.follows(idfollower, idfollowed);
 		
-		try {
-			con.close();
-		} catch (SQLException e) {
-			System.err.println("Database access error !\n Unable to close connection !");
-		}
 		return rb;
 	}
 
@@ -176,15 +153,9 @@ public class Requests extends UnicastRemoteObject implements RemoteServer {
 	 * @see jmbs.common.RemoteServer#unFollow(int, int)
 	 */
 	public boolean unFollow(int idfollower, int idfollowed) throws RemoteException {
-		Connection con = new Connect().getConnection();
 		UserDAO udao = new UserDAO(con);
 		boolean rb = udao.unFollow(idfollower, idfollowed);
 		
-		try {
-			con.close();
-		} catch (SQLException e) {
-			System.err.println("Database access error !\n Unable to close connection !");
-		}
 		return rb;
 	}
 
@@ -194,15 +165,9 @@ public class Requests extends UnicastRemoteObject implements RemoteServer {
 	 * @see jmbs.common.RemoteServer#getFollowers(jmbs.common.User)
 	 */
 	public ArrayList<User> getFollowers(User u) throws RemoteException {
-		Connection con = new Connect().getConnection();
 		UserDAO udao = new UserDAO(con);
 		ArrayList<User> ra =udao.getFollowers(u);
 		
-		try {
-			con.close();
-		} catch (SQLException e) {
-			System.err.println("Database access error !\n Unable to close connection !");
-		}
 		return ra;
 	}
 
@@ -216,11 +181,6 @@ public class Requests extends UnicastRemoteObject implements RemoteServer {
 		MessageDAO mdao = new MessageDAO(con);
 		ArrayList<Message> ra = mdao.getMessages(iduser, idlastmessage, maxMsg);
 		
-		try {
-			con.close();
-		} catch (SQLException e) {
-			System.err.println("Database access error !\n Unable to close connection !");
-		}
 		return ra;
 	}
 	
@@ -228,12 +188,6 @@ public class Requests extends UnicastRemoteObject implements RemoteServer {
 		Connection con = new Connect().getConnection();
 		ProjectDAO pdao = new ProjectDAO(con);
 		ArrayList<Project> found = pdao.findProjects(likeName);
-		
-		try {
-			con.close();
-		} catch (SQLException e) {
-			System.err.println("Database access error !\n Unable to close connection !");
-		}
 		
 		return found;
 	}
@@ -245,45 +199,61 @@ public class Requests extends UnicastRemoteObject implements RemoteServer {
 		
 		ret = udao.participate(iduser, idproject, auth);
 		
-		try {
-			con.close();
-		} catch (SQLException e) {
-			System.err.println("Database access error !\n Unable to close connection !");
-		}
-		
 		return ret;
 	}
 	
 	public boolean participate (int iduser, int idproject){
-		return this.participate(iduser, idproject, UserDAO.DEFAULT_AUTHORISATION_LEVEL);
+		return this.participate(iduser, idproject, User.DEFAULT_AUTHORISATION_LEVEL);
 	}
 	
 	public boolean unParticipate (int iduser, int idproject){
 		Connection con = new Connect().getConnection();
 		UserDAO udao = new UserDAO(con);
 		boolean ret = udao.unParticipate(iduser, idproject);
-		
-		try {
-			con.close();
-		} catch (SQLException e) {
-			System.err.println("Database access error !\n Unable to close connection !");
-		}
-		
+	
 		return ret;							
 	}
 	
-	public Project createProject(String name){
-		Connection con = new Connect().getConnection();
+	public Project createProject(String name, int iduser){
 		ProjectDAO pdao = new ProjectDAO(con);
-		Project p = pdao.findProject(name);
+		UserDAO udao = new UserDAO(con);
+		Project p = null;
 		
+		if (udao.getAccessLevel(iduser) >= ProjectDAO.CREATE_ACCESS_LEVEL){
+			 p = pdao.createProject(name,iduser);
+		}
+				
+		return p;
+	}
+	
+	public boolean close(){
+		boolean b = false;
 		try {
 			con.close();
+			b = true;
 		} catch (SQLException e) {
 			System.err.println("Database access error !\n Unable to close connection !");
 		}
+		return b;
+	}
+	
+	public boolean closeProject(int idUser, int idProject) throws RemoteException{
+		ProjectDAO pdao = new ProjectDAO(con);
+		boolean b = false;
+		if (pdao.isOwner(idUser, idProject)){
+			b = pdao.closeProject(idProject);
+		}
 		
-		return p;
+		return b;
+	}
+	
+	public ArrayList<Project> getUserProjects (int idUser) throws RemoteException{
+		UserDAO udao = new UserDAO(con);
+		return udao.getProjects(idUser);
 	}
 
+	public ArrayList<User> getProjectUsers (int idProject) throws RemoteException{
+		ProjectDAO pdao = new ProjectDAO(con);
+		return pdao.getUsers(idProject);
+	}
 }
