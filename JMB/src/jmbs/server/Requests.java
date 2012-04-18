@@ -43,15 +43,15 @@ public class Requests extends UnicastRemoteObject implements RemoteServer {
 
 	public Requests(String name) throws RemoteException {
 		this.name = name;
-		try {
+		//try {
 			this.registry = LocateRegistry.getRegistry();
-		} catch (RemoteException e) {
-			System.err.println("Unexcepted remote error.");
-			System.exit(-1); // can't just return, rmi threads may not exit
-		} 
+		//} catch (RemoteException e) {
+			//System.err.println("Unexcepted remote error.");
+			//System.exit(-1); // can't just return, rmi threads may not exit
+		//} 
 	}
 	
-	public void connect(){
+	public void connect() throws RemoteException{
 		try{
 			ConnectionInformation ci = new ConnectionInformation(getClientHost());// getting client ip adress
 			//Create connection informations
@@ -238,7 +238,7 @@ public class Requests extends UnicastRemoteObject implements RemoteServer {
 		return p;
 	}
 	
-	public void logOut(int userid){
+	public void logOut(int userid) throws RemoteException {
 		ServerMonitor.getInstance().logOff(userid);
 	}
 	

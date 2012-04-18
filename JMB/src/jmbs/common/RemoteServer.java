@@ -209,10 +209,10 @@ public interface RemoteServer extends Remote {
 	/**
 	 * set connection to server
 	 */
-	public void connect();
+	public void connect() throws RemoteException;
 	
 	/**
 	 * logs out a user
 	 */
-	public void logOut(int iduser);
+	public void logOut(int iduser) throws RemoteException;
 }

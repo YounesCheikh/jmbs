@@ -59,7 +59,7 @@ public class ServerWindow {
 		} catch (RemoteException e) {
 			// TODO Auto-generated catch block
 			// e.printStackTrace();
-			System.err.println("Error occurred during creating new The Request!\n" + e.getMessage());
+			System.err.println("Error occurred during creating the new Request!\n" + e.getMessage());
 		}
 		initialize();
 	}
