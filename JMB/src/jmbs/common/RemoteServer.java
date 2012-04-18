@@ -22,6 +22,7 @@ package jmbs.common;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 public interface RemoteServer extends Remote {
@@ -192,4 +193,16 @@ public interface RemoteServer extends Remote {
 	 * @return boolean - true if the connection was closed - false if not
 	 */
 	public boolean close() throws RemoteException;
+	
+	/**
+	 * Changes the password of the given user.
+	 * 
+	 * @param userid id of the user whose pass u want to change
+	 * @param oldPass old pass for this user
+	 * @param newPass new pass
+	 * @return true if everything was alright false if the old password is wrong.
+	 * @throws RemoteException
+	 * @throws SQLException if it was unable to change the password
+	 */
+	public boolean changePassword(int userid, String oldPass, String newPass) throws RemoteException, SQLException;
 }

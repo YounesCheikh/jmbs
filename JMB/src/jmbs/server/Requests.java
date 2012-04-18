@@ -256,4 +256,9 @@ public class Requests extends UnicastRemoteObject implements RemoteServer {
 		ProjectDAO pdao = new ProjectDAO(con);
 		return pdao.getUsers(idProject);
 	}
+	
+	public boolean changePassword(int userid, String oldPass, String newPass) throws RemoteException, SQLException{
+		UserDAO udao = new UserDAO(con);
+		return udao.changePassword(userid, oldPass, newPass);
+	}
 }

@@ -206,10 +206,24 @@ public class UserDAO extends DAO {
 	 * 
 	 */
 	public boolean checkPassword(User u, String pass) {
+		return checkPassword(u.getId(), pass);
+	}
+	
+	/**
+	 * Check if the password matches with the db one.
+	 * 
+	 * @param u
+	 *            User
+	 * @param pass
+	 *            String containing password
+	 * @return true - if the password matches
+	 * 
+	 */
+	public boolean checkPassword(int iduser, String pass) {
 		boolean ret = false;
 		
 		set("SELECT pass FROM users WHERE iduser =?;");
-		setInt(1,u.getId());
+		setInt(1,iduser);
 		ResultSet res = executeQuery();
 
 		try {
@@ -460,5 +474,19 @@ public class UserDAO extends DAO {
 		}
 		
 		return ret;
+	}
+	
+
+	public boolean changePassword(int userid, String oldPass, String newPass) throws SQLException{
+		boolean b = false;
+		if (checkPassword(userid, oldPass)){
+			set("UPDATE users SET pass=? WERE iduser = ?");
+			setString(1,newPass);
+			setInt(2,userid);
+			b = executeUpdate();
+			if (!b) throw new SQLException("Unable to change password in database for user id "+userid );
+		}
+		
+		return b;
 	}
 }
