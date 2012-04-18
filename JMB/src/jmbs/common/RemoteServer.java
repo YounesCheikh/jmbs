@@ -206,5 +206,8 @@ public interface RemoteServer extends Remote {
 	 */
 	public boolean changePassword(int userid, String oldPass, String newPass) throws RemoteException, SQLException;
 	
-	
+	/**
+	 * set connection to server
+	 */
+	public void connect();
 }
