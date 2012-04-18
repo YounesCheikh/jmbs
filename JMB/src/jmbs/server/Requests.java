@@ -51,11 +51,13 @@ public class Requests extends UnicastRemoteObject implements RemoteServer {
 		//} 
 	}
 	
-	public void connect() throws RemoteException{
+	public void connect() throws RemoteException, SecurityException{
 		try{
 			ConnectionInformation ci = new ConnectionInformation(getClientHost());// getting client ip adress
 			//Create connection informations
-			ServerMonitor.getInstance().addConnection(ci);
+			if(!ServerMonitor.getInstance().addConnection(ci)){
+				
+			}
 			//Register CI in server monitor
 		}catch (ServerNotActiveException e) {
 			System.err.println("Unexcepted Error");
