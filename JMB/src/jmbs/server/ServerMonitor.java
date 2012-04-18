@@ -32,16 +32,20 @@ public final class ServerMonitor {
 
 	public boolean addConnection(ConnectionInformation ci) throws SecurityException{
 		String ip = ci.getIp();
-		
+		boolean b = true;
 		if (!isConnectionActive(ip)) { 
 			if (!s.isBanned(ip)){
 				activeConnections.put(ip, ci);
 			}else {
+				b = false;
 				throw new SecurityException(s.getBanInformation(ip).toString());
 				}			
-		} else
+		} else {
+			b = false;
 			throw new SecurityException("You are trying to set 2 connections from de same ip adress at the same time.\n Please log of and try again.");
-		return true;
+		}
+			
+		return b;
 	}
 	
 	public void connectUserUnderIp(int userid, String ip){
