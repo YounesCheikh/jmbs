@@ -36,14 +36,17 @@ public class SecurityDAO extends DAO implements Security{
 				String reason = rs.getString("Reason");
 				boolean lb = rs.getBoolean("lifeban");
 				
-				if (!lb) bi = new BanInformation(ip, reason, exp);
-				else bi = new BanInformation(ip, reason);
-				
-				if (!isBanEffective(bi)) {
-					bi = null;
-					if (!removeBan(ip)) {
-						System.err.println("DB ERROR : Ban " + bi + " is no more effective but it hasn't been removed.");
+				if (!lb) {
+					bi = new BanInformation(ip, reason, exp);
+					if (!isBanEffective(bi)) {
+						bi = null;
+						if (!removeBan(ip)) {
+							System.err.println("DB ERROR : Ban " + bi + " is no more effective but it hasn't been removed.");
+						}
 					}
+				}
+				else {
+					bi = new BanInformation(ip, reason);
 				}
 				
 				//User is banned.
