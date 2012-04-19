@@ -72,10 +72,10 @@ public final class Configuration { /* Singleton pattern for configuration file. 
 			File config = new File(CONFIGURATION_FILE_PATH);
 			try {
 				FileOutputStream out = new FileOutputStream(config);
-				prop.setProperty("url", DEFAULT_URL);
-				prop.setProperty("driver",DEFAUlT_DRIVER);
-				prop.setProperty("login", DEFAULT_LOGIN);
-				prop.setProperty("password", DEFAULT_PASSWORD);
+				prop.setProperty("Url", DEFAULT_URL);
+				prop.setProperty("Driver",DEFAUlT_DRIVER);
+				prop.setProperty("Login", DEFAULT_LOGIN);
+				prop.setProperty("Password", DEFAULT_PASSWORD);
 				prop.store(out, "[AUTO-GENERATED CONFIGURATION FILE]");
 				out.flush();
 				out.close();
