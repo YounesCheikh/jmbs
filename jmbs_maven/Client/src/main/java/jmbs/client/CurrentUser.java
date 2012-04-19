@@ -22,17 +22,22 @@
 package jmbs.client;
 
 import java.io.Serializable;
+import java.rmi.RemoteException;
 
 import jmbs.common.User;
 
-	// TODO: This class will extends from User Class
 public class CurrentUser implements Serializable {
 	
+	/**
+	 * 
+	 */
 	private static final long serialVersionUID = 44433007358974855L;
 	private static User u = null;
 	
 	public CurrentUser(User receivedUser) {
+		if (get()==null) {
 			CurrentUser.set(receivedUser);
+		}
 	}
 	
 	public CurrentUser() {
@@ -48,6 +53,12 @@ public class CurrentUser implements Serializable {
 	}
 	
 	public void disconnect() {
+		try {
+			new ClientRequests().getConnection().logOut(u.getId());
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		set(null);
 	}
 	
