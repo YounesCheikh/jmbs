@@ -251,7 +251,8 @@ public class Requests extends UnicastRemoteObject implements RemoteServer {
 			ServerMonitor sm = ServerMonitor.getInstance();
 			sm.logOff(userid);
 			sm.closeConnection(ip);
-			con.close();
+			// TODO: check if rmi creates a new thread with all old objects copied in it or if it creates new ones?
+			con.close(); // close the connection in the current thread
 			b = true;
 		} catch (SQLException e) {
 			System.err.println("Database access error !\n Unable to close connection !");

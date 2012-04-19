@@ -58,14 +58,21 @@ public class SecurityDAO extends DAO implements Security{
 	}
 	
 	public boolean isBanned (String ip){
-		set("SELECT lifeban FROM banned WHERE ip = ?");
+		
+		set("SELECT lifeban,expiration FROM banned WHERE ip = ?");
 		setString(1,ip);
 		ResultSet rs = executeQuery();
 		boolean res = false;
 		
 		try {
-			rs.getBoolean("lifeban");
-			res = true;
+			if(!rs.getBoolean("lifeban") && !isBanEffective(rs.getTimestamp("expiration", Calendar.getInstance()))){
+				if(!removeBan(ip)){
+					System.err.println("DB ERROR : Ban on " + ip + " is no more effective but it hasn't been removed.");
+				}
+				res = false;
+			}else {
+				res = true;
+			}
 		} catch (SQLException e) {
 			res = false; // useless but for code comprehension 
 		}
@@ -90,8 +97,12 @@ public class SecurityDAO extends DAO implements Security{
 	}
 	
 	private boolean isBanEffective(BanInformation bi){
+		return (!bi.isLifebaned() && isBanEffective(bi.getExpiration()));
+	}
+	
+	private boolean isBanEffective (Timestamp t){
 		Timestamp currentTime = new Timestamp(Calendar.getInstance().getTimeInMillis());
-		return (!bi.isLifebaned() && currentTime.after(bi.getExpiration()));
+		return (currentTime.after(t));
 	}
 	
 }
