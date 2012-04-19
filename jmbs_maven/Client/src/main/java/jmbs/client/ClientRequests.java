@@ -20,7 +20,6 @@
 
 package jmbs.client;
 
-import java.rmi.AccessException;
 import java.rmi.NotBoundException;
 import java.rmi.RMISecurityManager;
 import java.rmi.RemoteException;
@@ -32,12 +31,9 @@ import jmbs.common.RemoteServer;
 
 public class ClientRequests {
 	private static RemoteServer server = null;
-	private static String addressIP;
-
-	private static int port;
-	private static String name;
-
+	private ServerConfig conf;
 	public static int maxReceivedMsgs = 30;
+	Registry registry;
 
 	public int getMaxReceivedMsgs() {
 		return maxReceivedMsgs;
@@ -49,64 +45,34 @@ public class ClientRequests {
 
 	public ClientRequests() {
 		if (server == null) {
-
+			conf = new ServerConfig();
 			System.setSecurityManager(new RMISecurityManager());
-			try {
-				ClientRequests.addressIP = "127.0.0.1";
-				ClientRequests.name = "serverjmbs";
-				ClientRequests.port = 1099;
-				Registry registry = LocateRegistry.getRegistry(addressIP, port);
-				server = (RemoteServer) registry.lookup(ClientRequests.name);
-				server.connect();
-
-			} catch (SecurityException se) {
-				new SayToUser(se.getMessage(), true);
-				server = null;
-			} catch (AccessException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (RemoteException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (NotBoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
+				configure();
+				try {
+					server.connect();
+				} catch (RemoteException e) {
+					new SayToUser(e.getMessage(),true);
+				}
 		}
 	}
 
 	public void setNewConfiguration(String ip, int port, String name) {
-		ClientRequests.addressIP = ip;
-		ClientRequests.port = port;
-		ClientRequests.name = name;
+		
+	}
+	
+	public void configure() {
+		try {
+			registry = LocateRegistry.getRegistry(conf.getAdressIP(), conf.getPort());
+			server = (RemoteServer) registry.lookup(conf.getServerName());
+		} catch (RemoteException e) {
+			new SayToUser(e.getMessage(), true);
+		} catch (NotBoundException e) {
+			new SayToUser(e.getMessage(), true);
+		}
 	}
 
 	public RemoteServer getConnection() {
 		return ClientRequests.server;
 	}
 
-	public String getAddressIP() {
-		return addressIP;
-	}
-
-	public void setAddressIP(String addressIP) {
-		ClientRequests.addressIP = addressIP;
-	}
-
-	public int getPort() {
-		return port;
-	}
-
-	public void setPort(int port) {
-		ClientRequests.port = port;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		ClientRequests.name = name;
-	}
 }

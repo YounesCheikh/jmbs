@@ -26,8 +26,6 @@ import javax.swing.SwingConstants;
 import javax.swing.JLabel;
 import javax.swing.JButton;
 import java.awt.Color;
-import javax.swing.ImageIcon;
-
 import com.sun.awt.AWTUtilities;
 
 import java.awt.Font;

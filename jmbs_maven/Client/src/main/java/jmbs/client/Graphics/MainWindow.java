@@ -356,13 +356,7 @@ public class MainWindow {
 	}
 
 	public void checkNewMessages(int idLastMsg) {
-		try {
-			System.out.println("msgListTL"+msgListTL);
-			System.out.println("new ClientRequests().getConnection()"+new ClientRequests().getConnection());
-			System.out.println("currentUser.getId()"+currentUser.getId());
-			System.out.println("currentUser.FullName"+currentUser.getFullName());
-			System.out.println("ClientRequests.maxReceivedMsgs"+ClientRequests.maxReceivedMsgs);
-			
+		try {			
 			msgListTL = new ClientRequests().getConnection().getLatestTL(
 					currentUser.getId(), idLastMsg,
 					ClientRequests.maxReceivedMsgs);

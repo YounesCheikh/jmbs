@@ -46,6 +46,7 @@ import java.awt.event.ActionEvent;
 import javax.swing.JTextField;
 
 import jmbs.client.ClientRequests;
+import jmbs.client.ServerConfig;
 import jmbs.client.SysConf;
 
 public class Preferences extends JFrame {
@@ -77,14 +78,12 @@ public class Preferences extends JFrame {
 	private JButton btnRestoreAsDefault;
 	private JLabel lblMessages;
 	private JTextField limitedMsgTextField;
-	private ClientRequests serverConfig;
-
 	/**
 	 * Create the frame.
 	 */
 	public Preferences() {
 		
-		serverConfig = new ClientRequests();
+		new ClientRequests();
 		ButtonGroup groupDefaultOptions = new ButtonGroup();
 		ButtonGroup groupThemes = new ButtonGroup();
 		setTitle("JMBS: Preferences");
@@ -119,17 +118,20 @@ public class Preferences extends JFrame {
 		ipTextField = new JTextField();
 		ipTextField.setBounds(135, 29, 134, 28);
 		ipTextField.setColumns(10);
-		ipTextField.setText(serverConfig.getAddressIP());
+		
+		ServerConfig sconf = new ServerConfig();
+		
+		ipTextField.setText(sconf.getAdressIP());
 		
 		serverNameTextField = new JTextField();
 		serverNameTextField.setBounds(135, 63, 134, 28);
 		serverNameTextField.setColumns(10);
-		serverNameTextField.setText(serverConfig.getName());
+		serverNameTextField.setText(sconf.getServerName());
 		
 		portTextField = new JTextField();
 		portTextField.setBounds(135, 97, 134, 28);
 		portTextField.setColumns(10);
-		portTextField.setText(""+serverConfig.getPort());
+		portTextField.setText(""+sconf.getPort());
 		
 		btnOk = new JButton("OK");
 		btnOk.setEnabled(false);
