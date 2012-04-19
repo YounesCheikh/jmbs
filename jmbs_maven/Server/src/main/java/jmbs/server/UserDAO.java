@@ -35,6 +35,7 @@ public class UserDAO extends DAO {
 	 */
 	private static final long serialVersionUID = 1371248166710891652L;
 
+	
 	public UserDAO(Connection c) {
 		super(c);
 	}
@@ -98,21 +99,22 @@ public class UserDAO extends DAO {
 		return u;
 	}
 
+	
 	/**
 	 * Returns all the projects a user is involved in.
 	 * 
 	 * @return Array of Projects
 	 */
-	public ArrayList<Project> getProjects(User u) {
+	public ArrayList<Project> getProjects(int userid) {
 		ArrayList<Project> p = new ArrayList<Project>();
 		
 		set("SELECT partiNamecipate.idproject,name FROM participate,project WHERE participate.iduser=? AND participate.idproject=project.idproject;");
-		setInt(1,u.getId());
+		setInt(1,userid);
 		ResultSet res = executeQuery();
 
 		try {
 			do {	
-				p.add(new Project(res.getString("name"), res.getInt("idproject")));
+				p.add(new Project(res.getString("name"), res.getInt("idproject"), this.getUser(res.getInt("idowner"))));
 			} while (res.next());
 
 		} catch (SQLException e) {
@@ -129,6 +131,15 @@ public class UserDAO extends DAO {
 		
 		
 		return p;
+	}
+	
+	/**
+	 * Returns all the projects a user is involved in.
+	 * 
+	 * @return Array of Projects
+	 */
+	public ArrayList<Project> getProjects(User u) {
+		return getProjects(u.getId());
 	}
 
 	// TODO add an option to list Users by second names...
@@ -195,10 +206,24 @@ public class UserDAO extends DAO {
 	 * 
 	 */
 	public boolean checkPassword(User u, String pass) {
+		return checkPassword(u.getId(), pass);
+	}
+	
+	/**
+	 * Check if the password matches with the db one.
+	 * 
+	 * @param u
+	 *            User
+	 * @param pass
+	 *            String containing password
+	 * @return true - if the password matches
+	 * 
+	 */
+	public boolean checkPassword(int iduser, String pass) {
 		boolean ret = false;
 		
 		set("SELECT pass FROM users WHERE iduser =?;");
-		setInt(1,u.getId());
+		setInt(1,iduser);
 		ResultSet res = executeQuery();
 
 		try {
@@ -235,6 +260,7 @@ public class UserDAO extends DAO {
 		return ret;
 	}
 
+	//TODO: check if not useless.
 	/**
 	 * Says if the user exists in the database.
 	 * 
@@ -253,6 +279,22 @@ public class UserDAO extends DAO {
 			ret = false;
 		}
 
+		return ret;
+	}
+	
+	public boolean exists(int iduser){
+		set("SELECT email FROM users WHERE iduser=?");
+		setInt(1,iduser);
+		ResultSet res = executeQuery();
+		boolean ret = false;
+		
+		try {
+			res.getString("email");
+			ret = true;
+		} catch (SQLException e) { // user does not exist we can do something here if we really want to waste time ...
+			
+		}
+		
 		return ret;
 	}
 
@@ -288,13 +330,14 @@ public class UserDAO extends DAO {
 	 * @return true if DB was editing DB succeeded
 	 */
 	public boolean follows(int idFollower, int idFollowed) {
-		
-		set("INSERT INTO follows(follower, followed) VALUES (?,?);");
-		setInt(1,idFollower);
-		setInt(2,idFollowed);
-		boolean res = executeUpdate();
-
-		return (res);
+		if (this.exists(idFollower) && this.exists(idFollowed)){
+			set("INSERT INTO follows(follower, followed) VALUES (?,?);");
+			setInt(1,idFollower);
+			setInt(2,idFollowed);
+			boolean res = executeUpdate();
+			
+			return (res);
+		} else return false	;
 	}
 
 	/**
@@ -305,13 +348,12 @@ public class UserDAO extends DAO {
 	 * @return true if DB was editing DB succeeded
 	 */
 	public boolean unFollow(int idFollower, int idFollowed) {
-
-		set("DELETE FROM follows WHERE follower=? and followed=?;");
-		setInt(1,idFollower);
-		setInt(2,idFollowed);
-		boolean res = executeUpdate();
-
-		return (res);
+			set("DELETE FROM follows WHERE follower=? and followed=?;");
+			setInt(1,idFollower);
+			setInt(2,idFollowed);
+			boolean res = executeUpdate();
+			
+			return (res);
 	}
 
 	/**
@@ -371,5 +413,80 @@ public class UserDAO extends DAO {
 		}
 		
 		return u;
+	}
+	
+	
+	public boolean participate (int iduser, int idproject, int auth){
+		if (this.exists(iduser) && (new ProjectDAO(super.con)).exists(idproject)){ //if the project and the user exists.
+			set("INSERT INTO participate (iduser,idproject,authlvl) VALUES (?,?,?);");
+			setInt(1,iduser);
+			setInt(2,idproject);
+			setInt(3,auth);
+			boolean res = executeUpdate();
+		
+			return res;
+		} else return false;
+	}
+	
+	public boolean participate (int iduser, int idproject){
+		return this.participate(iduser, idproject,User.DEFAULT_AUTHORISATION_LEVEL);
+	}
+	
+	public boolean unParticipate (int iduser, int idproject){
+		set("DELETE FROM participate WHERE iduser=? and idproject=?;");
+		setInt(1,iduser);
+		setInt(2,idproject);
+		boolean res = executeUpdate();
+		
+		return (res);
+	}
+	
+	public int getAccessLevel (int iduser, int idproject){
+		int ret = -1;
+		if (this.exists(iduser) && (new ProjectDAO(super.con)).exists(idproject)) {
+			set("SELECT authlvl FROM participate WHERE iduser=? AND idproject=?");
+			setInt(1,iduser);
+			setInt(2,idproject);
+			ResultSet res = executeQuery();
+		
+			try {
+				ret = res.getInt("authlvl");
+			} catch (SQLException e) {
+				System.err.println("Unexcepted error !");
+			}
+		}
+		
+		return ret;
+	}
+	
+	public int getAccessLevel (int iduser){
+		int ret = -1;
+		if (this.exists(iduser)) {
+			set("SELECT authlvl FROM user WHERE iduser=?");
+			setInt(1,iduser);
+			ResultSet res = executeQuery();
+		
+			try {
+				ret = res.getInt("authlvl");
+			} catch (SQLException e) {
+				System.err.println("Unexcepted error !");
+			}
+		}
+		
+		return ret;
+	}
+	
+
+	public boolean changePassword(int userid, String oldPass, String newPass) throws SQLException{
+		boolean b = false;
+		if (checkPassword(userid, oldPass)){
+			set("UPDATE users SET pass=? WERE iduser = ?");
+			setString(1,newPass);
+			setInt(2,userid);
+			b = executeUpdate();
+			if (!b) throw new SQLException("Unable to change password in database for user id "+userid );
+		}
+		
+		return b;
 	}
 }

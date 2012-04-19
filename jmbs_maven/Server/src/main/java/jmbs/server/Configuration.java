@@ -20,19 +20,30 @@
 
 package jmbs.server;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Properties;
 
 /**
  * Singleton used to set up a connection between the database specified in the
- * configuration file "db.connect" <br>
- * Note: : YOU MUST A THE CONFIGURATION FILE TO USE THAT CLASS.
+ * configuration file.<br>
+ * The configuration file path is described by the private static final String
+ * CONFIGURATION_FILE_PATH 
+ * <br>
+ * Note: : The configuration file will be automatically generated with the default values if it does not exist on the server.
  * 
  */
 public final class Configuration { /* Singleton pattern for configuration file. */
 
+	private static final String CONFIGURATION_FILE_PATH = "db.connect";
+	private static final String DEFAULT_URL = "jdbc:postgresql://localhost:5432/jmbs";
+	private static final String DEFAUlT_DRIVER = "org.postgresql.Driver";
+	private static final String DEFAULT_LOGIN = "postgres";
+	private static final String DEFAULT_PASSWORD = "postgres";
+	
 	private static Configuration instance = null;
 	private String url;
 	private String login;
@@ -40,22 +51,39 @@ public final class Configuration { /* Singleton pattern for configuration file. 
 	private String driver;
 
 	/**
-	 * Creates the singleton Configuration.
+	 * Creates the singleton Configuration.<br>
+	 * Should be launched only by the getInstance method.<br>
+	 * Follows the singleton pattern. 
 	 */
 	private Configuration() {
 		Properties prop = new Properties();
 
-		FileInputStream in;
+		FileInputStream in = null;
 		try {
-			in = new FileInputStream("db.connect");
+			in = new FileInputStream(CONFIGURATION_FILE_PATH);
 			prop.load(in);
-			in.close();
 			url = prop.getProperty("Url");
 			login = prop.getProperty("Login");
 			driver = prop.getProperty("Driver");
 			password = prop.getProperty("Password");
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+			in.close();
+		} catch (FileNotFoundException e) { // Generating default configuration file if the file was not found.
+			System.out.println("Configuration file was not found. Default configuration file is beeing generated.");
+			File config = new File(CONFIGURATION_FILE_PATH);
+			try {
+				FileOutputStream out = new FileOutputStream(config);
+				prop.setProperty("url", DEFAULT_URL);
+				prop.setProperty("driver",DEFAUlT_DRIVER);
+				prop.setProperty("login", DEFAULT_LOGIN);
+				prop.setProperty("password", DEFAULT_PASSWORD);
+				prop.store(out, "[AUTO-GENERATED CONFIGURATION FILE]");
+				out.flush();
+				out.close();
+				System.out.println("Configuration file was sucessfully generated.");
+				getInstance();
+			} catch (IOException e1) {
+				System.err.println("Unable to generate configuration file.");
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -63,13 +91,13 @@ public final class Configuration { /* Singleton pattern for configuration file. 
 	}
 
 	/**
-	 * Creates the unique instance of Configuration if it does not exist.
+	 * Creates the unique instance of Configuration if it does not already exist.
 	 * 
 	 * @return Configuration instance using Singleton Pattern
 	 */
 	public final static Configuration getInstance() {
 		if (instance == null) // we try to avoid using synchronized when not
-								// usefull
+								// Useful
 		{
 			synchronized (Configuration.class) {
 				if (instance == null)

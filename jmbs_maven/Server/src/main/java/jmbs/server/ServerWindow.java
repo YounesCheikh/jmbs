@@ -59,7 +59,7 @@ public class ServerWindow {
 		} catch (RemoteException e) {
 			// TODO Auto-generated catch block
 			// e.printStackTrace();
-			System.err.println("Error occurred during creating new The Request!\n" + e.getMessage());
+			System.err.println("Error occurred during creating the new Request!\n" + e.getMessage());
 		}
 		initialize();
 	}
@@ -109,8 +109,8 @@ public class ServerWindow {
 				}
 			}
 		});
-		btnStartstop.setSelectedIcon(new ImageIcon(ServerWindow.class.getResource("/com/sun/java/swing/plaf/gtk/resources/gtk-yes-4.png")));
-		btnStartstop.setIcon(new ImageIcon("/Users/ycheikh/Dev/JMB/src/jmbs/client/img/quit_ico.png"));
+		//btnStartstop.setSelectedIcon(new ImageIcon(ServerWindow.class.getResource("/com/sun/java/swing/plaf/gtk/resources/gtk-yes-4.png")));
+		//btnStartstop.setIcon(new ImageIcon("/Users/ycheikh/Dev/JMB/src/jmbs/client/img/quit_ico.png"));
 		btnStartstop.setToolTipText("Start/Stop JMBS Server");
 		btnStartstop.setBackground(Color.BLACK);
 
