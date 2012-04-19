@@ -126,7 +126,9 @@ public class ConnectionPanel extends JPanel {
 		btnRegister.setForeground(Color.BLUE);
 		btnRegister.setFont(new Font("Lucida Grande", Font.PLAIN, 14));
 		btnRegister.setBorderPainted(false);
-		setLayout(new MigLayout("", "[63px][12px][10px][12px][102px][6px][104px][][6px][96px]", "[20px][136px][28px][28px][23px][30px][12px][][][][36px]"));
+		setLayout(new MigLayout("",
+				"[63px][12px][10px][12px][102px][6px][104px][][6px][96px]",
+				"[20px][136px][28px][28px][23px][30px][12px][][][][36px]"));
 		add(lblPassword, "cell 0 3,alignx left,aligny center");
 		add(passwordField, "cell 4 3 6 1,aligny top");
 		add(lblConnectToJmbs, "cell 4 0 3 1,alignx center,aligny top");
@@ -159,7 +161,9 @@ public class ConnectionPanel extends JPanel {
 	 * @return true if the user has entred a right email adress
 	 */
 	private boolean verification(String mail) {
-		boolean correctMail = Pattern.matches("^[_a-z0-9-]+(\\.[_a-z0-9-]+)*@[a-z0-9-]+(\\.[a-z0-9-]+)+$", mail);
+		boolean correctMail = Pattern.matches(
+				"^[_a-z0-9-]+(\\.[_a-z0-9-]+)*@[a-z0-9-]+(\\.[a-z0-9-]+)+$",
+				mail);
 		return (correctMail);
 	}
 
@@ -194,35 +198,59 @@ public class ConnectionPanel extends JPanel {
 
 			try {
 				if (server != null) {
-					User u = server.connectUser(this.emailTextField.getText(), new HashPassword(listToString(passwordField.getPassword())).getHashed());
+					User u = server.connectUser(
+							this.emailTextField.getText(),
+							new HashPassword(listToString(passwordField
+									.getPassword())).getHashed());
 					if (u.getId() != -1) {
 						cf.dispose();
 						new CurrentUser(u);
 						this.initMainWindow();
-						this.getMainWindow().getFrame().setVisible(true);
 						// System.out.println(new
 						// CurrentUser().get().toString());
 					} else if (u.getId() == -1) {
-						respLabel.setText("Wrong password or wrong email, Please try again!");
+						respLabel
+								.setText("Wrong password or wrong email, Please try again!");
 						respLabel.setForeground(new Color(200, 0, 0));
 					}
 				}
+			} catch (SecurityException se) {
+				new SayToUser(se.getMessage(), true);
 			} catch (RemoteException e) {
-				//new SayToUser("coucou can't connect to server", true);
-				//System.out.println("Connection to server impossible \n" + e.getMessage());
+				// new SayToUser("coucou can't connect to server", true);
+				// System.out.println("Connection to server impossible \n" +
+				// e.getMessage());
 			}
 		}
 	}
 
-	/**
-	 * @return return the main windows of this program
-	 */
-	private MainWindow getMainWindow() {
-		return w;
-	}
-
 	private void initMainWindow() {
-		this.w = new MainWindow();
+		this.w = new MainWindow(); // Initialize new Main Window
+
+		// Setting the frame Title
+		this.w.getFrame().setTitle(
+				"JMBS Client : " + new CurrentUser().get().getFullName());
+		// Empty the List of messages if not
+		this.w.initMsgListTL();
+		// set the id of the last received message at 0
+		this.w.getTLPanel().setLastIdMsg(0);
+		// remove all the comptent from the timeline panel
+		this.w.getTLPanel().removeAll();
+		this.w.getTLPanel().updateUI();
+		// Repante and revalidate the timeline panel
+		this.w.getTLPanel().repaint();
+		this.w.getTLPanel().revalidate();
+		// Set the new User on the Main window as the Owner
+		this.w.setCurrentUser();
+		// check for new messages from the server and display them on the
+		// timeline panel
+		this.w.checkNewMessages(0);
+		// Resetting the profile panel
+		this.w.resetProfilePanel();
+		// setting the menubar
+		this.w.setMenuBar();
+		// Display the main frame
+		this.w.getFrame().setVisible(true);
 	}
 
 	private String listToString(char[] list) {

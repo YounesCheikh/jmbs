@@ -22,6 +22,7 @@
 package jmbs.client;
 
 import java.io.Serializable;
+import java.rmi.RemoteException;
 
 import jmbs.common.User;
 
@@ -52,6 +53,12 @@ public class CurrentUser implements Serializable {
 	}
 	
 	public void disconnect() {
+		try {
+			new ClientRequests().getConnection().logOut(u.getId());
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		set(null);
 	}
 	

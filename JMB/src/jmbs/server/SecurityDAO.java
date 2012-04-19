@@ -17,7 +17,7 @@ import java.util.Calendar;
 public class SecurityDAO extends DAO implements Security{
 
 	private static final long serialVersionUID = 7440865625633853755L;
-	final static long SUSPECT_INTERVAL = 60000; //ms = 10 min
+	final static long SUSPECT_INTERVAL = 600000; //ms = 10 min
 	final static int SUSPECT_ATTEMPTS_NUMBER = 5;
 	
 
@@ -82,9 +82,12 @@ public class SecurityDAO extends DAO implements Security{
 	
 	public boolean isConnectionAuthorized(ConnectionInformation i){ 
 		long interval = (i.getLastTryTime() - i.getFirstTryTime());
-		long zone = interval%SUSPECT_INTERVAL;
+		long zone = interval/SUSPECT_INTERVAL;
 		long limit = SUSPECT_ATTEMPTS_NUMBER*(zone+1);
-		
+		System.out.println("i.getNumberOfAttemps()"+i.getNumberOfAttemps());
+		System.out.println("limit:"+limit);
+		System.out.println("zone:"+zone);
+		System.out.println("interval:"+interval);
 		boolean b = (i.getNumberOfAttemps() <= limit);
 		
 		return b;

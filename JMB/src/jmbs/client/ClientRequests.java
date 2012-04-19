@@ -1,4 +1,3 @@
-
 /**
  * JMBS: Java Micro Blogging System
  *
@@ -19,10 +18,12 @@
  * 
  */
 
-
 package jmbs.client;
 
+import java.rmi.AccessException;
+import java.rmi.NotBoundException;
 import java.rmi.RMISecurityManager;
+import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 
@@ -31,12 +32,13 @@ import jmbs.common.RemoteServer;
 
 public class ClientRequests {
 	private static RemoteServer server = null;
-	private static String addressIP ;
+	private static String addressIP;
 
-	private static int port ;
-	private static String name ;
-	
+	private static int port;
+	private static String name;
+
 	public static int maxReceivedMsgs = 30;
+
 	public int getMaxReceivedMsgs() {
 		return maxReceivedMsgs;
 	}
@@ -44,37 +46,46 @@ public class ClientRequests {
 	public void setMaxReceivedMsgs(int maxReceivedMsgs) {
 		ClientRequests.maxReceivedMsgs = maxReceivedMsgs;
 	}
-	
+
 	public ClientRequests() {
 		if (server == null) {
-			
+
 			System.setSecurityManager(new RMISecurityManager());
 			try {
 				ClientRequests.addressIP = "127.0.0.1";
 				ClientRequests.name = "serverjmbs";
 				ClientRequests.port = 1099;
-				Registry registry = LocateRegistry
-						.getRegistry(addressIP,port);
-				server = (RemoteServer) registry
-						.lookup(ClientRequests.name);
+				Registry registry = LocateRegistry.getRegistry(addressIP, port);
+				server = (RemoteServer) registry.lookup(ClientRequests.name);
+				server.connect();
 
-			} catch (Exception e) {
-				// Something wrong here
-				new SayToUser("coucou can't connect to server", true);
+			} catch (SecurityException se) {
+				new SayToUser(se.getMessage(), true);
+				server = null;
+			} catch (AccessException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (RemoteException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (NotBoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
+
 		}
 	}
-	
+
 	public void setNewConfiguration(String ip, int port, String name) {
 		ClientRequests.addressIP = ip;
 		ClientRequests.port = port;
 		ClientRequests.name = name;
 	}
-	
+
 	public RemoteServer getConnection() {
 		return ClientRequests.server;
 	}
-	
+
 	public String getAddressIP() {
 		return addressIP;
 	}
