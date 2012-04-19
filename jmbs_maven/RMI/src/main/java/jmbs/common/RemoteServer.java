@@ -22,6 +22,7 @@ package jmbs.common;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 public interface RemoteServer extends Remote {
@@ -33,8 +34,9 @@ public interface RemoteServer extends Remote {
 	 *            - user's password
 	 * @return the user if pass and email match null if not
 	 * @throws RemoteException
+	 * @throws SecurityException if a user attempts to connect too many times
 	 */
-	public User connectUser(String em, String psw) throws RemoteException;
+	public User connectUser(String em, String psw) throws RemoteException, SecurityException;
 
 	/**
 	 * @param m
@@ -110,41 +112,55 @@ public interface RemoteServer extends Remote {
 	 */
 	public ArrayList<Message> getLatestTL(int iduser, int idlastmessage, int maxMsg) throws RemoteException;
 
-	// TODO the following methods:
 	/**
 	 * Search for projects have a name like 'likeName' in the DB 
 	 * @param likeName the name of project
 	 * @return a list of projects 
 	 * @throws RemoteException
 	 */
-	//public ArrayList<Project> searchForProject(String likeName) throws RemoteException ;
+	public ArrayList<Project> searchForProject(String likeName) throws RemoteException ;
+	
+	
 	
 	/**
-	 * participate a user into a project
+	 * participate a user into a project with the default authorization level
 	 * @param idUser user id
 	 * @param idProject project id
-	 * @return true if participation successed, else false
+	 * @return true if participation was set, else false
 	 * @throws RemoteException
 	 */
-	//public boolean participate(int idUser, int idProject) throws RemoteException ;
+	public boolean participate(int idUser, int idProject) throws RemoteException ;
+	
+	/**
+	 * participate a user into a project with the given authorization level
+	 * @param idUser user id
+	 * @param idProject project id
+	 * @param auth authorization level
+	 * @return true if participation was set, else false
+	 * @throws RemoteException
+	 */
+	public boolean participate(int idUser, int idProject, int auth) throws RemoteException ;
+
 	
 	/**
 	 * un participate user from project
 	 * @param idUser user ID
 	 * @param idProject project ID
-	 * @return true if un-participation successed<br />
+	 * @return true if participation was unset<br />
 	 * 			example: if user is not participated into project we return false
 	 * @throws RemoteException
 	 */
-	//public boolean unParticipate(int idUser, int idProject) throws RemoteException ; 
+	public boolean unParticipate(int idUser, int idProject) throws RemoteException ; 
+	
 	
 	/**
 	 * Create new project
-	 * @param idUser the creator of the project
+	 * @param name the project name
 	 * @return the created project
 	 * @throws RemoteException
 	 */
-	//public Project createProject(int idUser) throws RemoteException ;
+	public Project createProject(String name,int iduser) throws RemoteException ;
+	
 	
 	/**
 	 * or Remove project, to prevent the users to participate and write new messages in a closed project
@@ -153,7 +169,8 @@ public interface RemoteServer extends Remote {
 	 * @return true if project closed successfully 
 	 * @throws RemoteException
 	 */
-	//public boolean closeProject(int idUser, int idProject) throws RemoteException ;
+	public boolean closeProject(int idUser, int idProject) throws RemoteException ;
+	
 	
 	/**
 	 * search for projects where the user is participated
@@ -161,7 +178,7 @@ public interface RemoteServer extends Remote {
 	 * @return a list of projects
 	 * @throws RemoteException
 	 */
-	//public ArrayList<Project> getUserProjects (int idUser) throws RemoteException ;
+	public ArrayList<Project> getUserProjects (int idUser) throws RemoteException ;
 	
 	/**
 	 * search for all users have participated into a project
@@ -169,7 +186,33 @@ public interface RemoteServer extends Remote {
 	 * @return a list of users
 	 * @throws RemoteException
 	 */
-	//public ArrayList<User> getProjectUsers (int idProject) throws RemoteException ;
+	public ArrayList<User> getProjectUsers (int idProject) throws RemoteException ;
 	
+	/**
+	 * Close the connection and return a boolean saying if the connection was closed or not.
+	 * @return boolean - true if the connection was closed - false if not
+	 */
+	public boolean close(int userid) throws RemoteException;
 	
+	/**
+	 * Changes the password of the given user.
+	 * 
+	 * @param userid id of the user whose pass u want to change
+	 * @param oldPass old pass for this user
+	 * @param newPass new pass
+	 * @return true if everything was alright false if the old password is wrong.
+	 * @throws RemoteException
+	 * @throws SQLException if it was unable to change the password
+	 */
+	public boolean changePassword(int userid, String oldPass, String newPass) throws RemoteException, SQLException;
+	
+	/**
+	 * set connection to server
+	 */
+	public void connect() throws RemoteException;
+	
+	/**
+	 * logs out a user
+	 */
+	public void logOut(int iduser) throws RemoteException;
 }

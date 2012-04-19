@@ -30,9 +30,8 @@ import java.util.ArrayList;
 public class User implements Serializable {
 
 	private static final long serialVersionUID = -379020318303370555L;
-	/**
-	 * 
-	 */
+	public static final String DEFAULT_PICTURE = "avatar.jpg";
+	public static final int DEFAULT_AUTHORISATION_LEVEL = 0;
 
 	private String name;
 	private String fname;
@@ -40,9 +39,10 @@ public class User implements Serializable {
 	private int id;
 	// these attributes are not created by default because they are mostly
 	// unused or could trigger unwanted chained db access and object creation
-	private int accesslevel = 0;
+	private int accesslevel = DEFAULT_AUTHORISATION_LEVEL;
 	private ArrayList<Project> projects = new ArrayList<Project>();
 	private ArrayList<User> follows = new ArrayList<User>();
+	private String pic = new String();
 
 	
 	public User()
@@ -68,6 +68,7 @@ public class User implements Serializable {
 		this.fname = f;
 		this.mail = m;
 		this.id = 0;
+		this.pic = DEFAULT_PICTURE;
 	}
 
 	/**
@@ -87,6 +88,27 @@ public class User implements Serializable {
 		this.fname = f;
 		this.mail = m;
 		this.id = id;
+		this.pic = DEFAULT_PICTURE;
+	}
+	
+	/**
+	 * Creates a user with his id.
+	 * 
+	 * @param n
+	 *            user's name
+	 * @param f
+	 *            user's fore name
+	 * @param m
+	 *            user's mail
+	 * @param id
+	 *            user's id
+	 */
+	public User(String n, String f, String m, int id, String picName) {
+		this.name = n;
+		this.fname = f;
+		this.mail = m;
+		this.id = id;
+		this.pic = picName;
 	}
 
 	/**
@@ -198,6 +220,14 @@ public class User implements Serializable {
 		this.follows = follows;
 	}
 
+	public String getPic() {
+		return pic;
+	}
+
+	public void setPic(String pic) {
+		this.pic = pic;
+	}
+	
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -226,7 +256,7 @@ public class User implements Serializable {
 			return false;
 		User other = (User) obj;
 		// TODO: more advanced equality check
-		if (id != other.id || id == 0 || other.id == 0)
+		if (id != other.id || id <= 0 || other.id == 0)
 			return false;
 		return true;
 	}

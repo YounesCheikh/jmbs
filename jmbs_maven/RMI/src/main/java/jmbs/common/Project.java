@@ -40,24 +40,14 @@ import java.util.ArrayList;
  */
 public class Project {
 
-	String name;
-	User creator;
 	int id;
-	// these attributes are not created by default because they are mostly unused or could trigger unwanted chained db access and object creation
+	User owner;
+	String name;
+	int status = STATUS_OPENED; 
+	public final static int STATUS_OPENED = 1;
+	public final static int STATUS_CLOSED = 0;
+	// attributes below are not created by default because they are mostly unused or could trigger unwanted chained db access and object creation
 	ArrayList<User> users = new ArrayList<User>();
-
-	/**
-	 * Creates a project knowing the creator and the name.
-	 * 
-	 * @param n
-	 *            name of the project
-	 * @param owner
-	 *            the creator of project
-	 */
-	public Project(String n, User owner) {
-		this.name = n;
-		this.creator = owner;
-	}
 	
 	/**
 	 * Creates a project knowing the id and the name.
@@ -67,22 +57,12 @@ public class Project {
 	 * @param id
 	 *            project id
 	 */
-	public Project(String n, int id) {
+	public Project(String n, int id, User owner) {
 		this.name = n;
 		this.id = id;
+		this.owner = owner;
 	}
 
-	/**
-	 * Creates a project knowing the name only.
-	 * 
-	 * @param n
-	 *            name of the project
-	 */
-	public Project(String n) {
-		this.name = n;
-		this.id = 0;
-	}
-	
 	/**
 	 * @return the name
 	 */
