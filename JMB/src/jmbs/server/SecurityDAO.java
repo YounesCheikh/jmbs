@@ -126,8 +126,12 @@ public class SecurityDAO extends DAO implements Security{
 		return executeUpdate();
 	}
 	
-	private boolean isBanEffective(BanInformation bi){
-		return (!bi.isLifebaned() && isBanEffective(bi.getExpiration()));
+	public void createSuspectProfile(ConnectionInformation i){
+		
+	}
+	
+	public void saveSuspectInformation(ConnectionInformation i){
+		
 	}
 	
 	private boolean isBanEffective (Timestamp t){
