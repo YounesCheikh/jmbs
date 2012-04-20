@@ -36,42 +36,34 @@ import jmbs.common.User;
 
 public class Requests extends UnicastRemoteObject implements RemoteServer {
 
-	private String name;
 	private Registry registry;
 	private Connection con = new Connect().getConnection();
 	private static final long serialVersionUID = 5885886202424414094L;
+	private boolean security = true;
 
-	public Requests(String name) throws RemoteException {
-		this.name = name;
-		//try {
-			this.registry = LocateRegistry.getRegistry();
-		//} catch (RemoteException e) {
-			//System.err.println("Unexcepted remote error.");
-			//System.exit(-1); // can't just return, rmi threads may not exit
-		//} 
+	public Requests(boolean security) throws RemoteException {
+		this.registry = LocateRegistry.getRegistry();
+		this.security = security;
 	}
 	
 	public void connect() throws RemoteException, SecurityException{
-		try{
-			ConnectionInformation ci = new ConnectionInformation(getClientHost());// getting client ip adress
-			//Create connection informations
-			if(!ServerMonitor.getInstance().addConnection(ci)){
-				
+		if (security){
+			try{
+				String ip = getClientHost();
+				Security s = new SecurityDAO(new Connect().getConnection());
+			
+				if (s.isConnectionToServerAuthorized(ip)){
+					//Create connection informations with client ip
+					ConnectionInformation ci = new ConnectionInformation(ip); 
+					//Register CI in server monitor
+					ServerMonitor.getInstance().addConnection(ci);
+				}		
+			}catch (ServerNotActiveException e) {
+				System.err.println("Unexcepted Error");
 			}
-			//Register CI in server monitor
-		}catch (ServerNotActiveException e) {
-			System.err.println("Unexcepted Error");
 		}
-	}
-	
-	public String getName() {
-		return name;
-	}
-	
-	public Registry getRegistry() {
-		return registry;
-	}
-	
+	}	
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -80,31 +72,51 @@ public class Requests extends UnicastRemoteObject implements RemoteServer {
 	 */
 	public User connectUser(String em, String psw) throws RemoteException, SecurityException {
 		User returnUser = new User();//TODO: explain to youyou how to handle null objects ;)
+		Security s = new SecurityDAO(new Connect().getConnection());
 		ServerMonitor sm = ServerMonitor.getInstance();
 		String ip;
-		try {
-			ip = getClientHost();
-			if (sm.connectToAccount(sm.getConnectionInformations(ip).getIp())){ // Try to connect to an account from an ip (security check)		
-				UserDAO udao = new UserDAO(con); 
-				User u = udao.getUser(em);
 		
-				if (u != null){
-					boolean b = udao.checkPassword(u, psw);
-					if (b) { // if password is correct
-						u.setFollows(udao.getFollowed(u)); 
-						returnUser = u;
-						ServerMonitor.getInstance().connectUserUnderIp(u.getId(),ip); // add activated account to server Monitor
-						sm.getConnectionInformations(ip).setUserId(u.getId());		
+		if (security){
+			try {
+				 
+				ip = getClientHost();
+				if (s.isUserConnectionAttemptAuthorized(ip)){ // Try to connect to an account from an ip (security check)		
+					UserDAO udao = new UserDAO(con); 
+					User u = udao.getUser(em);
+			
+					if (u != null){
+						boolean b = udao.checkPassword(u, psw);
+						if (b) { // if password is correct
+							u.setFollows(udao.getFollowed(u)); 
+							returnUser = u;
+							ServerMonitor.getInstance().connectUserUnderIp(u.getId(),ip); // add activated account to server Monitor
+							sm.getConnectionInformations(ip).connectionAcepted(u.getId());
+						}
 					}
+			
+				} else throw new SecurityException("You're not authorized to connect to the server because your ip has made too many unsuccessfull login attemps.\n");
+			} catch (ServerNotActiveException e) {
+				System.err.println("Unexcepted error !");
+			}
+		}else {
+			UserDAO udao = new UserDAO(con); 
+			User u = udao.getUser(em);
+	
+			if (u != null){
+				boolean b = udao.checkPassword(u, psw);
+				if (b) { // if password is correct
+					u.setFollows(udao.getFollowed(u)); 
+					returnUser = u;
 				}
-		
-			} else throw new SecurityException("You're not authorized to connect to the server because your ip has made too many unsuccessfull login attemps.\n");
-		} catch (ServerNotActiveException e) {
-			System.err.println("Unexcepted error !");
+			}
 		}
 		return returnUser;
 	}
-
+	
+	public Registry getRegistry() {
+		return registry;
+	}
+	
 	/*
 	 * (non-Javadoc)
 	 * 

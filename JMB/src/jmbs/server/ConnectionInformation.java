@@ -7,6 +7,7 @@ public class ConnectionInformation {
 	
 	private static final int UNREGISTRED_USER = 0;
 	
+
 	private int numberOfAttemps = 0;
 	private Timestamp firstTry;
 	private Timestamp lastTry;
@@ -23,7 +24,7 @@ public class ConnectionInformation {
 		this.lastTry = firstTry;
 	}
 	
-	public void connectionAttempt(){
+	public void userConnectionAttempt(){
 		this.numberOfAttemps ++;
 		this.lastTry = new Timestamp(Calendar.getInstance().getTimeInMillis());
 	}
@@ -70,11 +71,13 @@ public class ConnectionInformation {
 	public int getUserId() {
 		return userId;
 	}
-
+	
 	/**
-	 * @param userId the userId to set
+	 * @param numberOfAttemps the numberOfAttemps to set
 	 */
-	public void setUserId(int userId) {
+	public void connectionAcepted(int userId) {
 		this.userId = userId;
+		this.numberOfAttemps = 0;
 	}
+
 }

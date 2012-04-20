@@ -11,7 +11,11 @@ public final class ServerMonitor {
 
 	private ServerMonitor() {
 	}
-
+	
+	/**
+	 * Gets the instance of the singleton ServerMonitor.
+	 * @return ServerMonitor current instance
+	 */
 	public final static ServerMonitor getInstance() {
 		if (instance == null) {
 			synchronized (Configuration.class) {
@@ -22,30 +26,22 @@ public final class ServerMonitor {
 		return instance;
 	}
 	
-	public ConnectionInformation getConnectionInformations (int userid){
-		return (getConnectionInformations(activeAccounts.get(userid)));
-	}
-	
-	public ConnectionInformation getConnectionInformations (String ip){
-		return activeConnections.get(ip);
+	/**
+	 * Adds a connection to the server monitor if the ip is not banned and hasn't set any other connections.
+	 * @param ci
+	 * @return
+	 * @throws SecurityException
+	 */
+	public void addConnection(ConnectionInformation ci) throws SecurityException{
+		activeConnections.put(ci.getIp(),ci);
 	}
 
-	public boolean addConnection(ConnectionInformation ci) throws SecurityException{
-		String ip = ci.getIp();
-		boolean b = true;
-		if (!isConnectionActive(ip)) { 
-			if (!s.isBanned(ip)){
-				activeConnections.put(ip, ci);
-			}else {
-				b = false;
-				throw new SecurityException(s.getBanInformation(ip).toString());
-				}			
-		} else {
-			b = false;
-			throw new SecurityException("You are trying to set 2 connections from de same ip adress at the same time.\n Please log of and try again.");
-		}
-			
-		return b;
+	public void closeConnection(String ip) {
+		activeConnections.remove(ip);
+	}
+	
+	public void logOff (int userid){
+		activeAccounts.remove(userid);
 	}
 	
 	public void connectUserUnderIp(int userid, String ip){
@@ -63,20 +59,12 @@ public final class ServerMonitor {
 	public boolean isConnectionActive(String ip){
 		return activeConnections.containsKey(ip);
 	}
-
-	public boolean connectToAccount(String ip) {
-		ConnectionInformation ci = activeConnections.get(ip);
-		ci.connectionAttempt();
-		
-		return (s.isConnectionAuthorized(ci));	
-	}
-
-	public void closeConnection(String ip) {
-		activeConnections.remove(ip);
+	
+	public ConnectionInformation getConnectionInformations (int userid){
+		return (getConnectionInformations(activeAccounts.get(userid)));
 	}
 	
-	public void logOff (int userid){
-		activeAccounts.remove(userid);
+	public ConnectionInformation getConnectionInformations (String ip){
+		return activeConnections.get(ip);
 	}
-	
 }

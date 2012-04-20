@@ -11,7 +11,7 @@ public class BanInformation {
 	private static final String END_MESSAGE= "\nPlease contact your server administrator for further informations.";
 	
 
-	public BanInformation(String ip, String reason, Timestamp expiration){
+	public BanInformation( String ip, String reason, Timestamp expiration){
 		this.ip=ip;
 		this.expiration=expiration;
 		this.reason=reason;
@@ -85,7 +85,7 @@ public class BanInformation {
 	@Override
 	public String toString() {
 		if (this.lifeban){
-			return ("Ip address " + ip + " is banned for life under the following reason: " + reason +  END_MESSAGE);
-		} else return ("Ip address " + ip + " is banned until " + expiration + " for reason " + reason +  END_MESSAGE);
+			return ("Ip address " + ip + " was banned for life under the following reason:\n" + reason +  END_MESSAGE);
+		} else return ("Ip address " + ip + " is banned until " + expiration + " for reason:\n" + reason +  END_MESSAGE);
 	}
 }
