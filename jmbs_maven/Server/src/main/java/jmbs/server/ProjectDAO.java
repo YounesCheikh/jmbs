@@ -48,7 +48,7 @@ public class ProjectDAO extends DAO {
 		ArrayList<User> u = new ArrayList<User>();
 		int userid = 0;
 		
-		set("SELECT participate.name,user.* FROM participate,user WHERE participate.idproject=? AND user.name=idproject.name;");
+		set("SELECT participate.name,user.* FROM participate,user WHERE participate.idproject=? AND user.name=projects.name;");
 		setInt(1, id);
 		ResultSet res = executeQuery();
 
@@ -82,7 +82,7 @@ public class ProjectDAO extends DAO {
 		Project p = null;
 		UserDAO udao = new UserDAO(con);
 		
-		set("SELECT * FROM project WHERE idproject=? ;");
+		set("SELECT * FROM projects WHERE idproject=? ;");
 		setInt(1, id);
 		ResultSet res = executeQuery();
 
@@ -107,7 +107,7 @@ public class ProjectDAO extends DAO {
 		Project p = null;
 		UserDAO udao = new UserDAO(con);
 		
-		set("SELECT * FROM project WHERE name=? ;");
+		set("SELECT * FROM projects WHERE name=? ;");
 		setString(1,name);
 		ResultSet res = executeQuery();
 		
@@ -125,7 +125,7 @@ public class ProjectDAO extends DAO {
 		ArrayList<Project> found = new ArrayList<Project>();
 		UserDAO udao = new UserDAO(con);
 		
-		set("SELECT * FROM project WHERE name LIKE ? ;");
+		set("SELECT * FROM projects WHERE name LIKE ? ;");
 		setString(1,"%"+name+"%");
 		ResultSet res = executeQuery();
 		
@@ -180,7 +180,7 @@ public class ProjectDAO extends DAO {
 		boolean res = false;
 		
 		if (!this.exists(name)) {
-			set ("INSERT INTO project (name,owner,status) VALUES (?,?,?)");
+			set ("INSERT INTO projects (name,idowner,status) VALUES (?,?,?)");
 			setString(1,name);
 			setInt(2,iduser);
 			setInt(3,1);
@@ -188,7 +188,6 @@ public class ProjectDAO extends DAO {
 			
 			if (res) ret = this.findProject(name);
 		}
-		
 		return ret;
 	}
 	
@@ -208,13 +207,13 @@ public class ProjectDAO extends DAO {
 	}
 	
 	public boolean isOwner(int iduser, int idproject){
-		set("SELECT owner FROM projects WHERE idproject=?");
+		set("SELECT idowner FROM projects WHERE idproject=?");
 		setInt(1,idproject);
 		ResultSet rs = executeQuery();
 		boolean b = false;
 		
 		try {
-			b = (iduser == rs.getInt("owner"));
+			b = (iduser == rs.getInt("idowner"));
 		}catch (SQLException e){
 			b = false;
 		}

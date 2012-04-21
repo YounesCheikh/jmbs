@@ -108,7 +108,7 @@ public class UserDAO extends DAO {
 	public ArrayList<Project> getProjects(int userid) {
 		ArrayList<Project> p = new ArrayList<Project>();
 		
-		set("SELECT partiNamecipate.idproject,name FROM participate,project WHERE participate.iduser=? AND participate.idproject=project.idproject;");
+		set("SELECT participate.idproject,name,idowner FROM participate,projects WHERE participate.iduser=? AND participate.idproject=projects.idproject;");
 		setInt(1,userid);
 		ResultSet res = executeQuery();
 
@@ -462,7 +462,7 @@ public class UserDAO extends DAO {
 	public int getAccessLevel (int iduser){
 		int ret = -1;
 		if (this.exists(iduser)) {
-			set("SELECT authlvl FROM user WHERE iduser=?");
+			set("SELECT authlvl FROM users WHERE iduser=?");
 			setInt(1,iduser);
 			ResultSet res = executeQuery();
 		

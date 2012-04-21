@@ -20,7 +20,6 @@
 
 package jmbs.server;
 
-import java.awt.EventQueue;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -38,6 +37,7 @@ public class MainServer {
 	 * @throws SQLException
 	 */
 	public static void main(String[] args) {
+
 		FileInputStream propFile;
 		try {
 			propFile = new FileInputStream("properties.cfg");
@@ -45,26 +45,21 @@ public class MainServer {
 			p.load(propFile);
 			propFile.close();
 			System.setProperties(p);
-		} catch (FileNotFoundException e1) {
+			//System.out.println(p.toString());
+		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
-			//e1.printStackTrace();
-			System.err.println(e1.getMessage());
-			System.exit(-1);
+			e.printStackTrace();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			//e.printStackTrace();
-			System.err.println(e.getMessage());
-			System.exit(-1);
+			e.printStackTrace();
 		}
-		
-		EventQueue.invokeLater(new Runnable() {
+		//ClassLoader.getSystemClassLoader().getSystemResource("jmbs/common/");
+		 //System.setProperty("java.rmi.server.codebase",ClassLoader.getSystemResource("jmbs/common/").toString());
+
+		javax.swing.SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
-				try {
-					ServerWindow window = new ServerWindow();
-					window.frmJmbsServerControl.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+				ServerWindow window = new ServerWindow();
+				window.frmJmbsServerControl.setVisible(true);
 			}
 		});
 	}

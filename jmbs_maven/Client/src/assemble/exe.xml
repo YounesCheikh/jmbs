@@ -8,7 +8,7 @@
     <dependencySet>
       <outputDirectory></outputDirectory>
       <outputFileNameMapping></outputFileNameMapping>
-      <unpack>true</unpack>
+      <unpack>false</unpack>
       <scope>runtime</scope>
       <includes>
         <include>commons-lang:commons-lang</include>

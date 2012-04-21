@@ -4,9 +4,10 @@
 	<groupId>jmbs.server</groupId>
 	<artifactId>Server</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
+	<packaging>jar</packaging>
 	<name>Server</name>
 	<description>jmbs Server</description>
-	<packaging>jar</packaging>
+	<url>http://maven.apache.org</url>
 
 	<properties>
 		<jmbs.version>0.0.1-SNAPSHOT</jmbs.version>
@@ -16,15 +17,10 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.10</version>
-		</dependency>
-
-		<dependency>
-			<groupId>jmbs.common</groupId>
 			<artifactId>RMI</artifactId>
+			<groupId>jmbs.common</groupId>
 			<version>${jmbs.version}</version>
+			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>postgresql</groupId>
@@ -52,7 +48,7 @@
 					</archive>
 
 					<additionalClasspathElements>
-						<additionalClasspathElement>${basedir}</additionalClasspathElement>
+						<additionalClasspathElement> ${basedir}</additionalClasspathElement>
 					</additionalClasspathElements>
 
 					<descriptors>

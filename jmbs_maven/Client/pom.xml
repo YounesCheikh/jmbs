@@ -14,6 +14,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
+
 	<dependencies>
 		<dependency>
 			<artifactId>RMI</artifactId>
@@ -59,8 +60,6 @@
 					<archive>
 						<manifestFile>src/main/resources/META-INF/MANIFEST.MF</manifestFile>
 					</archive>
-					<argLine>-Djava.security.policy=${basedir}/src/main/resources/security.policy </argLine>
-					<argLine>-Djava.rmi.server.codebase=${project.build.outputDirectory} </argLine>
 				</configuration>
 			</plugin>
 		</plugins>

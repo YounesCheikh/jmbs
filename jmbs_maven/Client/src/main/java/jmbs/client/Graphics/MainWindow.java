@@ -9,24 +9,20 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.UIManager;
-import javax.swing.border.TitledBorder;
 import javax.swing.JScrollPane;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import jmbs.client.ClientRequests;
 import jmbs.client.CurrentUser;
 import jmbs.client.SysConf;
+import jmbs.client.Graphics.projects.MyProjectsPanel;
+import jmbs.client.Graphics.projects.ParticipationsPrjcstPanel;
+import jmbs.client.Graphics.projects.PrjctsTimeLinePanel;
+import jmbs.client.Graphics.projects.SearchProjectPanel;
 import jmbs.common.Message;
 import jmbs.common.User;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
-import javax.swing.JLabel;
-import javax.swing.JTextField;
-import javax.swing.LayoutStyle.ComponentPlacement;
-import javax.swing.JComboBox;
-import javax.swing.JButton;
-import javax.swing.JSeparator;
-import javax.swing.DefaultComboBoxModel;
 
 public class MainWindow {
 
@@ -40,11 +36,7 @@ public class MainWindow {
 	private User currentUser;
 	private MainMenuBar menuBar;
 	private JTabbedPane tabbedPane;
-	private JPanel tlpanel;
 	private JPanel projectsPanel;
-	private JPanel prjctTopPanel;
-	private JPanel prjctMainPanel;
-	private JTextField searchTextField;
 
 	public MainWindow() {
 		if (frmJmbsClient == null) {
@@ -65,12 +57,7 @@ public class MainWindow {
 		msgListTL = new ArrayList<Message>();
 		currentUser = new CurrentUser().get();
 		frmJmbsClient = new JFrame();
-
-		timelinepanel = new TimeLinePanel();
-		timelinepanel.setBorder(null);
-
 		ppanel = new ProfilePanel(currentUser);
-		nmFrame = new NewMessageFrame(timelinepanel);
 		about = new AboutFrame();
 		uFrame = new UsersFrame();
 
@@ -85,180 +72,50 @@ public class MainWindow {
 		//menuBar = new MainMenuBar(this);
 		//frmJmbsClient.setJMenuBar(menuBar);
 		tabbedPane = new JTabbedPane(JTabbedPane.LEFT);
-		tabbedPane.setBorder(new TitledBorder(null, "", TitledBorder.LEADING,
-				TitledBorder.BELOW_BOTTOM, null, null));
+		tabbedPane.setBorder(null);
 		tabbedPane.setToolTipText("JMBS");
 		frmJmbsClient.getContentPane().add(tabbedPane, BorderLayout.CENTER);
-		tlpanel = new JPanel();
-		tlpanel.setBorder(null);
-		tlpanel.setToolTipText("TimeLine");
-		tabbedPane.addTab("TimeLine", null, tlpanel, null);
-		JScrollPane tlscrollPane = new JScrollPane();
-		tlscrollPane.setViewportBorder(null);
-		tlscrollPane.setAutoscrolls(true);
-		tlscrollPane.getVerticalScrollBar().setUnitIncrement(30);
-		tlscrollPane
-				.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-		tlscrollPane.setViewportView(timelinepanel);
-		GroupLayout gl_tlpanel = new GroupLayout(tlpanel);
-		gl_tlpanel.setHorizontalGroup(gl_tlpanel.createParallelGroup(
-				Alignment.LEADING).addGroup(
-				gl_tlpanel
-						.createSequentialGroup()
-						.addContainerGap()
-						.addComponent(tlscrollPane, GroupLayout.DEFAULT_SIZE,
-								312, Short.MAX_VALUE).addContainerGap()));
-		gl_tlpanel.setVerticalGroup(gl_tlpanel.createParallelGroup(
-				Alignment.LEADING).addGroup(
-				gl_tlpanel
-						.createSequentialGroup()
-						.addComponent(tlscrollPane, GroupLayout.DEFAULT_SIZE,
-								529, Short.MAX_VALUE).addContainerGap()));
-		tlpanel.setLayout(gl_tlpanel);
+		
+				timelinepanel = new TimeLinePanel();
+				nmFrame = new NewMessageFrame(timelinepanel);
+				JScrollPane tlscrollPane = new JScrollPane();
+				tabbedPane.addTab("TimeLine", null, tlscrollPane, null);
+				tlscrollPane.setAutoscrolls(true);
+				tlscrollPane.getVerticalScrollBar().setUnitIncrement(30);
+				tlscrollPane
+						.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+				tlscrollPane.setViewportView(timelinepanel);
 
 		projectsPanel = new JPanel();
 		tabbedPane.addTab("Projects", null, projectsPanel, null);
-
-		prjctTopPanel = new JPanel();
-
-		JLabel lblSeachForProject = new JLabel("Seach For Project:");
-
-		searchTextField = new JTextField();
-		searchTextField.setColumns(10);
-
-		JComboBox comboBox = new JComboBox();
-		comboBox.setModel(new DefaultComboBoxModel(new String[] {
-				"Projet Java", "Systeme d'Exploitation", "WebServer",
-				"SQL Maintenance" }));
-
-		JLabel lblShowMessagesFrom = new JLabel("Show Messages From:");
-
-		JButton btnOk = new JButton("OK");
-
-		JSeparator separator = new JSeparator();
-
-		JButton btnShow = new JButton("Show");
-
-		JSeparator separator_1 = new JSeparator();
-		GroupLayout gl_prjctTopPanel = new GroupLayout(prjctTopPanel);
-		gl_prjctTopPanel
-				.setHorizontalGroup(gl_prjctTopPanel
-						.createParallelGroup(Alignment.LEADING)
-						.addGroup(
-								Alignment.TRAILING,
-								gl_prjctTopPanel
-										.createSequentialGroup()
-										.addContainerGap()
-										.addGroup(
-												gl_prjctTopPanel
-														.createParallelGroup(
-																Alignment.TRAILING)
-														.addComponent(
-																separator_1,
-																GroupLayout.DEFAULT_SIZE,
-																410,
-																Short.MAX_VALUE)
-														.addGroup(
-																Alignment.LEADING,
-																gl_prjctTopPanel
-																		.createSequentialGroup()
-																		.addComponent(
-																				lblSeachForProject)
-																		.addPreferredGap(
-																				ComponentPlacement.RELATED)
-																		.addComponent(
-																				searchTextField)
-																		.addGap(30)
-																		.addComponent(
-																				btnOk))
-														.addGroup(
-																Alignment.LEADING,
-																gl_prjctTopPanel
-																		.createSequentialGroup()
-																		.addComponent(
-																				lblShowMessagesFrom)
-																		.addPreferredGap(
-																				ComponentPlacement.RELATED)
-																		.addComponent(
-																				comboBox,
-																				GroupLayout.PREFERRED_SIZE,
-																				159,
-																				GroupLayout.PREFERRED_SIZE)
-																		.addPreferredGap(
-																				ComponentPlacement.RELATED)
-																		.addComponent(
-																				btnShow))
-														.addComponent(
-																separator,
-																Alignment.LEADING,
-																GroupLayout.DEFAULT_SIZE,
-																410,
-																Short.MAX_VALUE))
-										.addContainerGap()));
-		gl_prjctTopPanel
-				.setVerticalGroup(gl_prjctTopPanel
-						.createParallelGroup(Alignment.LEADING)
-						.addGroup(
-								gl_prjctTopPanel
-										.createSequentialGroup()
-										.addGap(1)
-										.addGroup(
-												gl_prjctTopPanel
-														.createParallelGroup(
-																Alignment.TRAILING)
-														.addComponent(btnOk)
-														.addGroup(
-																gl_prjctTopPanel
-																		.createParallelGroup(
-																				Alignment.BASELINE)
-																		.addComponent(
-																				lblSeachForProject)
-																		.addComponent(
-																				searchTextField,
-																				GroupLayout.PREFERRED_SIZE,
-																				GroupLayout.DEFAULT_SIZE,
-																				GroupLayout.PREFERRED_SIZE)))
-										.addPreferredGap(
-												ComponentPlacement.RELATED,
-												GroupLayout.DEFAULT_SIZE,
-												Short.MAX_VALUE)
-										.addComponent(separator,
-												GroupLayout.PREFERRED_SIZE,
-												GroupLayout.DEFAULT_SIZE,
-												GroupLayout.PREFERRED_SIZE)
-										.addPreferredGap(
-												ComponentPlacement.RELATED)
-										.addGroup(
-												gl_prjctTopPanel
-														.createParallelGroup(
-																Alignment.BASELINE)
-														.addComponent(
-																comboBox,
-																GroupLayout.PREFERRED_SIZE,
-																GroupLayout.DEFAULT_SIZE,
-																GroupLayout.PREFERRED_SIZE)
-														.addComponent(btnShow)
-														.addComponent(
-																lblShowMessagesFrom))
-										.addGap(1)
-										.addComponent(separator_1,
-												GroupLayout.PREFERRED_SIZE,
-												GroupLayout.DEFAULT_SIZE,
-												GroupLayout.PREFERRED_SIZE)
-										.addContainerGap()));
-		prjctTopPanel.setLayout(gl_prjctTopPanel);
-
-		prjctMainPanel = new JPanel();
-		projectsPanel.setLayout(new BorderLayout(0, 0));
-		projectsPanel.add(prjctTopPanel, BorderLayout.NORTH);
-		projectsPanel.add(prjctMainPanel);
-		prjctMainPanel.setLayout(new BorderLayout(0, 0));
-
-		JScrollPane scrollPane = new JScrollPane();
-		prjctMainPanel.add(scrollPane, BorderLayout.CENTER);
-
-		SearchProjectPanel panel = new SearchProjectPanel();
-		scrollPane.setViewportView(panel);
+		
+		JTabbedPane tabbedPane_1 = new JTabbedPane(JTabbedPane.TOP);
+		
+		PrjctsTimeLinePanel prjctTLPanel = new PrjctsTimeLinePanel();
+		tabbedPane_1.addTab("TimeLine", null, prjctTLPanel, null);
+		
+		SearchProjectPanel searchPrjctPanel = new SearchProjectPanel();
+		tabbedPane_1.addTab("Search For Project", null, searchPrjctPanel, null);
+		
+		ParticipationsPrjcstPanel participationPrjctPanel = new ParticipationsPrjcstPanel();
+		tabbedPane_1.addTab("Participation", null, participationPrjctPanel, null);
+		
+		MyProjectsPanel myPrjctPanel = new MyProjectsPanel();
+		tabbedPane_1.addTab("My Projects", null, myPrjctPanel, null);
+		GroupLayout gl_projectsPanel = new GroupLayout(projectsPanel);
+		gl_projectsPanel.setHorizontalGroup(
+			gl_projectsPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_projectsPanel.createSequentialGroup()
+					.addComponent(tabbedPane_1, GroupLayout.DEFAULT_SIZE, 440, Short.MAX_VALUE)
+					.addGap(0))
+		);
+		gl_projectsPanel.setVerticalGroup(
+			gl_projectsPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_projectsPanel.createSequentialGroup()
+					.addComponent(tabbedPane_1, GroupLayout.DEFAULT_SIZE, 997, Short.MAX_VALUE)
+					.addGap(7))
+		);
+		projectsPanel.setLayout(gl_projectsPanel);
 
 		JPanel profpanel = new JPanel();
 		tabbedPane.addTab("Profile", null, profpanel, null);
@@ -356,7 +213,7 @@ public class MainWindow {
 	}
 
 	public void checkNewMessages(int idLastMsg) {
-		try {			
+		try {
 			msgListTL = new ClientRequests().getConnection().getLatestTL(
 					currentUser.getId(), idLastMsg,
 					ClientRequests.maxReceivedMsgs);

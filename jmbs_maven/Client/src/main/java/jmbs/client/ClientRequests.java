@@ -30,7 +30,7 @@ import jmbs.client.Graphics.SayToUser;
 import jmbs.common.RemoteServer;
 
 public class ClientRequests {
-	private static RemoteServer server = null;
+	public static RemoteServer server = null;
 	private ServerConfig conf;
 	public static int maxReceivedMsgs = 30;
 	Registry registry;

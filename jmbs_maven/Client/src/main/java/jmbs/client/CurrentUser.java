@@ -23,7 +23,9 @@ package jmbs.client;
 
 import java.io.Serializable;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 
+import jmbs.common.Project;
 import jmbs.common.User;
 
 public class CurrentUser implements Serializable {
@@ -37,14 +39,21 @@ public class CurrentUser implements Serializable {
 	public CurrentUser(User receivedUser) {
 		if (get()==null) {
 			CurrentUser.set(receivedUser);
+			try {
+				u.setProjects(ClientRequests.server.getUserProjects(u.getId()));
+			} catch (RemoteException e) {
+				// TODO Auto-generated catch block
+				//e.printStackTrace();
+				System.err.println(e.getMessage());
+			}
 		}
 	}
 	
 	public CurrentUser() {
-		
+
 	}
 
-	public User get() {
+	public static User get() {
 		return u;
 	}
 
@@ -52,14 +61,82 @@ public class CurrentUser implements Serializable {
 		CurrentUser.u = u;
 	}
 	
-	public void disconnect() {
+	public static void disconnect() {
 		try {
 			new ClientRequests().getConnection().logOut(u.getId());
 		} catch (RemoteException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//e.printStackTrace();
+			System.err.println(e.getMessage());
 		}
 		set(null);
+	}
+	
+	
+
+
+	/**
+	 * @return the name
+	 */
+	public static String getName() {
+		return u.getName();
+	}
+
+	public static String getFullName() {
+		return u.getFullName();
+	}
+
+
+	/**
+	 * @return the fore name
+	 */
+	public static String getFname() {
+		return u.getFname();
+	}
+
+
+	/**
+	 * @return the email
+	 */
+	public static String getMail() {
+		return u.getMail();
+	}
+
+
+	/**
+	 * @return the User id
+	 */
+	public static int getId() {
+		return u.getId();
+	}
+
+
+	/**
+	 * @return the access level
+	 */
+	public static int getAccesslevel() {
+		return u.getAccesslevel();
+	}
+
+	/**
+	 * @return the projects // TODO: more advanced equality check
+	 */
+	public static ArrayList<Project> getProjects() {
+		return u.getProjects();
+	}
+
+
+	/**
+	 * @return the followed users
+	 */
+	public static ArrayList<User> getFollows() {
+		return u.getFollows();
+	}
+
+
+
+	public static String getPic() {
+		return u.getPic();
 	}
 	
 	

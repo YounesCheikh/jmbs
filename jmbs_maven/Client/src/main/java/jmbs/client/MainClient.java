@@ -20,11 +20,6 @@
 
 package jmbs.client;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.Properties;
-
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 import jmbs.client.Graphics.ConnectionFrame;
@@ -39,28 +34,24 @@ public class MainClient {
 
 	private static SysConf setMacConf = new SysConf();
 
-	public static void main(String[] args){
+	public static void main(String[] args) {
 
-		FileInputStream propFile;
-		try {
-			propFile = new FileInputStream("properties.cfg");
-			Properties p = new Properties(System.getProperties());
-			p.load(propFile);
-			propFile.close();
-			System.setProperties(p);
-		} catch (FileNotFoundException e1) {
-			// TODO Auto-generated catch block
-			//e1.printStackTrace();
-			System.err.println(e1.getMessage());
-			System.exit(-1);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			//e.printStackTrace();
-			System.err.println(e.getMessage());
-			System.exit(-1);
-		}
-
+		/*
+		 * FileInputStream propFile; try { propFile = new
+		 * FileInputStream("properties.cfg"); Properties p = new
+		 * Properties(System.getProperties()); p.load(propFile);
+		 * propFile.close(); System.setProperties(p); } catch
+		 * (FileNotFoundException e1) { // TODO Auto-generated catch block
+		 * //e1.printStackTrace(); System.err.println(e1.getMessage());
+		 * System.exit(-1); } catch (IOException e) { // TODO Auto-generated
+		 * catch block //e.printStackTrace();
+		 * System.err.println(e.getMessage()); System.exit(-1); }
+		 */
 		
+		System.setProperty("java.security.policy", ClassLoader
+				.getSystemResource("security.policy").toString());
+		System.setProperty("java.rmi.server.codebase", ClassLoader
+				.getSystemResource("jmbs/common/").toString());
 		setMacConf.setUIMngr();
 		if (!setMacConf.isMac()) {
 			try {

@@ -29,6 +29,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JSeparator;
 
+import jmbs.client.CurrentUser;
 import jmbs.client.SysConf;
 
 public class MainMenuBar extends JMenuBar {
@@ -152,7 +153,7 @@ public class MainMenuBar extends JMenuBar {
 					prfrm.dispose();
 
 				frmJmbsClient.dispose();
-				//new CurrentUser().disconnect();
+				CurrentUser.disconnect();
 				ConnectionFrame cf = new ConnectionFrame(new MainWindow());
 				cf.setVisible(true);
 			}
