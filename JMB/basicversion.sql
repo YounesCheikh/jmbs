@@ -28,9 +28,11 @@ CREATE TABLE message ( /* Table des messages */
 	content varchar(600),
 	time timestamp, 
 	iduser integer NOT NULL,
+	idproject integer,
 
 CONSTRAINT pk_message PRIMARY KEY (idmessage),
 CONSTRAINT fk_message_user FOREIGN KEY (iduser) REFERENCES users (iduser)
+CONSTRAINT fk_message_project FOREIGN KEY (idproject) REFERENCES projects (idproject)
 );
 
 CREATE TABLE follows ( /* Table des suiveurs */
@@ -45,7 +47,7 @@ CONSTRAINT fk_followed_user FOREIGN KEY (followed) REFERENCES users (iduser)
 CREATE TABLE projects (
 	idproject serial,
 	idowner integer NOT NULL,
-	name varchar(20),
+	name varchar(60),
 	status integer,
 	
 CONSTRAINT pk_projects PRIMARY KEY (idproject),
@@ -71,4 +73,6 @@ CREATE TABLE banned (
 
 CONSTRAINT pk_banned PRIMARY KEY (ip)
 );
+
+CREATE VIEW timeline AS SELECT * FROM message WHERE idproject IS NULL;
 
