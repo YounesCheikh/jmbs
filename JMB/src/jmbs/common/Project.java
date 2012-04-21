@@ -57,10 +57,11 @@ public class Project {
 	 * @param id
 	 *            project id
 	 */
-	public Project(String n, int id, User owner) {
+	public Project(String n, int id, User owner, int status) {
 		this.name = n;
 		this.id = id;
 		this.owner = owner;
+		this.status = status;
 	}
 
 	/**
@@ -103,6 +104,10 @@ public class Project {
 	 */
 	public void setUsers(ArrayList<User> users) {
 		this.users = users;
+	}
+	
+	public void setStatus(int status){
+		this.status = status;
 	}
 
 	/*

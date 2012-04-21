@@ -6,6 +6,8 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.Calendar;
 
+import jmbs.common.ConnectionInformation;
+
 /**
  * This class is used to access Security information stored in the db. Since this class is separated from the others
  * by the Security interface, it is possible to store security information in files or in any other support by only changing 
@@ -23,11 +25,7 @@ public class SecurityDAO extends DAO implements Security{
 
 	public SecurityDAO(Connection con){
 		super(con);
-	}	/**Gives the informations on the ban. It is highly advised to use isBanned(String ip) before.
-	 * 
-	 * @param ip - the ip adress
-	 * @return BanInformation informations on ban.
-	 */
+	}
 	
 	/**Gives the informations on the ban. It is highly advised to use isBanned(String ip) before.
 	 * 
@@ -70,27 +68,53 @@ public class SecurityDAO extends DAO implements Security{
 		boolean res = false;
 		
 		try {
-			if(!rs.getBoolean("lifeban") && !isBanEffective(rs.getTimestamp("expiration", Calendar.getInstance()))){
-				if(!removeBan(ip)) System.err.println("DB ERROR : Ban on " + ip + " is no more effective but it hasn't been removed.");
+			if(!rs.getBoolean("lifeban") && !isPast(rs.getTimestamp("expiration", Calendar.getInstance()))){ // if ban has expired
+				if(!removeBan(ip)) System.err.println("DB ERROR : Ban on " + ip + " is no more effective but it hasn't been removed."); // try to remove if print error if not removed
 				res = false;
-			}else res = true;
+			}else res = true; // else return true;
 			
-		} catch (SQLException e) {
+		} catch (SQLException e) { // if the exception is caught it means the query was empty: ip is not banned !
 			res = false; // useless but for code comprehension 
 		}
 		
 		return res;
 	}
 	
-	/**
-	 * Given an ip adress this method checks if the ip is authorized to try to connec to to an account.
+	/**Says if the ip address is authorized to try to connect to the server.
 	 * 
-	 *  @param ip - the ip adress
+	 * @param ip - the ip address
+	 * @return true - if the distant computer is allowed to connect.
+	 */
+	public boolean isConnectionToServerAuthorized(String ip){
+		boolean b = true;
+		
+		if (!isBanned(ip))b = true;
+		else { 
+			b = false;
+			throw new SecurityException(getBanInformation(ip).toString());
+		}			
+		return b;
+	}
+
+	/**
+	 * checks if the date has past or not
+	 * @param t - timestamp to check
+	 * @return true if t is before current time.
+	 */
+	private boolean isPast (Timestamp t){
+		Timestamp currentTime = new Timestamp(Calendar.getInstance().getTimeInMillis());
+		return (currentTime.after(t));
+	}
+
+	/**
+	 * Given a key this method checks if the key is authorized to try to connect to to an account.
+	 * 
+	 *  @param key - the key
 	 *  @return  true if the connection is authorized, false if the number of attempts is too high.
 	 */
-	public boolean isUserConnectionAttemptAuthorized(String ip){ 
-		ConnectionInformation i = ServerMonitor.getInstance().getConnectionInformations(ip);
-		i.userConnectionAttempt();
+	public boolean isUserConnectionAttemptAuthorized(String key){ 
+		ConnectionInformation i = ServerMonitor.getInstance().getConnectionInformations(key);
+		i.connectionAttempt();
 		
 		long interval = (i.getLastTryTime() - i.getFirstTryTime());
 		long zone = interval/SUSPECT_INTERVAL;
@@ -98,45 +122,39 @@ public class SecurityDAO extends DAO implements Security{
 		
 		return (i.getNumberOfAttemps() <= limit);
 	}
-	
-	/**Says if the ip adress is authorized to try to connect to the server.
-	 * 
-	 * @param ip - the ip adress
-	 * @return true - if the distant computer is allowed to connect.
+
+	/**
+	 * Removes a ban from the db
+	 * @param ip - the ip to un-ban
+	 * @return true if the removal was done correctly, false otherwise
 	 */
-	public boolean isConnectionToServerAuthorized(String ip){
-		boolean b = true;
-		if (!ServerMonitor.getInstance().isConnectionActive(ip)) { //if connection is not active
-			if (!isBanned(ip)){ //and ip not banned
-				b = true;//add it to active connections
-			}else { //Means account is banned.
-				b = false;
-				throw new SecurityException(getBanInformation(ip).toString());
-				}			
-		} else { //Means the ip already has an active connection.
-			b = false; // TODO: handle that correctly !
-			throw new SecurityException("You are trying to set 2 connections from de same ip adress at the same time.\n Please log of and try again.");
-		}
-		return b;
-	}
-	
 	public boolean removeBan(String ip){
 		set("DELETE FROM banned WHERE ip = ?");
 		setString(1,ip);
 		return executeUpdate();
 	}
 	
-	public void createSuspectProfile(ConnectionInformation i){
-		
-	}
-	
-	public void saveSuspectInformation(ConnectionInformation i){
-		
-	}
-	
-	private boolean isBanEffective (Timestamp t){
-		Timestamp currentTime = new Timestamp(Calendar.getInstance().getTimeInMillis());
-		return (currentTime.after(t));
-	}
-	
+	/**
+	 * Bans a ip until an ordered time for the specified reason if the user is already banned
+	 * @param ip - ip to ban
+	 * @param reason - the reason
+	 * @param until - ban end timestamp
+	 */
+	public void setBan(String ip, String reason, Timestamp until){
+		set("INSERT INTO banned (ip,expiration,reason,lifeban) VALUES (?,?,?,0)");
+		setString(1,ip);
+		setTimestamp(2, until);
+		setString(3,reason);
+		if (!executeUpdate()){
+			set("UPDATE banned SET expiration = ? WHERE ip = ?");
+			setTimestamp(1, until);
+			setString(2,ip);
+			executeUpdate();
+			
+			set("UPDATE banned SET reason = ? WHERE ip = ?");
+			setString(1,reason);
+			setString(2,ip);
+			executeUpdate();
+		}
+	}	
 }

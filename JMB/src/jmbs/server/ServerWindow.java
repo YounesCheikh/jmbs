@@ -38,12 +38,15 @@ import java.rmi.AccessException;
 import java.rmi.AlreadyBoundException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+
+import jmbs.common.RemoteServer;
 
 public class ServerWindow {
 
 	protected JFrame frmJmbsServerControl;
 	private JTextField txtStatus;
-	private Requests req;
+	private ServerOF ser;
 	private boolean serverIsRunning = false;
 
 	/**
@@ -55,7 +58,7 @@ public class ServerWindow {
 	 */
 	public ServerWindow() {
 		try {
-			req = new Requests("serverjmbs");
+			ser = new ServerOF();
 		} catch (RemoteException e) {
 			// TODO Auto-generated catch block
 			// e.printStackTrace();
@@ -127,7 +130,7 @@ public class ServerWindow {
 	private boolean startServer() {
 		boolean retVal = false;
 		try {
-			req.getRegistry().bind(req.getName(), req);
+			LocateRegistry.getRegistry().bind(RemoteServer.REMOTE_NAME, ser);
 			System.out.println("The JMBS server loaded and ready to use.");
 			retVal = true;
 		} catch (AccessException e) {
@@ -144,7 +147,7 @@ public class ServerWindow {
 		boolean retVal = false;
 
 		try {
-			req.getRegistry().unbind(req.getName());
+			LocateRegistry.getRegistry().unbind(RemoteServer.REMOTE_NAME);
 			System.out.println("The JMBS server stopped correctly.");
 			retVal = true;
 		} catch (AccessException e) {

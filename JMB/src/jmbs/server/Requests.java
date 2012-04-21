@@ -20,49 +20,84 @@
 
 package jmbs.server;
 
+import java.awt.image.BufferedImage;
 import java.rmi.RemoteException;
-import java.rmi.registry.LocateRegistry;
-import java.rmi.registry.Registry;
 import java.rmi.server.ServerNotActiveException;
 import java.rmi.server.UnicastRemoteObject;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import jmbs.common.ConnectionInformation;
 import jmbs.common.Message;
 import jmbs.common.Project;
-import jmbs.common.RemoteServer;
+import jmbs.common.RemoteRequests;
 import jmbs.common.User;
 
-public class Requests extends UnicastRemoteObject implements RemoteServer {
+public class Requests extends UnicastRemoteObject implements RemoteRequests {
 
-	private Registry registry;
 	private Connection con = new Connect().getConnection();
 	private static final long serialVersionUID = 5885886202424414094L;
 	private boolean security = true;
+	private ConnectionInformation ci;
 
-	public Requests(boolean security) throws RemoteException {
-		this.registry = LocateRegistry.getRegistry();
+	public Requests(boolean security, String connectionNumber) throws RemoteException {
 		this.security = security;
+		this.ci = new ConnectionInformation(connectionNumber);
 	}
 	
-	public void connect() throws RemoteException, SecurityException{
-		if (security){
-			try{
-				String ip = getClientHost();
-				Security s = new SecurityDAO(new Connect().getConnection());
-			
-				if (s.isConnectionToServerAuthorized(ip)){
-					//Create connection informations with client ip
-					ConnectionInformation ci = new ConnectionInformation(ip); 
-					//Register CI in server monitor
-					ServerMonitor.getInstance().addConnection(ci);
-				}		
-			}catch (ServerNotActiveException e) {
-				System.err.println("Unexcepted Error");
-			}
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see jmbs.common.RemoteServer#addMessage(jmbs.common.Message)
+	 */
+	public int addMessage(Message m) throws RemoteException {
+		MessageDAO mdao = new MessageDAO(con);
+		int ret = mdao.addMessage(m);
+	
+		return ret;
+	}
+
+	public boolean changeAvatar(int userid, BufferedImage img, String nom, boolean overwrite){
+		PictureDAO pdao = new PictureDAO(con);
+		return pdao.setAvatar(userid, img, nom, overwrite);
+	}
+	
+	public boolean changeMail(int userid, String pass, String mail) throws RemoteException{
+		UserDAO udao = new UserDAO(con);
+		return udao.changeMail(userid, pass, mail);
+	}
+	
+	public boolean changePassword(int userid, String oldPass, String newPass) throws RemoteException{
+		UserDAO udao = new UserDAO(con);
+		return udao.changePassword(userid, oldPass, newPass);
+	}
+
+	public boolean close(int userid){
+		boolean b = false;
+		try {
+			ServerMonitor sm = ServerMonitor.getInstance();
+			sm.logOut(userid);
+			sm.endConnection(ci.getConnectionNumber());
+			// TODO: check if rmi creates a new thread with all old objects copied in it or if it creates new ones?
+			con.close(); // close the connection in the current thread
+			b = true;
+		} catch (SQLException e) {
+			System.err.println("Database access error !\n Unable to close connection !");
 		}
-	}	
+		return b;
+	}
+	
+
+	public boolean closeProject(int idUser, int idProject) throws RemoteException{
+		ProjectDAO pdao = new ProjectDAO(con);
+		boolean b = false;
+		if (pdao.isOwner(idUser, idProject)){
+			b = pdao.closeProject(idProject);
+		}
+		
+		return b;
+	}
 
 	/*
 	 * (non-Javadoc)
@@ -89,8 +124,8 @@ public class Requests extends UnicastRemoteObject implements RemoteServer {
 						if (b) { // if password is correct
 							u.setFollows(udao.getFollowed(u)); 
 							returnUser = u;
-							ServerMonitor.getInstance().connectUserUnderIp(u.getId(),ip); // add activated account to server Monitor
-							sm.getConnectionInformations(ip).connectionAcepted(u.getId());
+							ServerMonitor.getInstance().logIn(u.getId(),this.ci.getConnectionNumber()); // add activated account to server Monitor
+							this.ci.logIn(u.getId());
 						}
 					}
 			
@@ -112,21 +147,17 @@ public class Requests extends UnicastRemoteObject implements RemoteServer {
 		}
 		return returnUser;
 	}
-	
-	public Registry getRegistry() {
-		return registry;
-	}
-	
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see jmbs.common.RemoteServer#addMessage(jmbs.common.Message)
-	 */
-	public int addMessage(Message m) throws RemoteException {
-		MessageDAO mdao = new MessageDAO(con);
-		int ret = mdao.addMessage(m);
 
-		return ret;
+	public Project createProject(String name, int iduser){
+		ProjectDAO pdao = new ProjectDAO(con);
+		UserDAO udao = new UserDAO(con);
+		Project p = null;
+		
+		if (udao.getAccessLevel(iduser) >= ProjectDAO.CREATE_ACCESS_LEVEL){
+			 p = pdao.createProject(name,iduser);
+		}
+				
+		return p;
 	}
 
 	//TODO send a mail and check if used.
@@ -150,20 +181,6 @@ public class Requests extends UnicastRemoteObject implements RemoteServer {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see jmbs.common.RemoteServer#searchFor(java.lang.String)
-	 */
-	public ArrayList<User> searchUser(String userName, int param) throws RemoteException {
-		UserDAO udao = new UserDAO(con);
-		
-		if (param != DAO.BY_NAME && param != DAO.BY_FORNAME && param != DAO.BY_BOTH) param = DAO.BY_BOTH; // default value
-		ArrayList<User> u = udao.findUsers(userName, param);
-		
-		return u;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
 	 * @see jmbs.common.RemoteServer#follow(int, int)
 	 */
 	public boolean follows(int idfollower, int idfollowed) throws RemoteException {
@@ -173,18 +190,9 @@ public class Requests extends UnicastRemoteObject implements RemoteServer {
 		return rb;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see jmbs.common.RemoteServer#unFollow(int, int)
-	 */
-	public boolean unFollow(int idfollower, int idfollowed) throws RemoteException {
-		UserDAO udao = new UserDAO(con);
-		boolean rb = udao.unFollow(idfollower, idfollowed);
-		
-		return rb;
+	public ConnectionInformation getConnectionInformations(){
+		return this.ci;
 	}
-
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -209,15 +217,21 @@ public class Requests extends UnicastRemoteObject implements RemoteServer {
 		
 		return ra;
 	}
-	
-	public ArrayList<Project> searchForProject(String likeName) throws RemoteException {
-		Connection con = new Connect().getConnection();
+
+	public ArrayList<User> getProjectUsers (int idProject) throws RemoteException{
 		ProjectDAO pdao = new ProjectDAO(con);
-		ArrayList<Project> found = pdao.findProjects(likeName);
-		
-		return found;
+		return pdao.getUsers(idProject);
 	}
-	
+
+	public ArrayList<Project> getUserProjects (int idUser) throws RemoteException{
+		UserDAO udao = new UserDAO(con);
+		return udao.getProjects(idUser);
+	}
+
+	public void logOut(int userid) throws RemoteException {
+		ServerMonitor.getInstance().logOut(userid);
+	}
+
 	public boolean participate (int iduser, int idproject, int auth){
 		Connection con = new Connect().getConnection();
 		UserDAO udao = new UserDAO(con);
@@ -227,12 +241,46 @@ public class Requests extends UnicastRemoteObject implements RemoteServer {
 		
 		return ret;
 	}
-	
+
 	public boolean participate (int iduser, int idproject){
 		return this.participate(iduser, idproject, User.DEFAULT_AUTHORISATION_LEVEL);
 	}
-	
-	public boolean unParticipate (int iduser, int idproject){
+
+	public ArrayList<Project> searchForProject(String likeName) throws RemoteException {
+		Connection con = new Connect().getConnection();
+		ProjectDAO pdao = new ProjectDAO(con);
+		ArrayList<Project> found = pdao.findProjects(likeName);
+		
+		return found;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see jmbs.common.RemoteServer#searchFor(java.lang.String)
+	 */
+	public ArrayList<User> searchUser(String userName, int param) throws RemoteException {
+		UserDAO udao = new UserDAO(con);
+		
+		if (param != DAO.BY_NAME && param != DAO.BY_FORNAME && param != DAO.BY_BOTH) param = DAO.BY_BOTH; // default value
+		ArrayList<User> u = udao.findUsers(userName, param);
+		
+		return u;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see jmbs.common.RemoteServer#unFollow(int, int)
+	 */
+	public boolean unFollow(int idfollower, int idfollowed) throws RemoteException {
+		UserDAO udao = new UserDAO(con);
+		boolean rb = udao.unFollow(idfollower, idfollowed);
+		
+		return rb;
+	}
+
+	public boolean unParticipate (int iduser, int idproject) throws RemoteException{
 		Connection con = new Connect().getConnection();
 		UserDAO udao = new UserDAO(con);
 		boolean ret = udao.unParticipate(iduser, idproject);
@@ -240,62 +288,8 @@ public class Requests extends UnicastRemoteObject implements RemoteServer {
 		return ret;							
 	}
 	
-	public Project createProject(String name, int iduser){
-		ProjectDAO pdao = new ProjectDAO(con);
-		UserDAO udao = new UserDAO(con);
-		Project p = null;
-		
-		if (udao.getAccessLevel(iduser) >= ProjectDAO.CREATE_ACCESS_LEVEL){
-			 p = pdao.createProject(name,iduser);
-		}
-				
-		return p;
+	public ArrayList<Project> getOwnedProject(int userid) throws RemoteException{
+		return new UserDAO(con).getOwnedProject(userid);
 	}
 	
-	public void logOut(int userid) throws RemoteException {
-		ServerMonitor.getInstance().logOff(userid);
-	}
-	
-	public boolean close(int userid){
-		boolean b = false;
-		try {
-			String ip = getClientHost();
-			ServerMonitor sm = ServerMonitor.getInstance();
-			sm.logOff(userid);
-			sm.closeConnection(ip);
-			// TODO: check if rmi creates a new thread with all old objects copied in it or if it creates new ones?
-			con.close(); // close the connection in the current thread
-			b = true;
-		} catch (SQLException e) {
-			System.err.println("Database access error !\n Unable to close connection !");
-		} catch (ServerNotActiveException e) {
-			System.err.println("Unexcepted error !");
-		}
-		return b;
-	}
-	
-	public boolean closeProject(int idUser, int idProject) throws RemoteException{
-		ProjectDAO pdao = new ProjectDAO(con);
-		boolean b = false;
-		if (pdao.isOwner(idUser, idProject)){
-			b = pdao.closeProject(idProject);
-		}
-		
-		return b;
-	}
-	
-	public ArrayList<Project> getUserProjects (int idUser) throws RemoteException{
-		UserDAO udao = new UserDAO(con);
-		return udao.getProjects(idUser);
-	}
-
-	public ArrayList<User> getProjectUsers (int idProject) throws RemoteException{
-		ProjectDAO pdao = new ProjectDAO(con);
-		return pdao.getUsers(idProject);
-	}
-	
-	public boolean changePassword(int userid, String oldPass, String newPass) throws RemoteException, SQLException{
-		UserDAO udao = new UserDAO(con);
-		return udao.changePassword(userid, oldPass, newPass);
-	}
 }

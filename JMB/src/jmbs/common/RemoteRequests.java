@@ -25,7 +25,7 @@ import java.rmi.RemoteException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public interface RemoteServer extends Remote {
+public interface RemoteRequests extends Remote {
 
 	/**
 	 * @param em
@@ -209,10 +209,12 @@ public interface RemoteServer extends Remote {
 	/**
 	 * set connection to server
 	 */
-	public void connect() throws RemoteException, SecurityException;
+	//public void connect() throws RemoteException, SecurityException;
 	
 	/**
 	 * logs out a user
 	 */
 	public void logOut(int iduser) throws RemoteException;
+	
+	public ArrayList<Project> getOwnedProject(int userid) throws RemoteException;
 }

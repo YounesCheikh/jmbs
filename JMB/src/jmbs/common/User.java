@@ -70,26 +70,6 @@ public class User implements Serializable {
 		this.id = 0;
 		this.pic = DEFAULT_PICTURE;
 	}
-
-	/**
-	 * Creates a user with his id.
-	 * 
-	 * @param n
-	 *            user's name
-	 * @param f
-	 *            user's fore name
-	 * @param m
-	 *            user's mail
-	 * @param id
-	 *            user's id
-	 */
-	public User(String n, String f, String m, int id) {
-		this.name = n;
-		this.fname = f;
-		this.mail = m;
-		this.id = id;
-		this.pic = DEFAULT_PICTURE;
-	}
 	
 	/**
 	 * Creates a user with his id.
@@ -109,134 +89,6 @@ public class User implements Serializable {
 		this.mail = m;
 		this.id = id;
 		this.pic = picName;
-	}
-
-	/**
-	 * @return the name
-	 */
-	public String getName() {
-		return name;
-	}
-
-	public String getFullName() {
-		return (name + " " + fname);
-	}
-
-	/**
-	 * @param name
-	 *            the name to set
-	 */
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	/**
-	 * @return the fore name
-	 */
-	public String getFname() {
-		return fname;
-	}
-
-	/**
-	 * @param fname
-	 *            the fore name to set
-	 */
-	public void setFname(String fname) {
-		this.fname = fname;
-	}
-
-	/**
-	 * @return the email
-	 */
-	public String getMail() {
-		return mail;
-	}
-
-	/**
-	 * @param mail
-	 *            the email to set
-	 */
-	public void setMail(String mail) {
-		this.mail = mail;
-	}
-
-	/**
-	 * @return the User id
-	 */
-	public int getId() {
-		return id;
-	}
-
-	/**
-	 * @param idUser
-	 *            the User id to set
-	 */
-	public void setId(int idUser) {
-		this.id = idUser;
-	}
-
-	/**
-	 * @return the access level
-	 */
-	public int getAccesslevel() {
-		return accesslevel;
-	}
-
-	/**
-	 * @param accesslevel
-	 *            the access level to set
-	 */
-	public void setAccesslevel(int accesslevel) {
-		this.accesslevel = accesslevel;
-	}
-
-	/**
-	 * @return the projects // TODO: more advanced equality check
-	 */
-	public ArrayList<Project> getProjects() {
-		return projects;
-	}
-
-	/**
-	 * @param projects
-	 *            the projects to set
-	 */
-	public void setProjects(ArrayList<Project> projects) {
-		this.projects = projects;
-	}
-
-	/**
-	 * @return the followed users
-	 */
-	public ArrayList<User> getFollows() {
-		return follows;
-	}
-
-	/**
-	 * @param follows
-	 *            the followed users to set
-	 */
-	public void setFollows(ArrayList<User> follows) {
-		this.follows = follows;
-	}
-
-	public String getPic() {
-		return pic;
-	}
-
-	public void setPic(String pic) {
-		this.pic = pic;
-	}
-	
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#toString()
-	 */
-	@Override
-	public String toString() {
-		return "\nName: " + name + "\nForename: " + fname + "\nEmail: " + mail
-				+ "\n";
 	}
 
 	/*
@@ -259,6 +111,134 @@ public class User implements Serializable {
 		if (id != other.id || id <= 0 || other.id == 0)
 			return false;
 		return true;
+	}
+
+	/**
+	 * @return the access level
+	 */
+	public int getAccesslevel() {
+		return accesslevel;
+	}
+
+	/**
+	 * @return the followed users
+	 */
+	public ArrayList<User> getFollows() {
+		return follows;
+	}
+
+	/**
+	 * @return the fore name
+	 */
+	public String getFname() {
+		return fname;
+	}
+
+	public String getFullName() {
+		return (name + " " + fname);
+	}
+
+	/**
+	 * @return the User id
+	 */
+	public int getId() {
+		return id;
+	}
+
+	/**
+	 * @return the email
+	 */
+	public String getMail() {
+		return mail;
+	}
+
+	/**
+	 * @return the name
+	 */
+	public String getName() {
+		return name;
+	}
+
+	public String getPic() {
+		return pic;
+	}
+
+	/**
+	 * @return the projects // TODO: more advanced equality check
+	 */
+	public ArrayList<Project> getProjects() {
+		return projects;
+	}
+
+	/**
+	 * @param accesslevel
+	 *            the access level to set
+	 */
+	public void setAccesslevel(int accesslevel) {
+		this.accesslevel = accesslevel;
+	}
+
+	/**
+	 * @param follows
+	 *            the followed users to set
+	 */
+	public void setFollows(ArrayList<User> follows) {
+		this.follows = follows;
+	}
+
+	/**
+	 * @param fname
+	 *            the fore name to set
+	 */
+	public void setFname(String fname) {
+		this.fname = fname;
+	}
+
+	/**
+	 * @param idUser
+	 *            the User id to set
+	 */
+	public void setId(int idUser) {
+		this.id = idUser;
+	}
+
+	/**
+	 * @param name
+	 *            the name to set
+	 */
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	/**
+	 * @param mail
+	 *            the email to set
+	 */
+	public void setMail(String mail) {
+		this.mail = mail;
+	}
+
+	public void setPic(String pic) {
+		this.pic = pic;
+	}
+
+	/**
+	 * @param projects
+	 *            the projects to set
+	 */
+	public void setProjects(ArrayList<Project> projects) {
+		this.projects = projects;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "\nName: " + name + "\nForename: " + fname + "\nEmail: " + mail
+				+ "\n";
 	}
 
 }
