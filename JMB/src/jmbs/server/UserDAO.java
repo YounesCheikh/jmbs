@@ -462,7 +462,7 @@ public class UserDAO extends DAO {
 	public int getAccessLevel (int iduser){
 		int ret = -1;
 		if (this.exists(iduser)) {
-			set("SELECT authlvl FROM user WHERE iduser=?");
+			set("SELECT authlvl FROM users WHERE iduser=?");
 			setInt(1,iduser);
 			ResultSet res = executeQuery();
 		
