@@ -36,7 +36,7 @@ import java.awt.event.ActionEvent;
 
 import jmbs.client.ClientRequests;
 import jmbs.client.HashPassword;
-import jmbs.common.RemoteServer;
+import jmbs.common.RemoteRequests;
 import jmbs.common.User;
 import net.miginfocom.swing.MigLayout;
 
@@ -229,7 +229,7 @@ public class RegisterPanel extends JPanel {
 			lblResp.setText("Connection to server...");
 			lblResp.setForeground(new Color(0, 100, 0));
 			boolean emailAvailable = false;
-			RemoteServer server = new ClientRequests().getConnection();
+			RemoteRequests server = new ClientRequests().getConnection();
 			try {
 				if (server != null) {
 					emailAvailable = server.createUser(new User(nameTextField.getText(), fnameTextField.getText(), emailTextField.getText()), new HashPassword(listToString(passwordField.getPassword())).getHashed());

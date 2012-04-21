@@ -87,7 +87,7 @@ public class MsgPanel extends JPanel {
 		btnUser.setBorderPainted(false);
 		
 		
-		lblPrinttime = new JLabel(m.getDatetime().toString());
+		lblPrinttime = new JLabel(m.getTimestamp().toString());
 		lblPrinttime.setFont(new Font("Lucida Grande", Font.PLAIN, 10));
 		
 		GroupLayout gl_txtPanel = new GroupLayout(txtPanel);

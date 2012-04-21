@@ -39,6 +39,7 @@ import java.awt.event.ActionEvent;
 import jmbs.client.ClientRequests;
 import jmbs.client.CurrentUser;
 import jmbs.client.HashPassword;
+import jmbs.common.RemoteRequests;
 import jmbs.common.RemoteServer;
 import jmbs.common.User;
 import javax.swing.JSeparator;
@@ -183,7 +184,7 @@ public class ConnectionPanel extends JPanel {
 	 * this methode update the response Label 'respLabel'
 	 */
 	private void checkConnection() {
-		RemoteServer server = new ClientRequests().getConnection();
+		RemoteRequests server = new ClientRequests().getConnection();
 		if (!verification(emailTextField.getText())) {
 			respLabel.setText("Enter a valide email please!");
 			respLabel.setForeground(Color.red);
