@@ -180,7 +180,7 @@ public class ProjectDAO extends DAO {
 		boolean res = false;
 		
 		if (!this.exists(name)) {
-			set ("INSERT INTO projects (name,owner,status) VALUES (?,?,?)");
+			set ("INSERT INTO projects (name,idowner,status) VALUES (?,?,?)");
 			setString(1,name);
 			setInt(2,iduser);
 			setInt(3,1);
@@ -208,13 +208,13 @@ public class ProjectDAO extends DAO {
 	}
 	
 	public boolean isOwner(int iduser, int idproject){
-		set("SELECT owner FROM projects WHERE idproject=?");
+		set("SELECT idowner FROM projects WHERE idproject=?");
 		setInt(1,idproject);
 		ResultSet rs = executeQuery();
 		boolean b = false;
 		
 		try {
-			b = (iduser == rs.getInt("owner"));
+			b = (iduser == rs.getInt("idowner"));
 		}catch (SQLException e){
 			b = false;
 		}
