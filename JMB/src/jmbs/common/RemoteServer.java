@@ -11,9 +11,10 @@ import java.rmi.RemoteException;
 public interface RemoteServer extends Remote{
 
 	public static final String REMOTE_NAME = "Server";
+	
 	/**
 	 * Creates a RemoteRequests object.
 	 * @return RemoteRequests - the RemoteRequests object to be used by client to make requests on the server.
 	 */
-	public RemoteRequests connect() throws RemoteException;
+	public String connect() throws RemoteException;
 }

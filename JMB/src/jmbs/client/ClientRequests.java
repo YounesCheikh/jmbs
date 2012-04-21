@@ -28,10 +28,13 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 
 import jmbs.client.Graphics.SayToUser;
+import jmbs.common.RemoteRequests;
 import jmbs.common.RemoteServer;
 
 public class ClientRequests {
-	private static RemoteServer server = null;
+	private static RemoteServer main = null;
+	private static RemoteRequests server = null;
+	private static String key = null;
 	private static String addressIP;
 
 	private static int port;
@@ -48,7 +51,7 @@ public class ClientRequests {
 	}
 
 	public ClientRequests() {
-		if (server == null) {
+		if (main == null) {
 
 			System.setSecurityManager(new RMISecurityManager());
 			try {
@@ -56,8 +59,9 @@ public class ClientRequests {
 				ClientRequests.name = "serverjmbs";
 				ClientRequests.port = 1099;
 				Registry registry = LocateRegistry.getRegistry(addressIP, port);
-				server = (RemoteServer) registry.lookup(ClientRequests.name);
-				server.connect();
+				main = (RemoteServer) registry.lookup(RemoteServer.REMOTE_NAME);
+				key = main.connect();
+				server = (RemoteRequests) registry.lookup(key);
 
 			} catch (SecurityException se) {
 				new SayToUser(se.getMessage(), true);
@@ -82,7 +86,7 @@ public class ClientRequests {
 		ClientRequests.name = name;
 	}
 
-	public RemoteServer getConnection() {
+	public RemoteRequests getConnection() {
 		return ClientRequests.server;
 	}
 

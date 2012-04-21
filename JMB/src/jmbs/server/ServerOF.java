@@ -26,10 +26,10 @@ public class ServerOF extends UnicastRemoteObject implements RemoteServer{
 	 * Creates a RemoteRequests object.
 	 * @return RemoteRequests - the RemoteRequests object to be used by client to make requests on the server.
 	 */
-	public RemoteRequests connect() throws RemoteException{
+	public String connect() throws RemoteException{
 		ServerMonitor sm = ServerMonitor.getInstance();
 		Requests r = new Requests(true,sm.generateKey());
 		sm.addConnection(r);
-		return r;
+		return r.getConnectionInformations().getConnectionNumber();
 	}
 }
