@@ -63,24 +63,12 @@ CONSTRAINT fk_part_project FOREIGN KEY (idproject) REFERENCES projects (idprojec
 );
 
 
-
-CREATE TABLE connection (
-	idconnection serial,
-	ip varchar(20) NOT NULL,
-	iduser integer,
-	beginTime timestamp, /* connection begining time */
-	endTime timestamp,
-
-CONSTRAINT pk_connect PRIMARY KEY (idconnection),
-CONSTRAINT fk_connect_user FOREIGN KEY (iduser) REFERENCES users (iduser)
-);
-
 CREATE TABLE banned (
-	ip varchar(20) UNIQUE;
-	lifeban int;
-	expiration Timestamp;
-	reason varchar(500);
+	ip varchar(20) UNIQUE,
+	lifeban int,
+	expiration Timestamp,
+	reason varchar(500),
 
-CONSTRAINT pk_connect PRIMARY KEY (idconnection),
+CONSTRAINT pk_banned PRIMARY KEY (ip)
 );
 
