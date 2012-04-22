@@ -74,9 +74,6 @@ public final class ServerMonitor {
 		return keyString;
 	}
 	
-	public static void main(String args[]){
-		System.out.println(ServerMonitor.getInstance().generateKey());
-	}
 	/**
 	 * Gives the number of connected users
 	 * @return the  number of connected users
