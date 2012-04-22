@@ -20,23 +20,24 @@
 
 package jmbs.client.Graphics;
 
-import javax.swing.JPanel;
+import java.awt.Component;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.rmi.RemoteException;
+
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JLabel;
-import javax.swing.LayoutStyle.ComponentPlacement;
-import java.awt.Font;
+import javax.swing.JPanel;
 import javax.swing.JToggleButton;
+import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.SwingConstants;
+import javax.swing.border.TitledBorder;
 
 import jmbs.client.ClientRequests;
 import jmbs.client.CurrentUser;
 import jmbs.common.User;
-import javax.swing.border.TitledBorder;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import java.rmi.RemoteException;
-import java.awt.Component;
-import javax.swing.SwingConstants;
 
 public class FlwUsrPanel extends JPanel {
 

@@ -1,27 +1,26 @@
 package jmbs.client.Graphics.projects;
 
-import javax.swing.JPanel;
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
-import javax.swing.JLabel;
-import javax.swing.JButton;
+import javax.swing.ScrollPaneConstants;
 
 import jmbs.client.ClientRequests;
 import jmbs.client.CurrentUser;
 import jmbs.client.Graphics.SayToUser;
 import jmbs.common.Project;
-
 import net.miginfocom.swing.MigLayout;
-import javax.swing.JCheckBox;
-import java.awt.FlowLayout;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import javax.swing.ScrollPaneConstants;
 
 public class MyProjectsPanel extends JPanel {
 

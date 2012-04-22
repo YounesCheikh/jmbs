@@ -20,36 +20,34 @@
 
 package jmbs.client.Graphics;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-import javax.swing.JTextArea;
-import javax.swing.JButton;
-import javax.swing.JScrollPane;
-import javax.swing.ScrollPaneConstants;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import java.rmi.RemoteException;
-
 import java.awt.Color;
 import java.awt.Point;
-
-import javax.swing.border.TitledBorder;
-
-import java.awt.event.MouseMotionAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
+import java.rmi.RemoteException;
+import java.sql.Timestamp;
+import java.util.Calendar;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.ScrollPaneConstants;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.TitledBorder;
 
 import jmbs.client.ClientRequests;
 import jmbs.client.CurrentUser;
 import jmbs.client.SysConf;
 import jmbs.common.Message;
 import net.miginfocom.swing.MigLayout;
-import javax.swing.JLabel;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.sql.Timestamp;
-import java.util.Calendar;
 
 public class NewMessageFrame extends JFrame {
 

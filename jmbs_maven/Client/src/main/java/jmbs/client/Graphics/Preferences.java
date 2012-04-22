@@ -84,7 +84,6 @@ public class Preferences extends JFrame {
 	 */
 	public Preferences() {
 		
-		new ClientRequests();
 		ButtonGroup groupDefaultOptions = new ButtonGroup();
 		ButtonGroup groupThemes = new ButtonGroup();
 		setTitle("JMBS: Preferences");
