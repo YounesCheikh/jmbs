@@ -208,11 +208,6 @@ public interface RemoteRequests extends Remote {
 	public boolean changePassword(int userid, String oldPass, String newPass) throws RemoteException, SQLException;
 	
 	/**
-	 * set connection to server
-	 */
-	//public void connect() throws RemoteException, SecurityException;
-	
-	/**
 	 * logs out a user
 	 */
 	public void logOut(int iduser) throws RemoteException;
@@ -229,5 +224,5 @@ public interface RemoteRequests extends Remote {
                 
         public boolean changName(int userid, String name) throws RemoteException;
         
-        public boolean createUser(int userid, User u, String hashedPassword, int authlvl);
+        public boolean createUser(int userid, User u, String hashedPassword, int authlvl) throws RemoteException, SecurityException;
 }
