@@ -109,30 +109,24 @@ public class Requests extends UnicastRemoteObject implements RemoteRequests {
 		User returnUser = new User();//TODO: explain to youyou how to handle null objects ;)
 		Security s = new SecurityDAO(new Connect().getConnection());
 		ServerMonitor sm = ServerMonitor.getInstance();
-		String ip;
 		
 		if (security){
-			try {
-				 
-				ip = getClientHost();
-				if (s.isUserConnectionAttemptAuthorized(ip)){ // Try to connect to an account from an ip (security check)		
-					UserDAO udao = new UserDAO(con); 
-					User u = udao.getUser(em);
-			
-					if (u != null){
-						boolean b = udao.checkPassword(u, psw);
-						if (b) { // if password is correct
-							u.setFollows(udao.getFollowed(u)); 
-							returnUser = u;
-							ServerMonitor.getInstance().logIn(u.getId(),this.ci.getConnectionNumber()); // add activated account to server Monitor
-							this.ci.logIn(u.getId());
-						}
+			if (s.isUserConnectionAttemptAuthorized(this.ci.getConnectionNumber())){ // Try to connect to an account from an ip (security check)		
+				UserDAO udao = new UserDAO(con); 
+				User u = udao.getUser(em);
+		
+				if (u != null){
+					boolean b = udao.checkPassword(u, psw);
+					if (b) { // if password is correct
+						u.setFollows(udao.getFollowed(u)); 
+						returnUser = u;
+						ServerMonitor.getInstance().logIn(u.getId(),this.ci.getConnectionNumber()); // add activated account to server Monitor
+						this.ci.logIn(u.getId());
 					}
+				}
 			
-				} else throw new SecurityException("You're not authorized to connect to the server because your ip has made too many unsuccessfull login attemps.\n");
-			} catch (ServerNotActiveException e) {
-				System.err.println("Unexcepted error !");
-			}
+			} else throw new SecurityException("You're not authorized to connect to the server because your ip has made too many unsuccessfull login attemps.\n");
+
 		}else {
 			UserDAO udao = new UserDAO(con); 
 			User u = udao.getUser(em);
