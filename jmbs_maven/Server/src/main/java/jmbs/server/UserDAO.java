@@ -77,6 +77,14 @@ public class UserDAO extends DAO {
 	
 		return false;
 	}
+        
+        public boolean changeFname(int userid, String fname){
+		
+		set("UPDATE users SET forename=? WERE iduser = ?");
+		setString(1,fname);
+		setInt(2,userid);
+		return executeUpdate();
+        }
 	
 	public boolean changeMail(int userid, String pass, String mail){
 		boolean b = false;
@@ -88,6 +96,14 @@ public class UserDAO extends DAO {
 		}
 		return b;
 	}
+        
+        public boolean changeName(int userid, String name){
+		
+		set("UPDATE users SET name=? WERE iduser = ?");
+		setString(1,name);
+		setInt(2,userid);
+		return executeUpdate();
+        }
 
 	public boolean changePassword(int userid, String oldPass, String newPass){
 		boolean b = false;

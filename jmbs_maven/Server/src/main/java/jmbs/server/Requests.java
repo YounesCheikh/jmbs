@@ -59,20 +59,26 @@ public class Requests extends UnicastRemoteObject implements RemoteRequests {
 		return ret;
 	}
 
-	public boolean changeAvatar(int userid, BufferedImage img, String nom, boolean overwrite){
-		PictureDAO pdao = new PictureDAO(con);
-		return pdao.setAvatar(userid, img, nom, overwrite);
+	public boolean changeAvatar(int userid, BufferedImage img, String nom, boolean overwrite) throws RemoteException{
+		return new PictureDAO(con).setAvatar(userid, img, nom, overwrite);
 	}
 	
 	public boolean changeMail(int userid, String pass, String mail) throws RemoteException{
-		UserDAO udao = new UserDAO(con);
-		return udao.changeMail(userid, pass, mail);
+		return new UserDAO(con).changeMail(userid, pass, mail);
 	}
 	
 	public boolean changePassword(int userid, String oldPass, String newPass) throws RemoteException{
-		UserDAO udao = new UserDAO(con);
-		return udao.changePassword(userid, oldPass, newPass);
+		return new UserDAO(con).changePassword(userid, oldPass, newPass);
 	}
+        
+        public boolean changName(int userid, String name) throws RemoteException{
+            return new UserDAO(con).changeName(userid,name);
+        }
+        
+        public boolean changFname(int userid, String fname) throws RemoteException{
+            return new UserDAO(con).changeFname(userid,fname);
+            
+        }
 
 	public boolean close(int userid){
 		boolean b = false;
