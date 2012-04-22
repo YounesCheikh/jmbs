@@ -20,29 +20,19 @@
 
 package jmbs.server;
 
-import javax.swing.JFrame;
-import javax.swing.JTextField;
-import javax.swing.SwingConstants;
-import javax.swing.JLabel;
-import javax.swing.JButton;
-import java.awt.Color;
 import com.sun.awt.AWTUtilities;
-
+import java.awt.Color;
 import java.awt.Font;
-import net.miginfocom.swing.MigLayout;
-import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.rmi.AccessException;
-import java.rmi.AlreadyBoundException;
-import java.rmi.NoSuchObjectException;
-import java.rmi.NotBoundException;
-import java.rmi.RemoteException;
+import java.rmi.*;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.server.UnicastRemoteObject;
-
+import javax.swing.*;
 import jmbs.common.RemoteServer;
+import net.miginfocom.swing.MigLayout;
 
 @SuppressWarnings("restriction")
 public class ServerWindow {

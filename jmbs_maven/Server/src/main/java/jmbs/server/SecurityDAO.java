@@ -52,6 +52,20 @@ public class SecurityDAO extends DAO implements Security{
 			
 		return bi;			
 	}
+        
+                /**
+         * Tells if the user has at least the access level passed in parameter.
+         * \n\n
+         * It returns (getAccessLevel(userId) <= accessLevel)
+         * 
+         * 
+         * @param userId - the user id to check
+         * @param accessLevel - the requiered access level
+         * @return true if the access level is sufficiant false if not
+         */
+        public boolean isAccessLevelSufficiant(int userId,int accessLevel){
+            return (getAccessLevel(userId) <= accessLevel);
+        }    
 	
 	/**This method checks in the db if the ip address occurs in the ban table. If so, it checks
 	 * if the ban expiration is over and removes the ban from the db if it is and returns false.
@@ -123,6 +137,29 @@ public class SecurityDAO extends DAO implements Security{
 		return (i.getNumberOfAttemps() <= limit);
 	}
 
+        /**
+         * Gives the user authorisation level
+         * @param iduser - the user
+         * @return the authorisation level
+         * @throws SecurityException when user does not exists
+         */
+        public int getAccessLevel (int iduser) throws SecurityException{
+		int ret = 100;
+		if (new UserDAO(con).exists(iduser)) {
+			set("SELECT authlvl FROM users WHERE iduser=?");
+			setInt(1,iduser);
+			ResultSet res = executeQuery();
+		
+			try {
+				ret = res.getInt("authlvl");
+			} catch (SQLException e) {
+				System.err.println("Unexcepted error !");
+			}
+		}else throw new SecurityException("User "+iduser+" not found.");
+		
+		return ret;
+	}
+                
 	/**
 	 * Removes a ban from the db
 	 * @param ip - the ip to un-ban

@@ -64,7 +64,7 @@ public class PictureDAO extends DAO {
 		
 		if (f.isDirectory()){
 			File[] subfiles = f.listFiles();
-			String subfileName = new String ();
+			String subfileName;
 		
 			for (File i:subfiles){
 				subfileName = i.getName();

@@ -1,4 +1,4 @@
-/**
+/*
  * JMBS: Java Micro Blogging System
  *
  * Copyright (C) 2012  
@@ -18,6 +18,9 @@
  * 
  */
 
+/**
+ * 
+ */
 package jmbs.server;
 
 import java.sql.Connection;
@@ -27,13 +30,23 @@ import java.util.ArrayList;
 import jmbs.common.Project;
 import jmbs.common.User;
 
+/**
+ * 
+ * @author
+ */
 public class UserDAO extends DAO {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1371248166710891652L;
-
+        
+        public static final int ROOT_ACCESS_LEVEL = 0; 
+        public static final int ADMIN_ACCESS_LEVEL = 1; // Sees all projects, can supress, give authorisations, suppress others messages in projects
+        public static final int MANAGER_ACCESS_LEVEL = 2; // Create projects, supress owned projects, invite users in project, supress messages in his project
+        public static final int CREATE_ACCESS_LEVEL = 2; // for code clarity in functions
+        public static final int DEV_ACCESS_LEVEL = 3; // Post in a project he is involved in, Post on timeline,
+        public static final int DEFAULT_ACCESS_LEVEL = 10; // See timelines & projects
 	
 	public UserDAO(Connection c) {
 		super(c);
@@ -51,12 +64,13 @@ public class UserDAO extends DAO {
 	public boolean addUser(User u, String pass) {
 		if (!checkMail(u.getMail()))
 		{
-			set("INSERT INTO users(name, forename, email, pass, picture) VALUES (?,?,?,?,?);");
+			set("INSERT INTO users(name, forename, email, pass, picture, authlvl) VALUES (?,?,?,?,?,?);");
 			setString(1,u.getName());
 			setString(2,u.getFname());
 			setString(3,u.getMail());
 			setString(4,pass);
 			setString(5,u.getPic());
+                        setInt(6,DEFAULT_ACCESS_LEVEL);
 			return executeUpdate();
 		}
 		System.err.println("Email already used.");
@@ -160,7 +174,7 @@ public class UserDAO extends DAO {
 	 * @return true - if the user is registered in the database.
 	 */
 	public boolean exists(User u) {
-		boolean ret = false;
+		boolean ret;
 		
 		set("SELECT * FROM users WHERE iduser=?;");
 		setInt(1,u.getId());
@@ -169,7 +183,7 @@ public class UserDAO extends DAO {
 		try {
 			ret = res.getString("email").equals(u.getMail());
 		} catch (SQLException e) { // user does not exist
-			ret = false;
+                    ret = false;
 		}
 	
 		return ret;
@@ -202,7 +216,7 @@ public class UserDAO extends DAO {
 	 */
 	public ArrayList<User> findUsers(String uName, int param) {
 		ArrayList<User> u = new ArrayList<User>();
-		int userid = 0;
+		int userid;
 		String errorMsg = new String();
 		
 		if (param == BY_NAME) 
@@ -280,27 +294,10 @@ public class UserDAO extends DAO {
 		return ret;
 	}
 
-	public int getAccessLevel (int iduser){
-		int ret = -1;
-		if (this.exists(iduser)) {
-			set("SELECT authlvl FROM users WHERE iduser=?");
-			setInt(1,iduser);
-			ResultSet res = executeQuery();
-		
-			try {
-				ret = res.getInt("authlvl");
-			} catch (SQLException e) {
-				System.err.println("Unexcepted error !");
-			}
-		}
-		
-		return ret;
-	}
-
 	/**
 	 * Returns all the users a user is following
 	 * 
-	 * @param user
+	 * @param user - the user 
 	 * @return list of users
 	 */
 	public ArrayList<User> getFollowed(User user) {
@@ -456,8 +453,8 @@ public class UserDAO extends DAO {
 	 */
 	public User getUser(String em) {
 		User u = null;
-		int userid = 0;
-		ResultSet res = null;
+		int userid;
+		ResultSet res;
 		
 		set("SELECT * FROM users WHERE email=?;");
 		setString(1,em);
@@ -479,7 +476,26 @@ public class UserDAO extends DAO {
 		return u;
 	}
 
-	
+        /**
+         * Grans the developper status to a user
+         * @param adminId - the user who grants the developper status
+         * @param userId - the user who will be granted the status
+         * @return
+         * @throws SecurityException if the user who try to grant status has a too low authorisation level
+         */
+        public boolean grantDevStatus(int adminId, int userId) throws SecurityException{
+            boolean res;
+            if (new SecurityDAO(con).isAccessLevelSufficiant(adminId,ADMIN_ACCESS_LEVEL)){
+                set("UPDATE users SET authlvl=? WHERE iduser=?;");
+                setInt(1,DEV_ACCESS_LEVEL);
+                setInt(2,userId);
+                res = executeUpdate();
+            } else {
+                throw new SecurityException("Your access level is not high enough to do that operation.");
+            }
+            return res;
+        }       
+        
 	public boolean participate (int iduser, int idproject, int auth){
 		if (this.exists(iduser) && (new ProjectDAO(super.con)).exists(idproject)){ //if the project and the user exists.
 			set("INSERT INTO participate (iduser,idproject,authlvl) VALUES (?,?,?);");

@@ -24,7 +24,6 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-
 import jmbs.common.Project;
 import jmbs.common.User;
 
@@ -33,7 +32,6 @@ import jmbs.common.User;
 public class ProjectDAO extends DAO {
 
 	private static final long serialVersionUID = -1449738022340494222L;
-	public static final int CREATE_ACCESS_LEVEL = 10;
 
 	public ProjectDAO(Connection c) {
 		super(c);
@@ -56,7 +54,7 @@ public class ProjectDAO extends DAO {
 
 	public Project createProject (String name, int iduser){
 		Project ret = null;
-		boolean res = false;
+		boolean res;
 		
 		if (!this.exists(name)) {
 			set ("INSERT INTO projects (name,idowner,status) VALUES (?,?,?);");

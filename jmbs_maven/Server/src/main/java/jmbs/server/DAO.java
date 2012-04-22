@@ -55,7 +55,6 @@ public abstract class DAO implements Serializable {
 					stmt = null;
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
 			System.err.println("Unable to close Statement !");
 		}
 		
@@ -68,7 +67,6 @@ public abstract class DAO implements Serializable {
 			res.next();
 		} catch (SQLException e) {
 			System.err.println("Unable to execute query.");
-			e.printStackTrace();
 		}
 	
 		return res;
@@ -82,7 +80,6 @@ public abstract class DAO implements Serializable {
 			b = true;
 		} catch (SQLException e) {
 			System.err.println("Unable to execute query.");
-			e.printStackTrace();
 			b = false;
 		}
 		
@@ -97,8 +94,8 @@ public abstract class DAO implements Serializable {
 		ResultSet res = null;
 		try {
 			res = stmt.getGeneratedKeys();
+                        res.next();
 		} catch (SQLException e) {
-			e.printStackTrace();
 		}
 		return res;
 	}

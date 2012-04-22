@@ -23,8 +23,10 @@ package jmbs.server;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
-
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import jmbs.common.Message;
 
 public class MessageDAO extends DAO {
@@ -104,16 +106,34 @@ public class MessageDAO extends DAO {
 	 */
 	public int addMessage(Message m) {
 		int messageId = -1;
-		set("INSERT INTO message(content, \"time\", iduser) VALUES (?,?,?);");
+		set("INSERT INTO message(content, \"time\", iduser) VALUES (?,?,?);",Statement.RETURN_GENERATED_KEYS );
 		setString(1, m.getMessage());
 		setTimestamp(2, m.getTimestamp());
 		setInt(3, m.getOwner().getId());
-		boolean res = executeUpdate();
-
-		if (res)
-			messageId = getLastMessage(m.getOwner().getId()).getId();
-		// id of the last message sent to database by the user.
-
+		executeUpdate();
+                try {
+                    ResultSet rs = getGeneratedKeys();
+                    messageId = rs.getInt("idmessage");
+                } catch (SQLException ex) {
+                    System.err.println("Error returning generated key.");
+                } 
+		return messageId;
+	}
+        
+        public int addMessage(Message m, int projectId) {
+		int messageId = -1;
+		set("INSERT INTO message(content, \"time\", iduser,idproject) VALUES (?,?,?,?);",Statement.RETURN_GENERATED_KEYS);
+		setString(1, m.getMessage());
+		setTimestamp(2, m.getTimestamp());
+		setInt(3, m.getOwner().getId());
+                setInt(4,projectId);
+                executeUpdate();
+                try {
+                    ResultSet rs = getGeneratedKeys();
+                    messageId = rs.getInt("idmessage");
+                } catch (SQLException ex) {
+                    System.err.println("Error while creating message.");
+                } 
 		return messageId;
 	}
 
@@ -123,13 +143,15 @@ public class MessageDAO extends DAO {
 	 * @return list of messages
 	 */
 	public ArrayList<Message> getMessages(int iduser, int idlastmessage, int maxMsg) {
-		Connection con = new Connect().getConnection();
 		ArrayList<Message> msgList = new ArrayList<Message>();
 
-		set("SELECT idmessage, content, \"time\", iduser FROM message,follows " +
-				"WHERE (((follows.followed = message.iduser AND follows.follower=?) " +
-				"OR message.iduser=?) AND idmessage>?) " +
-				"GROUP BY idmessage ORDER BY idmessage;");
+		set("SELECT idmessage, content, \"time\", iduser "
+                        + "FROM message,follows "
+                        + "WHERE (((follows.followed = message.iduser "
+                        + "AND follows.follower=? "
+                        + "AND message.idproject IS NULL) "
+                        + "OR message.iduser=?) AND idmessage>?) " 
+                        + "GROUP BY idmessage ORDER BY idmessage;");
 		setInt(1, iduser);
 		setInt(2, iduser);
 		setInt(3, idlastmessage);

@@ -26,12 +26,7 @@ import java.rmi.server.UnicastRemoteObject;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
-
-import jmbs.common.ConnectionInformation;
-import jmbs.common.Message;
-import jmbs.common.Project;
-import jmbs.common.RemoteRequests;
-import jmbs.common.User;
+import jmbs.common.*;
 
 public class Requests extends UnicastRemoteObject implements RemoteRequests {
 
@@ -53,6 +48,13 @@ public class Requests extends UnicastRemoteObject implements RemoteRequests {
 	public int addMessage(Message m) throws RemoteException {
 		MessageDAO mdao = new MessageDAO(con);
 		int ret = mdao.addMessage(m);
+	
+		return ret;
+	}
+        
+        public int addMessage(Message m, int projectId) throws RemoteException {
+		MessageDAO mdao = new MessageDAO(con);
+		int ret = mdao.addMessage(m, projectId);
 	
 		return ret;
 	}
@@ -143,10 +145,10 @@ public class Requests extends UnicastRemoteObject implements RemoteRequests {
 
 	public Project createProject(String name, int iduser){
 		ProjectDAO pdao = new ProjectDAO(con);
-		UserDAO udao = new UserDAO(con);
+		SecurityDAO sdao = new SecurityDAO(con);
 		Project p = null;
 		
-		if (udao.getAccessLevel(iduser) >= ProjectDAO.CREATE_ACCESS_LEVEL){
+		if (sdao.isAccessLevelSufficiant(iduser, UserDAO.CREATE_ACCESS_LEVEL)){
 			 p = pdao.createProject(name,iduser);
 		}
 				
@@ -204,7 +206,6 @@ public class Requests extends UnicastRemoteObject implements RemoteRequests {
 	 * @see jmbs.common.RemoteServer#getLatestTL(int, int)
 	 */
 	public ArrayList<Message> getLatestTL(int iduser, int idlastmessage, int maxMsg) throws RemoteException {
-		Connection con = new Connect().getConnection();
 		MessageDAO mdao = new MessageDAO(con);
 		ArrayList<Message> ra = mdao.getMessages(iduser, idlastmessage, maxMsg);
 		
@@ -226,12 +227,9 @@ public class Requests extends UnicastRemoteObject implements RemoteRequests {
 	}
 
 	public boolean participate (int iduser, int idproject, int auth){
-		Connection con = new Connect().getConnection();
 		UserDAO udao = new UserDAO(con);
-		boolean ret = false;
-		
-		ret = udao.participate(iduser, idproject, auth);
-		
+		boolean ret = udao.participate(iduser, idproject, auth);
+
 		return ret;
 	}
 
@@ -240,7 +238,6 @@ public class Requests extends UnicastRemoteObject implements RemoteRequests {
 	}
 
 	public ArrayList<Project> searchForProject(String likeName) throws RemoteException {
-		Connection con = new Connect().getConnection();
 		ProjectDAO pdao = new ProjectDAO(con);
 		ArrayList<Project> found = pdao.findProjects(likeName);
 		
@@ -274,7 +271,6 @@ public class Requests extends UnicastRemoteObject implements RemoteRequests {
 	}
 
 	public boolean unParticipate (int iduser, int idproject) throws RemoteException{
-		Connection con = new Connect().getConnection();
 		UserDAO udao = new UserDAO(con);
 		boolean ret = udao.unParticipate(iduser, idproject);
 	
