@@ -92,25 +92,6 @@ public class MyProjectsPanel extends JPanel {
 		prjctListPanel.setLayout(new MigLayout("", "[]", "[]"));
 		scrollPane.setViewportView(prjctListPanel);
 		
-		ArrayList<Project> plist = new ArrayList<Project>();
-		plist.add(new Project("",0,null));
-		plist.add(new Project("",0,null));
-		plist.add(new Project("",0,null));
-		plist.add(new Project("",0,null));
-		plist.add(new Project("",0,null));
-		plist.add(new Project("",0,null));
-		plist.add(new Project("",0,null));
-		plist.add(new Project("",0,null));
-		plist.add(new Project("",0,null));
-		plist.add(new Project("",0,null));
-		plist.add(new Project("",0,null));
-		plist.add(new Project("",0,null));
-		plist.add(new Project("",0,null));
-		plist.add(new Project("",0,null));
-		plist.add(new Project("",0,null));
-		plist.add(new Project("",0,null));
-		putList(plist);
-		
 	}
 	
 	public void putProject(Component obj) {

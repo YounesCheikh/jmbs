@@ -229,10 +229,9 @@ public class RegisterPanel extends JPanel {
 			lblResp.setText("Connection to server...");
 			lblResp.setForeground(new Color(0, 100, 0));
 			boolean emailAvailable = false;
-			RemoteServer server = new ClientRequests().getConnection();
 			try {
-				if (server != null) {
-					emailAvailable = server.createUser(new User(nameTextField.getText(), fnameTextField.getText(), emailTextField.getText()), new HashPassword(listToString(passwordField.getPassword())).getHashed());
+				if (ClientRequests.server != null) {
+					emailAvailable = ClientRequests.server.createUser(new User(nameTextField.getText(), fnameTextField.getText(), emailTextField.getText()), new HashPassword(listToString(passwordField.getPassword())).getHashed());
 					if (!emailAvailable) {
 						emailTextField.setBorder(BorderFactory.createLineBorder(Color.RED));
 						lblResp.setText("Email in used!");

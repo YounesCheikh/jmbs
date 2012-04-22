@@ -193,14 +193,13 @@ public class ConnectionPanel extends JPanel {
 	 * this methode update the response Label 'respLabel'
 	 */
 	private void checkConnection() {
-		RemoteServer server = new ClientRequests().getConnection();
 
 		respLabel.setText("Connection to server...");
 		respLabel.setForeground(new Color(0, 100, 0));
 
 		try {
-			if (server != null) {
-				User u = server.connectUser(
+			if (ClientRequests.server != null) {
+				User u = ClientRequests.server.connectUser(
 						this.emailTextField.getText(),
 						new HashPassword(listToString(passwordField
 								.getPassword())).getHashed());

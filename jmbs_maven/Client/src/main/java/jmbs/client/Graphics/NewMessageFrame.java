@@ -49,6 +49,8 @@ import net.miginfocom.swing.MigLayout;
 import javax.swing.JLabel;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.sql.Timestamp;
+import java.util.Calendar;
 
 public class NewMessageFrame extends JFrame {
 
@@ -109,7 +111,7 @@ public class NewMessageFrame extends JFrame {
 				if (textArea.getText().length() > 0 && textArea.getText().length()<=599) {
 					newMsgStr = textArea.getText();//replaceAll("'", "$'$");
 					Message m = new Message(new CurrentUser().get(), newMsgStr,
-							new Date(new java.util.Date().getTime()));
+							new Timestamp(Calendar.getInstance().getTimeInMillis()));
 					Integer getIdMsg = 0;
 					try {
 
@@ -125,7 +127,7 @@ public class NewMessageFrame extends JFrame {
 					if (!getIdMsg.equals(-1)) {
 						tlpanel.putMessage(new MsgPanel(new Message(
 								new CurrentUser().get(), textArea.getText(),
-								new Date(new java.util.Date().getTime()))));
+								new Timestamp(Calendar.getInstance().getTimeInMillis()))));
 						tlpanel.setLastIdMsg(getIdMsg);
 						textArea.setText("");
 						setVisible(false);
