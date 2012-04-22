@@ -20,6 +20,8 @@
 
 package jmbs.client.Graphics;
 
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import javax.swing.JFrame;
 
 import jmbs.client.SysConf;
@@ -30,7 +32,7 @@ public class ConnectionFrame extends JFrame {
 	 * Display a frame contain the connection panel
 	 */
 	private static final long serialVersionUID = 6941716821811760066L;
-	
+
 	/**
 	 * Create the frame.
 	 * 
@@ -40,11 +42,18 @@ public class ConnectionFrame extends JFrame {
 	public ConnectionFrame(MainWindow w) {
 		setResizable(false);
 		setLocationRelativeTo(null);
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				dispose();
+				System.exit(0);
+			}
+		});
 		this.setTitle("Connect to JMBS!");
 		this.setSize(430, 430);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-		//this.setLocationRelativeTo(null);
+		// this.setLocationRelativeTo(null);
 		new SysConf().centerThisFrame(this);
 
 		ConnectionPanel cp = new ConnectionPanel(w, this);

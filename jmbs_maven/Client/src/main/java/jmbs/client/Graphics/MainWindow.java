@@ -20,9 +20,10 @@ import jmbs.client.Graphics.projects.ParticipationsPrjcstPanel;
 import jmbs.client.Graphics.projects.PrjctsTimeLinePanel;
 import jmbs.client.Graphics.projects.SearchProjectPanel;
 import jmbs.common.Message;
-import jmbs.common.User;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class MainWindow {
 
@@ -55,6 +56,21 @@ public class MainWindow {
 	private void initialize() {
 		msgListTL = new ArrayList<Message>();
 		frmJmbsClient = new JFrame();
+		frmJmbsClient.addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				frmJmbsClient.dispose();
+				if (ClientRequests.server != null)
+					try {
+						ClientRequests.server.close(CurrentUser.getId());
+					} catch (RemoteException e1) {
+						// TODO Auto-generated catch block
+						// e1.printStackTrace();
+						System.out.println(e1.getMessage());
+					}
+				System.exit(0);
+			}
+		});
 		ppanel = new ProfilePanel(CurrentUser.get());
 		about = new AboutFrame();
 		uFrame = new UsersFrame();
