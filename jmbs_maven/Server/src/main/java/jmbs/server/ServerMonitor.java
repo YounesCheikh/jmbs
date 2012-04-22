@@ -139,5 +139,6 @@ public final class ServerMonitor {
 		if (!activeConnections.containsKey(key)) throw new SecurityException("Illegal user trying to connect.\n Try to restart your application \n If the problem presists contact your administator.");
 		if (isAcountActive(userId)) logOut(userId);
 		this.activeConnections.get(key).getConnectionInformations().logIn(userId);
+                this.connectedUsers.put(userId, key);
 	}
 }
