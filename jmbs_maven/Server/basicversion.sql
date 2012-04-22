@@ -1,4 +1,4 @@
-﻿/* 
+/* 
 Title: MBS Project Sql tables
 Authors: Babic Benjamin, Cheikh Younes 
 Version: 1.1
@@ -22,6 +22,15 @@ CREATE TABLE users ( /* Table des utilisateurs */
 CONSTRAINT pk_users PRIMARY KEY (iduser)
 );
 
+CREATE TABLE projects (
+	idproject serial,
+	idowner integer NOT NULL,
+	name varchar(60),
+	status integer,
+	
+CONSTRAINT pk_projects PRIMARY KEY (idproject),
+CONSTRAINT fk_projects_user FOREIGN KEY (idowner) REFERENCES users (iduser)
+);
 
 CREATE TABLE message ( /* Table des messages */
 	idmessage serial,
@@ -31,7 +40,7 @@ CREATE TABLE message ( /* Table des messages */
 	idproject integer,
 
 CONSTRAINT pk_message PRIMARY KEY (idmessage),
-CONSTRAINT fk_message_user FOREIGN KEY (iduser) REFERENCES users (iduser)
+CONSTRAINT fk_message_user FOREIGN KEY (iduser) REFERENCES users (iduser),
 CONSTRAINT fk_message_project FOREIGN KEY (idproject) REFERENCES projects (idproject)
 );
 
@@ -44,15 +53,7 @@ CONSTRAINT fk_follower_user FOREIGN KEY (follower) REFERENCES users (iduser),
 CONSTRAINT fk_followed_user FOREIGN KEY (followed) REFERENCES users (iduser)
 );
 
-CREATE TABLE projects (
-	idproject serial,
-	idowner integer NOT NULL,
-	name varchar(60),
-	status integer,
-	
-CONSTRAINT pk_projects PRIMARY KEY (idproject),
-CONSTRAINT fk_projects_user FOREIGN KEY (idowner) REFERENCES users (iduser)
-);
+
 
 CREATE TABLE participate (
 	idproject integer NOT NULL,
