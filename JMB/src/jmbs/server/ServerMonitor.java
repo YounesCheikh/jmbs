@@ -65,13 +65,18 @@ public final class ServerMonitor {
 	 */
 	public String generateKey(){
 		int key = 0;
+		String keyString;
 		do{
 			key = (int)(Math.random() * (KEY_INTERVAL)) + 1;
-		}while (!activeConnections.containsKey(key));
+			keyString = String.valueOf(key);
+		}while (activeConnections.containsKey(keyString));
 		
-		return String.valueOf(key);
+		return keyString;
 	}
 	
+	public static void main(String args[]){
+		System.out.println(ServerMonitor.getInstance().generateKey());
+	}
 	/**
 	 * Gives the number of connected users
 	 * @return the  number of connected users
