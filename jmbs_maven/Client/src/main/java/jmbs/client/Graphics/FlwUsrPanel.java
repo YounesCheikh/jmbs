@@ -74,12 +74,12 @@ public class FlwUsrPanel extends JPanel {
 				try {
 
 					if (!CurrentUser.getFollows().contains(u)) {
-						new ClientRequests().getConnection().follows(
+						ClientRequests.server.follows(
 								CurrentUser.getId(), u.getId());
 						CurrentUser.getFollows().add(u);
 					}
 					else {
-						new ClientRequests().getConnection().unFollow(
+						ClientRequests.server.unFollow(
 								CurrentUser.getId(), u.getId());
 						CurrentUser.getFollows().remove(u);
 					}

@@ -63,7 +63,7 @@ public class CurrentUser implements Serializable {
 	
 	public static void disconnect() {
 		try {
-			new ClientRequests().getConnection().logOut(u.getId());
+			ClientRequests.server.logOut(u.getId());
 		} catch (RemoteException e) {
 			// TODO Auto-generated catch block
 			//e.printStackTrace();

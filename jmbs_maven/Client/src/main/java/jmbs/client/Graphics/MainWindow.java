@@ -13,6 +13,7 @@ import javax.swing.JScrollPane;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import jmbs.client.ClientRequests;
+import jmbs.client.CurrentUser;
 import jmbs.client.SysConf;
 import jmbs.client.Graphics.projects.MyProjectsPanel;
 import jmbs.client.Graphics.projects.ParticipationsPrjcstPanel;
@@ -32,7 +33,6 @@ public class MainWindow {
 	private static AboutFrame about;
 	private static UsersFrame uFrame;
 	private static ArrayList<Message> msgListTL;
-	private User currentUser;
 	private MainMenuBar menuBar;
 	private JTabbedPane tabbedPane;
 	private JPanel projectsPanel;
@@ -55,11 +55,11 @@ public class MainWindow {
 	private void initialize() {
 		msgListTL = new ArrayList<Message>();
 		frmJmbsClient = new JFrame();
-		ppanel = new ProfilePanel(currentUser);
+		ppanel = new ProfilePanel(CurrentUser.get());
 		about = new AboutFrame();
 		uFrame = new UsersFrame();
 
-		frmJmbsClient.setTitle("JMBS Client : " + currentUser.getFullName());
+		frmJmbsClient.setTitle("JMBS Client : " + CurrentUser.getFullName());
 		// frmJmbsClient.setBounds(100, 100, 365, 600);
 		frmJmbsClient.setSize(480, 640);
 		frmJmbsClient.setMinimumSize(new Dimension(480, 600));
@@ -172,10 +172,6 @@ public class MainWindow {
 		return uFrame;
 	}
 
-	public User getCurrentUser() {
-		return currentUser;
-	}
-
 	public ArrayList<Message> getMsgListTL() {
 		return msgListTL;
 	}
@@ -189,7 +185,7 @@ public class MainWindow {
 	}
 	
 	public void resetProfilePanel() {
-		ppanel.resetAll(currentUser);
+		ppanel.resetAll(CurrentUser.get());
 		uFrame = new UsersFrame(); // TODO:  Provisoir !
 	}
 	
@@ -209,7 +205,7 @@ public class MainWindow {
 	public void checkNewMessages(int idLastMsg) {
 		try {
 			msgListTL = new ClientRequests().getConnection().getLatestTL(
-					currentUser.getId(), idLastMsg,
+					CurrentUser.getId(), idLastMsg,
 					ClientRequests.maxReceivedMsgs);
 			timelinepanel.putList(msgListTL);
 		} catch (RemoteException e1) {

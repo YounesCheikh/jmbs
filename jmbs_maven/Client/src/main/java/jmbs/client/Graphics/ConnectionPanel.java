@@ -192,7 +192,7 @@ public class ConnectionPanel extends JPanel {
 	 * this methode update the response Label 'respLabel'
 	 */
 	private void checkConnection() {
-
+		new ClientRequests();
 		respLabel.setText("Connection to server...");
 		respLabel.setForeground(new Color(0, 100, 0));
 
@@ -206,8 +206,6 @@ public class ConnectionPanel extends JPanel {
 					cf.dispose();
 					new CurrentUser(u);
 					this.initMainWindow();
-					// System.out.println(new
-					// CurrentUser().get().toString());
 				} else if (u.getId() == -1) {
 					respLabel
 							.setText("Wrong password or wrong email, Please try again!");
