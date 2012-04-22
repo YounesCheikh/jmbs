@@ -214,6 +214,7 @@ public class ConnectionPanel extends JPanel {
 	}
 
 	private void initMainWindow() {
+		MainWindow.initFrame();
 		this.w = new MainWindow(); // Initialize new Main Window
 
 		// Setting the frame Title

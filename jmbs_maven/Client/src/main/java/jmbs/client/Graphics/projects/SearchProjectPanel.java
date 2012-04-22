@@ -23,7 +23,6 @@ package jmbs.client.Graphics.projects;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.rmi.RemoteException;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
@@ -34,7 +33,7 @@ import javax.swing.JTextField;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.SoftBevelBorder;
 
-import jmbs.client.ClientRequests;
+import jmbs.client.RemoteRequests;
 import jmbs.common.Project;
 
 public class SearchProjectPanel extends JPanel {
@@ -51,39 +50,34 @@ public class SearchProjectPanel extends JPanel {
 	 */
 	public SearchProjectPanel() {
 		setLayout(new BorderLayout(0, 0));
-		
+
 		JPanel panel = new JPanel();
 		add(panel, BorderLayout.NORTH);
 		panel.setLayout(new BorderLayout(0, 0));
-		
+
 		JLabel lblFind = new JLabel("Find Projects:");
 		panel.add(lblFind, BorderLayout.WEST);
-		
+
 		textField = new JTextField();
 		panel.add(textField, BorderLayout.CENTER);
 		textField.setColumns(10);
-		
+
 		JButton btnSearch = new JButton("Search");
 		btnSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				ArrayList<Project> plist = new ArrayList<Project>();
-				try {
-					plist = ClientRequests.server.searchForProject(textField.getText());
-					foundedPrjctsPanel.removeAll();
-					foundedPrjctsPanel.updateUI();
-					if(plist!= null) foundedPrjctsPanel.putList(plist);
-				} catch (RemoteException e1) {
-					// TODO Auto-generated catch block
-					//e1.printStackTrace();
-					System.err.println(e1.getMessage());
-				}
-				
+				plist = RemoteRequests.searchForProject(textField.getText());
+				foundedPrjctsPanel.removeAll();
+				foundedPrjctsPanel.updateUI();
+				if (plist != null)
+					foundedPrjctsPanel.putList(plist);
 			}
 		});
 		panel.add(btnSearch, BorderLayout.EAST);
 		foundedPrjctsPanel = new PrjctsListPanel();
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setViewportBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		scrollPane.setViewportBorder(new SoftBevelBorder(BevelBorder.LOWERED,
+				null, null, null, null));
 		scrollPane.updateUI();
 		scrollPane.setAutoscrolls(true);
 		add(scrollPane, BorderLayout.CENTER);

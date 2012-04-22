@@ -10,7 +10,6 @@ import javax.swing.JTabbedPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.UIManager;
 import javax.swing.JScrollPane;
-import java.rmi.RemoteException;
 import java.util.ArrayList;
 import jmbs.client.ClientRequests;
 import jmbs.client.CurrentUser;
@@ -49,6 +48,9 @@ public class MainWindow {
 		return frmJmbsClient;
 	}
 
+	public static void initFrame() {
+		frmJmbsClient = null;
+	}
 	/**
 	 * Initialize the contents of the frame.
 	 * 
@@ -61,9 +63,7 @@ public class MainWindow {
 			@Override
 			public void windowClosing(WindowEvent e) {
 				frmJmbsClient.dispose();
-				
-					RemoteRequests.close(CurrentUser.getId());
-					
+				RemoteRequests.close(CurrentUser.getId());
 				System.exit(0);
 			}
 		});
@@ -79,52 +79,54 @@ public class MainWindow {
 		// frmJmbsClient.setLocationRelativeTo(null);
 		// frmJmbsClient.setVisible(true);
 		new SysConf().centerThisFrame(frmJmbsClient);
-		//menuBar = new MainMenuBar(this);
-		//frmJmbsClient.setJMenuBar(menuBar);
+		// menuBar = new MainMenuBar(this);
+		// frmJmbsClient.setJMenuBar(menuBar);
 		tabbedPane = new JTabbedPane(JTabbedPane.LEFT);
 		tabbedPane.setBorder(null);
 		tabbedPane.setToolTipText("JMBS");
 		frmJmbsClient.getContentPane().add(tabbedPane, BorderLayout.CENTER);
-		
-				timelinepanel = new TimeLinePanel();
-				nmFrame = new NewMessageFrame(timelinepanel);
-				JScrollPane tlscrollPane = new JScrollPane();
-				tabbedPane.addTab("TimeLine", null, tlscrollPane, null);
-				tlscrollPane.setAutoscrolls(true);
-				tlscrollPane.getVerticalScrollBar().setUnitIncrement(30);
-				tlscrollPane
-						.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-				tlscrollPane.setViewportView(timelinepanel);
+
+		timelinepanel = new TimeLinePanel();
+		nmFrame = new NewMessageFrame(timelinepanel);
+		JScrollPane tlscrollPane = new JScrollPane();
+		tabbedPane.addTab("TimeLine", null, tlscrollPane, null);
+		tlscrollPane.setAutoscrolls(true);
+		tlscrollPane.getVerticalScrollBar().setUnitIncrement(30);
+		tlscrollPane
+				.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		tlscrollPane.setViewportView(timelinepanel);
 
 		projectsPanel = new JPanel();
 		tabbedPane.addTab("Projects", null, projectsPanel, null);
-		
+
 		JTabbedPane tabbedPane_1 = new JTabbedPane(JTabbedPane.TOP);
-		
+
 		PrjctsTimeLinePanel prjctTLPanel = new PrjctsTimeLinePanel();
 		tabbedPane_1.addTab("TimeLine", null, prjctTLPanel, null);
-		
+
 		SearchProjectPanel searchPrjctPanel = new SearchProjectPanel();
 		tabbedPane_1.addTab("Search For Project", null, searchPrjctPanel, null);
-		
+
 		ParticipationsPrjcstPanel participationPrjctPanel = new ParticipationsPrjcstPanel();
-		tabbedPane_1.addTab("Participation", null, participationPrjctPanel, null);
-		
+		tabbedPane_1.addTab("Participation", null, participationPrjctPanel,
+				null);
+
 		MyProjectsPanel myPrjctPanel = new MyProjectsPanel();
 		tabbedPane_1.addTab("My Projects", null, myPrjctPanel, null);
 		GroupLayout gl_projectsPanel = new GroupLayout(projectsPanel);
-		gl_projectsPanel.setHorizontalGroup(
-			gl_projectsPanel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_projectsPanel.createSequentialGroup()
-					.addComponent(tabbedPane_1, GroupLayout.DEFAULT_SIZE, 440, Short.MAX_VALUE)
-					.addGap(0))
-		);
-		gl_projectsPanel.setVerticalGroup(
-			gl_projectsPanel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_projectsPanel.createSequentialGroup()
-					.addComponent(tabbedPane_1, GroupLayout.DEFAULT_SIZE, 997, Short.MAX_VALUE)
-					.addGap(7))
-		);
+		gl_projectsPanel.setHorizontalGroup(gl_projectsPanel
+				.createParallelGroup(Alignment.LEADING).addGroup(
+						gl_projectsPanel
+								.createSequentialGroup()
+								.addComponent(tabbedPane_1,
+										GroupLayout.DEFAULT_SIZE, 440,
+										Short.MAX_VALUE).addGap(0)));
+		gl_projectsPanel.setVerticalGroup(gl_projectsPanel.createParallelGroup(
+				Alignment.LEADING).addGroup(
+				gl_projectsPanel
+						.createSequentialGroup()
+						.addComponent(tabbedPane_1, GroupLayout.DEFAULT_SIZE,
+								997, Short.MAX_VALUE).addGap(7)));
 		projectsPanel.setLayout(gl_projectsPanel);
 
 		JPanel profpanel = new JPanel();
@@ -195,35 +197,28 @@ public class MainWindow {
 	public MainMenuBar getMenuBar() {
 		return menuBar;
 	}
-	
+
 	public void resetProfilePanel() {
 		ppanel.resetAll(CurrentUser.get());
-		uFrame = new UsersFrame(); // TODO:  Provisoir !
+		uFrame = new UsersFrame(); // TODO: Provisoir !
 	}
-	
+
 	public void setMenuBar() {
 		menuBar = new MainMenuBar(this);
 		frmJmbsClient.setJMenuBar(menuBar);
 	}
-	
-	public 	JTabbedPane getTabbedPane() {
+
+	public JTabbedPane getTabbedPane() {
 		return tabbedPane;
 	}
-	
+
 	public JPanel getProjectsPanel() {
 		return projectsPanel;
 	}
 
 	public void checkNewMessages(int idLastMsg) {
-		try {
-			msgListTL = new ClientRequests().getConnection().getLatestTL(
-					CurrentUser.getId(), idLastMsg,
-					ClientRequests.maxReceivedMsgs);
-			timelinepanel.putList(msgListTL);
-		} catch (RemoteException e1) {
-			// TODO Auto-generated catch block
-			// e1.printStackTrace();
-			System.out.println("Can't get last timeLine from server ");
-		}
+		msgListTL = RemoteRequests.getLatestTL(CurrentUser.getId(), idLastMsg,
+				ClientRequests.maxReceivedMsgs);
+		timelinepanel.putList(msgListTL);
 	}
 }

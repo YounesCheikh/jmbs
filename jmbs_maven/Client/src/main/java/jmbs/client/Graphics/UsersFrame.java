@@ -24,9 +24,7 @@ import java.awt.BorderLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.rmi.RemoteException;
 import java.util.ArrayList;
-
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
@@ -38,8 +36,8 @@ import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.border.EmptyBorder;
 
-import jmbs.client.ClientRequests;
 import jmbs.client.CurrentUser;
+import jmbs.client.RemoteRequests;
 import jmbs.client.SysConf;
 import jmbs.common.User;
 import net.miginfocom.swing.MigLayout;
@@ -67,7 +65,7 @@ public class UsersFrame extends JFrame {
 	public UsersFrame() {
 		setResizable(false);
 		setAlwaysOnTop(true);
-		//setLocationRelativeTo(new MainWindow().getFrame());
+		// setLocationRelativeTo(new MainWindow().getFrame());
 		setLocationRelativeTo(nameTextField);
 		setTitle("Users management ");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -96,15 +94,8 @@ public class UsersFrame extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				resultSearchPanel.removeAll();
 				ArrayList<User> usersList = null;
-				try {
-					usersList = new ClientRequests().getConnection()
-							.searchUser(nameTextField.getText(), 0);
-				} catch (RemoteException e1) {
-					// TODO Auto-generated catch block
-					// e1.printStackTrace();
-					System.out.println("Error while downloading user list\n"
-							+ e1.getMessage());
-				}
+				usersList = RemoteRequests.searchUser(nameTextField.getText(),
+						0);
 				if (usersList != null) {
 					resultSearchPanel.putList(usersList);
 				}
@@ -128,18 +119,11 @@ public class UsersFrame extends JFrame {
 				// if checkBox by name selected search by = 1
 				searchBy = byNameCheckBox.isSelected() ? searchBy + 1
 						: searchBy;
-				//if checkBox by forename selected searchby = seachby +2
+				// if checkBox by forename selected searchby = seachby +2
 				searchBy = chckbxByForeName.isSelected() ? searchBy + 2
 						: searchBy;
-				try {
-					usersList = new ClientRequests().getConnection()
-							.searchUser(nameTextField.getText(), searchBy);
-				} catch (RemoteException e1) {
-					// TODO Auto-generated catch block
-					// e1.printStackTrace();
-					System.out.println("Error while downloading user list\n"
-							+ e1.getMessage());
-				}
+				usersList = RemoteRequests.searchUser(nameTextField.getText(),
+						searchBy);
 				if (usersList != null) {
 					resultSearchPanel.putList(usersList);
 				}
@@ -185,7 +169,8 @@ public class UsersFrame extends JFrame {
 		followingPanel.add(topFlwngPanel, BorderLayout.NORTH);
 		topFlwngPanel.setLayout(new BorderLayout(0, 0));
 
-		lblPeopleYouFollow = new JLabel("People you follow: "+CurrentUser.getFollows().size());
+		lblPeopleYouFollow = new JLabel("People you follow: "
+				+ CurrentUser.getFollows().size());
 		lblPeopleYouFollow.setFont(new Font("Lucida Grande", Font.PLAIN, 15));
 		topFlwngPanel.add(lblPeopleYouFollow);
 
@@ -197,7 +182,8 @@ public class UsersFrame extends JFrame {
 				flwngUsrsLstPanel.repaint();
 				flwngUsrsLstPanel.validate();
 				flwngUsrsLstPanel.updateUI();
-				lblPeopleYouFollow.setText("People you follow: "+CurrentUser.getFollows().size());
+				lblPeopleYouFollow.setText("People you follow: "
+						+ CurrentUser.getFollows().size());
 			}
 		});
 		topFlwngPanel.add(btnRefresh, BorderLayout.EAST);
@@ -211,15 +197,7 @@ public class UsersFrame extends JFrame {
 
 		flwrLstPanel = new UsrLstPanel();
 		flwrList = new ArrayList<User>();
-		try {
-			flwrList = new ClientRequests().getConnection().getFollowers(
-					CurrentUser.get());
-		} catch (RemoteException e2) {
-			// TODO Auto-generated catch block
-			// e2.printStackTrace();
-			System.out.println("there is no follower!");
-		}
-
+		flwrList = RemoteRequests.getFollowers(CurrentUser.get());
 		flwrLstPanel.putList(flwrList);
 
 		flwrScrollPane.setViewportView(flwrLstPanel);
@@ -228,23 +206,16 @@ public class UsersFrame extends JFrame {
 		followersPanel.add(panel_1, BorderLayout.NORTH);
 		panel_1.setLayout(new BorderLayout(0, 0));
 
-		lblYourFollowers = new JLabel("Your Followers: "+flwrList.size());
+		lblYourFollowers = new JLabel("Your Followers: " + flwrList.size());
 		panel_1.add(lblYourFollowers);
 
 		JButton btnRefresh_1 = new JButton("Refresh");
 		btnRefresh_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				flwrLstPanel.removeAll();
-				try {
-					flwrList = new ClientRequests().getConnection()
-							.getFollowers(CurrentUser.get());
-					flwrLstPanel.putList(flwrList);
-				} catch (RemoteException e1) {
-					// TODO Auto-generated catch block
-					// e1.printStackTrace();
-					System.out.println("there is no follower!");
-				}
-				lblYourFollowers.setText("Your Followers: "+flwrList.size());
+				flwrList = RemoteRequests.getFollowers(CurrentUser.get());
+				flwrLstPanel.putList(flwrList);
+				lblYourFollowers.setText("Your Followers: " + flwrList.size());
 				flwrLstPanel.repaint();
 				flwrLstPanel.validate();
 				flwrLstPanel.updateUI();

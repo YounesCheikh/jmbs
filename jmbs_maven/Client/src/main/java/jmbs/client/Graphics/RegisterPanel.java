@@ -29,13 +29,13 @@ import javax.swing.JSeparator;
 import javax.swing.JButton;
 import java.awt.Color;
 import java.awt.Font;
-import java.rmi.RemoteException;
 import java.util.regex.Pattern;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
 import jmbs.client.ClientRequests;
 import jmbs.client.HashPassword;
+import jmbs.client.RemoteRequests;
 import jmbs.common.User;
 import net.miginfocom.swing.MigLayout;
 
@@ -70,7 +70,9 @@ public class RegisterPanel extends JPanel {
 	}
 
 	private boolean rightEmail() {
-		boolean correctMail = Pattern.matches("^[_a-z0-9-]+(\\.[_a-z0-9-]+)*@[a-z0-9-]+(\\.[a-z0-9-]+)+$", emailTextField.getText());
+		boolean correctMail = Pattern.matches(
+				"^[_a-z0-9-]+(\\.[_a-z0-9-]+)*@[a-z0-9-]+(\\.[a-z0-9-]+)+$",
+				emailTextField.getText());
 		return correctMail;
 	}
 
@@ -79,8 +81,10 @@ public class RegisterPanel extends JPanel {
 	}
 
 	private boolean confirmedPassword() {
-		String strPass = new HashPassword(listToString(passwordField.getPassword())).getHashed();
-		String strConfirmedPass = new HashPassword(listToString(confirmPasswordField.getPassword())).getHashed();
+		String strPass = new HashPassword(
+				listToString(passwordField.getPassword())).getHashed();
+		String strConfirmedPass = new HashPassword(
+				listToString(confirmPasswordField.getPassword())).getHashed();
 		return strPass.equals(strConfirmedPass);
 	}
 
@@ -172,7 +176,8 @@ public class RegisterPanel extends JPanel {
 		lblWelcomeToJmbs.setFont(new Font("Lucida Grande", Font.BOLD, 16));
 
 		ImagePanel panel = new ImagePanel("/img/jmbslogo_small.png");
-		setLayout(new MigLayout("", "[127px][18px][139px][1px][163px]", "[20px][156px][18px][18px][18px][12px][18px][18px][29px][12px][16px]"));
+		setLayout(new MigLayout("", "[127px][18px][139px][1px][163px]",
+				"[20px][156px][18px][18px][18px][12px][18px][18px][29px][12px][16px]"));
 		add(lblResp, "cell 0 10 5 1,growx,aligny top");
 		add(separator, "cell 0 9 5 1,growx,aligny top");
 		add(lblPassword, "cell 0 6,alignx left,aligny center");
@@ -199,7 +204,8 @@ public class RegisterPanel extends JPanel {
 		fnameTextField.setBorder(BorderFactory.createLineBorder(Color.GREEN));
 		emailTextField.setBorder(BorderFactory.createLineBorder(Color.GREEN));
 		passwordField.setBorder(BorderFactory.createLineBorder(Color.GREEN));
-		confirmPasswordField.setBorder(BorderFactory.createLineBorder(Color.GREEN));
+		confirmPasswordField.setBorder(BorderFactory
+				.createLineBorder(Color.GREEN));
 		boolean correctFields = true;
 		if (!rightName()) {
 			nameTextField.setBorder(BorderFactory.createLineBorder(Color.RED));
@@ -219,7 +225,8 @@ public class RegisterPanel extends JPanel {
 		}
 		if (!rightPassword(passwordField) || !confirmedPassword()) {
 			passwordField.setBorder(BorderFactory.createLineBorder(Color.RED));
-			confirmPasswordField.setBorder(BorderFactory.createLineBorder(Color.RED));
+			confirmPasswordField.setBorder(BorderFactory
+					.createLineBorder(Color.RED));
 			correctFields = false;
 		}
 		if (!correctFields) {
@@ -229,26 +236,27 @@ public class RegisterPanel extends JPanel {
 			lblResp.setText("Connection to server...");
 			lblResp.setForeground(new Color(0, 100, 0));
 			boolean emailAvailable = false;
-			try {
-				if (ClientRequests.server != null) {
-					emailAvailable = ClientRequests.server.createUser(new User(nameTextField.getText(), fnameTextField.getText(), emailTextField.getText()), new HashPassword(listToString(passwordField.getPassword())).getHashed());
-					if (!emailAvailable) {
-						emailTextField.setBorder(BorderFactory.createLineBorder(Color.RED));
-						lblResp.setText("Email in used!");
-						lblResp.setForeground(new Color(255, 0, 0));
 
-					} else {
-						RegistrationSuccessed rs = new RegistrationSuccessed(nameTextField.getText());
-						lblResp.setText("Right email");
-						lblResp.setForeground(new Color(0, 100, 0));
-						rf.setVisible(false);
-						rs.setVisible(true);
-					}
-				}
-			} catch (RemoteException e1) {
-				// emailAvailable = false;
+			emailAvailable = RemoteRequests.createUser(
+					new User(nameTextField.getText(), fnameTextField.getText(),
+							emailTextField.getText()), new HashPassword(
+							listToString(passwordField.getPassword()))
+							.getHashed());
+			if (!emailAvailable) {
+				emailTextField.setBorder(BorderFactory
+						.createLineBorder(Color.RED));
+				lblResp.setText("Email in used!");
+				lblResp.setForeground(new Color(255, 0, 0));
+
+			} else {
+				RegistrationSuccessed rs = new RegistrationSuccessed(
+						nameTextField.getText());
+				lblResp.setText("Right email");
+				lblResp.setForeground(new Color(0, 100, 0));
+				rf.setVisible(false);
+				rs.setVisible(true);
 			}
-			
+
 		}
 	}
 }
