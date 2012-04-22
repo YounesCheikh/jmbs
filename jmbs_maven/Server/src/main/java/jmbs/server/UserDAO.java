@@ -41,105 +41,155 @@ public class UserDAO extends DAO {
 	}
 
 	/**
-	 * Find a user using his database id.
+	 * Adds a new user in the Database.
 	 * 
-	 * @param userid
-	 *            database id of the user u want to find.
+	 * @param u
+	 *            the new user
+	 * @param pass
+	 *            the hashed password
+	 * @return true if editing DB succeeded
 	 */
-	public User getUser(int userid) {
-
-		User u = null;
-		set("SELECT * FROM users WHERE iduser=?;");
-		setInt(1, userid);
-		ResultSet res = executeQuery();
-
-		try {
-			u = new User(res.getString("name"), res.getString("forename"), res.getString("email"), userid);
-		} catch (SQLException e) {
-			System.out.println("No users with id equal to " + userid + " !");
+	public boolean addUser(User u, String pass) {
+		if (!checkMail(u.getMail()))
+		{
+			set("INSERT INTO users(name, forename, email, pass, picture) VALUES (?,?,?,?,?);");
+			setString(1,u.getName());
+			setString(2,u.getFname());
+			setString(3,u.getMail());
+			setString(4,pass);
+			setString(5,u.getPic());
+			return executeUpdate();
 		}
-
-		try {
-			res.close();
-		} catch (SQLException e) {
-			System.err.println("Database acess error !\n Unable to close connection !");
+		System.err.println("Email already used.");
+	
+		return false;
+	}
+	
+	public boolean changeMail(int userid, String pass, String mail){
+		boolean b = false;
+		if (checkPassword(userid, pass)){
+			set("UPDATE users SET mail=? WERE iduser = ?");
+			setString(1,mail);
+			setInt(2,userid);
+			b = executeUpdate();
 		}
-		return u;
+		return b;
+	}
+
+	public boolean changePassword(int userid, String oldPass, String newPass){
+		boolean b = false;
+		if (checkPassword(userid, oldPass)){
+			set("UPDATE users SET pass=? WERE iduser = ?");
+			setString(1,newPass);
+			setInt(2,userid);
+			b = executeUpdate();
+
+		}
+		
+		return b;
 	}
 
 	/**
-	 * Finds a user using his email.
+	 * Check if the password matches with the db one.
+	 * 
+	 * @param u
+	 *            User
+	 * @param pass
+	 *            String containing password
+	 * @return true - if the password matches
+	 * 
+	 */
+	public boolean checkPassword(User u, String pass) {
+		return checkPassword(u.getId(), pass);
+	}
+
+	/**
+	 * Check if the password matches with the db one.
+	 * 
+	 * @param u
+	 *            User
+	 * @param pass
+	 *            String containing password
+	 * @return true - if the password matches
+	 * 
+	 */
+	public boolean checkPassword(int iduser, String pass) {
+		boolean ret = false;
+		
+		set("SELECT pass FROM users WHERE iduser =?;");
+		setInt(1,iduser);
+		ResultSet res = executeQuery();
+	
+		try {
+			ret = res.getString("pass").equals(pass);
+			// TODO add connection log.
+		} catch (SQLException e) {
+			System.err.println("Invalid User.\n");
+		}
+	
+		return ret;
+	}
+
+	/**
+	 * Check if the email is already in use.
 	 * 
 	 * @param em
-	 *            email of the user.
-	 * @throws SQLException 
+	 *            String containing the email.
+	 * 
+	 * @return true if the email is used.
 	 */
-	public User getUser(String em) {
-		User u = null;
-		int userid = 0;
-		ResultSet res = null;
+	public boolean checkMail(String em) {
+		boolean ret = true;
 		
-		set("SELECT * FROM users WHERE email=? ;");
+		set("SELECT email FROM users WHERE email =?;");
 		setString(1,em);
-		res = executeQuery();
-		
-		try {
-			userid = res.getInt("iduser");
-			u = new User(res.getString("name"), res.getString("forename"), res.getString("email"), userid);
-		} catch (SQLException e) {
-			System.err.println("No user with " + em + " as email adress !\n");
-		}
-
-		try {
-			res.close();
-		} catch (SQLException e) {
-			System.err.println("Database acess error !\n Unable to close connection !");
-		}
-		
-		return u;
-	}
-
-	
-	/**
-	 * Returns all the projects a user is involved in.
-	 * 
-	 * @return Array of Projects
-	 */
-	public ArrayList<Project> getProjects(int userid) {
-		ArrayList<Project> p = new ArrayList<Project>();
-		
-		set("SELECT participate.idproject,name,idowner FROM participate,projects WHERE participate.iduser=? AND participate.idproject=projects.idproject;");
-		setInt(1,userid);
 		ResultSet res = executeQuery();
-
-		try {
-			do {	
-				p.add(new Project(res.getString("name"), res.getInt("idproject"), this.getUser(res.getInt("idowner"))));
-			} while (res.next());
-
-		} catch (SQLException e) {
-			System.err.println("This user has no projects/n ");
-			// TODO determine if this error is due to a wrong user name or a
-			// lack of projects.
-		}
-
-		try {
-			res.close();
-		} catch (SQLException e) {
-			System.err.println("Database acess error !\n Unable to close connection !");
-		}
-		
-		
-		return p;
-	}
 	
+		try {
+			res.getString("email");
+		} catch (SQLException e) { // Unused email
+			ret = false;
+		}
+	
+		return ret;
+	}
+
+	//TODO: check if not useless.
 	/**
-	 * Returns all the projects a user is involved in.
+	 * Says if the user exists in the database.
 	 * 
-	 * @return Array of Projects
+	 * @return true - if the user is registered in the database.
 	 */
-	public ArrayList<Project> getProjects(User u) {
-		return getProjects(u.getId());
+	public boolean exists(User u) {
+		boolean ret = false;
+		
+		set("SELECT * FROM users WHERE iduser=?;");
+		setInt(1,u.getId());
+		ResultSet res = executeQuery();
+	
+		try {
+			ret = res.getString("email").equals(u.getMail());
+		} catch (SQLException e) { // user does not exist
+			ret = false;
+		}
+	
+		return ret;
+	}
+
+	public boolean exists(int iduser){
+		set("SELECT email FROM users WHERE iduser=?");
+		setInt(1,iduser);
+		ResultSet res = executeQuery();
+		boolean ret = false;
+		
+		try {
+			res.getString("email");
+			ret = true;
+		} catch (SQLException e) { // user does not exist we can do something here if we really want to waste time ...
+			
+		}
+		
+		return ret;
 	}
 
 	// TODO add an option to list Users by second names...
@@ -176,150 +226,23 @@ public class UserDAO extends DAO {
 			errorMsg="No users found with name or second name containing  \"" + uName +"\"";
 		}
 		ResultSet res = executeQuery();
-
+	
 		try {
 			 do {
 					userid = res.getInt("iduser");
-					u.add(new User(res.getString("name"), res.getString("forename"), res.getString("email"), userid));
+					u.add(new User(res.getString("name"), res.getString("forename"), res.getString("email"), userid, res.getString("picture")));
 			} while (res.next());
 		} catch (SQLException e) {
 			System.err.println(errorMsg);
 		}
-
+	
 		try {
 			res.close();
 		} catch (SQLException e) {
 			System.err.println("Database acess error !\n Unable to close connection !");
 		}
-
+	
 		return u;
-	}
-
-	/**
-	 * Check if the password matches with the db one.
-	 * 
-	 * @param u
-	 *            User
-	 * @param pass
-	 *            String containing password
-	 * @return true - if the password matches
-	 * 
-	 */
-	public boolean checkPassword(User u, String pass) {
-		return checkPassword(u.getId(), pass);
-	}
-	
-	/**
-	 * Check if the password matches with the db one.
-	 * 
-	 * @param u
-	 *            User
-	 * @param pass
-	 *            String containing password
-	 * @return true - if the password matches
-	 * 
-	 */
-	public boolean checkPassword(int iduser, String pass) {
-		boolean ret = false;
-		
-		set("SELECT pass FROM users WHERE iduser =?;");
-		setInt(1,iduser);
-		ResultSet res = executeQuery();
-
-		try {
-			ret = res.getString("pass").equals(pass);
-			// TODO add connection log.
-		} catch (SQLException e) {
-			System.err.println("Invalid User.\n");
-		}
-
-		return ret;
-	}
-
-	/**
-	 * Check if the email is already in use.
-	 * 
-	 * @param em
-	 *            String containing the email.
-	 * 
-	 * @return true if the email is used.
-	 */
-	public boolean checkMail(String em) {
-		boolean ret = true;
-		
-		set("SELECT email FROM users WHERE email =?;");
-		setString(1,em);
-		ResultSet res = executeQuery();
-
-		try {
-			res.getString("email");
-		} catch (SQLException e) { // Unused email
-			ret = false;
-		}
-
-		return ret;
-	}
-
-	//TODO: check if not useless.
-	/**
-	 * Says if the user exists in the database.
-	 * 
-	 * @return true - if the user is registered in the database.
-	 */
-	public boolean exists(User u) {
-		boolean ret = false;
-		
-		set("SELECT * FROM users WHERE iduser=?;");
-		setInt(1,u.getId());
-		ResultSet res = executeQuery();
-
-		try {
-			ret = res.getString("email").equals(u.getMail());
-		} catch (SQLException e) { // user does not exist
-			ret = false;
-		}
-
-		return ret;
-	}
-	
-	public boolean exists(int iduser){
-		set("SELECT email FROM users WHERE iduser=?");
-		setInt(1,iduser);
-		ResultSet res = executeQuery();
-		boolean ret = false;
-		
-		try {
-			res.getString("email");
-			ret = true;
-		} catch (SQLException e) { // user does not exist we can do something here if we really want to waste time ...
-			
-		}
-		
-		return ret;
-	}
-
-	/**
-	 * Adds a new user in the Database.
-	 * 
-	 * @param u
-	 *            the new user
-	 * @param pass
-	 *            the hashed password
-	 * @return true if editing DB succeeded
-	 */
-	public boolean addUser(User u, String pass) {
-		if (!checkMail(u.getMail()))
-		{
-			set("INSERT INTO users(name, forename, email, pass) VALUES (?,?,?,?);");
-			setString(1,u.getName());
-			setString(2,u.getFname());
-			setString(3,u.getMail());
-			setString(4,pass);
-			return executeUpdate();
-		}
-		System.err.println("Email already used.");
-
-		return false;
 	}
 
 	/**
@@ -340,20 +263,39 @@ public class UserDAO extends DAO {
 		} else return false	;
 	}
 
-	/**
-	 * Set a user to stop following an other user.
-	 * 
-	 * @param idFollower
-	 * @param idFollowed
-	 * @return true if DB was editing DB succeeded
-	 */
-	public boolean unFollow(int idFollower, int idFollowed) {
-			set("DELETE FROM follows WHERE follower=? and followed=?;");
-			setInt(1,idFollower);
-			setInt(2,idFollowed);
-			boolean res = executeUpdate();
-			
-			return (res);
+	public int getAccessLevel (int iduser, int idproject){
+		int ret = -1;
+		if (this.exists(iduser) && (new ProjectDAO(super.con)).exists(idproject)) {
+			set("SELECT authlvl FROM participate WHERE iduser=? AND idproject=?");
+			setInt(1,iduser);
+			setInt(2,idproject);
+			ResultSet res = executeQuery();
+		
+			try {
+				ret = res.getInt("authlvl");
+			} catch (SQLException e) {
+				System.err.println("Unexcepted error !");
+			}
+		}
+		
+		return ret;
+	}
+
+	public int getAccessLevel (int iduser){
+		int ret = -1;
+		if (this.exists(iduser)) {
+			set("SELECT authlvl FROM users WHERE iduser=?");
+			setInt(1,iduser);
+			ResultSet res = executeQuery();
+		
+			try {
+				ret = res.getInt("authlvl");
+			} catch (SQLException e) {
+				System.err.println("Unexcepted error !");
+			}
+		}
+		
+		return ret;
 	}
 
 	/**
@@ -365,18 +307,18 @@ public class UserDAO extends DAO {
 	public ArrayList<User> getFollowed(User user) {
 		ArrayList<User> u = new ArrayList<User>();
 		
-		set("SELECT iduser,name,forename,email FROM users,follows WHERE follows.follower =? and follows.followed=users.iduser;");
+		set("SELECT * FROM users,follows WHERE follows.follower =? and follows.followed=users.iduser;");
 		setInt(1,user.getId());
 		ResultSet res = executeQuery();
-
+	
 		try {
 			do {
-				u.add(new User(res.getString("name"), res.getString("forename"), res.getString("email"), res.getInt("iduser")));
+				u.add(new User(res.getString("name"), res.getString("forename"), res.getString("email"), res.getInt("iduser"), res.getString("picture")));
 			} while (res.next());
 		} catch (SQLException e) {
 			System.err.println(user.getFname() + " does not follow anyone yet!");
 		}
-
+	
 		try {
 			res.close();
 		} catch (SQLException e) {
@@ -401,7 +343,7 @@ public class UserDAO extends DAO {
 		
 		try {
 			do {
-				u.add(new User(res.getString("name"), res.getString("forename"), res.getString("email"), res.getInt("iduser")));
+				u.add(new User(res.getString("name"), res.getString("forename"), res.getString("email"), res.getInt("iduser"), res.getString("picture")));
 			}while (res.next());
 		} catch (SQLException e) {
 			System.err.println(user.getFname() + " is not followed by anyone yet!");
@@ -414,7 +356,130 @@ public class UserDAO extends DAO {
 		
 		return u;
 	}
+
+	/**
+	 * Returns all the projects a user is involved in.
+	 * 
+	 * @return Array of Projects
+	 */
+	public ArrayList<Project> getProjects(int userid) {
+		ArrayList<Project> p = new ArrayList<Project>();
+		
+		set("SELECT projects.idowner,participate.idproject,name FROM participate,projects WHERE participate.iduser=? AND participate.idproject=projects.idproject;");
+		setInt(1,userid);
+		ResultSet res = executeQuery();
 	
+		try {
+			do {	
+				p.add(new Project(res.getString("name"), res.getInt("idproject"), this.getUser(res.getInt("idowner")),res.getInt("status")));
+			} while (res.next());
+	
+		} catch (SQLException e) {
+			System.err.println("This user has no projects/n ");
+			// TODO determine if this error is due to a wrong user name or a
+			// lack of projects.
+		}
+	
+		try {
+			res.close();
+		} catch (SQLException e) {
+			System.err.println("Database acess error !\n Unable to close connection !");
+		}
+		
+		
+		return p;
+	}
+
+	/**
+	 * Returns all the projects a user is involved in.
+	 * 
+	 * @return Array of Projects
+	 */
+	public ArrayList<Project> getProjects(User u) {
+		return getProjects(u.getId());
+	}
+	
+	public ArrayList<Project> getOwnedProject(User u){
+		return getOwnedProject(u.getId());
+	}
+	
+	public ArrayList<Project> getOwnedProject(int userid){
+		set("SELECT * FROM projects WHERE idowner=?;");
+		setInt(1,userid);
+		ResultSet rs = executeQuery();
+		
+		ArrayList<Project> pj = new ArrayList<Project>();
+		
+		try{
+			do{
+				pj.add(new Project(rs.getString("name"), rs.getInt("idproject"),getUser(userid),rs.getInt("status")));
+			}while(rs.next());
+			
+		}catch(SQLException e){
+			
+		}
+		return pj;
+	}
+
+	/**
+	 * Find a user using his database id.
+	 * 
+	 * @param userid
+	 *            database id of the user u want to find.
+	 */
+	public User getUser(int userid) {
+
+		User u = null;
+		set("SELECT * FROM users WHERE iduser=?;");
+		setInt(1, userid);
+		ResultSet res = executeQuery();
+
+		try {
+			u = new User(res.getString("name"), res.getString("forename"), res.getString("email"), userid, res.getString("picture"));
+		} catch (SQLException e) {
+			System.out.println("No users with id equal to " + userid + " !");
+		}
+
+		try {
+			res.close();
+		} catch (SQLException e) {
+			System.err.println("Database acess error !\n Unable to close connection !");
+		}
+		return u;
+	}
+
+	/**
+	 * Finds a user using his email.
+	 * 
+	 * @param em
+	 *            email of the user.
+	 * @throws SQLException 
+	 */
+	public User getUser(String em) {
+		User u = null;
+		int userid = 0;
+		ResultSet res = null;
+		
+		set("SELECT * FROM users WHERE email=?;");
+		setString(1,em);
+		res = executeQuery();
+		
+		try {
+			userid = res.getInt("iduser");
+			u = new User(res.getString("name"), res.getString("forename"), res.getString("email"), userid, res.getString("picture"));
+		} catch (SQLException e) {
+			System.err.println("No user with " + em + " as email adress !\n");
+		}
+
+		try {
+			res.close();
+		} catch (SQLException e) {
+			System.err.println("Database acess error !\n Unable to close connection !");
+		}
+		
+		return u;
+	}
+
 	
 	public boolean participate (int iduser, int idproject, int auth){
 		if (this.exists(iduser) && (new ProjectDAO(super.con)).exists(idproject)){ //if the project and the user exists.
@@ -427,11 +492,27 @@ public class UserDAO extends DAO {
 			return res;
 		} else return false;
 	}
-	
+
 	public boolean participate (int iduser, int idproject){
 		return this.participate(iduser, idproject,User.DEFAULT_AUTHORISATION_LEVEL);
 	}
-	
+
+	/**
+	 * Set a user to stop following an other user.
+	 * 
+	 * @param idFollower
+	 * @param idFollowed
+	 * @return true if DB was editing DB succeeded
+	 */
+	public boolean unFollow(int idFollower, int idFollowed) {
+			set("DELETE FROM follows WHERE follower=? and followed=?;");
+			setInt(1,idFollower);
+			setInt(2,idFollowed);
+			boolean res = executeUpdate();
+			
+			return (res);
+	}
+
 	public boolean unParticipate (int iduser, int idproject){
 		set("DELETE FROM participate WHERE iduser=? and idproject=?;");
 		setInt(1,iduser);
@@ -439,54 +520,5 @@ public class UserDAO extends DAO {
 		boolean res = executeUpdate();
 		
 		return (res);
-	}
-	
-	public int getAccessLevel (int iduser, int idproject){
-		int ret = -1;
-		if (this.exists(iduser) && (new ProjectDAO(super.con)).exists(idproject)) {
-			set("SELECT authlvl FROM participate WHERE iduser=? AND idproject=?");
-			setInt(1,iduser);
-			setInt(2,idproject);
-			ResultSet res = executeQuery();
-		
-			try {
-				ret = res.getInt("authlvl");
-			} catch (SQLException e) {
-				System.err.println("Unexcepted error !");
-			}
-		}
-		
-		return ret;
-	}
-	
-	public int getAccessLevel (int iduser){
-		int ret = -1;
-		if (this.exists(iduser)) {
-			set("SELECT authlvl FROM users WHERE iduser=?");
-			setInt(1,iduser);
-			ResultSet res = executeQuery();
-		
-			try {
-				ret = res.getInt("authlvl");
-			} catch (SQLException e) {
-				System.err.println("Unexcepted error !");
-			}
-		}
-		
-		return ret;
-	}
-	
-
-	public boolean changePassword(int userid, String oldPass, String newPass) throws SQLException{
-		boolean b = false;
-		if (checkPassword(userid, oldPass)){
-			set("UPDATE users SET pass=? WERE iduser = ?");
-			setString(1,newPass);
-			setInt(2,userid);
-			b = executeUpdate();
-			if (!b) throw new SQLException("Unable to change password in database for user id "+userid );
-		}
-		
-		return b;
 	}
 }

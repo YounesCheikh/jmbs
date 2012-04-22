@@ -22,11 +22,11 @@ package jmbs.server;
 
 import java.io.Serializable;
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
 
 /**
  * Contains all the possible ways to set a request to the db.
@@ -46,6 +46,61 @@ public abstract class DAO implements Serializable {
 	
 	public DAO(Connection c){
 		con = c;
+	}
+
+	protected void closeStatement(){
+		try {
+			if (stmt != null) {
+					stmt.close();
+					stmt = null;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.err.println("Unable to close Statement !");
+		}
+		
+	}
+
+	protected ResultSet executeQuery() {
+		ResultSet res = null;
+		try {
+			res = stmt.executeQuery();
+			res.next();
+		} catch (SQLException e) {
+			System.err.println("Unable to execute query.");
+			e.printStackTrace();
+		}
+	
+		return res;
+	}
+
+	protected boolean executeUpdate() {
+		boolean b;
+	
+		try {
+			stmt.executeUpdate();
+			b = true;
+		} catch (SQLException e) {
+			System.err.println("Unable to execute query.");
+			e.printStackTrace();
+			b = false;
+		}
+		
+		return b;
+	}
+
+	public Connection getConnection(){
+		return con;
+	}
+
+	protected ResultSet getGeneratedKeys() {
+		ResultSet res = null;
+		try {
+			res = stmt.getGeneratedKeys();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return res;
 	}
 
 	protected ResultSet send(String request){
@@ -81,6 +136,14 @@ public abstract class DAO implements Serializable {
 		}
 	}
 	
+	protected void setInt (int index,int i){
+		try {
+			stmt.setInt(index, i);
+		} catch (SQLException e) {
+			System.err.println("Unable to set int: "+ i);
+		}
+	}
+
 	protected void setString (int index,String s){
 		try {
 			stmt.setString(index,s);
@@ -89,74 +152,11 @@ public abstract class DAO implements Serializable {
 		}
 	}
 	
-	protected void setInt (int index,int i){
+	protected void setTimestamp(int index,Timestamp dt){
 		try {
-			stmt.setInt(index, i);
-		} catch (SQLException e) {
-			System.err.println("Unable to set int: "+ i);
-		}
-	}
-	
-	protected void setDate(int index,Date dt){
-		try {
-			stmt.setDate(index,dt);
+			stmt.setTimestamp(index,dt);
 		} catch (SQLException e) {
 			System.err.println("Unable to set date: "+ dt);
 		}
-	}
-	
-	protected ResultSet executeQuery() {
-		ResultSet res = null;
-		try {
-			res = stmt.executeQuery();
-			res.next();
-		} catch (SQLException e) {
-			System.err.println("Unable to execute query.");
-			e.printStackTrace();
-		}
-
-		return res;
-	}
-	
-	protected boolean executeUpdate() {
-		boolean b;
-
-		try {
-			stmt.executeUpdate();
-			b = true;
-		} catch (SQLException e) {
-			System.err.println("Unable to execute query.");
-			e.printStackTrace();
-			b = false;
-		}
-		
-		return b;
-	}
-	
-	protected ResultSet getGeneratedKeys() {
-		ResultSet res = null;
-		try {
-			res = stmt.getGeneratedKeys();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return res;
-	}
-	
-	protected void closeStatement(){
-		try {
-			if (stmt != null) {
-					stmt.close();
-					stmt = null;
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-			System.err.println("Unable to close Statement !");
-		}
-		
-	}
-	
-	public Connection getConnection(){
-		return con;
 	}
 }

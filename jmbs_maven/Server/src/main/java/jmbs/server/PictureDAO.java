@@ -39,6 +39,62 @@ public class PictureDAO extends DAO {
 		super(c);
 	}
 	
+	public boolean createUserRepertory(User u){
+		return createUserRepertory(u.getId());
+	}
+
+	public boolean createUserRepertory(int userid){
+		File f = new File(getRepertoryPath(userid));
+		boolean ret = false;
+		
+		if (!f.exists()){
+			ret = f.mkdir();
+		}
+		
+		return ret;
+	}
+
+	public boolean deleteUserRepertory(User u){
+		return deleteUserRepertory(u.getId());
+	}
+
+	public boolean deleteUserRepertory(int userid){
+		boolean ret = false;
+		File f = new File(getRepertoryPath(userid));
+		
+		if (f.isDirectory()){
+			File[] subfiles = f.listFiles();
+			String subfileName = new String ();
+		
+			for (File i:subfiles){
+				subfileName = i.getName();
+				i.delete();
+				System.out.println(subfileName + " deleted.");
+			}
+			if (ret=f.delete()) System.out.println(f.getName() + " deleted.");
+		}else {
+			System.err.println("This user has no avatar repertory.");
+		}
+		
+		return ret;
+	}
+
+	public BufferedImage getAvatar(User u){
+		return (getAvatar(u.getId(),u.getPic()));
+	}
+
+	public BufferedImage getAvatar(int iduser, String pic){
+		return (getPicture(getAvatarPath(iduser,pic)));
+	}
+
+	public String getAvatarPath(int userid, String name){
+		return (getRepertoryPath(userid) + name);
+	}
+
+	public String getName(String path){
+		return path.substring(path.lastIndexOf(DEFAULT_SEPARATOR)+1);
+	}
+
 	/**
 	 * Retruned image can be null ! 
 	 * @param path
@@ -60,24 +116,6 @@ public class PictureDAO extends DAO {
 		return (DEFAULT_PATH + DEFAULT_SEPARATOR + String.valueOf(userid) + DEFAULT_SEPARATOR);
 	}
 	
-	public String getAvatarPath(int userid, String name){
-		return (getRepertoryPath(userid) + name);
-	}
-	
-	public String getName(String path){
-		return path.substring(path.lastIndexOf(DEFAULT_SEPARATOR)+1);
-	}
-	
-	
-	public BufferedImage getAvatar(int iduser, String pic){
-		return (getPicture(getAvatarPath(iduser,pic)));
-	}
-	
-	public BufferedImage getAvatar(User u){
-		return (getAvatar(u.getId(),u.getPic()));
-	}
-	
-
 	public boolean setAvatar(int userid, BufferedImage img, String nom, boolean overwrite){
 		String path = getRepertoryPath(userid) + nom;
 		createUserRepertory(userid);
@@ -86,8 +124,6 @@ public class PictureDAO extends DAO {
 		File f = new File(path);
 		
 		if (!f.exists() || overwrite){
-			
-		
 			try {
 				ImageIO.write(img, DEFAULT_IMAGE_FORMAT, f);
 				ret = true;
@@ -111,50 +147,6 @@ public class PictureDAO extends DAO {
 	 */
 	public boolean setAvatar(User u, BufferedImage img, String nom, boolean overwrite){
 		return setAvatar(u.getId(),img,nom,overwrite);
-	}
-
-
-	
-
-	public boolean createUserRepertory(User u){
-		return createUserRepertory(u.getId());
-	}
-	
-
-	public boolean createUserRepertory(int userid){
-		File f = new File(getRepertoryPath(userid));
-		boolean ret = false;
-		
-		if (!f.exists()){
-			ret = f.mkdir();
-		}
-		
-		return ret;
-	}
-	
-	public boolean deleteUserRepertory(User u){
-		return deleteUserRepertory(u.getId());
-	}
-	
-	public boolean deleteUserRepertory(int userid){
-		boolean ret = false;
-		File f = new File(getRepertoryPath(userid));
-		
-		if (f.isDirectory()){
-			File[] subfiles = f.listFiles();
-			String subfileName = new String ();
-		
-			for (File i:subfiles){
-				subfileName = i.getName();
-				i.delete();
-				System.out.println(subfileName + " deleted.");
-			}
-			if (ret=f.delete()) System.out.println(f.getName() + " deleted.");
-		}else {
-			System.err.println("This user has no avatar repertory.");
-		}
-		
-		return ret;
 	}
 
 }

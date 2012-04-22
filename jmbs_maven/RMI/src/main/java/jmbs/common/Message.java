@@ -21,7 +21,7 @@
 package jmbs.common;
 
 import java.io.Serializable;
-import java.sql.Date;
+import java.sql.Timestamp;
 
 public class Message implements Serializable {
 
@@ -33,7 +33,7 @@ public class Message implements Serializable {
 	private int id;
 	private User owner;
 	private String message;
-	private Date datetime;
+	private Timestamp t;
 
 	public Message() {
 
@@ -53,9 +53,9 @@ public class Message implements Serializable {
 	 * @param t
 	 *            (String) title of the message
 	 */
-	public Message(int id, User o, String m, Date dt) {
+	public Message(int id, User o, String m, Timestamp dt) {
 		this.id = id;
-		this.datetime = dt;
+		this.t = dt;
 		this.message = m;
 		this.owner = o;
 	}
@@ -72,9 +72,9 @@ public class Message implements Serializable {
 	 * @param t
 	 *            (String) title of the message
 	 */
-	public Message(User o, String m, Date dt) {
+	public Message(User o, String m, Timestamp dt) {
 		this.id = 0;
-		this.datetime = dt;
+		this.t = dt;
 		this.message = m;
 		this.owner = o;
 	}
@@ -127,16 +127,16 @@ public class Message implements Serializable {
 	/**
 	 * @return the date & time
 	 */
-	public Date getDatetime() {
-		return datetime;
+	public Timestamp getTimestamp() {
+		return t;
 	}
 
 	/**
 	 * @param datetime
 	 *            the datetime to set
 	 */
-	public void setDatetime(Date datetime) {
-		this.datetime = datetime;
+	public void setTimestamp(Timestamp t) {
+		this.t = t;
 	}
 
 	/* (non-Javadoc)
@@ -144,7 +144,7 @@ public class Message implements Serializable {
 	 */
 	@Override
 	public String toString() {
-		return ("\nSent by " + owner.getFname() + " at " + datetime + ": " + message + "");
+		return ("\nSent by " + owner.getFname() + " at " + t + ": " + message + "");
 	}
 	
 

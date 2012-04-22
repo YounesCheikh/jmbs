@@ -7,7 +7,9 @@ public interface Security{
 	
 	public boolean isBanned (String ip);
 	
-	public boolean isConnectionAuthorized(ConnectionInformation i);
+	public boolean isUserConnectionAttemptAuthorized(String key);
+	
+	public boolean isConnectionToServerAuthorized(String ip);
 	
 	public boolean removeBan(String ip);	
 }

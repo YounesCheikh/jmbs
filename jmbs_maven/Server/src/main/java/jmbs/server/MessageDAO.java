@@ -52,7 +52,7 @@ public class MessageDAO extends DAO {
 		UserDAO uDAO = new UserDAO(this.getConnection());
 
 		try {
-			m = new Message(res.getInt("idmessage"), uDAO.getUser(res.getInt("iduser")), res.getString("content"), res.getDate("time"));
+			m = new Message(res.getInt("idmessage"), uDAO.getUser(res.getInt("iduser")), res.getString("content"), res.getTimestamp("time"));
 		} catch (SQLException e) {
 			System.out.println("No messages for id " + id + " !");
 		}
@@ -80,7 +80,7 @@ public class MessageDAO extends DAO {
 		UserDAO uDAO = new UserDAO(this.getConnection());
 
 		try {
-			m = new Message(res.getInt("idmessage"), uDAO.getUser(res.getInt("iduser")), res.getString("content"), res.getDate("time"));
+			m = new Message(res.getInt("idmessage"), uDAO.getUser(res.getInt("iduser")), res.getString("content"), res.getTimestamp("time"));
 		} catch (SQLException e) {
 			System.err.println("No messages by " + uDAO.getUser(iduser).getFname() + " !"); // :)
 		}
@@ -106,7 +106,7 @@ public class MessageDAO extends DAO {
 		int messageId = -1;
 		set("INSERT INTO message(content, \"time\", iduser) VALUES (?,?,?);");
 		setString(1, m.getMessage());
-		setDate(2, m.getDatetime());
+		setTimestamp(2, m.getTimestamp());
 		setInt(3, m.getOwner().getId());
 		boolean res = executeUpdate();
 
@@ -140,7 +140,7 @@ public class MessageDAO extends DAO {
 		try {
 			if (maxMsg > 0) {
 				do {
-					msgList.add(new Message(res.getInt("idmessage"), udao.getUser(res.getInt("iduser")), res.getString("content"), res.getDate("time")));
+					msgList.add(new Message(res.getInt("idmessage"), udao.getUser(res.getInt("iduser")), res.getString("content"), res.getTimestamp("time")));
 				} while (res.next());
 				//int i = 0;
 				while (msgList.size()>maxMsg) {
