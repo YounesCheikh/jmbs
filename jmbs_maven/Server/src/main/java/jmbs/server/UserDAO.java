@@ -59,10 +59,11 @@ public class UserDAO extends DAO {
 	 *            the new user
 	 * @param pass
 	 *            the hashed password
-	 * @return true if editing DB succeeded
+	 * @return true if the user was added false if the email is already used
 	 */
 	public boolean addUser(User u, String pass) {
-		if (!checkMail(u.getMail()))
+            boolean b = false;
+            if (!checkMail(u.getMail()))
 		{
 			set("INSERT INTO users(name, forename, email, pass, picture, authlvl) VALUES (?,?,?,?,?,?);");
 			setString(1,u.getName());
@@ -71,12 +72,40 @@ public class UserDAO extends DAO {
 			setString(4,pass);
 			setString(5,u.getPic());
                         setInt(6,DEFAULT_ACCESS_LEVEL);
-			return executeUpdate();
-		}
-		System.err.println("Email already used.");
+			b = executeUpdate();
+		}else {
+                    System.err.println("Email already used.");
+                }
+		
 	
-		return false;
+		return b;
 	}
+        
+        public boolean addUser(int adminId, User u, String pass, int authlvl) throws SecurityException{
+            boolean b = false;
+            SecurityDAO s =new SecurityDAO(con);
+            if (s.isAccessLevelSufficiant(adminId,ADMIN_ACCESS_LEVEL)){
+                if (s.getAccessLevel(adminId) <= authlvl){
+                    if (!checkMail(u.getMail()))
+                    {
+                                set("INSERT INTO users(name, forename, email, pass, picture, authlvl) VALUES (?,?,?,?,?,?);");
+                                setString(1,u.getName());
+                                setString(2,u.getFname());
+                                setString(3,u.getMail());
+                                setString(4,pass);
+                                setString(5,u.getPic());
+                                setInt(6,authlvl);
+                                b = executeUpdate();
+                    }else {
+                        System.err.println("Email already used.");
+                    }
+                }else throw new SecurityException("You cannot create a user with higher access level than you have.");
+            }else throw new SecurityException("You have not sufficient access level to do that !");	
+                
+
+            return b;
+        }
+	
         
         public boolean changeFname(int userid, String fname){
 		
@@ -259,7 +288,7 @@ public class UserDAO extends DAO {
 		try {
 			 do {
 					userid = res.getInt("iduser");
-					u.add(new User(res.getString("name"), res.getString("forename"), res.getString("email"), userid, res.getString("picture")));
+					u.add(new User(res.getString("name"), res.getString("forename"), res.getString("email"), userid, res.getString("picture"), res.getInt("authlvl")));
 			} while (res.next());
 		} catch (SQLException e) {
 			System.err.println(errorMsg);
@@ -325,7 +354,7 @@ public class UserDAO extends DAO {
 	
 		try {
 			do {
-				u.add(new User(res.getString("name"), res.getString("forename"), res.getString("email"), res.getInt("iduser"), res.getString("picture")));
+				u.add(new User(res.getString("name"), res.getString("forename"), res.getString("email"), res.getInt("iduser"), res.getString("picture"),res.getInt("authlvl")));
 			} while (res.next());
 		} catch (SQLException e) {
 			System.err.println(user.getFname() + " does not follow anyone yet!");
@@ -349,13 +378,13 @@ public class UserDAO extends DAO {
 	public ArrayList<User> getFollowers(User user) {
 		ArrayList<User> u = new ArrayList<User>();
 		
-		set("SELECT iduser,name,forename,email,picture FROM users,follows WHERE follows.followed =? and follows.follower=users.iduser;");
+		set("SELECT iduser,name,forename,email,picture,authlvl FROM users,follows WHERE follows.followed =? and follows.follower=users.iduser;");
 		setInt(1,user.getId());
 		ResultSet res = executeQuery();
 		
 		try {
 			do {
-				u.add(new User(res.getString("name"), res.getString("forename"), res.getString("email"), res.getInt("iduser"), res.getString("picture")));
+				u.add(new User(res.getString("name"), res.getString("forename"), res.getString("email"), res.getInt("iduser"), res.getString("picture"), res.getInt("authlvl")));
 			}while (res.next());
 		} catch (SQLException e) {
 			System.err.println(user.getFname() + " is not followed by anyone yet!");
@@ -447,7 +476,7 @@ public class UserDAO extends DAO {
 		ResultSet res = executeQuery();
 
 		try {
-			u = new User(res.getString("name"), res.getString("forename"), res.getString("email"), userid, res.getString("picture"));
+			u = new User(res.getString("name"), res.getString("forename"), res.getString("email"), userid, res.getString("picture"),res.getInt("authlvl"));
 		} catch (SQLException e) {
 			System.out.println("No users with id equal to " + userid + " !");
 		}
@@ -478,7 +507,7 @@ public class UserDAO extends DAO {
 		
 		try {
 			userid = res.getInt("iduser");
-			u = new User(res.getString("name"), res.getString("forename"), res.getString("email"), userid, res.getString("picture"));
+			u = new User(res.getString("name"), res.getString("forename"), res.getString("email"), userid, res.getString("picture"), res.getInt("authlvl"));
 		} catch (SQLException e) {
 			System.err.println("No user with " + em + " as email adress !\n");
 		}
@@ -512,6 +541,8 @@ public class UserDAO extends DAO {
             return res;
         }       
         
+        
+        
 	public boolean participate (int iduser, int idproject, int auth){
 		if (this.exists(iduser) && (new ProjectDAO(super.con)).exists(idproject)){ //if the project and the user exists.
 			set("INSERT INTO participate (iduser,idproject,authlvl) VALUES (?,?,?);");
@@ -525,7 +556,7 @@ public class UserDAO extends DAO {
 	}
 
 	public boolean participate (int iduser, int idproject){
-		return this.participate(iduser, idproject,User.DEFAULT_AUTHORISATION_LEVEL);
+		return this.participate(iduser, idproject,UserDAO.DEFAULT_ACCESS_LEVEL);
 	}
 
 	/**

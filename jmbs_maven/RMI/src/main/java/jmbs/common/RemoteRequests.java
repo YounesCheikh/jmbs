@@ -20,6 +20,7 @@
 
 package jmbs.common;
 
+import java.awt.image.BufferedImage;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.sql.SQLException;
@@ -217,4 +218,16 @@ public interface RemoteRequests extends Remote {
 	public void logOut(int iduser) throws RemoteException;
 	
 	public ArrayList<Project> getOwnedProject(int userid) throws RemoteException;
+        
+        public boolean changeAvatar(int userid, BufferedImage img, String nom, boolean overwrite) throws RemoteException;
+        
+        public boolean changeMail(int userid, String pass, String mail) throws RemoteException;
+        
+        public int addMessage(Message m, int projectId) throws RemoteException; 
+        
+        public boolean changFname(int userid, String fname) throws RemoteException;
+                
+        public boolean changName(int userid, String name) throws RemoteException;
+        
+        public boolean createUser(int userid, User u, String hashedPassword, int authlvl);
 }

@@ -54,41 +54,74 @@ public final class Configuration { /* Singleton pattern for configuration file. 
 	 * Creates the singleton Configuration.<br>
 	 * Should be launched only by the getInstance method.<br>
 	 * Follows the singleton pattern. 
+         * Configuration creation never fails, if it isn't loaded and if it will be
+         * logged and the default options will be forced.
 	 */
 	private Configuration() {
-		Properties prop = new Properties();
-
-		FileInputStream in = null;
-		try {
-			in = new FileInputStream(CONFIGURATION_FILE_PATH);
-			prop.load(in);
-			url = prop.getProperty("Url");
-			login = prop.getProperty("Login");
-			driver = prop.getProperty("Driver");
-			password = prop.getProperty("Password");
-			in.close();
-		} catch (FileNotFoundException e) { // Generating default configuration file if the file was not found.
-			System.out.println("Configuration file was not found. Default configuration file is beeing generated.");
-			File config = new File(CONFIGURATION_FILE_PATH);
-			try {
-				FileOutputStream out = new FileOutputStream(config);
-				prop.setProperty("Url", DEFAULT_URL);
-				prop.setProperty("Driver",DEFAUlT_DRIVER);
-				prop.setProperty("Login", DEFAULT_LOGIN);
-				prop.setProperty("Password", DEFAULT_PASSWORD);
-				prop.store(out, "[AUTO-GENERATED CONFIGURATION FILE]");
-				out.flush();
-				out.close();
-				System.out.println("Configuration file was sucessfully generated.");
-				getInstance();
-			} catch (IOException e1) {
-				System.err.println("Unable to generate configuration file.");
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
+            if (!loadCfg()) {
+                System.err.println("db.connect file not found: using default cfg");
+                forceDefaultCfg();
+            }
 	}
+        
+        /**
+         * Loads the configuration file in the single Configuration instance.
+         * If the file was not found it generates the file using a private
+         * method.
+         * 
+         * @return true if confing was loaded false if not
+         */
+        private boolean loadCfg() {
+            Properties prop = new Properties();
+            boolean b;
+            try{
+                FileInputStream in = new FileInputStream(CONFIGURATION_FILE_PATH);
+                prop.load(in);  
+                this.url = prop.getProperty("Url");
+                this.login = prop.getProperty("Login");
+                this.driver = prop.getProperty("Driver");
+                this.password = prop.getProperty("Password");
+                in.close();
+                b = true;
+            } catch (FileNotFoundException e) { // if the file was not found
+                generateDefaultCfg(); // we try to generate it
+                b = false;
+            } catch (IOException e) {
+                System.err.println("Unable to load the file check permission on "+CONFIGURATION_FILE_PATH);
+                b = false;
+            } 
+            return b;
+        }
+        
+        private boolean generateDefaultCfg(){
+            Properties prop = new Properties();
+            File config = new File(CONFIGURATION_FILE_PATH);
+            boolean b;
+            
+            try {
+                FileOutputStream out = new FileOutputStream(config);
+                prop.setProperty("Url", DEFAULT_URL);
+                prop.setProperty("Driver",DEFAUlT_DRIVER);
+                prop.setProperty("Login", DEFAULT_LOGIN);
+                prop.setProperty("Password", DEFAULT_PASSWORD);
+                prop.store(out, "[AUTO-GENERATED CONFIGURATION FILE]");
+                out.flush();
+                out.close();
+                System.out.println("Configuration file was sucessfully generated.");
+                b = true;
+            } catch (IOException e1) {
+                System.err.println("Unable to generate configuration file.");
+                b = false;
+            }
+            return b;
+        }
+        
+        private void forceDefaultCfg(){
+            this.url = DEFAULT_URL;
+            this.login = DEFAUlT_DRIVER;
+            this.driver = DEFAULT_LOGIN;
+            this.password = DEFAULT_PASSWORD;
+        }
 
 	/**
 	 * Creates the unique instance of Configuration if it does not already exist.

@@ -169,14 +169,11 @@ public class Requests extends UnicastRemoteObject implements RemoteRequests {
 	 * java.lang.String)
 	 */
 	public boolean createUser(User u, String hashedPassword) throws RemoteException {
-		boolean ret = false;
-		UserDAO udao = new UserDAO(con);
-		
-		if (!udao.checkMail(u.getMail())) {
-			ret = udao.addUser(u, hashedPassword);
-		}
-		
-		return ret;
+		return new UserDAO(con).addUser(u, hashedPassword);
+	}
+        
+        public boolean createUser(int userid, User u, String hashedPassword, int authlvl) throws RemoteException, SecurityException {
+            return new UserDAO(con).addUser(userid,u,hashedPassword,authlvl);
 	}
 
 	/*
@@ -240,7 +237,7 @@ public class Requests extends UnicastRemoteObject implements RemoteRequests {
 	}
 
 	public boolean participate (int iduser, int idproject){
-		return this.participate(iduser, idproject, User.DEFAULT_AUTHORISATION_LEVEL);
+		return this.participate(iduser, idproject, UserDAO.DEFAULT_ACCESS_LEVEL);
 	}
 
 	public ArrayList<Project> searchForProject(String likeName) throws RemoteException {

@@ -38,7 +38,7 @@ public class ProjectDAO extends DAO {
 	}
 
 	public boolean closeProject (int idproject){	
-		boolean ret = true;
+		boolean ret;
 			if (exists(idproject)){ // can be optimized
 				set ("UPDATE projects SET status = ? WHERE idproject = ?;");
 				setInt(1,Project.STATUS_CLOSED);
@@ -176,7 +176,7 @@ public class ProjectDAO extends DAO {
 	 */
 	public ArrayList<User> getUsers(int id) {
 		ArrayList<User> u = new ArrayList<User>();
-		int userid = 0;
+		int userid;
 		
 		set("SELECT participate.name,user.* FROM participate,user WHERE participate.idproject=? AND user.name=projects.name;");
 		setInt(1, id);
@@ -185,7 +185,7 @@ public class ProjectDAO extends DAO {
 		try {
 			do {
 				userid = res.getInt("iduser");
-				u.add(new User(res.getString("name"), res.getString("forename"), res.getString("email"), userid, res.getString("picture")));
+				u.add(new User(res.getString("name"), res.getString("forename"), res.getString("email"), userid, res.getString("picture"),res.getInt("authlvl")));
 			}while (res.next());
 
 		} catch (SQLException e) {
@@ -204,7 +204,7 @@ public class ProjectDAO extends DAO {
 		set("SELECT idowner FROM projects WHERE idproject=?;");
 		setInt(1,idproject);
 		ResultSet rs = executeQuery();
-		boolean b = false;
+		boolean b;
 		
 		try {
 			b = (iduser == rs.getInt("idowner"));
@@ -218,7 +218,7 @@ public class ProjectDAO extends DAO {
 		set("SELECT status FROM projects WHERE idproject=?;");
 		setInt(1,projectId);
 		ResultSet rs = executeQuery();
-		boolean b = false;
+		boolean b;
 		
 		try {
 			
