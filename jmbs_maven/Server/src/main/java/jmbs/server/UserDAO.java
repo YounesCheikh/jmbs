@@ -440,11 +440,11 @@ public class UserDAO extends DAO {
 		return getProjects(u.getId());
 	}
 	
-	public ArrayList<Project> getOwnedProject(User u){
-		return getOwnedProject(u.getId());
+	public ArrayList<Project> getOwnedProjects(User u){
+		return getOwnedProjects(u.getId());
 	}
 	
-	public ArrayList<Project> getOwnedProject(int userid){
+	public ArrayList<Project> getOwnedProjects(int userid){
 		set("SELECT * FROM projects WHERE idowner=?;");
 		setInt(1,userid);
 		ResultSet rs = executeQuery();

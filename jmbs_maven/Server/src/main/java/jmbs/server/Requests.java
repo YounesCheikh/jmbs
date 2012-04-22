@@ -214,6 +214,15 @@ public class Requests extends UnicastRemoteObject implements RemoteRequests {
 		
 		return ra;
 	}
+        
+        public ArrayList<Message> getLastetProjectTL(int iduser, int idlastmessage, int maxMsg, int idproject){
+            ArrayList<Message> ra = new ArrayList<Message>();
+            if (new ProjectDAO(con).isUserInvolved(idproject, iduser)){
+                ra = new MessageDAO(con).getMessages(iduser, idlastmessage, maxMsg, idproject);
+            }
+		
+            return ra;
+        }
 
 	public ArrayList<User> getProjectUsers (int idProject) throws RemoteException{
 		ProjectDAO pdao = new ProjectDAO(con);
@@ -280,8 +289,8 @@ public class Requests extends UnicastRemoteObject implements RemoteRequests {
 		return ret;							
 	}
 	
-	public ArrayList<Project> getOwnedProject(int userid) throws RemoteException{
-		return new UserDAO(con).getOwnedProject(userid);
+	public ArrayList<Project> getOwnedProjects(int userid) throws RemoteException{
+		return new UserDAO(con).getOwnedProjects(userid);
 	}
 	
 }

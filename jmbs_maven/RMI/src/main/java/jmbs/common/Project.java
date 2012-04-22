@@ -49,6 +49,7 @@ public class Project implements Serializable{
 	User owner;
 	String name;
 	int status = STATUS_OPENED; 
+        int numberOfUsers;
 	public final static int STATUS_OPENED = 1;
 	public final static int STATUS_CLOSED = 0;
 	// attributes below are not created by default because they are mostly unused or could trigger unwanted chained db access and object creation

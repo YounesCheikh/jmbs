@@ -25,8 +25,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import jmbs.common.Message;
 
 public class MessageDAO extends DAO {
@@ -54,7 +52,11 @@ public class MessageDAO extends DAO {
 		UserDAO uDAO = new UserDAO(this.getConnection());
 
 		try {
-			m = new Message(res.getInt("idmessage"), uDAO.getUser(res.getInt("iduser")), res.getString("content"), res.getTimestamp("time"));
+			m = new Message(res.getInt("idmessage"), 
+                                uDAO.getUser(res.getInt("iduser")), 
+                                res.getString("content"), 
+                                res.getTimestamp("time"),
+                                new ProjectDAO(con).findProject(res.getInt("idproject")));
 		} catch (SQLException e) {
 			System.out.println("No messages for id " + id + " !");
 		}
@@ -82,7 +84,10 @@ public class MessageDAO extends DAO {
 		UserDAO uDAO = new UserDAO(this.getConnection());
 
 		try {
-			m = new Message(res.getInt("idmessage"), uDAO.getUser(res.getInt("iduser")), res.getString("content"), res.getTimestamp("time"));
+			m = new Message(res.getInt("idmessage"), 
+                                uDAO.getUser(res.getInt("iduser")), 
+                                res.getString("content"), 
+                                res.getTimestamp("time"));
 		} catch (SQLException e) {
 			System.err.println("No messages by " + uDAO.getUser(iduser).getFname() + " !"); // :)
 		}
@@ -163,6 +168,51 @@ public class MessageDAO extends DAO {
 			if (maxMsg > 0) {
 				do {
 					msgList.add(new Message(res.getInt("idmessage"), udao.getUser(res.getInt("iduser")), res.getString("content"), res.getTimestamp("time")));
+				} while (res.next());
+				//int i = 0;
+				while (msgList.size()>maxMsg) {
+					msgList.remove(0);
+				}
+			}
+
+		} catch (SQLException e) {
+			System.out.println("There are no new messages !");
+		}
+		try {
+			res.close();
+		} catch (SQLException e) {
+			System.err.println("Database acess error !\n Unable to close connection !");
+		}
+
+		return msgList;
+	}
+        
+        public ArrayList<Message> getMessages(int idUser, int idlastmessage, int maxMsg, int idProject) {
+		ArrayList<Message> msgList = new ArrayList<Message>();
+
+		set("SELECT idmessage, content, \"time\", iduser "
+                        + "FROM message,follows "
+                        + "WHERE (((follows.followed = message.iduser "
+                        + "AND follows.follower=? "
+                        + "AND message.idproject=?) "
+                        + "OR message.iduser=?) AND idmessage>?) " 
+                        + "GROUP BY idmessage ORDER BY idmessage;");
+		setInt(1, idUser);
+                setInt(2,idProject);
+		setInt(3, idUser);
+		setInt(4, idlastmessage);
+		ResultSet res = executeQuery();
+
+		UserDAO udao = new UserDAO(con);
+
+		try {
+			if (maxMsg > 0) {
+				do {
+					msgList.add(new Message(res.getInt("idmessage"), 
+                                                udao.getUser(res.getInt("iduser")), 
+                                                res.getString("content"), 
+                                                res.getTimestamp("time"),
+                                                new ProjectDAO(con).findProject(idProject)));
 				} while (res.next());
 				//int i = 0;
 				while (msgList.size()>maxMsg) {

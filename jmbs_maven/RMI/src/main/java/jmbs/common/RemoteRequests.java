@@ -212,7 +212,7 @@ public interface RemoteRequests extends Remote {
 	 */
 	public void logOut(int iduser) throws RemoteException;
 	
-	public ArrayList<Project> getOwnedProject(int userid) throws RemoteException;
+	public ArrayList<Project> getOwnedProjects(int userid) throws RemoteException;
         
         public boolean changeAvatar(int userid, BufferedImage img, String nom, boolean overwrite) throws RemoteException;
         
@@ -225,4 +225,6 @@ public interface RemoteRequests extends Remote {
         public boolean changName(int userid, String name) throws RemoteException;
         
         public boolean createUser(int userid, User u, String hashedPassword, int authlvl) throws RemoteException, SecurityException;
+        
+        public ArrayList<Message> getLastetProjectTL(int iduser, int idlastmessage, int maxMsg, int idproject);
 }

@@ -228,4 +228,20 @@ public class ProjectDAO extends DAO {
 		}
 		return b;
 	}
+        
+        public boolean isUserInvolved(int idproject, int iduser){
+            boolean b;
+            set("SELECT idproject FROM projects WHERE idproject=? AND iduser=?;");
+            setInt(1,idproject);
+            setInt(2,iduser);
+            ResultSet rs = executeQuery();
+            
+            try{
+                rs.getInt("idproject");
+                b = true;
+            }catch (SQLException e){
+                b = false;
+            }
+            return b;
+        }
 }

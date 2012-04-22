@@ -34,6 +34,7 @@ public class Message implements Serializable {
 	private User owner;
 	private String message;
 	private Timestamp t;
+        private Project project;
 
 	public Message() {
 
@@ -53,11 +54,20 @@ public class Message implements Serializable {
 	 * @param t
 	 *            (String) title of the message
 	 */
-	public Message(int id, User o, String m, Timestamp dt) {
+	public Message(int id, User o, String m, Timestamp dt, Project p) {
 		this.id = id;
 		this.t = dt;
 		this.message = m;
 		this.owner = o;
+                this.project=p;
+	}
+        
+        public Message(int id, User o, String m, Timestamp dt) {
+		this.id = id;
+		this.t = dt;
+		this.message = m;
+		this.owner = o;
+                this.project=null;
 	}
 
 	/**
