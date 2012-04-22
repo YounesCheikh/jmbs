@@ -24,7 +24,6 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-
 import jmbs.common.Project;
 import jmbs.common.User;
 
@@ -337,7 +336,7 @@ public class UserDAO extends DAO {
 	public ArrayList<User> getFollowers(User user) {
 		ArrayList<User> u = new ArrayList<User>();
 		
-		set("SELECT iduser,name,forename,email FROM users,follows WHERE follows.followed =? and follows.follower=users.iduser;");
+		set("SELECT iduser,name,forename,email,picture FROM users,follows WHERE follows.followed =? and follows.follower=users.iduser;");
 		setInt(1,user.getId());
 		ResultSet res = executeQuery();
 		
