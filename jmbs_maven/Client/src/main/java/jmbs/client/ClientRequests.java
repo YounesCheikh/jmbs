@@ -64,7 +64,7 @@ public class ClientRequests {
 				server = (RemoteRequests) registry.lookup(key);
 
 			} catch (SecurityException se) {
-				new SayToUser(se.getMessage(), true);
+				SayToUser.error("SecurityException", se.getMessage());
 				server = null;
 			} catch (AccessException e) {
 				// TODO Auto-generated catch block

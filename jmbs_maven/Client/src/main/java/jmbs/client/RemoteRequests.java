@@ -19,7 +19,7 @@ public class RemoteRequests {
 		try {
 			retList = ClientRequests.server.getUserProjects(idUser);
 		} catch (RemoteException e) {
-			new SayToUser(e.getMessage(), true);
+			SayToUser.error("RemoteException", e.getMessage());
 		}
 		return retList;
 	}
@@ -28,7 +28,7 @@ public class RemoteRequests {
 		try {
 			ClientRequests.server.logOut(idUser);
 		} catch (RemoteException e) {
-			new SayToUser(e.getMessage(), true);
+			SayToUser.error("RemoteException", e.getMessage());
 		}
 	}
 
@@ -37,9 +37,9 @@ public class RemoteRequests {
 		try {
 			u = ClientRequests.server.connectUser(em, psw);
 		} catch (RemoteException e) {
-			new SayToUser(e.getMessage(), true);
+			SayToUser.error("RemoteException", e.getMessage());
 		} catch (SecurityException e) {
-			new SayToUser(e.getMessage(), true);
+			SayToUser.error("SecurityException", e.getMessage());
 		}
 		return u;
 	}
@@ -49,7 +49,7 @@ public class RemoteRequests {
 		try {
 			retVal = ClientRequests.server.follows(idfollower, idfollowed);
 		} catch (RemoteException e) {
-			new SayToUser(e.getMessage(), true);
+			SayToUser.error("RemoteException", e.getMessage());
 		}
 
 		return retVal;
@@ -60,7 +60,7 @@ public class RemoteRequests {
 		try {
 			retVal = ClientRequests.server.unFollow(idfollower, idfollowed);
 		} catch (RemoteException e) {
-			new SayToUser(e.getMessage(), true);
+			SayToUser.error("RemoteException", e.getMessage());
 		}
 
 		return retVal;
@@ -72,7 +72,7 @@ public class RemoteRequests {
 			try {
 				retVal = ClientRequests.server.close(idUser);
 			} catch (RemoteException e1) {
-				new SayToUser(e1.getMessage(), true);
+				SayToUser.error("RemoteException", e1.getMessage());
 			}
 		return retVal;
 	}
@@ -84,7 +84,7 @@ public class RemoteRequests {
 			retList = new ClientRequests().getConnection().getLatestTL(iduser,
 					idlastmessage, maxMsg);
 		} catch (RemoteException e1) {
-			new SayToUser(e1.getMessage(), true);
+			SayToUser.error("RemoteException", e1.getMessage());
 		}
 		return retList;
 	}
@@ -94,7 +94,7 @@ public class RemoteRequests {
 		try {
 			retVal = ClientRequests.server.addMessage(m);
 		} catch (RemoteException e1) {
-			new SayToUser("Can't send to server!\n" + e1.getMessage(), true);
+			SayToUser.error("RemoteException", e1.getMessage());
 		}
 		return retVal;
 	}
@@ -105,7 +105,7 @@ public class RemoteRequests {
 			if (ClientRequests.server != null)
 				retVal = ClientRequests.server.createUser(u, hashedpassword);
 		} catch (RemoteException e) {
-			new SayToUser(e.getMessage(), true);
+			SayToUser.error("RemoteException", e.getMessage());
 		}
 		return retVal;
 	}
@@ -115,7 +115,7 @@ public class RemoteRequests {
 		try {
 			retList = ClientRequests.server.searchUser(userName, 0);
 		} catch (RemoteException e) {
-			new SayToUser(e.getMessage(), true);
+			SayToUser.error("RemoteException", e.getMessage());
 		}
 		return retList;
 	}
@@ -125,7 +125,7 @@ public class RemoteRequests {
 		try {
 			retList = ClientRequests.server.getFollowers(u);
 		} catch (RemoteException e) {
-			new SayToUser(e.getMessage(), true);
+			SayToUser.error("RemoteException", e.getMessage());
 		}
 		return retList;
 	}
@@ -135,7 +135,7 @@ public class RemoteRequests {
 		try {
 			retVal = ClientRequests.server.createProject(name, iduser);
 		} catch (RemoteException e) {
-			new SayToUser(e.getMessage(), true);
+			SayToUser.error("RemoteException", e.getMessage());
 		}
 		return retVal;
 	}
@@ -145,7 +145,7 @@ public class RemoteRequests {
 		try {
 			retList = ClientRequests.server.searchForProject(likeName);
 		} catch (RemoteException e) {
-			new SayToUser(e.getMessage(), true);
+			SayToUser.error("RemoteException", e.getMessage());
 		}
 		return retList;
 	}
@@ -155,7 +155,7 @@ public class RemoteRequests {
 		try {
 			retVal = ClientRequests.server.unParticipate(idUser, idProject);
 		} catch (RemoteException e) {
-			new SayToUser(e.getMessage(), true);
+			SayToUser.error("RemoteException", e.getMessage());
 		}
 		return retVal;
 	}
@@ -165,7 +165,7 @@ public class RemoteRequests {
 		try {
 			retVal = ClientRequests.server.participate(idUser, idProject);
 		} catch (RemoteException e) {
-			new SayToUser(e.getMessage(), true);
+			SayToUser.error("RemoteException", e.getMessage());
 		}
 		return retVal;
 	}

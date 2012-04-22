@@ -53,10 +53,10 @@ public class MyProjectsPanel extends JPanel {
 				created = (RemoteRequests.createProject(
 						txtProjectName.getText(), CurrentUser.getId()) != null);
 				if (created)
-					new SayToUser("The project " + txtProjectName.getText()
-							+ " has been created", false);
+					SayToUser.success("Successed", "The project "
+							+ txtProjectName.getText() + " has been created");
 				else
-					new SayToUser("You don't have access to do this!", true);
+					SayToUser.error("Permission denied", "You don't have access to do this!");
 			}
 		});
 		topMyPrjctPanel.add(btnCreate, BorderLayout.EAST);

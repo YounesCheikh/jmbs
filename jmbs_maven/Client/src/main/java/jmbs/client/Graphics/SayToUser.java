@@ -20,13 +20,10 @@
 
 package jmbs.client.Graphics;
 
-import java.awt.BorderLayout;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import java.awt.event.ActionListener;
@@ -35,71 +32,110 @@ import java.awt.event.ActionEvent;
 import jmbs.client.SysConf;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.Color;
+import java.awt.Font;
+import javax.swing.JTextArea;
+import javax.swing.UIManager;
 
-public class SayToUser extends JDialog {
+public class SayToUser  {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 9145407301854671794L;
-	private final JPanel contentPanel = new JPanel();
+	private final static JPanel contentPanel = new JPanel();
 	private JButton cancelButton;
-
+	private static JDialog dialog;
+	private static JLabel lblTitleLabel;
+	private static JTextArea textArea;
+	private static ImagePanel panel;
 	/**
 	 * Create the dialog.
 	 */
-	public SayToUser(String msg, boolean error) {
-		if(error) {
-		setTitle("error");
-		}
-		else {
-			setTitle("Message from server:");
-		}
-		setAlwaysOnTop(true);
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setResizable(false);
-		//setBounds(100, 100, 360, 160);
-		setSize(360,160);
-		new SysConf().centerThisDialog(this);
-		getContentPane().setLayout(new BorderLayout());
+	public SayToUser() {
+		dialog = new JDialog();
+		dialog.setAlwaysOnTop(true);
+		dialog.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		dialog.setResizable(false);
+		dialog.setSize(460, 220);
+		new SysConf().centerThisDialog(dialog);
+		dialog.getContentPane().setLayout(null);
+		contentPanel.setBounds(0, 0, 460, 163);
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
-		getContentPane().add(contentPanel, BorderLayout.CENTER);
-		JLabel lblNewLabel = new JLabel(msg);
-		
-		//if (error) {
-			//lblNewLabel.setIcon(new ImageIcon(SayToUser.class.getResource("/com/sun/java/swing/plaf/gtk/resources/gtk-dialog-error-6.png")));
-	//	} else {
-		//	lblNewLabel.setIcon(new ImageIcon(SayToUser.class.getResource("/com/sun/java/swing/plaf/gtk/resources/gtk-yes-4.png")));
-		//}
+		dialog.getContentPane().add(contentPanel);
 
-		GroupLayout gl_contentPanel = new GroupLayout(contentPanel);
-		gl_contentPanel.setHorizontalGroup(gl_contentPanel.createParallelGroup(Alignment.LEADING).addGroup(gl_contentPanel.createSequentialGroup().addGap(31).addComponent(lblNewLabel).addContainerGap(85, Short.MAX_VALUE)));
-		gl_contentPanel.setVerticalGroup(gl_contentPanel.createParallelGroup(Alignment.LEADING).addGroup(Alignment.TRAILING, gl_contentPanel.createSequentialGroup().addContainerGap(36, Short.MAX_VALUE).addComponent(lblNewLabel).addGap(21)));
-		contentPanel.setLayout(gl_contentPanel);
+		panel = new ImagePanel("/img/warning_ico.png");
+		panel.setBounds(26, 17, 43, 39);
+		panel.setBackground(Color.WHITE);
+
+		lblTitleLabel = new JLabel("Title of message");
+		lblTitleLabel.setBounds(81, 28, 368, 20);
+		lblTitleLabel.setFont(new Font("Lucida Grande", Font.BOLD, 16));
+		contentPanel.setLayout(null);
+
+		textArea = new JTextArea();
+		textArea.setBackground(UIManager.getColor("Button.background"));
+		textArea.setBounds(11, 68, 438, 90);
+		textArea.setEditable(false);
+		textArea.setLineWrap(true);
+		contentPanel.add(textArea);
+		contentPanel.add(panel);
+		contentPanel.add(lblTitleLabel);
 		{
 			JPanel buttonPane = new JPanel();
-			getContentPane().add(buttonPane, BorderLayout.SOUTH);
+			buttonPane.setBounds(0, 163, 460, 35);
+			dialog.getContentPane().add(buttonPane);
 			{
 				cancelButton = new JButton("Okay!");
+				cancelButton.setBounds(182, 6, 80, 29);
 				cancelButton.addKeyListener(new KeyAdapter() {
 					@Override
 					public void keyTyped(KeyEvent e) {
-						dispose();
+						dialog.dispose();
 					}
 				});
 				cancelButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-						dispose();
+						dialog.dispose();
 					}
 				});
 				cancelButton.setActionCommand("Cancel");
 			}
-			GroupLayout gl_buttonPane = new GroupLayout(buttonPane);
-			gl_buttonPane.setHorizontalGroup(gl_buttonPane.createParallelGroup(Alignment.LEADING).addGroup(gl_buttonPane.createSequentialGroup().addGap(137).addComponent(cancelButton).addContainerGap(137, Short.MAX_VALUE)));
-			gl_buttonPane.setVerticalGroup(gl_buttonPane.createParallelGroup(Alignment.LEADING).addGroup(Alignment.TRAILING, gl_buttonPane.createSequentialGroup().addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).addComponent(cancelButton)));
-			buttonPane.setLayout(gl_buttonPane);
+			buttonPane.setLayout(null);
+			buttonPane.add(cancelButton);
 		}
-		setVisible(true);
+		
 	}
 
+	public static void error(String title, String message) {
+		dialog.setTitle("error: "+title);
+		contentPanel.remove(panel);
+		panel = new ImagePanel("/img/error_ico.png");
+		panel.setBounds(26, 17, 43, 39);
+		contentPanel.add(panel);
+		contentPanel.updateUI();
+		lblTitleLabel.setText(title);
+		textArea.setText(message);
+		dialog.setVisible(true);
+	}
+
+	public static void warning(String title, String message) {
+		dialog.setTitle("Warning: "+title);
+		contentPanel.remove(panel);
+		panel = new ImagePanel("/img/warning_ico.png");
+		panel.setBounds(26, 17, 43, 39);
+		contentPanel.add(panel);
+		contentPanel.updateUI();
+		lblTitleLabel.setText(title);
+		textArea.setText(message);
+		dialog.setVisible(true);
+	}
+
+	public static void success(String title, String message) {
+		dialog.setTitle("Success: "+title);
+		contentPanel.remove(panel);
+		panel = new ImagePanel("/img/success_ico.png");
+		panel.setBounds(26, 17, 43, 39);
+		contentPanel.add(panel);
+		contentPanel.updateUI();
+		lblTitleLabel.setText(title);
+		textArea.setText(message);
+		dialog.setVisible(true);
+	}
 }

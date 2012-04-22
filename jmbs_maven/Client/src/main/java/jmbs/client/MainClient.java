@@ -24,6 +24,7 @@ import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 import jmbs.client.Graphics.ConnectionFrame;
 import jmbs.client.Graphics.MainWindow;
+import jmbs.client.Graphics.SayToUser;
 
 public class MainClient {
 	private static MainWindow window;
@@ -63,6 +64,7 @@ public class MainClient {
 			}
 		}
 
+		new SayToUser();
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 				cf = new ConnectionFrame(window);
