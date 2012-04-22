@@ -13,7 +13,6 @@ import javax.swing.JScrollPane;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import jmbs.client.ClientRequests;
-import jmbs.client.CurrentUser;
 import jmbs.client.SysConf;
 import jmbs.client.Graphics.projects.MyProjectsPanel;
 import jmbs.client.Graphics.projects.ParticipationsPrjcstPanel;
@@ -55,7 +54,6 @@ public class MainWindow {
 	 */
 	private void initialize() {
 		msgListTL = new ArrayList<Message>();
-		currentUser = new CurrentUser().get();
 		frmJmbsClient = new JFrame();
 		ppanel = new ProfilePanel(currentUser);
 		about = new AboutFrame();
@@ -176,10 +174,6 @@ public class MainWindow {
 
 	public User getCurrentUser() {
 		return currentUser;
-	}
-	
-	public void setCurrentUser() {
-		currentUser = new CurrentUser().get(); 
 	}
 
 	public ArrayList<Message> getMsgListTL() {

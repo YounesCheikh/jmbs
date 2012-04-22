@@ -30,7 +30,6 @@ import javax.swing.ScrollPaneConstants;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.rmi.RemoteException;
-import java.sql.Date;
 
 import java.awt.Color;
 import java.awt.Point;
@@ -110,7 +109,7 @@ public class NewMessageFrame extends JFrame {
 				// prevent the to send the emepty and the very long messages (>600 chars) to the DB
 				if (textArea.getText().length() > 0 && textArea.getText().length()<=599) {
 					newMsgStr = textArea.getText();//replaceAll("'", "$'$");
-					Message m = new Message(new CurrentUser().get(), newMsgStr,
+					Message m = new Message(CurrentUser.get(), newMsgStr,
 							new Timestamp(Calendar.getInstance().getTimeInMillis()));
 					Integer getIdMsg = 0;
 					try {
@@ -126,7 +125,7 @@ public class NewMessageFrame extends JFrame {
 					System.out.println(""+getIdMsg);
 					if (!getIdMsg.equals(-1)) {
 						tlpanel.putMessage(new MsgPanel(new Message(
-								new CurrentUser().get(), textArea.getText(),
+								CurrentUser.get(), textArea.getText(),
 								new Timestamp(Calendar.getInstance().getTimeInMillis()))));
 						tlpanel.setLastIdMsg(getIdMsg);
 						textArea.setText("");

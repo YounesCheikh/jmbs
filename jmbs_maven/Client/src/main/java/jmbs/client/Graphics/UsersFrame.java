@@ -54,7 +54,6 @@ public class UsersFrame extends JFrame {
 	private UsrLstPanel resultSearchPanel;
 	private UsrLstPanel flwngUsrsLstPanel;
 	private UsrLstPanel flwrLstPanel;
-	private User currentUser = new CurrentUser().get();
 	ArrayList<User> flwrList;
 	private JCheckBox byNameCheckBox;
 	private JCheckBox chckbxByForeName;
@@ -178,14 +177,14 @@ public class UsersFrame extends JFrame {
 		followingPanel.add(flwngScrollPane, BorderLayout.CENTER);
 
 		flwngUsrsLstPanel = new UsrLstPanel();
-		flwngUsrsLstPanel.putList(currentUser.getFollows());
+		flwngUsrsLstPanel.putList(CurrentUser.getFollows());
 		flwngScrollPane.setViewportView(flwngUsrsLstPanel);
 
 		JPanel topFlwngPanel = new JPanel();
 		followingPanel.add(topFlwngPanel, BorderLayout.NORTH);
 		topFlwngPanel.setLayout(new BorderLayout(0, 0));
 
-		lblPeopleYouFollow = new JLabel("People you follow: "+currentUser.getFollows().size());
+		lblPeopleYouFollow = new JLabel("People you follow: "+CurrentUser.getFollows().size());
 		lblPeopleYouFollow.setFont(new Font("Lucida Grande", Font.PLAIN, 15));
 		topFlwngPanel.add(lblPeopleYouFollow);
 
@@ -193,11 +192,11 @@ public class UsersFrame extends JFrame {
 		btnRefresh.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				flwngUsrsLstPanel.removeAll();
-				flwngUsrsLstPanel.putList(currentUser.getFollows());
+				flwngUsrsLstPanel.putList(CurrentUser.getFollows());
 				flwngUsrsLstPanel.repaint();
 				flwngUsrsLstPanel.validate();
 				flwngUsrsLstPanel.updateUI();
-				lblPeopleYouFollow.setText("People you follow: "+currentUser.getFollows().size());
+				lblPeopleYouFollow.setText("People you follow: "+CurrentUser.getFollows().size());
 			}
 		});
 		topFlwngPanel.add(btnRefresh, BorderLayout.EAST);
@@ -213,7 +212,7 @@ public class UsersFrame extends JFrame {
 		flwrList = new ArrayList<User>();
 		try {
 			flwrList = new ClientRequests().getConnection().getFollowers(
-					currentUser);
+					CurrentUser.get());
 		} catch (RemoteException e2) {
 			// TODO Auto-generated catch block
 			// e2.printStackTrace();
@@ -237,7 +236,7 @@ public class UsersFrame extends JFrame {
 				flwrLstPanel.removeAll();
 				try {
 					flwrList = new ClientRequests().getConnection()
-							.getFollowers(currentUser);
+							.getFollowers(CurrentUser.get());
 					flwrLstPanel.putList(flwrList);
 				} catch (RemoteException e1) {
 					// TODO Auto-generated catch block

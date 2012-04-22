@@ -36,17 +36,6 @@ public class MainClient {
 
 	public static void main(String[] args) {
 
-		/*
-		 * FileInputStream propFile; try { propFile = new
-		 * FileInputStream("properties.cfg"); Properties p = new
-		 * Properties(System.getProperties()); p.load(propFile);
-		 * propFile.close(); System.setProperties(p); } catch
-		 * (FileNotFoundException e1) { // TODO Auto-generated catch block
-		 * //e1.printStackTrace(); System.err.println(e1.getMessage());
-		 * System.exit(-1); } catch (IOException e) { // TODO Auto-generated
-		 * catch block //e.printStackTrace();
-		 * System.err.println(e.getMessage()); System.exit(-1); }
-		 */
 		
 		System.setProperty("java.security.policy", ClassLoader
 				.getSystemResource("security.policy").toString());

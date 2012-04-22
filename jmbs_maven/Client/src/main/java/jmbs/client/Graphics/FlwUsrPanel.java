@@ -64,24 +64,23 @@ public class FlwUsrPanel extends JPanel {
 		tglbtnFollow.setHorizontalAlignment(SwingConstants.RIGHT);
 		tglbtnFollow.setAlignmentX(Component.RIGHT_ALIGNMENT);
 		// if the current user follows this user u, set this button as selected
-		if (new CurrentUser().get().getFollows().contains(u)) {
+		if (CurrentUser.getFollows().contains(u)) {
 			tglbtnFollow.setSelected(true);
 		}
 		tglbtnFollow.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
 				try {
-					User current = new CurrentUser().get();
 
-					if (!current.getFollows().contains(u)) {
+					if (!CurrentUser.getFollows().contains(u)) {
 						new ClientRequests().getConnection().follows(
-								current.getId(), u.getId());
-						current.getFollows().add(u);
+								CurrentUser.getId(), u.getId());
+						CurrentUser.getFollows().add(u);
 					}
 					else {
 						new ClientRequests().getConnection().unFollow(
-								current.getId(), u.getId());
-						current.getFollows().remove(u);
+								CurrentUser.getId(), u.getId());
+						CurrentUser.getFollows().remove(u);
 					}
 
 				} catch (RemoteException e1) {

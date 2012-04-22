@@ -49,6 +49,7 @@ import jmbs.client.ClientRequests;
 import jmbs.client.ServerConfig;
 import jmbs.client.SysConf;
 
+@SuppressWarnings("restriction")
 public class Preferences extends JFrame {
 
 	/**

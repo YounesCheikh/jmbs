@@ -36,7 +36,6 @@ import java.awt.event.ActionEvent;
 
 import jmbs.client.ClientRequests;
 import jmbs.client.HashPassword;
-import jmbs.common.RemoteServer;
 import jmbs.common.User;
 import net.miginfocom.swing.MigLayout;
 

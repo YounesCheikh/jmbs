@@ -5,7 +5,6 @@ import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JLabel;
 import java.awt.Font;
-import java.awt.PopupMenu;
 
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.JButton;
@@ -44,7 +43,7 @@ public class PrjctAdministration extends JPanel {
 		JButton btnClose = new JButton("Admin");
 		btnClose.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				 popupMenu.show(true);
+				 //popupMenu.show(true);
 			}
 		});
 		GroupLayout groupLayout = new GroupLayout(this);

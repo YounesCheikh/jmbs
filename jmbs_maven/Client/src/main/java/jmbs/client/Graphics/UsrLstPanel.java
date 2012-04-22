@@ -51,7 +51,7 @@ public class UsrLstPanel extends JPanel {
 		if (userList != null) {
 			for (User u : userList) {
 				// don't display the current user in the list
-				if (!u.equals(new CurrentUser().get()))
+				if (!u.equals(CurrentUser.get()))
 					putUser(new FlwUsrPanel(u));
 			}
 		}

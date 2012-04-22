@@ -39,7 +39,6 @@ import java.awt.event.ActionEvent;
 import jmbs.client.ClientRequests;
 import jmbs.client.CurrentUser;
 import jmbs.client.HashPassword;
-import jmbs.common.RemoteServer;
 import jmbs.common.User;
 import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
@@ -228,7 +227,7 @@ public class ConnectionPanel extends JPanel {
 
 		// Setting the frame Title
 		this.w.getFrame().setTitle(
-				"JMBS Client : " + new CurrentUser().get().getFullName());
+				"JMBS Client : " + CurrentUser.getFullName());
 		// Empty the List of messages if not
 		this.w.initMsgListTL();
 		// set the id of the last received message at 0
@@ -239,8 +238,6 @@ public class ConnectionPanel extends JPanel {
 		// Repante and revalidate the timeline panel
 		this.w.getTLPanel().repaint();
 		this.w.getTLPanel().revalidate();
-		// Set the new User on the Main window as the Owner
-		this.w.setCurrentUser();
 		// check for new messages from the server and display them on the
 		// timeline panel
 		this.w.checkNewMessages(0);
