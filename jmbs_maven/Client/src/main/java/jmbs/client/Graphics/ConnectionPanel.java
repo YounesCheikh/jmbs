@@ -25,7 +25,6 @@ import javax.swing.JLabel;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.rmi.RemoteException;
 import java.util.regex.Pattern;
 
 import javax.swing.JTextField;
@@ -39,6 +38,7 @@ import java.awt.event.ActionEvent;
 import jmbs.client.ClientRequests;
 import jmbs.client.CurrentUser;
 import jmbs.client.HashPassword;
+import jmbs.client.RemoteRequests;
 import jmbs.common.User;
 import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
@@ -82,7 +82,7 @@ public class ConnectionPanel extends JPanel {
 	public ConnectionPanel(MainWindow w, ConnectionFrame cf) {
 		this.w = w;
 		this.cf = cf;
-
+		new ClientRequests();
 		JLabel lblConnectToJmbs = new JLabel("Connect to JMBS");
 		lblConnectToJmbs.setFont(new Font("Dialog", Font.BOLD, 16));
 
@@ -192,31 +192,25 @@ public class ConnectionPanel extends JPanel {
 	 * this methode update the response Label 'respLabel'
 	 */
 	private void checkConnection() {
-		new ClientRequests();
+		
 		respLabel.setText("Connection to server...");
 		respLabel.setForeground(new Color(0, 100, 0));
 
-		try {
-			if (ClientRequests.server != null) {
-				User u = ClientRequests.server.connectUser(
-						this.emailTextField.getText(),
-						new HashPassword(listToString(passwordField
-								.getPassword())).getHashed());
-				if (u.getId() != -1) {
-					cf.dispose();
-					new CurrentUser(u);
-					this.initMainWindow();
-				} else if (u.getId() == -1) {
-					respLabel
-							.setText("Wrong password or wrong email, Please try again!");
-					respLabel.setForeground(new Color(200, 0, 0));
-				}
-			}
-		} catch (SecurityException se) {
-			new SayToUser(se.getMessage(), true);
-		} catch (RemoteException e) {
+		User u = RemoteRequests.connectUser(this.emailTextField.getText(),
+				new HashPassword(listToString(passwordField.getPassword()))
+						.getHashed());
+		if(u==null) {
 			respLabel.setText("Connection impossible...");
 			respLabel.setForeground(new Color(100, 0, 0));
+		}
+		else if (u.getId() != -1) {
+			cf.dispose();
+			new CurrentUser(u);
+			this.initMainWindow();
+		} else if (u.getId() == -1) {
+			respLabel
+					.setText("Wrong password or wrong email, Please try again!");
+			respLabel.setForeground(new Color(200, 0, 0));
 		}
 	}
 
@@ -224,8 +218,8 @@ public class ConnectionPanel extends JPanel {
 		this.w = new MainWindow(); // Initialize new Main Window
 
 		// Setting the frame Title
-		this.w.getFrame().setTitle(
-				"JMBS Client : " + CurrentUser.getFullName());
+		this.w.getFrame()
+				.setTitle("JMBS Client : " + CurrentUser.getFullName());
 		// Empty the List of messages if not
 		this.w.initMsgListTL();
 		// set the id of the last received message at 0
