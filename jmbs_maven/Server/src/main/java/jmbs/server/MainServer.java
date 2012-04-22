@@ -23,6 +23,10 @@ package jmbs.server;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.rmi.NoSuchObjectException;
+import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.server.UnicastRemoteObject;
 import java.sql.SQLException;
 import java.util.Properties;
 
@@ -55,7 +59,25 @@ public class MainServer {
 		}
 		//ClassLoader.getSystemClassLoader().getSystemResource("jmbs/common/");
 		 //System.setProperty("java.rmi.server.codebase",ClassLoader.getSystemResource("jmbs/common/").toString());
-
+		try {
+			UnicastRemoteObject.unexportObject(LocateRegistry.createRegistry(1099),true);
+		} catch (NoSuchObjectException e1) {
+			// TODO Auto-generated catch block
+			//e1.printStackTrace();
+			System.out.println(e1.getMessage());
+		} catch (RemoteException e1) {
+			// TODO Auto-generated catch block
+			//e1.printStackTrace();
+			System.out.println(e1.getMessage());
+		}
+		try {
+			LocateRegistry.createRegistry(1099);
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			//e.printStackTrace();
+			System.err.println("Failed to create a rigistry on port 1099.\nRMIREGISTRY already in used:\n"+e.getMessage());
+			System.exit(-1);
+		}
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 				ServerWindow window = new ServerWindow();

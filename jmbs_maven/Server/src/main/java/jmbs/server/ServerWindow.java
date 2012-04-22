@@ -32,11 +32,15 @@ import java.awt.Font;
 import net.miginfocom.swing.MigLayout;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.rmi.AccessException;
 import java.rmi.AlreadyBoundException;
+import java.rmi.NoSuchObjectException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
+import java.rmi.server.UnicastRemoteObject;
 
 import jmbs.common.RemoteServer;
 
@@ -71,6 +75,24 @@ public class ServerWindow {
 	 */
 	private void initialize() {
 		frmJmbsServerControl = new JFrame();
+		frmJmbsServerControl.addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				frmJmbsServerControl.dispose();
+				try {
+					UnicastRemoteObject.unexportObject(LocateRegistry.createRegistry(1099),true);
+				} catch (NoSuchObjectException e1) {
+					// TODO Auto-generated catch block
+					//e1.printStackTrace();
+					System.out.println(e1.getMessage());
+				} catch (RemoteException e1) {
+					// TODO Auto-generated catch block
+					//e1.printStackTrace();
+					System.out.println(e1.getMessage());
+				} 
+				System.exit(0);
+			}
+		});
 		frmJmbsServerControl.setResizable(false);
 		frmJmbsServerControl.setBackground(new Color(105, 105, 105));
 		frmJmbsServerControl.setAlwaysOnTop(true);
