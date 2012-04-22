@@ -20,6 +20,7 @@
 
 package jmbs.common;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 // TODO: check how it displays on jdoc. Update when the method for transferring objects will be created.
@@ -38,8 +39,12 @@ import java.util.ArrayList;
  * 
  * 
  */
-public class Project {
+public class Project implements Serializable{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -4499543532559102808L;
 	int id;
 	User owner;
 	String name;
