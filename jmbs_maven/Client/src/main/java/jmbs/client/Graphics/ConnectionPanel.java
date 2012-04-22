@@ -82,7 +82,6 @@ public class ConnectionPanel extends JPanel {
 	public ConnectionPanel(MainWindow w, ConnectionFrame cf) {
 		this.w = w;
 		this.cf = cf;
-		new ClientRequests();
 		JLabel lblConnectToJmbs = new JLabel("Connect to JMBS");
 		lblConnectToJmbs.setFont(new Font("Dialog", Font.BOLD, 16));
 
@@ -192,7 +191,7 @@ public class ConnectionPanel extends JPanel {
 	 * this methode update the response Label 'respLabel'
 	 */
 	private void checkConnection() {
-		
+		new ClientRequests();
 		respLabel.setText("Connection to server...");
 		respLabel.setForeground(new Color(0, 100, 0));
 

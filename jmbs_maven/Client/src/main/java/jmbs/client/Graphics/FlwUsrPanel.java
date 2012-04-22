@@ -24,7 +24,6 @@ import java.awt.Component;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.rmi.RemoteException;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -34,9 +33,8 @@ import javax.swing.JToggleButton;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.SwingConstants;
 import javax.swing.border.TitledBorder;
-
-import jmbs.client.ClientRequests;
 import jmbs.client.CurrentUser;
+import jmbs.client.RemoteRequests;
 import jmbs.common.User;
 
 public class FlwUsrPanel extends JPanel {
@@ -53,8 +51,7 @@ public class FlwUsrPanel extends JPanel {
 		setBorder(new TitledBorder(null, "", TitledBorder.LEADING,
 				TitledBorder.TOP, null, null));
 
-		ImagePanel panel = new ImagePanel("/img/avatar.jpg",
-				60, 60);
+		ImagePanel panel = new ImagePanel("/img/avatar.jpg", 60, 60);
 		panel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
 		JLabel lblYounesCheikh = new JLabel(u.getFullName());
@@ -71,49 +68,57 @@ public class FlwUsrPanel extends JPanel {
 		tglbtnFollow.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
-				try {
-
-					if (!CurrentUser.getFollows().contains(u)) {
-						ClientRequests.server.follows(
-								CurrentUser.getId(), u.getId());
-						CurrentUser.getFollows().add(u);
-					}
-					else {
-						ClientRequests.server.unFollow(
-								CurrentUser.getId(), u.getId());
-						CurrentUser.getFollows().remove(u);
-					}
-
-				} catch (RemoteException e1) {
-					// TODO Auto-generated catch block
-					// e1.printStackTrace();
-					System.out.println("Error: Can't follow this user\n"
-							+ e1.getMessage());
+				if (!CurrentUser.getFollows().contains(u)) {
+					RemoteRequests.follows(CurrentUser.getId(), u.getId());
+					CurrentUser.getFollows().add(u);
+				} else {
+					RemoteRequests.unFollow(CurrentUser.getId(), u.getId());
+					CurrentUser.getFollows().remove(u);
 				}
-
 			}
 		});
 		GroupLayout groupLayout = new GroupLayout(this);
-		groupLayout.setHorizontalGroup(
-			groupLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(groupLayout.createSequentialGroup()
-					.addComponent(panel, GroupLayout.PREFERRED_SIZE, 78, GroupLayout.PREFERRED_SIZE)
-					.addGap(18)
-					.addComponent(lblYounesCheikh, GroupLayout.DEFAULT_SIZE, 101, Short.MAX_VALUE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(tglbtnFollow, GroupLayout.PREFERRED_SIZE, 85, GroupLayout.PREFERRED_SIZE)
-					.addGap(0))
-		);
-		groupLayout.setVerticalGroup(
-			groupLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(groupLayout.createSequentialGroup()
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-							.addComponent(lblYounesCheikh, GroupLayout.PREFERRED_SIZE, 68, GroupLayout.PREFERRED_SIZE)
-							.addComponent(tglbtnFollow))
-						.addComponent(panel, GroupLayout.PREFERRED_SIZE, 68, GroupLayout.PREFERRED_SIZE))
-					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-		);
+		groupLayout.setHorizontalGroup(groupLayout.createParallelGroup(
+				Alignment.LEADING).addGroup(
+				groupLayout
+						.createSequentialGroup()
+						.addComponent(panel, GroupLayout.PREFERRED_SIZE, 78,
+								GroupLayout.PREFERRED_SIZE)
+						.addGap(18)
+						.addComponent(lblYounesCheikh,
+								GroupLayout.DEFAULT_SIZE, 101, Short.MAX_VALUE)
+						.addPreferredGap(ComponentPlacement.RELATED)
+						.addComponent(tglbtnFollow, GroupLayout.PREFERRED_SIZE,
+								85, GroupLayout.PREFERRED_SIZE).addGap(0)));
+		groupLayout
+				.setVerticalGroup(groupLayout
+						.createParallelGroup(Alignment.LEADING)
+						.addGroup(
+								groupLayout
+										.createSequentialGroup()
+										.addGroup(
+												groupLayout
+														.createParallelGroup(
+																Alignment.LEADING)
+														.addGroup(
+																groupLayout
+																		.createParallelGroup(
+																				Alignment.BASELINE)
+																		.addComponent(
+																				lblYounesCheikh,
+																				GroupLayout.PREFERRED_SIZE,
+																				68,
+																				GroupLayout.PREFERRED_SIZE)
+																		.addComponent(
+																				tglbtnFollow))
+														.addComponent(
+																panel,
+																GroupLayout.PREFERRED_SIZE,
+																68,
+																GroupLayout.PREFERRED_SIZE))
+										.addContainerGap(
+												GroupLayout.DEFAULT_SIZE,
+												Short.MAX_VALUE)));
 		setLayout(groupLayout);
 
 	}

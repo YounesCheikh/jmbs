@@ -194,6 +194,7 @@ public class RegisterPanel extends JPanel {
 	}
 
 	private void analysis() {
+		new ClientRequests();
 		nameTextField.setBorder(BorderFactory.createLineBorder(Color.GREEN));
 		fnameTextField.setBorder(BorderFactory.createLineBorder(Color.GREEN));
 		emailTextField.setBorder(BorderFactory.createLineBorder(Color.GREEN));

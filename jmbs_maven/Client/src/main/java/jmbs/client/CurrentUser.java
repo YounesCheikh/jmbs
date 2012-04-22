@@ -22,9 +22,7 @@
 package jmbs.client;
 
 import java.io.Serializable;
-import java.rmi.RemoteException;
 import java.util.ArrayList;
-
 import jmbs.common.Project;
 import jmbs.common.User;
 
@@ -39,13 +37,7 @@ public class CurrentUser implements Serializable {
 	public CurrentUser(User receivedUser) {
 		if (get()==null) {
 			CurrentUser.set(receivedUser);
-			try {
-				u.setProjects(ClientRequests.server.getUserProjects(u.getId()));
-			} catch (RemoteException e) {
-				// TODO Auto-generated catch block
-				//e.printStackTrace();
-				System.err.println(e.getMessage());
-			}
+			u.setProjects(RemoteRequests.getUserProjects(u.getId()));
 		}
 	}
 	
@@ -62,18 +54,9 @@ public class CurrentUser implements Serializable {
 	}
 	
 	public static void disconnect() {
-		try {
-			ClientRequests.server.logOut(u.getId());
-		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
-			//e.printStackTrace();
-			System.err.println(e.getMessage());
-		}
+		RemoteRequests.logOut(u.getId());
 		set(null);
 	}
-	
-	
-
 
 	/**
 	 * @return the name

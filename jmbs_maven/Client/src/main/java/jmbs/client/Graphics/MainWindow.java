@@ -14,6 +14,7 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 import jmbs.client.ClientRequests;
 import jmbs.client.CurrentUser;
+import jmbs.client.RemoteRequests;
 import jmbs.client.SysConf;
 import jmbs.client.Graphics.projects.MyProjectsPanel;
 import jmbs.client.Graphics.projects.ParticipationsPrjcstPanel;
@@ -60,14 +61,9 @@ public class MainWindow {
 			@Override
 			public void windowClosing(WindowEvent e) {
 				frmJmbsClient.dispose();
-				if (ClientRequests.server != null)
-					try {
-						ClientRequests.server.close(CurrentUser.getId());
-					} catch (RemoteException e1) {
-						// TODO Auto-generated catch block
-						// e1.printStackTrace();
-						System.out.println(e1.getMessage());
-					}
+				
+					RemoteRequests.close(CurrentUser.getId());
+					
 				System.exit(0);
 			}
 		});

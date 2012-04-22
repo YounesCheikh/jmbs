@@ -86,16 +86,6 @@ public class MainMenuBar extends JMenuBar {
 		mntmRefresh.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				mw.checkNewMessages(timelinepanel.getLastIdMsg());
-				/*
-				try {
-					msgListTL = new ClientRequests().getConnection().getLatestTL(currentUser.getId(), timelinepanel.getLastIdMsg(), ClientRequests.maxReceivedMsgs);
-					timelinepanel.putList(msgListTL);
-				} catch (RemoteException e1) {
-					// TODO Auto-generated catch block
-					// e1.printStackTrace();
-					System.out.println("Can't get last timeLine from server ");
-				}
-				*/
 			}
 		});
 		mnFile.add(mntmRefresh);
