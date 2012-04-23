@@ -154,23 +154,25 @@ public interface RemoteRequests extends Remote {
 	public boolean unParticipate(int idUser, int idProject) throws RemoteException ; 
 	
 	
-	/**
-	 * Create new project
-	 * @param name the project name
-	 * @return the created project
-	 * @throws RemoteException
-	 */
-	public Project createProject(String name,int iduser) throws RemoteException ;
+	 /**
+         * Creates a project under user's name if he is authorised to do so
+         * @param name - project name
+         * @param iduser - user's id
+         * @return 
+         * @throws SecurityException if user is not allowed to create Project
+         */
+	public Project createProject(String name,int iduser) throws RemoteException, SecurityException ;
 	
 	
-	/**
-	 * or Remove project, to prevent the users to participate and write new messages in a closed project
-	 * @param idUser user id , to confirm that the owner who want to close his project
-	 * @param idProject the project to close
-	 * @return true if project closed successfully 
-	 * @throws RemoteException
-	 */
-	public boolean closeProject(int idUser, int idProject) throws RemoteException ;
+        /**
+         * Closes a project if the user is authorized to close it.
+         * @param idUser - the user who wants to close the project
+         * @param idProject - the project to close
+         * @return true if the operation was sucessful
+         * @throws RemoteException 
+         * @throws SecurityException if user has not requiered access level
+         */
+	public boolean closeProject(int idUser, int idProject) throws RemoteException, SecurityException ;
 	
 	
 	/**
@@ -190,22 +192,15 @@ public interface RemoteRequests extends Remote {
 	public ArrayList<User> getProjectUsers (int idProject) throws RemoteException ;
 	
 	/**
-	 * Close the connection and return a boolean saying if the connection was closed or not.
-	 * @return boolean - true if the connection was closed - false if not
-	 */
-	public boolean close(int userid) throws RemoteException;
-	
-	/**
-	 * Changes the password of the given user.
-	 * 
-	 * @param userid id of the user whose pass u want to change
-	 * @param oldPass old pass for this user
-	 * @param newPass new pass
-	 * @return true if everything was alright false if the old password is wrong.
-	 * @throws RemoteException
-	 * @throws SQLException if it was unable to change the password
-	 */
-	public boolean changePassword(int userid, String oldPass, String newPass) throws RemoteException, SQLException;
+         * Changes the user's password.<br>
+         * It requires the old password.
+         * @param userid - the user id
+         * @param oldPass - the old password
+         * @param newPass - the new password
+         * @return true if change was sucessful 
+         * @throws RemoteException 
+         */
+	public boolean changePassword(int userid, String oldPass, String newPass) throws RemoteException;
 	
 	/**
 	 * logs out a user
@@ -226,5 +221,7 @@ public interface RemoteRequests extends Remote {
         
         public boolean createUser(int userid, User u, String hashedPassword, int authlvl) throws RemoteException, SecurityException;
         
-        public ArrayList<Message> getLastetProjectTL(int iduser, int idlastmessage, int maxMsg, int idproject);
+        public ArrayList<Message> getLastetProjectTL(int iduser, int idlastmessage, int maxMsg, int idproject) throws RemoteException;
+        
+        public boolean close() throws RemoteException;
 }

@@ -35,6 +35,8 @@ public class Message implements Serializable {
 	private String message;
 	private Timestamp t;
         private Project project;
+        private User editUser = null;
+        private Timestamp editTime = null;
 
 	public Message() {
 
@@ -43,23 +45,26 @@ public class Message implements Serializable {
 	/**
 	 * Creates a message knowing all informations.
 	 * 
-	 * @param id
+	 * @param idmessage
 	 *            (int) message id given by the db
-	 * @param o
+	 * @param owner
 	 *            (User) Owner of the message
-	 * @param m
+	 * @param content
 	 *            (String) Body of the message
 	 * @param dt
 	 *            (Date) date of creation
 	 * @param t
 	 *            (String) title of the message
 	 */
-	public Message(int id, User o, String m, Timestamp dt, Project p) {
-		this.id = id;
-		this.t = dt;
-		this.message = m;
-		this.owner = o;
+	public Message(int idmessage, User owner, String content, Timestamp createDate, Project p, User editUser, Timestamp editTime) {
+		this.id = idmessage;
+		this.t = createDate;
+		this.message = content;
+		this.owner = owner;
                 this.project=p;
+                this.editUser=editUser;
+                this.editTime=editTime;
+                
 	}
         
         public Message(int id, User o, String m, Timestamp dt) {
