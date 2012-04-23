@@ -1,8 +1,8 @@
 package jmbs.server;
 
 import java.util.HashMap;
-
 import jmbs.common.ConnectionInformation;
+
 //TODO make the class thread safe.
 /**
  * This class implements a server monitor which will keep in trace of every current established connections to the server.
@@ -41,16 +41,20 @@ public final class ServerMonitor {
 	 * 
 	 * @param key
 	 */
-	public void endConnection(String key){
-		if (this.activeConnections.containsKey(key)) this.activeConnections.remove(key);
+	public boolean endConnection(String key){
+		if (this.activeConnections.containsKey(key)){
+                    logOut(this.activeConnections.get(key).getConnectionInformations().getUserId()); 
+                    this.activeConnections.remove(key);
+                }
+                return true; // for future improvement
 	}
 	
 	/**
 	 * Gets the instance of the singleton ServerMonitor.
 	 * @return ServerMonitor current instance
 	 */
-	public final static ServerMonitor getInstance(){
-		if (instance == null) {
+	public static ServerMonitor getInstance(){
+		if (instance == null) { // sometimes we don't need to synchronize
 			synchronized (Configuration.class) {
 				if (instance == null)
 					instance = new ServerMonitor();
@@ -63,7 +67,7 @@ public final class ServerMonitor {
 	 * Generates a random key which is not yet used and returns it as a string.
 	 * @return String - the new key
 	 */
-	public String generateKey(){
+	public synchronized String generateKey(){
 		int key = 0;
 		String keyString;
 		do{
@@ -121,9 +125,11 @@ public final class ServerMonitor {
 	 * Logs a user out.
 	 * @param userId - the connection k
 	 */
-	public void logOut (int userId){
+	public synchronized void logOut (int userId){
 		String key = this.connectedUsers.get(userId);
-		this.activeConnections.get(key).getConnectionInformations().logOut();
+		if (this.activeConnections.containsKey(key)) { // if connection was closed before user is logged out.
+                    this.activeConnections.get(key).getConnectionInformations().logOut();
+                }
 		this.connectedUsers.remove(userId);
 	}
 	
@@ -132,7 +138,7 @@ public final class ServerMonitor {
 	 * @param userId - the user id
 	 * @param key - the user ip address
 	 */
-	public void logIn(int userId, String key) throws SecurityException{
+	public synchronized void logIn(int userId, String key) throws SecurityException{
 		if (!activeConnections.containsKey(key)) throw new SecurityException("Illegal user trying to connect.\n Try to restart your application \n If the problem presists contact your administator.");
 		if (isAcountActive(userId)) logOut(userId);
 		this.activeConnections.get(key).getConnectionInformations().logIn(userId);

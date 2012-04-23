@@ -26,6 +26,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import jmbs.common.Message;
+import jmbs.common.Project;
+import jmbs.common.User;
 
 public class MessageDAO extends DAO {
 
@@ -37,26 +39,43 @@ public class MessageDAO extends DAO {
 	public MessageDAO(Connection c) {
 		super(c);
 	}
+        
+        private Message createMessage(ResultSet rs) throws SQLException{
+            UserDAO uDAO = new UserDAO(con);
+            ProjectDAO pDAO = new ProjectDAO(con);
+            Message m;
+            User editUser = null;
+            Project p = null;
+            User owner = uDAO.getUser(rs.getInt("iduser"));
+             
+            
+            int projectId = rs.getInt("idproject");
+            int editUserId = rs.getInt("idedituser");
+            if (editUserId != 0) editUser = uDAO.getUser(editUserId);
+            if (projectId != 0) p = pDAO.findProject(projectId);
+            
+            m = new Message(rs.getInt("idmessage"), 
+                            owner,
+                            rs.getString("content"),
+                            rs.getTimestamp("time"),
+                            p,
+                            editUser,
+                            rs.getTimestamp("edittime"));
+                            
+            return m;                   
+        }
 
 	/**
 	 * @param id
 	 * @return
 	 */
 	public Message getMessage(int id) {
-		Message m = null;
-
 		set("SELECT * FROM message WHERE idmessage=?;");
 		setInt(1, id);
 		ResultSet res = executeQuery();
-
-		UserDAO uDAO = new UserDAO(this.getConnection());
-
+                Message m = null;
 		try {
-			m = new Message(res.getInt("idmessage"), 
-                                uDAO.getUser(res.getInt("iduser")), 
-                                res.getString("content"), 
-                                res.getTimestamp("time"),
-                                new ProjectDAO(con).findProject(res.getInt("idproject")));
+                    m = createMessage(res);
 		} catch (SQLException e) {
 			System.out.println("No messages for id " + id + " !");
 		}
@@ -141,7 +160,7 @@ public class MessageDAO extends DAO {
                 } 
 		return messageId;
 	}
-
+        
 	/**
 	 * @param iduser
 	 * @param idlastmessage
@@ -167,7 +186,7 @@ public class MessageDAO extends DAO {
 		try {
 			if (maxMsg > 0) {
 				do {
-					msgList.add(new Message(res.getInt("idmessage"), udao.getUser(res.getInt("iduser")), res.getString("content"), res.getTimestamp("time")));
+					msgList.add(createMessage(res));
 				} while (res.next());
 				//int i = 0;
 				while (msgList.size()>maxMsg) {
@@ -190,7 +209,7 @@ public class MessageDAO extends DAO {
         public ArrayList<Message> getMessages(int idUser, int idlastmessage, int maxMsg, int idProject) {
 		ArrayList<Message> msgList = new ArrayList<Message>();
 
-		set("SELECT idmessage, content, \"time\", iduser "
+		set("SELECT message.* "
                         + "FROM message,follows "
                         + "WHERE (((follows.followed = message.iduser "
                         + "AND follows.follower=? "
@@ -208,11 +227,7 @@ public class MessageDAO extends DAO {
 		try {
 			if (maxMsg > 0) {
 				do {
-					msgList.add(new Message(res.getInt("idmessage"), 
-                                                udao.getUser(res.getInt("iduser")), 
-                                                res.getString("content"), 
-                                                res.getTimestamp("time"),
-                                                new ProjectDAO(con).findProject(idProject)));
+					msgList.add(createMessage(res));
 				} while (res.next());
 				//int i = 0;
 				while (msgList.size()>maxMsg) {
