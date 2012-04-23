@@ -66,11 +66,11 @@ public class RemoteRequests {
 		return retVal;
 	}
 
-	public static boolean close(int idUser) {
+	public static boolean close() {
 		boolean retVal = false;
 		if (ClientRequests.server != null)
 			try {
-				retVal = ClientRequests.server.close(idUser);
+				retVal = ClientRequests.server.close();
 			} catch (RemoteException e1) {
 				SayToUser.error("RemoteException", e1.getMessage());
 			}

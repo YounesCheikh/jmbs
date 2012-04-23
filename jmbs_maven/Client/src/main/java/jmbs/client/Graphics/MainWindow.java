@@ -63,7 +63,7 @@ public class MainWindow {
 			@Override
 			public void windowClosing(WindowEvent e) {
 				frmJmbsClient.dispose();
-				RemoteRequests.close(CurrentUser.getId());
+				RemoteRequests.close();
 				System.exit(0);
 			}
 		});

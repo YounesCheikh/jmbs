@@ -26,7 +26,6 @@ import java.rmi.RMISecurityManager;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
-
 import jmbs.client.Graphics.SayToUser;
 import jmbs.common.RemoteRequests;
 import jmbs.common.RemoteServer;
