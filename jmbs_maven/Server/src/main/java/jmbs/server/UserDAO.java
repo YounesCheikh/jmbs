@@ -109,7 +109,7 @@ public class UserDAO extends DAO {
         
         public boolean changeFname(int userid, String fname){
 		
-		set("UPDATE users SET forename=? WERE iduser = ?");
+		set("UPDATE users SET forename=? WHERE iduser=?;");
 		setString(1,fname);
 		setInt(2,userid);
 		return executeUpdate();
@@ -118,7 +118,7 @@ public class UserDAO extends DAO {
 	public boolean changeMail(int userid, String pass, String mail){
 		boolean b = false;
 		if (checkPassword(userid, pass)){
-			set("UPDATE users SET mail=? WERE iduser = ?");
+			set("UPDATE users SET mail=? WHERE iduser=?;");
 			setString(1,mail);
 			setInt(2,userid);
 			b = executeUpdate();
@@ -128,7 +128,7 @@ public class UserDAO extends DAO {
         
         public boolean changeName(int userid, String name){
 		
-		set("UPDATE users SET name=? WERE iduser = ?");
+		set("UPDATE users SET name=? WHERE iduser=?;");
 		setString(1,name);
 		setInt(2,userid);
 		return executeUpdate();
@@ -137,16 +137,15 @@ public class UserDAO extends DAO {
 	public boolean changePassword(int userid, String oldPass, String newPass){
 		boolean b = false;
 		if (checkPassword(userid, oldPass)){
-			set("UPDATE users SET pass=? WERE iduser = ?");
+			set("UPDATE users SET pass=? WHERE iduser=?;");
 			setString(1,newPass);
 			setInt(2,userid);
 			b = executeUpdate();
-
 		}
 		
 		return b;
 	}
-
+        
 	/**
 	 * Check if the password matches with the db one.
 	 * 
