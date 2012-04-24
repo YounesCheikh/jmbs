@@ -169,7 +169,7 @@ public class MessageDAO extends DAO {
 	public ArrayList<Message> getMessages(int iduser, int idlastmessage, int maxMsg) {
 		ArrayList<Message> msgList = new ArrayList<Message>();
 
-		set("SELECT idmessage, content, \"time\", iduser "
+		set("SELECT message.* "
                         + "FROM message,follows "
                         + "WHERE (((follows.followed = message.iduser "
                         + "AND follows.follower=? "

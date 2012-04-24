@@ -41,7 +41,7 @@ public class MainServer {
 	 * @throws SQLException
 	 */
 	public static void main(String[] args) {
-
+                
 		FileInputStream propFile;
 		try {
 			propFile = new FileInputStream("properties.cfg");

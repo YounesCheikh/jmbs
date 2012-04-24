@@ -118,7 +118,7 @@ public class UserDAO extends DAO {
 	public boolean changeMail(int userid, String pass, String mail){
 		boolean b = false;
 		if (checkPassword(userid, pass)){
-			set("UPDATE users SET mail=? WHERE iduser=?;");
+			set("UPDATE users SET email=? WHERE iduser=?;");
 			setString(1,mail);
 			setInt(2,userid);
 			b = executeUpdate();
@@ -404,14 +404,15 @@ public class UserDAO extends DAO {
 	 */
 	public ArrayList<Project> getProjects(int userid) {
 		ArrayList<Project> p = new ArrayList<Project>();
+                ProjectDAO pdao = new ProjectDAO(con);
 		
-		set("SELECT projects.idowner,projects.status,participate.idproject,name FROM participate,projects WHERE participate.iduser=? AND participate.idproject=projects.idproject;");
+		set("SELECT projects.* FROM participate,projects WHERE participate.iduser=? AND participate.idproject=projects.idproject;");
 		setInt(1,userid);
 		ResultSet res = executeQuery();
 	
 		try {
 			do {	
-				p.add(new Project(res.getString("name"), res.getInt("idproject"), this.getUser(res.getInt("idowner")),res.getInt("status")));
+				p.add(pdao.getProject(res));
 			} while (res.next());
 	
 		} catch (SQLException e) {
@@ -447,12 +448,13 @@ public class UserDAO extends DAO {
 		set("SELECT * FROM projects WHERE idowner=?;");
 		setInt(1,userid);
 		ResultSet rs = executeQuery();
+                ProjectDAO pdao = new ProjectDAO(con);
 		
 		ArrayList<Project> pj = new ArrayList<Project>();
 		
 		try{
 			do{
-				pj.add(new Project(rs.getString("name"), rs.getInt("idproject"),getUser(userid),rs.getInt("status")));
+				pj.add(pdao.getProject(rs));
 			}while(rs.next());
 			
 		}catch(SQLException e){

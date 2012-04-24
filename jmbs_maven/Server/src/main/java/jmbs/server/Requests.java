@@ -212,7 +212,9 @@ public class Requests extends UnicastRemoteObject implements RemoteRequests {
 		
 		if (sdao.isAccessLevelSufficiant(iduser, UserDAO.CREATE_ACCESS_LEVEL)){
 			 p = pdao.createProject(name,iduser);
-		}else throw new SecurityException("You are not authorized to create a project.");
+		}else {
+                    throw new SecurityException("You are not authorized to create a project.\n Please contact your administator for further informations.");
+                }
 				
 		return p;
 	}

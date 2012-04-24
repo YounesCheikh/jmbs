@@ -51,7 +51,7 @@ public class ServerWindow {
 	 */
 	public ServerWindow() {
 		try {
-			ser = new ServerOF();
+                    ser = new ServerOF();
 		} catch (RemoteException e) {
 			// TODO Auto-generated catch block
 			// e.printStackTrace();
