@@ -1,4 +1,3 @@
-
 /**
  * JMBS: Java Micro Blogging System
  *
@@ -23,24 +22,25 @@ package jmbs.client;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+
 import jmbs.common.Project;
 import jmbs.common.User;
 
 public class CurrentUser implements Serializable {
-	
+
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 44433007358974855L;
 	private static User u = null;
-	
+
 	public CurrentUser(User receivedUser) {
-		if (get()==null) {
+		if (get() == null) {
 			CurrentUser.set(receivedUser);
-			u.setProjects(RemoteRequests.getUserProjects(u.getId()));
+			u.setProjects(ClientRequests.getUserProjects(u.getId()));
 		}
 	}
-	
+
 	public CurrentUser() {
 
 	}
@@ -52,9 +52,9 @@ public class CurrentUser implements Serializable {
 	private static void set(User u) {
 		CurrentUser.u = u;
 	}
-	
+
 	public static void disconnect() {
-		RemoteRequests.logOut(u.getId());
+		ClientRequests.logOut(u.getId());
 		set(null);
 	}
 
@@ -69,14 +69,12 @@ public class CurrentUser implements Serializable {
 		return u.getFullName();
 	}
 
-
 	/**
 	 * @return the fore name
 	 */
 	public static String getFname() {
 		return u.getFname();
 	}
-
 
 	/**
 	 * @return the email
@@ -85,14 +83,12 @@ public class CurrentUser implements Serializable {
 		return u.getMail();
 	}
 
-
 	/**
 	 * @return the User id
 	 */
 	public static int getId() {
 		return u.getId();
 	}
-
 
 	/**
 	 * @return the access level
@@ -108,7 +104,6 @@ public class CurrentUser implements Serializable {
 		return u.getProjects();
 	}
 
-
 	/**
 	 * @return the followed users
 	 */
@@ -116,11 +111,8 @@ public class CurrentUser implements Serializable {
 		return u.getFollows();
 	}
 
-
-
 	public static String getPic() {
 		return u.getPic();
 	}
-	
-	
+
 }

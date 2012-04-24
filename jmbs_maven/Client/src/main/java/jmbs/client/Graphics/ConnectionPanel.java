@@ -20,29 +20,27 @@
 
 package jmbs.client.Graphics;
 
-import javax.swing.JPanel;
-import javax.swing.JLabel;
-
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.regex.Pattern;
 
-import javax.swing.JTextField;
-import javax.swing.JPasswordField;
-import javax.swing.JCheckBox;
 import javax.swing.JButton;
-
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
+import javax.swing.JCheckBox;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JSeparator;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 
 import jmbs.client.ClientRequests;
 import jmbs.client.CurrentUser;
 import jmbs.client.HashPassword;
-import jmbs.client.RemoteRequests;
+import jmbs.client.ServerConnection;
+import jmbs.common.RemoteRequests;
 import jmbs.common.User;
-import javax.swing.JSeparator;
-import javax.swing.SwingConstants;
-
 import net.miginfocom.swing.MigLayout;
 
 public class ConnectionPanel extends JPanel {
@@ -191,11 +189,11 @@ public class ConnectionPanel extends JPanel {
 	 * this methode update the response Label 'respLabel'
 	 */
 	private void checkConnection() {
-		new ClientRequests();
+		new ServerConnection();
 		respLabel.setText("Connection to server...");
 		respLabel.setForeground(new Color(0, 100, 0));
 
-		User u = RemoteRequests.connectUser(this.emailTextField.getText(),
+		User u = ClientRequests.connectUser(this.emailTextField.getText(),
 				new HashPassword(listToString(passwordField.getPassword()))
 						.getHashed());
 		if(u==null) {

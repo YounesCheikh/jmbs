@@ -25,6 +25,7 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
@@ -36,8 +37,8 @@ import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.border.EmptyBorder;
 
+import jmbs.client.ClientRequests;
 import jmbs.client.CurrentUser;
-import jmbs.client.RemoteRequests;
 import jmbs.client.SysConf;
 import jmbs.common.User;
 import net.miginfocom.swing.MigLayout;
@@ -94,7 +95,7 @@ public class UsersFrame extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				resultSearchPanel.removeAll();
 				ArrayList<User> usersList = null;
-				usersList = RemoteRequests.searchUser(nameTextField.getText(),
+				usersList = ClientRequests.searchUser(nameTextField.getText(),
 						0);
 				if (usersList != null) {
 					resultSearchPanel.putList(usersList);
@@ -122,7 +123,7 @@ public class UsersFrame extends JFrame {
 				// if checkBox by forename selected searchby = seachby +2
 				searchBy = chckbxByForeName.isSelected() ? searchBy + 2
 						: searchBy;
-				usersList = RemoteRequests.searchUser(nameTextField.getText(),
+				usersList = ClientRequests.searchUser(nameTextField.getText(),
 						searchBy);
 				if (usersList != null) {
 					resultSearchPanel.putList(usersList);
@@ -197,7 +198,7 @@ public class UsersFrame extends JFrame {
 
 		flwrLstPanel = new UsrLstPanel();
 		flwrList = new ArrayList<User>();
-		flwrList = RemoteRequests.getFollowers(CurrentUser.get());
+		flwrList = ClientRequests.getFollowers(CurrentUser.get());
 		flwrLstPanel.putList(flwrList);
 
 		flwrScrollPane.setViewportView(flwrLstPanel);
@@ -213,7 +214,7 @@ public class UsersFrame extends JFrame {
 		btnRefresh_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				flwrLstPanel.removeAll();
-				flwrList = RemoteRequests.getFollowers(CurrentUser.get());
+				flwrList = ClientRequests.getFollowers(CurrentUser.get());
 				flwrLstPanel.putList(flwrList);
 				lblYourFollowers.setText("Your Followers: " + flwrList.size());
 				flwrLstPanel.repaint();

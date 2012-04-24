@@ -22,7 +22,9 @@ package jmbs.client.Graphics;
 
 import java.awt.Component;
 import java.util.ArrayList;
+
 import javax.swing.JPanel;
+
 import jmbs.client.CurrentUser;
 import jmbs.common.User;
 import net.miginfocom.swing.MigLayout;
@@ -43,7 +45,7 @@ public class UsrLstPanel extends JPanel {
 
 	public void putUser(Component obj) {
 		// put new element and go to next row
-		this.add(obj, "wrap",0);
+		this.add(obj, "wrap", 0);
 		this.updateUI();
 	}
 

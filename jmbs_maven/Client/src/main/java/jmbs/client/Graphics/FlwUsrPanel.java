@@ -33,8 +33,9 @@ import javax.swing.JToggleButton;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.SwingConstants;
 import javax.swing.border.TitledBorder;
+
+import jmbs.client.ClientRequests;
 import jmbs.client.CurrentUser;
-import jmbs.client.RemoteRequests;
 import jmbs.common.User;
 
 public class FlwUsrPanel extends JPanel {
@@ -69,10 +70,10 @@ public class FlwUsrPanel extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 
 				if (!CurrentUser.getFollows().contains(u)) {
-					RemoteRequests.follows(CurrentUser.getId(), u.getId());
+					ClientRequests.follows(CurrentUser.getId(), u.getId());
 					CurrentUser.getFollows().add(u);
 				} else {
-					RemoteRequests.unFollow(CurrentUser.getId(), u.getId());
+					ClientRequests.unFollow(CurrentUser.getId(), u.getId());
 					CurrentUser.getFollows().remove(u);
 				}
 			}

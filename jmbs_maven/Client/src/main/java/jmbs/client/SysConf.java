@@ -44,7 +44,8 @@ public class SysConf {
 			return;
 
 		System.setProperty("apple.laf.useScreenMenuBar", "true");
-		System.setProperty("com.apple.mrj.application.apple.menu.about.name", appName);
+		System.setProperty("com.apple.mrj.application.apple.menu.about.name",
+				appName);
 
 	}
 
@@ -53,7 +54,8 @@ public class SysConf {
 			alreadyTested = true;
 			macSetup("JMBS");
 			try {
-				UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+				UIManager.setLookAndFeel(UIManager
+						.getSystemLookAndFeelClassName());
 			} catch (ClassNotFoundException e) {
 				// TODO Auto-generated catch block
 				// e.printStackTrace();
@@ -85,7 +87,7 @@ public class SysConf {
 		// Move the window
 		window.setLocation(x, y);
 	}
-	
+
 	public void centerThisDialog(JDialog window) {
 		// Get the size of thescreen
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();

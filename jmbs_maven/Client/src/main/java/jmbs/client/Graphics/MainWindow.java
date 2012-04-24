@@ -1,29 +1,31 @@
 package jmbs.client.Graphics;
 
-import javax.swing.JFrame;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.util.ArrayList;
+
+import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.Alignment;
+import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.UIManager;
-import javax.swing.JScrollPane;
-import java.util.ArrayList;
+
 import jmbs.client.ClientRequests;
 import jmbs.client.CurrentUser;
-import jmbs.client.RemoteRequests;
+import jmbs.client.ServerConnection;
 import jmbs.client.SysConf;
 import jmbs.client.Graphics.projects.MyProjectsPanel;
 import jmbs.client.Graphics.projects.ParticipationsPrjcstPanel;
 import jmbs.client.Graphics.projects.PrjctsTimeLinePanel;
 import jmbs.client.Graphics.projects.SearchProjectPanel;
 import jmbs.common.Message;
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 
 public class MainWindow {
 
@@ -63,7 +65,7 @@ public class MainWindow {
 			@Override
 			public void windowClosing(WindowEvent e) {
 				frmJmbsClient.dispose();
-				RemoteRequests.close();
+				ClientRequests.close();
 				System.exit(0);
 			}
 		});
@@ -217,8 +219,8 @@ public class MainWindow {
 	}
 
 	public void checkNewMessages(int idLastMsg) {
-		msgListTL = RemoteRequests.getLatestTL(CurrentUser.getId(), idLastMsg,
-				ClientRequests.maxReceivedMsgs);
+		msgListTL = ClientRequests.getLatestTL(CurrentUser.getId(), idLastMsg,
+				ServerConnection.maxReceivedMsgs);
 		timelinepanel.putList(msgListTL);
 	}
 }

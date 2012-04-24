@@ -81,7 +81,15 @@ public class Project implements Serializable {
         this.aviableToPublic = aviableToPublic;
         this.creationTime =  creationTime;
     }
-
+	
+    /**
+     * 
+     * @return the creation time (Timestamp )
+     */
+    public Timestamp getTimestamp() {
+    	return this.creationTime;
+    }
+    
     /**
      * @return the name
      */

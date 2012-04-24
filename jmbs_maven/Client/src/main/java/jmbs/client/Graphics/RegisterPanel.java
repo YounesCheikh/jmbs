@@ -20,22 +20,23 @@
 
 package jmbs.client.Graphics;
 
-import javax.swing.JPanel;
-import javax.swing.JLabel;
-import javax.swing.BorderFactory;
-import javax.swing.JPasswordField;
-import javax.swing.JTextField;
-import javax.swing.JSeparator;
-import javax.swing.JButton;
 import java.awt.Color;
 import java.awt.Font;
-import java.util.regex.Pattern;
-import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.regex.Pattern;
+
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JSeparator;
+import javax.swing.JTextField;
 
 import jmbs.client.ClientRequests;
 import jmbs.client.HashPassword;
-import jmbs.client.RemoteRequests;
+import jmbs.client.ServerConnection;
 import jmbs.common.User;
 import net.miginfocom.swing.MigLayout;
 
@@ -199,7 +200,7 @@ public class RegisterPanel extends JPanel {
 	}
 
 	private void analysis() {
-		new ClientRequests();
+		new ServerConnection();
 		nameTextField.setBorder(BorderFactory.createLineBorder(Color.GREEN));
 		fnameTextField.setBorder(BorderFactory.createLineBorder(Color.GREEN));
 		emailTextField.setBorder(BorderFactory.createLineBorder(Color.GREEN));
@@ -237,7 +238,7 @@ public class RegisterPanel extends JPanel {
 			lblResp.setForeground(new Color(0, 100, 0));
 			boolean emailAvailable = false;
 
-			emailAvailable = RemoteRequests.createUser(
+			emailAvailable = ClientRequests.createUser(
 					new User(nameTextField.getText(), fnameTextField.getText(),
 							emailTextField.getText()), new HashPassword(
 							listToString(passwordField.getPassword()))

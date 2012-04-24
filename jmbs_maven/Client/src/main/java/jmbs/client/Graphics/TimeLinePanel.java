@@ -35,7 +35,6 @@ public class TimeLinePanel extends JPanel {
 	 */
 	private static final long serialVersionUID = -8369036368823849803L;
 	private static int idLastMessage = 0;
-	
 
 	/**
 	 * Create the panel.
@@ -43,12 +42,12 @@ public class TimeLinePanel extends JPanel {
 	public TimeLinePanel() {
 		// Set maximum width possible with difault height
 		setLayout(new MigLayout("", "[grow 80,fill]", "[]"));
-		//add(new MsgPanel(new Message()), "wrap", 0);
+		// add(new MsgPanel(new Message()), "wrap", 0);
 	}
 
 	public void putMessage(Component obj) {
 		// put new element and go to next row
-		this.add(obj, "wrap",0);
+		this.add(obj, "wrap", 0);
 		this.updateUI();
 	}
 
@@ -56,7 +55,7 @@ public class TimeLinePanel extends JPanel {
 		if (msgList != null) {
 			for (Message m : msgList) {
 				putMessage(new MsgPanel(m));
-				idLastMessage= m.getId();
+				idLastMessage = m.getId();
 			}
 		}
 	}
@@ -64,7 +63,7 @@ public class TimeLinePanel extends JPanel {
 	public int getLastIdMsg() {
 		return idLastMessage;
 	}
-	
+
 	public void setLastIdMsg(int id) {
 		idLastMessage = id;
 	}

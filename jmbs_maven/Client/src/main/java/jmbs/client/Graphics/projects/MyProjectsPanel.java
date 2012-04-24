@@ -6,6 +6,7 @@ import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
@@ -13,8 +14,9 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
+
+import jmbs.client.ClientRequests;
 import jmbs.client.CurrentUser;
-import jmbs.client.RemoteRequests;
 import jmbs.client.Graphics.SayToUser;
 import jmbs.common.Project;
 import net.miginfocom.swing.MigLayout;
@@ -50,13 +52,14 @@ public class MyProjectsPanel extends JPanel {
 		btnCreate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				boolean created = false;
-				created = (RemoteRequests.createProject(
+				created = (ClientRequests.createProject(
 						txtProjectName.getText(), CurrentUser.getId()) != null);
 				if (created)
 					SayToUser.success("Successed", "The project "
 							+ txtProjectName.getText() + " has been created");
 				else
-					SayToUser.error("Permission denied", "You don't have access to do this!");
+					SayToUser.error("Permission denied",
+							"You don't have access to do this!");
 			}
 		});
 		topMyPrjctPanel.add(btnCreate, BorderLayout.EAST);
@@ -75,6 +78,13 @@ public class MyProjectsPanel extends JPanel {
 		panel.add(chckbxOpened);
 
 		JButton btnRefresh = new JButton("Refresh");
+		btnRefresh.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				CurrentUser.get().setProjects(
+						ClientRequests.getUserProjects(CurrentUser.getId()));
+				putList(CurrentUser.getProjects());
+			}
+		});
 		panel.add(btnRefresh);
 
 		JScrollPane scrollPane = new JScrollPane();
@@ -84,6 +94,9 @@ public class MyProjectsPanel extends JPanel {
 
 		prjctListPanel = new JPanel();
 		prjctListPanel.setLayout(new MigLayout("", "[]", "[]"));
+		// ArrayList<Project> prjctList =
+		// RemoteRequests.getUserProjects(CurrentUser.)
+		putList(CurrentUser.getProjects());
 		scrollPane.setViewportView(prjctListPanel);
 
 	}
@@ -96,6 +109,8 @@ public class MyProjectsPanel extends JPanel {
 
 	public void putList(ArrayList<Project> projectList) {
 		if (projectList != null) {
+			prjctListPanel.removeAll();
+			prjctListPanel.updateUI();
 			for (Project p : projectList) {
 				putProject(new PrjctAdministration(p));
 			}

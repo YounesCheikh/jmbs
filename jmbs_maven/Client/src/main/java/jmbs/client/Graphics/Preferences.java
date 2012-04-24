@@ -22,32 +22,31 @@
 package jmbs.client.Graphics;
 
 import java.awt.BorderLayout;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-import javax.swing.ButtonGroup;
-import javax.swing.JTabbedPane;
-import javax.swing.ImageIcon;
-import javax.swing.JRadioButton;
-import javax.swing.JLabel;
-import javax.swing.JCheckBox;
-import javax.swing.JSlider;
 import java.awt.Font;
-import javax.swing.JSeparator;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.ButtonGroup;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.event.ChangeListener;
+import javax.swing.JCheckBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JSeparator;
+import javax.swing.JSlider;
+import javax.swing.JTabbedPane;
+import javax.swing.JTextField;
+import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+
+import jmbs.client.ServerConfig;
+import jmbs.client.ServerConnection;
+import jmbs.client.SysConf;
 
 import com.sun.awt.AWTUtilities;
-
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import javax.swing.JTextField;
-
-import jmbs.client.ClientRequests;
-import jmbs.client.ServerConfig;
-import jmbs.client.SysConf;
 
 @SuppressWarnings("restriction")
 public class Preferences extends JFrame {
@@ -163,7 +162,7 @@ public class Preferences extends JFrame {
 		limitedMsgTextField = new JTextField();
 		limitedMsgTextField.setBounds(189, 173, 80, 28);
 		limitedMsgTextField.setColumns(10);
-		limitedMsgTextField.setText(""+ClientRequests.maxReceivedMsgs);
+		limitedMsgTextField.setText(""+ServerConnection.maxReceivedMsgs);
 		
 		JSeparator separator_1 = new JSeparator();
 		separator_1.setBounds(44, 131, 273, 12);

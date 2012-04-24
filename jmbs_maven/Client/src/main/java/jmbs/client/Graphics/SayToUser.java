@@ -20,25 +20,26 @@
 
 package jmbs.client.Graphics;
 
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JEditorPane;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.UIManager;
+import javax.swing.border.EmptyBorder;
 
 import jmbs.client.SysConf;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.Color;
-import java.awt.Font;
-import javax.swing.UIManager;
-import javax.swing.JScrollPane;
 
-public class SayToUser  {
+public class SayToUser {
 
 	private final static JPanel contentPanel = new JPanel();
 	private JButton cancelButton;
@@ -46,6 +47,7 @@ public class SayToUser  {
 	private static JLabel lblTitleLabel;
 	private static JEditorPane textArea;
 	private static ImagePanel panel;
+
 	/**
 	 * Create the dialog.
 	 */
@@ -73,12 +75,12 @@ public class SayToUser  {
 		textArea = new JEditorPane();
 		textArea.setContentType("text/html");
 		textArea.setBackground(UIManager.getColor("Button.background"));
-		//textArea.setBounds(11, 68, 438, 90);
+		// textArea.setBounds(11, 68, 438, 90);
 		textArea.setEditable(false);
-		//contentPanel.add(textArea);
+		// contentPanel.add(textArea);
 		contentPanel.add(panel);
 		contentPanel.add(lblTitleLabel);
-		
+
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(6, 65, 448, 92);
 		contentPanel.add(scrollPane);
@@ -107,11 +109,11 @@ public class SayToUser  {
 			buttonPane.setLayout(null);
 			buttonPane.add(cancelButton);
 		}
-		
+
 	}
 
 	public static void error(String title, String message) {
-		dialog.setTitle("error: "+title);
+		dialog.setTitle("error: " + title);
 		contentPanel.remove(panel);
 		panel = new ImagePanel("/img/error_ico.png");
 		panel.setBounds(26, 17, 43, 39);
@@ -123,7 +125,7 @@ public class SayToUser  {
 	}
 
 	public static void warning(String title, String message) {
-		dialog.setTitle("Warning: "+title);
+		dialog.setTitle("Warning: " + title);
 		contentPanel.remove(panel);
 		panel = new ImagePanel("/img/warning_ico.png");
 		panel.setBounds(26, 17, 43, 39);
@@ -135,7 +137,7 @@ public class SayToUser  {
 	}
 
 	public static void success(String title, String message) {
-		dialog.setTitle("Success: "+title);
+		dialog.setTitle("Success: " + title);
 		contentPanel.remove(panel);
 		panel = new ImagePanel("/img/success_ico.png");
 		panel.setBounds(26, 17, 43, 39);

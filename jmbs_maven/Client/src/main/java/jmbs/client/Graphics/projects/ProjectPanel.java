@@ -23,6 +23,7 @@ package jmbs.client.Graphics.projects;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JLabel;
@@ -31,8 +32,8 @@ import javax.swing.JSeparator;
 import javax.swing.JToggleButton;
 import javax.swing.LayoutStyle.ComponentPlacement;
 
+import jmbs.client.ClientRequests;
 import jmbs.client.CurrentUser;
-import jmbs.client.RemoteRequests;
 import jmbs.common.Project;
 
 public class ProjectPanel extends JPanel {
@@ -50,20 +51,22 @@ public class ProjectPanel extends JPanel {
 		JLabel lblName = new JLabel(p.getName());
 		lblName.setFont(new Font("Lucida Grande", Font.BOLD, 14));
 
-		JLabel lblCreator = new JLabel("Created by '");// +p.getOwner().getFullName()+"'");
+		JLabel lblCreator = new JLabel("Created by '"
+				+ p.getOwner().getFullName() + "'");
 
-		JLabel lblParticipants = new JLabel("Participants: ");// +p.getUsers().size());
+		JLabel lblParticipants = new JLabel("Participants: "
+				+ p.getUsers().size());
 
 		final JToggleButton tglbtnParticipate = new JToggleButton("Participate");
 		tglbtnParticipate.setSelected(CurrentUser.getProjects().contains(p));
 		tglbtnParticipate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (CurrentUser.getProjects().contains(p)) {
-					RemoteRequests.unParticipate(CurrentUser.getId(), p.getId());
+					ClientRequests.unParticipate(CurrentUser.getId(), p.getId());
 					tglbtnParticipate.setSelected(false);
 					CurrentUser.getProjects().remove(p);
 				} else {
-					RemoteRequests.participate(CurrentUser.getId(), p.getId());
+					ClientRequests.participate(CurrentUser.getId(), p.getId());
 					tglbtnParticipate.setSelected(true);
 					CurrentUser.getProjects().add(p);
 				}

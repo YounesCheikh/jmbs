@@ -49,10 +49,10 @@ public class RegistrationSuccessed extends JDialog {
 	 * Create the dialog.
 	 */
 	public RegistrationSuccessed(String userName) {
-		//setLocationRelativeTo(null);
+		// setLocationRelativeTo(null);
 		setSize(450, 200);
 		new SysConf().centerThisDialog(this);
-		//setBounds(100, 100, 450, 203);
+		// setBounds(100, 100, 450, 203);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
@@ -60,8 +60,10 @@ public class RegistrationSuccessed extends JDialog {
 		JLabel lblCongrat = new JLabel("Congratulations!");
 		lblCongrat.setFont(new Font("Comic Sans MS", Font.PLAIN, 23));
 		lblCongrat.setForeground(new Color(0, 102, 0));
-		JLabel lblThanks = new JLabel("Thanks "+userName+"! your registration has been ");
-		JLabel lblSecondeline = new JLabel("successful. Now you can login using your email");
+		JLabel lblThanks = new JLabel("Thanks " + userName
+				+ "! your registration has been ");
+		JLabel lblSecondeline = new JLabel(
+				"successful. Now you can login using your email");
 		JLabel lblThirdline = new JLabel("and password.");
 		{
 			okButton = new JButton("OK");
@@ -74,44 +76,93 @@ public class RegistrationSuccessed extends JDialog {
 			getRootPane().setDefaultButton(okButton);
 		}
 		GroupLayout gl_contentPanel = new GroupLayout(contentPanel);
-		gl_contentPanel.setHorizontalGroup(
-			gl_contentPanel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_contentPanel.createSequentialGroup()
-					.addGroup(gl_contentPanel.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_contentPanel.createSequentialGroup()
-							.addContainerGap()
-							.addComponent(panel, GroupLayout.PREFERRED_SIZE, 118, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addGroup(gl_contentPanel.createParallelGroup(Alignment.LEADING)
-								.addComponent(lblCongrat)
-								.addComponent(lblSecondeline)
-								.addComponent(lblThirdline)
-								.addComponent(lblThanks)))
-						.addGroup(gl_contentPanel.createSequentialGroup()
-							.addGap(180)
-							.addComponent(okButton)))
-					.addContainerGap(9, Short.MAX_VALUE))
-		);
-		gl_contentPanel.setVerticalGroup(
-			gl_contentPanel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_contentPanel.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(gl_contentPanel.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_contentPanel.createSequentialGroup()
-							.addComponent(panel, GroupLayout.PREFERRED_SIZE, 117, GroupLayout.PREFERRED_SIZE)
-							.addContainerGap())
-						.addGroup(gl_contentPanel.createSequentialGroup()
-							.addComponent(lblCongrat)
-							.addGap(18)
-							.addComponent(lblThanks, GroupLayout.PREFERRED_SIZE, 16, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(lblSecondeline)
-							.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-							.addComponent(lblThirdline)
-							.addGap(18)
-							.addComponent(okButton)
-							.addContainerGap(7, Short.MAX_VALUE))))
-		);
+		gl_contentPanel
+				.setHorizontalGroup(gl_contentPanel
+						.createParallelGroup(Alignment.LEADING)
+						.addGroup(
+								gl_contentPanel
+										.createSequentialGroup()
+										.addGroup(
+												gl_contentPanel
+														.createParallelGroup(
+																Alignment.LEADING)
+														.addGroup(
+																gl_contentPanel
+																		.createSequentialGroup()
+																		.addContainerGap()
+																		.addComponent(
+																				panel,
+																				GroupLayout.PREFERRED_SIZE,
+																				118,
+																				GroupLayout.PREFERRED_SIZE)
+																		.addPreferredGap(
+																				ComponentPlacement.RELATED)
+																		.addGroup(
+																				gl_contentPanel
+																						.createParallelGroup(
+																								Alignment.LEADING)
+																						.addComponent(
+																								lblCongrat)
+																						.addComponent(
+																								lblSecondeline)
+																						.addComponent(
+																								lblThirdline)
+																						.addComponent(
+																								lblThanks)))
+														.addGroup(
+																gl_contentPanel
+																		.createSequentialGroup()
+																		.addGap(180)
+																		.addComponent(
+																				okButton)))
+										.addContainerGap(9, Short.MAX_VALUE)));
+		gl_contentPanel
+				.setVerticalGroup(gl_contentPanel
+						.createParallelGroup(Alignment.LEADING)
+						.addGroup(
+								gl_contentPanel
+										.createSequentialGroup()
+										.addContainerGap()
+										.addGroup(
+												gl_contentPanel
+														.createParallelGroup(
+																Alignment.LEADING)
+														.addGroup(
+																gl_contentPanel
+																		.createSequentialGroup()
+																		.addComponent(
+																				panel,
+																				GroupLayout.PREFERRED_SIZE,
+																				117,
+																				GroupLayout.PREFERRED_SIZE)
+																		.addContainerGap())
+														.addGroup(
+																gl_contentPanel
+																		.createSequentialGroup()
+																		.addComponent(
+																				lblCongrat)
+																		.addGap(18)
+																		.addComponent(
+																				lblThanks,
+																				GroupLayout.PREFERRED_SIZE,
+																				16,
+																				GroupLayout.PREFERRED_SIZE)
+																		.addPreferredGap(
+																				ComponentPlacement.RELATED)
+																		.addComponent(
+																				lblSecondeline)
+																		.addPreferredGap(
+																				ComponentPlacement.RELATED,
+																				GroupLayout.DEFAULT_SIZE,
+																				Short.MAX_VALUE)
+																		.addComponent(
+																				lblThirdline)
+																		.addGap(18)
+																		.addComponent(
+																				okButton)
+																		.addContainerGap(
+																				7,
+																				Short.MAX_VALUE)))));
 		contentPanel.setLayout(gl_contentPanel);
 	}
 

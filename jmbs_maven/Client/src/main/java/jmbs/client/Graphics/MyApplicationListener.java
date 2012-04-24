@@ -21,8 +21,11 @@
 
 package jmbs.client.Graphics;
 
-import javax.swing.*;
-import org.simplericity.macify.eawt.*;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+
+import org.simplericity.macify.eawt.ApplicationEvent;
+import org.simplericity.macify.eawt.ApplicationListener;
 
 public class MyApplicationListener implements ApplicationListener {
 	private JFrame f = new MainWindow().getFrame();

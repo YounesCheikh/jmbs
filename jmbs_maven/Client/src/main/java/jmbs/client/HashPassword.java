@@ -1,4 +1,4 @@
-/**
+/*
  * JMBS: Java Micro Blogging System
  *
  * Copyright (C) 2012  
@@ -18,7 +18,6 @@
  * 
  */
 
-
 package jmbs.client;
 
 import java.math.BigInteger;
@@ -26,22 +25,24 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 public class HashPassword {
-	
+
 	String word = null;
+
 	/**
 	 * this class hash a String to Md5 password
+	 * 
 	 * @param password
 	 */
 	public HashPassword(String password) {
 		word = password;
 	}
-	
+
 	public HashPassword(char[] password) {
 		word = listToString(password);
 	}
 
 	/**
-	 * @return Hashed Password 
+	 * @return Hashed Password
 	 */
 	public String getHashed() {
 		String hashword = null;
@@ -55,7 +56,7 @@ public class HashPassword {
 		}
 		return hashword;
 	}
-	
+
 	private String listToString(char[] list) {
 		String retStr = new String();
 		for (char c : list) {
@@ -63,5 +64,5 @@ public class HashPassword {
 		}
 		return retStr;
 	}
-	
+
 }

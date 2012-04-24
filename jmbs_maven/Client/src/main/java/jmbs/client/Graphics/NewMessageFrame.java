@@ -31,6 +31,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.sql.Timestamp;
 import java.util.Calendar;
+
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -40,8 +41,9 @@ import javax.swing.JTextArea;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
+
+import jmbs.client.ClientRequests;
 import jmbs.client.CurrentUser;
-import jmbs.client.RemoteRequests;
 import jmbs.client.SysConf;
 import jmbs.common.Message;
 import net.miginfocom.swing.MigLayout;
@@ -107,7 +109,7 @@ public class NewMessageFrame extends JFrame {
 					Message m = new Message(CurrentUser.get(), newMsgStr,
 							new Timestamp(Calendar.getInstance().getTimeInMillis()));
 					Integer getIdMsg = 0;
-					getIdMsg = RemoteRequests.addMessage(m);
+					getIdMsg = ClientRequests.addMessage(m);
 					System.out.println(""+getIdMsg);
 					if (!getIdMsg.equals(-1)) {
 						tlpanel.putMessage(new MsgPanel(new Message(

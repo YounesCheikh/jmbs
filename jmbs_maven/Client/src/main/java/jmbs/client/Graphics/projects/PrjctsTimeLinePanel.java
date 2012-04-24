@@ -1,15 +1,18 @@
 package jmbs.client.Graphics.projects;
 
-import javax.swing.JPanel;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.util.ArrayList;
 
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.LayoutStyle.ComponentPlacement;
 
 import jmbs.client.CurrentUser;
@@ -17,9 +20,6 @@ import jmbs.client.Graphics.MsgPanel;
 import jmbs.common.Message;
 import jmbs.common.Project;
 import net.miginfocom.swing.MigLayout;
-import javax.swing.JLabel;
-import javax.swing.JComboBox;
-import javax.swing.DefaultComboBoxModel;
 
 public class PrjctsTimeLinePanel extends JPanel {
 
@@ -121,10 +121,9 @@ public class PrjctsTimeLinePanel extends JPanel {
 				prjctsName[i] = p.getName();
 				i++;
 			}
-		}
-		else {
+		} else {
 			prjctsName = new String[1];
-			prjctsName[0]="";
+			prjctsName[0] = "";
 		}
 
 		comboBox.setModel(new DefaultComboBoxModel(prjctsName));
