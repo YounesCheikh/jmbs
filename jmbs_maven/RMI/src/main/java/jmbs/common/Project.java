@@ -116,6 +116,14 @@ public class Project implements Serializable {
     public ArrayList<User> getUsers() {
         return users;
     }
+    
+    /**
+     * 
+     * @return return the owner of the project
+     */
+    public User getOwUser() {
+    	return this.owner;
+    }
 
     /**
      * @param users the users to set
