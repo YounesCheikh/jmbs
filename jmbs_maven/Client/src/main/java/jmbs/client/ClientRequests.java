@@ -65,15 +65,19 @@ public class ClientRequests {
 			} catch (SecurityException se) {
 				SayToUser.error("SecurityException", se.getMessage());
 				server = null;
+                                main = null;
 			} catch (AccessException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				SayToUser.error("AccessException", e.getMessage());
+                                server = null;
+                                main = null;
 			} catch (RemoteException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				SayToUser.error("RemoteException", e.getMessage());
+                                server = null;
+                                main = null;
 			} catch (NotBoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				SayToUser.error("NotBoundException", e.getMessage());
+                                server = null;
+                                main = null;
 			}
 
 		}
