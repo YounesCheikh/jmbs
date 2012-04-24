@@ -22,6 +22,7 @@ package jmbs.client.Graphics;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JEditorPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JFrame;
@@ -34,8 +35,8 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.Color;
 import java.awt.Font;
-import javax.swing.JTextArea;
 import javax.swing.UIManager;
+import javax.swing.JScrollPane;
 
 public class SayToUser  {
 
@@ -43,7 +44,7 @@ public class SayToUser  {
 	private JButton cancelButton;
 	private static JDialog dialog;
 	private static JLabel lblTitleLabel;
-	private static JTextArea textArea;
+	private static JEditorPane textArea;
 	private static ImagePanel panel;
 	/**
 	 * Create the dialog.
@@ -69,14 +70,20 @@ public class SayToUser  {
 		lblTitleLabel.setFont(new Font("Lucida Grande", Font.BOLD, 16));
 		contentPanel.setLayout(null);
 
-		textArea = new JTextArea();
+		textArea = new JEditorPane();
+		textArea.setContentType("text/html");
 		textArea.setBackground(UIManager.getColor("Button.background"));
-		textArea.setBounds(11, 68, 438, 90);
+		//textArea.setBounds(11, 68, 438, 90);
 		textArea.setEditable(false);
-		textArea.setLineWrap(true);
-		contentPanel.add(textArea);
+		//contentPanel.add(textArea);
 		contentPanel.add(panel);
 		contentPanel.add(lblTitleLabel);
+		
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(6, 65, 448, 92);
+		contentPanel.add(scrollPane);
+
+		scrollPane.setViewportView(textArea);
 		{
 			JPanel buttonPane = new JPanel();
 			buttonPane.setBounds(0, 163, 460, 35);

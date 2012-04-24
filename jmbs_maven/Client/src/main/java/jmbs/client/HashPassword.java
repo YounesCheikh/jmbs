@@ -35,6 +35,10 @@ public class HashPassword {
 	public HashPassword(String password) {
 		word = password;
 	}
+	
+	public HashPassword(char[] password) {
+		word = listToString(password);
+	}
 
 	/**
 	 * @return Hashed Password 
@@ -51,4 +55,13 @@ public class HashPassword {
 		}
 		return hashword;
 	}
+	
+	private String listToString(char[] list) {
+		String retStr = new String();
+		for (char c : list) {
+			retStr += c;
+		}
+		return retStr;
+	}
+	
 }
