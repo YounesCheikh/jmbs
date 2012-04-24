@@ -121,7 +121,7 @@ public class Project implements Serializable {
      * 
      * @return return the owner of the project
      */
-    public User getOwUser() {
+    public User getOwner() {
     	return this.owner;
     }
 
