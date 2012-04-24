@@ -20,6 +20,7 @@
 package jmbs.common;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 
 // TODO: check how it displays on jdoc. Update when the method for transferring objects will be created.
@@ -59,6 +60,7 @@ public class Project implements Serializable {
     boolean editAllowed;
     boolean supressionAllowed;
     boolean aviableToPublic;
+    Timestamp creationTime;
     // attributes below are not created by default because they are mostly unused or could trigger unwanted chained db access and object creation
     ArrayList<User> users = new ArrayList<User>();
 
@@ -68,7 +70,7 @@ public class Project implements Serializable {
      * @param n name of the project
      * @param id project id
      */
-    public Project(String n, int id, User owner, int status, int numberOfUsers, boolean editAllowed, boolean supressionAllowed, boolean aviableToPublic) {
+    public Project(String n, int id, User owner, int status, int numberOfUsers, boolean editAllowed, boolean supressionAllowed, boolean aviableToPublic,Timestamp  creationTime) {
         this.name = n;
         this.id = id;
         this.owner = owner;
@@ -77,6 +79,7 @@ public class Project implements Serializable {
         this.editAllowed = editAllowed;
         this.supressionAllowed = supressionAllowed;
         this.aviableToPublic = aviableToPublic;
+        this.creationTime =  creationTime;
     }
 
     /**

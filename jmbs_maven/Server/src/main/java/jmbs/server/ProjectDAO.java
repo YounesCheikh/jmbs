@@ -19,11 +19,9 @@
  */
 package jmbs.server;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
+import java.util.Calendar;
 import jmbs.common.Project;
 import jmbs.common.User;
 
@@ -52,19 +50,32 @@ public class ProjectDAO extends DAO {
     public Project createProject(String name, int iduser) {
         Project ret = null;
         boolean res;
+        Timestamp currentTime = new Timestamp(Calendar.getInstance().getTimeInMillis());
 
         if (!this.exists(name)) {
-            set("INSERT INTO projects (name,idowner,status,nbsuscribers) VALUES (?,?,?,?);", Statement.RETURN_GENERATED_KEYS);
+            set("INSERT INTO projects (name,idowner,status,nbsuscribers,iseditallowed,issupressionallowed,ispublic,creationtime) VALUES (?,?,?,?,?,?,?,?);", Statement.RETURN_GENERATED_KEYS);
             setString(1, name);
             setInt(2, iduser);
             setInt(3, 1); // is activate by default
             setInt(4, 0); // starts with 0 involved users
+            setInt(5,1);
+            setInt(6,1);
+            setInt(7,1); //TODO: edid correctly
+            setTimestamp(8,currentTime);
             res = executeUpdate();
 
             if (res) {//TODO: change creator when youyou is ready to implement new interface
                 try {
                     ResultSet rs = getGeneratedKeys();
-                    ret = new Project(name, rs.getInt("idproject"), new UserDAO(con).getUser(iduser), Project.STATUS_OPENED, 0, Project.DEFAULT_EDIT_OPTION, Project.DEFAULT_SUPRESS_OPTION, Project.DEFAULT_ACCES_OPTION);
+                    ret = new Project(name, 
+                                    rs.getInt("idproject"), 
+                                    new UserDAO(con).getUser(iduser), 
+                                    Project.STATUS_OPENED,
+                                    0, 
+                                    Project.DEFAULT_EDIT_OPTION, 
+                                    Project.DEFAULT_SUPRESS_OPTION, 
+                                    Project.DEFAULT_ACCES_OPTION,
+                                    currentTime);
                 } catch (SQLException e) {
                 }
             }
@@ -116,7 +127,8 @@ public class ProjectDAO extends DAO {
                 rs.getInt("nbsuscribers"),
                 rs.getBoolean("iseditallowed"),
                 rs.getBoolean("issupressionallowed"),
-                rs.getBoolean("ispublic"));
+                rs.getBoolean("ispublic"),
+                rs.getTimestamp("creationtime"));
         return p;
     }
 
