@@ -251,7 +251,7 @@ public class ProfilePanel extends JPanel {
                         editingResults.put("pass", RemoteRequests.changePassword(
                                 CurrentUser.getId(),
                                 new HashPassword(passwordField.getPassword()).getHashed(),
-                                new HashPassword(passwordField.getPassword()).getHashed()));
+                                new HashPassword(newpasswordField.getPassword()).getHashed()));
                     }
 
                     String updateSucess = "<b>Updates : <b><br />";
