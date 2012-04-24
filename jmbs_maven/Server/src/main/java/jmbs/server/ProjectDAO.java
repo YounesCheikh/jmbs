@@ -194,7 +194,7 @@ public class ProjectDAO extends DAO {
         ArrayList<User> u = new ArrayList<User>();
         int userid;
 
-        set("SELECT participate.name,user.* FROM participate,user WHERE participate.idproject=? AND user.name=projects.name;");
+        set("SELECT users.* FROM participate,users WHERE participate.idproject=? AND users.iduser=participate.iduser;");
         setInt(1, id);
         ResultSet res = executeQuery();
 
