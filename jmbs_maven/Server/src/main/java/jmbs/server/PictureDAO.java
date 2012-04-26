@@ -24,9 +24,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
-
 import javax.imageio.ImageIO;
-
 import jmbs.common.User;
 
 public class PictureDAO extends DAO {

@@ -21,11 +21,16 @@
 package jmbs.server;
 
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 import jmbs.common.*;
 
 public class Requests extends UnicastRemoteObject implements RemoteRequests {
@@ -351,4 +356,32 @@ public class Requests extends UnicastRemoteObject implements RemoteRequests {
 		return new UserDAO(con).getOwnedProjects(userid);
 	}
 	
+        public Project findProject(String name) throws RemoteException{
+            return new ProjectDAO(con).findProject(name);
+        }
+        
+        public byte[] getPicture(int userId, String path){
+            try {
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                BufferedImage bi = new PictureDAO(con).getAvatar(userId, path);
+                ImageIO.write(bi,"jpg",baos);
+
+                baos.flush();
+                byte[] imageInByte = baos.toByteArray();
+                baos.close();
+                return imageInByte;
+            } catch (IOException ex) {
+                return null;
+            }
+        }
+        
+        public boolean setPicture(int userId, String name, byte[] imageInByte){
+            try {
+                BufferedImage image = ImageIO.read(new ByteArrayInputStream(imageInByte));
+                return new PictureDAO(con).setAvatar(userId, image, name, true);
+            } catch (IOException ex) {
+                return false;
+            }
+        }
+        
 }

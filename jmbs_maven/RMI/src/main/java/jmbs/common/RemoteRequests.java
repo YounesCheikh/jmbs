@@ -23,7 +23,6 @@ package jmbs.common;
 import java.awt.image.BufferedImage;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 public interface RemoteRequests extends Remote {
@@ -224,4 +223,10 @@ public interface RemoteRequests extends Remote {
         public ArrayList<Message> getLastetProjectTL(int iduser, int idlastmessage, int maxMsg, int idproject) throws RemoteException;
         
         public boolean close() throws RemoteException;
+        
+        public Project findProject(String name) throws RemoteException;
+        
+        public byte[] getPicture(int userId, String path);
+        
+        public boolean setPicture(int userId, String name, byte[] imageInByte);
 }
