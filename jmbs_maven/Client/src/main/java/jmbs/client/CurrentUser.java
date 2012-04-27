@@ -33,11 +33,25 @@ public class CurrentUser implements Serializable {
 	 */
 	private static final long serialVersionUID = 44433007358974855L;
 	private static User u = null;
+	public static String DEFAULT_IMAGE = null;
 
 	public CurrentUser(User receivedUser) {
+		DEFAULT_IMAGE = "/img/avatar.jpg";
 		if (get() == null) {
 			CurrentUser.set(receivedUser);
-			u.setProjects(ClientRequests.getUserProjects(u.getId()));
+			// try {
+			// u.setPicture(ImageIO.read(DEFAULT_IMAGE));
+			// } catch (IOException e) {
+			// System.out.println("file :" + DEFAULT_IMAGE + "not found\n"
+			// + e.getMessage());
+			// }
+			ArrayList<Project> userPrjcsList = ClientRequests.getUserProjects(u
+					.getId());
+			if (userPrjcsList != null) {
+				u.setProjects(userPrjcsList);
+			} else {
+				u.setProjects(new ArrayList<Project>());
+			}
 		}
 	}
 
@@ -114,5 +128,9 @@ public class CurrentUser implements Serializable {
 	public static String getPic() {
 		return u.getPic();
 	}
+
+	// public static BufferedImage getPicture() {
+	// return u.getPicture();
+	// }
 
 }

@@ -1,4 +1,3 @@
-
 /*
  * JMBS: Java Micro Blogging System
  *
@@ -20,46 +19,248 @@
  */
 package jmbs.client.Graphics;
 
-
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
+
 import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JPanel;
- 
+
 public class ImagePanel extends JPanel {
-	String filePath;
-	private int w = 0;
-	private int h = 0; /*w: Width ; h : Height */
-	public ImagePanel(String fileImage) {
-		this.filePath = fileImage;
-	}
-	
-	public ImagePanel(String fileImage, int width, int height) {
-		this.filePath = fileImage;
-		this.w = width;
-		this.h = height;
-	}
- 
-	private static final long serialVersionUID = 5118025531286392963L;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1101259239413058291L;
+	Image image = null;
+	ImageIcon thumbnail = null;
 
-		public void paintComponent(Graphics g){
-                try {
-                        Image img = ImageIO.read(getClass().getResource(this.filePath));
-                        if (this.w == 0 || this.h==0)
-                        	g.drawImage(img, 0, 0,img.getWidth(null),img.getHeight(null), this);
-                        else 
-                        	g.drawImage(img, 0, 0,w,h, this);
-                        //Pour une image de fond
-                        //g.drawImage(img, 0, 0, this.getWidth(), this.getHeight(), this);
-                } catch (IOException e) {
-                        // TODO Auto-generated catch block
-                        //e.printStackTrace();
-                	System.err.println("file of image not found\n"+this.filePath);
-                }
-                
-        }
+	public ImagePanel(String imgFilePath) {
+		try {
+			File input = new File(imgFilePath);
+			image = ImageIO.read(input);
+		} catch (IOException ie) {
+			try {
+				image = ImageIO.read(getClass().getResource(imgFilePath));
+			} catch (IOException ioe) {
+				System.out.println("Error:" + ie.getMessage());
+			}
+		}
+	}
+
+	public ImagePanel(String imgFilePath, int width, int height) {
+		try {
+			File input = new File(imgFilePath);
+			image = ImageIO.read(input);
+		} catch (IOException ie) {
+			try {
+				image = ImageIO.read(getClass().getResource(imgFilePath));
+			} catch (IOException ioe) {
+				System.out.println("Error:" + ie.getMessage());
+			}
+		}
+
+		if (width > 0) {
+			if (image.getWidth(null) > width) {
+				thumbnail = new ImageIcon(image.getScaledInstance(width, -1,
+						Image.SCALE_DEFAULT));
+			}
+		}
+		if (height > 0) {
+			if (image.getHeight(null) > height) {
+				thumbnail = new ImageIcon(thumbnail.getImage()
+						.getScaledInstance(-1, height, Image.SCALE_DEFAULT));
+			}
+		}
+		image = thumbnail.getImage();
+	}
+
+	public ImagePanel(BufferedImage bImage) {
+		image = bImage;
+	}
+
+	public ImagePanel(BufferedImage bImage, int width, int height) {
+		image = bImage;
+		if (bImage != null) {
+			if (width > 0) {
+				if (image.getWidth(null) > width) {
+					thumbnail = new ImageIcon(image.getScaledInstance(width,
+							-1, Image.SCALE_DEFAULT));
+				}
+			}
+			if (height > 0) {
+				if (image.getHeight(null) > height) {
+					thumbnail = new ImageIcon(thumbnail.getImage()
+							.getScaledInstance(-1, height, Image.SCALE_DEFAULT));
+				}
+			}
+			image = thumbnail.getImage();
+		}
+
+	}
+
+	public ImagePanel(ImageIcon imico) {
+		image = imico.getImage();
+	}
+
+	public ImagePanel(ImageIcon imico, int width, int height) {
+		image = imico.getImage();
+		if (imico != null) {
+			if (width > 0) {
+				if (image.getWidth(null) > width) {
+					thumbnail = new ImageIcon(image.getScaledInstance(width,
+							-1, Image.SCALE_DEFAULT));
+				}
+			}
+			if (height > 0) {
+				if (image.getHeight(null) > height) {
+					thumbnail = new ImageIcon(thumbnail.getImage()
+							.getScaledInstance(-1, height, Image.SCALE_DEFAULT));
+				}
+			}
+			image = thumbnail.getImage();
+		}
+
+	}
+
+	public ImagePanel(Image ima) {
+		image = ima;
+	}
+
+	public ImagePanel(Image ima, int width, int height) {
+		image = ima;
+		if (ima != null) {
+			if (width > 0) {
+				if (image.getWidth(null) > width) {
+					thumbnail = new ImageIcon(image.getScaledInstance(width,
+							-1, Image.SCALE_DEFAULT));
+				}
+			}
+			if (height > 0) {
+				if (image.getHeight(null) > height) {
+					thumbnail = new ImageIcon(thumbnail.getImage()
+							.getScaledInstance(-1, height, Image.SCALE_DEFAULT));
+				}
+			}
+			image = thumbnail.getImage();
+		}
+	}
+
+	public void setImage(Image im) {
+		this.image = im;
+		repaint();
+	}
+
+	public void setImage(ImageIcon im) {
+		this.image = im.getImage();
+		repaint();
+	}
+
+	public void setImage(BufferedImage im) {
+		this.image = im;
+		repaint();
+	}
+
+	public void setImage(String im) {
+		try {
+			this.image = ImageIO.read(new File(im));
+			repaint();
+		} catch (IOException e) {
+			System.out.println(e.getMessage());
+		}
+
+	}
+
+	public void setImage(Image im, int width, int height) {
+		this.image = im;
+		if (im != null) {
+			if (width > 0) {
+				if (image.getWidth(null) > width) {
+					thumbnail = new ImageIcon(image.getScaledInstance(width,
+							-1, Image.SCALE_DEFAULT));
+				}
+			}
+			if (height > 0) {
+				if (image.getHeight(null) > height) {
+					thumbnail = new ImageIcon(thumbnail.getImage()
+							.getScaledInstance(-1, height, Image.SCALE_DEFAULT));
+				}
+			}
+			image = thumbnail.getImage();
+			repaint();
+		}
 		
-		
+	}
+
+	public void setImage(ImageIcon im, int width, int height) {
+		this.image = im.getImage();
+		if (im != null) {
+			if (width > 0) {
+				if (image.getWidth(null) > width) {
+					thumbnail = new ImageIcon(image.getScaledInstance(width,
+							-1, Image.SCALE_DEFAULT));
+				}
+			}
+			if (height > 0) {
+				if (image.getHeight(null) > height) {
+					thumbnail = new ImageIcon(thumbnail.getImage()
+							.getScaledInstance(-1, height, Image.SCALE_DEFAULT));
+				}
+			}
+			image = thumbnail.getImage();
+			repaint();
+		}
+	}
+
+	public void setImage(BufferedImage im, int width, int height) {
+		this.image = im;
+		if (im != null) {
+			if (width > 0) {
+				if (image.getWidth(null) > width) {
+					thumbnail = new ImageIcon(image.getScaledInstance(width,
+							-1, Image.SCALE_DEFAULT));
+				}
+			}
+			if (height > 0) {
+				if (image.getHeight(null) > height) {
+					thumbnail = new ImageIcon(thumbnail.getImage()
+							.getScaledInstance(-1, height, Image.SCALE_DEFAULT));
+				}
+			}
+			image = thumbnail.getImage();
+			repaint();
+		}
+	}
+
+	public void setImage(String im, int width, int height) {
+		try {
+			this.image = ImageIO.read(new File(im));
+			if (im != null) {
+				if (width > 0) {
+					if (image.getWidth(null) > width) {
+						thumbnail = new ImageIcon(image.getScaledInstance(width,
+								-1, Image.SCALE_DEFAULT));
+					}
+				}
+				if (height > 0) {
+					if (image.getHeight(null) > height) {
+						thumbnail = new ImageIcon(thumbnail.getImage()
+								.getScaledInstance(-1, height, Image.SCALE_DEFAULT));
+					}
+				}
+				image = thumbnail.getImage();
+				repaint();
+			}
+		} catch (IOException e) {
+			System.out.println(e.getMessage());
+		}
+
+	}
+
+	public void paint(Graphics g) {
+		if (image != null)
+			g.drawImage(image, 0, 0, null);
+	}
 }
-

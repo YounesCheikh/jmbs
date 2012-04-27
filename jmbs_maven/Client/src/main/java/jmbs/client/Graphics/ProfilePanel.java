@@ -23,6 +23,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.util.HashMap;
 import java.util.regex.Pattern;
 
@@ -39,6 +40,9 @@ import javax.swing.SwingConstants;
 import jmbs.client.ClientRequests;
 import jmbs.client.CurrentUser;
 import jmbs.client.HashPassword;
+import jmbs.client.Graphics.images.ImageFileView;
+import jmbs.client.Graphics.images.ImageFilter;
+import jmbs.client.Graphics.images.ImagePreview;
 import jmbs.common.User;
 
 public class ProfilePanel extends JPanel {
@@ -54,6 +58,8 @@ public class ProfilePanel extends JPanel {
 	private JPasswordField newpasswordField;
 	private JPasswordField confirmpasswordField;
 	private JTextField profilePicturePathTextField;
+	private JFileChooser fc;
+	ImagePanel profilePicturePanel;
 
 	/**
 	 * Create the panel.
@@ -119,9 +125,9 @@ public class ProfilePanel extends JPanel {
 		confirmpasswordField.setBounds(142, 266, 180, 28);
 		confirmpasswordField.setBorder(BorderFactory.createLineBorder(null));
 
-		JPanel panel = new JPanel();
-		panel.setBounds(6, 324, 70, 70);
-		panel.setBackground(Color.GRAY);
+		profilePicturePanel = new ImagePanel(CurrentUser.DEFAULT_IMAGE.toString());
+		profilePicturePanel.setBounds(6, 324, 70, 70);
+		profilePicturePanel.setBackground(Color.GRAY);
 
 		JSeparator separator_1 = new JSeparator();
 		separator_1.setBounds(9, 306, 264, 12);
@@ -133,25 +139,34 @@ public class ProfilePanel extends JPanel {
 		JButton btnBrowse = new JButton("Browse");
 		btnBrowse.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				JFileChooser chooser = new JFileChooser();
-				// Note: source for ExampleFileFilter can be found in
-				// FileChooserDemo,
-				// under the demo/jfc directory in the Java 2 SDK, Standard
-				// Edition.
-				// ExampleFileFilter filter = new ExampleFileFilter();
-				// filter.addExtension("jpg");
-				// filter.addExtension("gif");
-				// filter.setDescription("JPG & GIF Images");
-				// chooser.setFileFilter(null);
-				// TODO: Add the fileFilter of images.
-				int returnVal = chooser
-						.showOpenDialog(profilePicturePathTextField);
-				if (returnVal == JFileChooser.APPROVE_OPTION) {
-					System.out.println("You chose to open this file: "
-							+ chooser.getSelectedFile().getName());
-					profilePicturePathTextField.setText(chooser
-							.getSelectedFile().getPath());
+				if (fc == null) {
+					fc = new JFileChooser();
+
+					// Add a custom file filter and disable the default
+					// (Accept All) file filter.
+					fc.addChoosableFileFilter(new ImageFilter());
+					fc.setAcceptAllFileFilterUsed(false);
+
+					// Add custom icons for file types.
+					fc.setFileView(new ImageFileView());
+
+					// Add the preview pane.
+					fc.setAccessory(new ImagePreview(fc));
 				}
+
+				// Show it.
+				int returnVal = fc.showDialog(fc, "Attach");
+
+				// Process the results.
+				if (returnVal == JFileChooser.APPROVE_OPTION) {
+					File file = fc.getSelectedFile();
+					profilePicturePathTextField.setText(file.getPath());
+				} else {
+					profilePicturePathTextField.setText("");
+				}
+
+				// Reset the file chooser for the next time it's shown.
+				fc.setSelectedFile(null);
 			}
 		});
 		btnBrowse.setBounds(263, 365, 89, 29);
@@ -174,7 +189,7 @@ public class ProfilePanel extends JPanel {
 		add(emailTextField);
 		add(fnameTextField);
 		add(nameTextField);
-		add(panel);
+		add(profilePicturePanel);
 		add(profilePicturePathTextField);
 		add(btnBrowse);
 		add(separator_1);
@@ -189,6 +204,13 @@ public class ProfilePanel extends JPanel {
 		btnUpdate.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
+
+				if (!profilePicturePathTextField.equals(""))
+					;
+				{
+					profilePicturePanel.setImage(
+							profilePicturePathTextField.getText(), 70, 70);
+				}
 				// This hashMap contains the values which we want to update
 				HashMap<String, Boolean> valuesToEdit = new HashMap<String, Boolean>();
 				// Put the values we want to edit in the HashMap with the false
@@ -295,7 +317,7 @@ public class ProfilePanel extends JPanel {
 												.getPassword()).getHashed()));
 					}
 
-					String updateSucess = "<b>Updates : <b><br />";
+					String updateSucess = "<b>Updates : </b><br />";
 					String updateFailure = "<b>Failures : </b><br />";
 
 					if (editingResults.containsKey("name")) {
@@ -443,4 +465,5 @@ public class ProfilePanel extends JPanel {
 		}
 		return passConfirmed;
 	}
+
 }

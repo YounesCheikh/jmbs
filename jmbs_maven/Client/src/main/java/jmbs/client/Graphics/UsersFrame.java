@@ -54,7 +54,7 @@ public class UsersFrame extends JFrame {
 	private UsrLstPanel resultSearchPanel;
 	private UsrLstPanel flwngUsrsLstPanel;
 	private UsrLstPanel flwrLstPanel;
-	ArrayList<User> flwrList;
+	ArrayList<User> flwrList = new ArrayList<User>();
 	private JCheckBox byNameCheckBox;
 	private JCheckBox chckbxByForeName;
 	private JLabel lblYourFollowers;
@@ -197,8 +197,10 @@ public class UsersFrame extends JFrame {
 		followersPanel.add(flwrScrollPane);
 
 		flwrLstPanel = new UsrLstPanel();
-		flwrList = new ArrayList<User>();
 		flwrList = ClientRequests.getFollowers(CurrentUser.get());
+		if (flwrList == null) {
+			flwrList = new ArrayList<User>();
+		}
 		flwrLstPanel.putList(flwrList);
 
 		flwrScrollPane.setViewportView(flwrLstPanel);
