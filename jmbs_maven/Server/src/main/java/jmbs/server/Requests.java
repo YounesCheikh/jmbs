@@ -360,7 +360,7 @@ public class Requests extends UnicastRemoteObject implements RemoteRequests {
             return new ProjectDAO(con).findProject(name);
         }
         
-        public byte[] getPicture(int userId, String path){
+        public byte[] getPicture(int userId, String path)  throws RemoteException{
             try {
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
                 BufferedImage bi = new PictureDAO(con).getAvatar(userId, path);
@@ -375,7 +375,7 @@ public class Requests extends UnicastRemoteObject implements RemoteRequests {
             }
         }
         
-        public boolean setPicture(int userId, String name, byte[] imageInByte){
+        public boolean setPicture(int userId, String name, byte[] imageInByte)  throws RemoteException{
             try {
                 BufferedImage image = ImageIO.read(new ByteArrayInputStream(imageInByte));
                 return new PictureDAO(con).setAvatar(userId, image, name, true);

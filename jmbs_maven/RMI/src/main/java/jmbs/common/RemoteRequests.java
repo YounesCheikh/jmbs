@@ -226,7 +226,7 @@ public interface RemoteRequests extends Remote {
         
         public Project findProject(String name) throws RemoteException;
         
-        public byte[] getPicture(int userId, String path);
+        public byte[] getPicture(int userId, String path)  throws RemoteException;
         
-        public boolean setPicture(int userId, String name, byte[] imageInByte);
+        public boolean setPicture(int userId, String name, byte[] imageInByte)  throws RemoteException;
 }
