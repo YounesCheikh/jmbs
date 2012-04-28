@@ -39,7 +39,6 @@ import jmbs.client.ClientRequests;
 import jmbs.client.CurrentUser;
 import jmbs.client.HashPassword;
 import jmbs.client.ServerConnection;
-import jmbs.common.RemoteRequests;
 import jmbs.common.User;
 import net.miginfocom.swing.MigLayout;
 

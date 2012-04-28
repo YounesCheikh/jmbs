@@ -39,31 +39,28 @@ public class MessageDAO extends DAO {
 	public MessageDAO(Connection c) {
 		super(c);
 	}
-        
-        private Message createMessage(ResultSet rs) throws SQLException{
-            UserDAO uDAO = new UserDAO(con);
-            ProjectDAO pDAO = new ProjectDAO(con);
-            Message m;
-            User editUser = null;
-            Project p = null;
-            User owner = uDAO.getUser(rs.getInt("iduser"));
-             
-            
-            int projectId = rs.getInt("idproject");
-            int editUserId = rs.getInt("idedituser");
-            if (editUserId != 0) editUser = uDAO.getUser(editUserId);
-            if (projectId != 0) p = pDAO.findProject(projectId);
-            
-            m = new Message(rs.getInt("idmessage"), 
-                            owner,
-                            rs.getString("content"),
-                            rs.getTimestamp("time"),
-                            p,
-                            editUser,
-                            rs.getTimestamp("edittime"));
-                            
-            return m;                   
-        }
+
+	private Message createMessage(ResultSet rs) throws SQLException {
+		UserDAO uDAO = new UserDAO(con);
+		ProjectDAO pDAO = new ProjectDAO(con);
+		Message m;
+		User editUser = null;
+		Project p = null;
+		User owner = uDAO.getUser(rs.getInt("iduser"));
+
+		int projectId = rs.getInt("idproject");
+		int editUserId = rs.getInt("idedituser");
+		if (editUserId != 0)
+			editUser = uDAO.getUser(editUserId);
+		if (projectId != 0)
+			p = pDAO.findProject(projectId);
+
+		m = new Message(rs.getInt("idmessage"), owner, rs.getString("content"),
+				rs.getTimestamp("time"), p, editUser,
+				rs.getTimestamp("edittime"));
+
+		return m;
+	}
 
 	/**
 	 * @param id
@@ -73,16 +70,17 @@ public class MessageDAO extends DAO {
 		set("SELECT * FROM message WHERE idmessage=?;");
 		setInt(1, id);
 		ResultSet res = executeQuery();
-                Message m = null;
+		Message m = null;
 		try {
-                    m = createMessage(res);
+			m = createMessage(res);
 		} catch (SQLException e) {
 			System.out.println("No messages for id " + id + " !");
 		}
 		try {
 			res.close();
 		} catch (SQLException e) {
-			System.err.println("Database acess error !\n Unable to close connection !");
+			System.err
+					.println("Database acess error !\n Unable to close connection !");
 		}
 
 		return m;
@@ -103,18 +101,19 @@ public class MessageDAO extends DAO {
 		UserDAO uDAO = new UserDAO(this.getConnection());
 
 		try {
-			m = new Message(res.getInt("idmessage"), 
-                                uDAO.getUser(res.getInt("iduser")), 
-                                res.getString("content"), 
-                                res.getTimestamp("time"));
+			m = new Message(res.getInt("idmessage"), uDAO.getUser(res
+					.getInt("iduser")), res.getString("content"),
+					res.getTimestamp("time"));
 		} catch (SQLException e) {
-			System.err.println("No messages by " + uDAO.getUser(iduser).getFname() + " !"); // :)
+			System.err.println("No messages by "
+					+ uDAO.getUser(iduser).getFname() + " !"); // :)
 		}
 
 		try {
 			res.close();
 		} catch (SQLException e) {
-			System.err.println("Database acess error !\n Unable to close connection !");
+			System.err
+					.println("Database acess error !\n Unable to close connection !");
 		}
 
 		return m;
@@ -130,52 +129,54 @@ public class MessageDAO extends DAO {
 	 */
 	public int addMessage(Message m) {
 		int messageId = -1;
-		set("INSERT INTO message(content, \"time\", iduser) VALUES (?,?,?);",Statement.RETURN_GENERATED_KEYS );
+		set("INSERT INTO message(content, \"time\", iduser) VALUES (?,?,?);",
+				Statement.RETURN_GENERATED_KEYS);
 		setString(1, m.getMessage());
 		setTimestamp(2, m.getTimestamp());
 		setInt(3, m.getOwner().getId());
 		executeUpdate();
-                try {
-                    ResultSet rs = getGeneratedKeys();
-                    messageId = rs.getInt("idmessage");
-                } catch (SQLException ex) {
-                    System.err.println("Error returning generated key.");
-                } 
+		try {
+			ResultSet rs = getGeneratedKeys();
+			messageId = rs.getInt("idmessage");
+		} catch (SQLException ex) {
+			System.err.println("Error returning generated key.");
+		}
 		return messageId;
 	}
-        
-        public int addMessage(Message m, int projectId) {
+
+	public int addMessage(Message m, int projectId) {
 		int messageId = -1;
-		set("INSERT INTO message(content, \"time\", iduser,idproject) VALUES (?,?,?,?);",Statement.RETURN_GENERATED_KEYS);
+		set("INSERT INTO message(content, \"time\", iduser,idproject) VALUES (?,?,?,?);",
+				Statement.RETURN_GENERATED_KEYS);
 		setString(1, m.getMessage());
 		setTimestamp(2, m.getTimestamp());
 		setInt(3, m.getOwner().getId());
-                setInt(4,projectId);
-                executeUpdate();
-                try {
-                    ResultSet rs = getGeneratedKeys();
-                    messageId = rs.getInt("idmessage");
-                } catch (SQLException ex) {
-                    System.err.println("Error while creating message.");
-                } 
+		setInt(4, projectId);
+		executeUpdate();
+		try {
+			ResultSet rs = getGeneratedKeys();
+			messageId = rs.getInt("idmessage");
+		} catch (SQLException ex) {
+			System.err.println("Error while creating message.");
+		}
 		return messageId;
 	}
-        
+
 	/**
 	 * @param iduser
 	 * @param idlastmessage
 	 * @return list of messages
 	 */
-	public ArrayList<Message> getMessages(int iduser, int idlastmessage, int maxMsg) {
+	public ArrayList<Message> getMessages(int iduser, int idlastmessage,
+			int maxMsg) {
 		ArrayList<Message> msgList = new ArrayList<Message>();
 
 		set("SELECT message.* "
-                        + "FROM message,follows "
-                        + "WHERE (((follows.followed = message.iduser "
-                        + "AND follows.follower=? "
-                        + "AND message.idproject IS NULL) "
-                        + "OR message.iduser=?) AND idmessage>?) " 
-                        + "GROUP BY idmessage ORDER BY idmessage;");
+				+ "FROM message,follows "
+				+ "WHERE (((follows.followed = message.iduser "
+				+ "AND follows.follower=?) "
+				+ "OR message.iduser=?) AND idmessage>? AND message.idproject IS NULL) "
+				+ "GROUP BY idmessage ORDER BY idmessage;");
 		setInt(1, iduser);
 		setInt(2, iduser);
 		setInt(3, idlastmessage);
@@ -188,8 +189,8 @@ public class MessageDAO extends DAO {
 				do {
 					msgList.add(createMessage(res));
 				} while (res.next());
-				//int i = 0;
-				while (msgList.size()>maxMsg) {
+				// int i = 0;
+				while (msgList.size() > maxMsg) {
 					msgList.remove(0);
 				}
 			}
@@ -200,26 +201,26 @@ public class MessageDAO extends DAO {
 		try {
 			res.close();
 		} catch (SQLException e) {
-			System.err.println("Database acess error !\n Unable to close connection !");
+			System.err
+					.println("Database acess error !\n Unable to close connection !");
 		}
 
 		return msgList;
 	}
-        
-        public ArrayList<Message> getMessages(int idUser, int idlastmessage, int maxMsg, int idProject) {
+
+	public ArrayList<Message> getMessages(int idUser, int idlastmessage,
+			int maxMsg, int idProject) {
 		ArrayList<Message> msgList = new ArrayList<Message>();
 
-		set("SELECT message.* "
-                        + "FROM message,follows "
-                        + "WHERE (((follows.followed = message.iduser "
-                        + "AND follows.follower=? "
-                        + "AND message.idproject=?) "
-                        + "OR message.iduser=?) AND idmessage>?) " 
-                        + "GROUP BY idmessage ORDER BY idmessage;");
+		set("SELECT message.* " + "FROM message,follows "
+				+ "WHERE (((follows.followed = message.iduser "
+				+ "AND follows.follower=?) "
+				+ "OR message.iduser=?) AND idmessage>? AND message.idproject=?) "
+				+ "GROUP BY idmessage ORDER BY idmessage;");
 		setInt(1, idUser);
-                setInt(2,idProject);
-		setInt(3, idUser);
-		setInt(4, idlastmessage);
+		setInt(2, idUser);
+		setInt(3, idlastmessage);
+		setInt(4, idProject);
 		ResultSet res = executeQuery();
 
 		UserDAO udao = new UserDAO(con);
@@ -229,8 +230,8 @@ public class MessageDAO extends DAO {
 				do {
 					msgList.add(createMessage(res));
 				} while (res.next());
-				//int i = 0;
-				while (msgList.size()>maxMsg) {
+				// int i = 0;
+				while (msgList.size() > maxMsg) {
 					msgList.remove(0);
 				}
 			}
@@ -241,7 +242,8 @@ public class MessageDAO extends DAO {
 		try {
 			res.close();
 		} catch (SQLException e) {
-			System.err.println("Database acess error !\n Unable to close connection !");
+			System.err
+					.println("Database acess error !\n Unable to close connection !");
 		}
 
 		return msgList;

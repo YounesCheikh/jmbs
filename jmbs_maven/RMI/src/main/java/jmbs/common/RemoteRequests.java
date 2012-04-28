@@ -34,9 +34,11 @@ public interface RemoteRequests extends Remote {
 	 *            - user's password
 	 * @return the user if pass and email match null if not
 	 * @throws RemoteException
-	 * @throws SecurityException if a user attempts to connect too many times
+	 * @throws SecurityException
+	 *             if a user attempts to connect too many times
 	 */
-	public User connectUser(String em, String psw) throws RemoteException, SecurityException;
+	public User connectUser(String em, String psw) throws RemoteException,
+			SecurityException;
 
 	/**
 	 * @param m
@@ -55,7 +57,8 @@ public interface RemoteRequests extends Remote {
 	 * @return true if creating new user on db is successed
 	 * @throws RemoteException
 	 */
-	public boolean createUser(User u, String hashedpassword) throws RemoteException;
+	public boolean createUser(User u, String hashedpassword)
+			throws RemoteException;
 
 	/**
 	 * Search for users on DB
@@ -65,7 +68,8 @@ public interface RemoteRequests extends Remote {
 	 * @return a list of users who have name as the entred string
 	 * @throws RemoteException
 	 */
-	public ArrayList<User> searchUser(String userName, int param) throws RemoteException;
+	public ArrayList<User> searchUser(String userName, int param)
+			throws RemoteException;
 
 	/**
 	 * add relation on follows table in the DB
@@ -77,7 +81,8 @@ public interface RemoteRequests extends Remote {
 	 * @return true if editing on the DB is successed
 	 * @throws RemoteException
 	 */
-	public boolean follows(int idfollower, int idfollowed) throws RemoteException;
+	public boolean follows(int idfollower, int idfollowed)
+			throws RemoteException;
 
 	/**
 	 * remove relation from follows table in the DB
@@ -89,7 +94,8 @@ public interface RemoteRequests extends Remote {
 	 * @return true if editing on the DB is successed
 	 * @throws RemoteException
 	 */
-	public boolean unFollow(int idfollower, int idfollowed) throws RemoteException;
+	public boolean unFollow(int idfollower, int idfollowed)
+			throws RemoteException;
 
 	/**
 	 * @param u
@@ -110,123 +116,161 @@ public interface RemoteRequests extends Remote {
 	 * @return list of messages
 	 * @throws RemoteException
 	 */
-	public ArrayList<Message> getLatestTL(int iduser, int idlastmessage, int maxMsg) throws RemoteException;
+	public ArrayList<Message> getLatestTL(int iduser, int idlastmessage,
+			int maxMsg) throws RemoteException;
 
 	/**
-	 * Search for projects have a name like 'likeName' in the DB 
-	 * @param likeName the name of project
-	 * @return a list of projects 
-	 * @throws RemoteException
-	 */
-	public ArrayList<Project> searchForProject(String likeName) throws RemoteException ;
-	
-	
-	
-	/**
-	 * participate a user into a project with the default authorization level
-	 * @param idUser user id
-	 * @param idProject project id
-	 * @return true if participation was set, else false
-	 * @throws RemoteException
-	 */
-	public boolean participate(int idUser, int idProject) throws RemoteException ;
-	
-	/**
-	 * participate a user into a project with the given authorization level
-	 * @param idUser user id
-	 * @param idProject project id
-	 * @param auth authorization level
-	 * @return true if participation was set, else false
-	 * @throws RemoteException
-	 */
-	public boolean participate(int idUser, int idProject, int auth) throws RemoteException ;
-
-	
-	/**
-	 * un participate user from project
-	 * @param idUser user ID
-	 * @param idProject project ID
-	 * @return true if participation was unset<br />
-	 * 			example: if user is not participated into project we return false
-	 * @throws RemoteException
-	 */
-	public boolean unParticipate(int idUser, int idProject) throws RemoteException ; 
-	
-	
-	 /**
-         * Creates a project under user's name if he is authorised to do so
-         * @param name - project name
-         * @param iduser - user's id
-         * @return 
-         * @throws SecurityException if user is not allowed to create Project
-         */
-	public Project createProject(String name,int iduser) throws RemoteException, SecurityException ;
-	
-	
-        /**
-         * Closes a project if the user is authorized to close it.
-         * @param idUser - the user who wants to close the project
-         * @param idProject - the project to close
-         * @return true if the operation was sucessful
-         * @throws RemoteException 
-         * @throws SecurityException if user has not requiered access level
-         */
-	public boolean closeProject(int idUser, int idProject) throws RemoteException, SecurityException ;
-	
-	
-	/**
-	 * search for projects where the user is participated
-	 * @param idUser user id
+	 * Search for projects have a name like 'likeName' in the DB
+	 * 
+	 * @param likeName
+	 *            the name of project
 	 * @return a list of projects
 	 * @throws RemoteException
 	 */
-	public ArrayList<Project> getUserProjects (int idUser) throws RemoteException ;
-	
+	public ArrayList<Project> searchForProject(String likeName)
+			throws RemoteException;
+
+	/**
+	 * participate a user into a project with the default authorization level
+	 * 
+	 * @param idUser
+	 *            user id
+	 * @param idProject
+	 *            project id
+	 * @return true if participation was set, else false
+	 * @throws RemoteException
+	 */
+	public boolean participate(int idUser, int idProject)
+			throws RemoteException;
+
+	/**
+	 * participate a user into a project with the given authorization level
+	 * 
+	 * @param idUser
+	 *            user id
+	 * @param idProject
+	 *            project id
+	 * @param auth
+	 *            authorization level
+	 * @return true if participation was set, else false
+	 * @throws RemoteException
+	 */
+	public boolean participate(int idUser, int idProject, int auth)
+			throws RemoteException;
+
+	/**
+	 * un participate user from project
+	 * 
+	 * @param idUser
+	 *            user ID
+	 * @param idProject
+	 *            project ID
+	 * @return true if participation was unset<br />
+	 *         example: if user is not participated into project we return false
+	 * @throws RemoteException
+	 */
+	public boolean unParticipate(int idUser, int idProject)
+			throws RemoteException;
+
+	/**
+	 * Creates a project under user's name if he is authorised to do so
+	 * 
+	 * @param name
+	 *            - project name
+	 * @param iduser
+	 *            - user's id
+	 * @return
+	 * @throws SecurityException
+	 *             if user is not allowed to create Project
+	 */
+	public Project createProject(String name, int iduser)
+			throws RemoteException, SecurityException;
+
+	/**
+	 * Closes a project if the user is authorized to close it.
+	 * 
+	 * @param idUser
+	 *            - the user who wants to close the project
+	 * @param idProject
+	 *            - the project to close
+	 * @return true if the operation was sucessful
+	 * @throws RemoteException
+	 * @throws SecurityException
+	 *             if user has not requiered access level
+	 */
+	public boolean closeProject(int idUser, int idProject)
+			throws RemoteException, SecurityException;
+
+	/**
+	 * search for projects where the user is participated
+	 * 
+	 * @param idUser
+	 *            user id
+	 * @return a list of projects
+	 * @throws RemoteException
+	 */
+	public ArrayList<Project> getUserProjects(int idUser)
+			throws RemoteException;
+
 	/**
 	 * search for all users have participated into a project
-	 * @param idProject project id
+	 * 
+	 * @param idProject
+	 *            project id
 	 * @return a list of users
 	 * @throws RemoteException
 	 */
-	public ArrayList<User> getProjectUsers (int idProject) throws RemoteException ;
-	
+	public ArrayList<User> getProjectUsers(int idProject)
+			throws RemoteException;
+
 	/**
-         * Changes the user's password.<br>
-         * It requires the old password.
-         * @param userid - the user id
-         * @param oldPass - the old password
-         * @param newPass - the new password
-         * @return true if change was sucessful 
-         * @throws RemoteException 
-         */
-	public boolean changePassword(int userid, String oldPass, String newPass) throws RemoteException;
-	
+	 * Changes the user's password.<br>
+	 * It requires the old password.
+	 * 
+	 * @param userid
+	 *            - the user id
+	 * @param oldPass
+	 *            - the old password
+	 * @param newPass
+	 *            - the new password
+	 * @return true if change was sucessful
+	 * @throws RemoteException
+	 */
+	public boolean changePassword(int userid, String oldPass, String newPass)
+			throws RemoteException;
+
 	/**
 	 * logs out a user
 	 */
 	public void logOut(int iduser) throws RemoteException;
-	
-	public ArrayList<Project> getOwnedProjects(int userid) throws RemoteException;
-        
-        public boolean changeAvatar(int userid, BufferedImage img, String nom, boolean overwrite) throws RemoteException;
-        
-        public boolean changeMail(int userid, String pass, String mail) throws RemoteException;
-        
-        public int addMessage(Message m, int projectId) throws RemoteException; 
-        
-        public boolean changFname(int userid, String fname) throws RemoteException;
-                
-        public boolean changName(int userid, String name) throws RemoteException;
-        
-        public boolean createUser(int userid, User u, String hashedPassword, int authlvl) throws RemoteException, SecurityException;
-        
-        public ArrayList<Message> getLastetProjectTL(int iduser, int idlastmessage, int maxMsg, int idproject) throws RemoteException;
-        
-        public boolean close() throws RemoteException;
-        
-        public Project findProject(String name) throws RemoteException;
-        
-        public byte[] getPicture(int userId, String path)  throws RemoteException;
-        
-        public boolean setPicture(int userId, String name, byte[] imageInByte)  throws RemoteException;
+
+	public ArrayList<Project> getOwnedProjects(int userid)
+			throws RemoteException;
+
+	public boolean changeAvatar(int userid, BufferedImage img, String nom,
+			boolean overwrite) throws RemoteException;
+
+	public boolean changeMail(int userid, String pass, String mail)
+			throws RemoteException;
+
+	public int addMessage(Message m, int projectId) throws RemoteException;
+
+	public boolean changFname(int userid, String fname) throws RemoteException;
+
+	public boolean changName(int userid, String name) throws RemoteException;
+
+	public boolean createUser(int userid, User u, String hashedPassword,
+			int authlvl) throws RemoteException, SecurityException;
+
+	public ArrayList<Message> getLastetProjectTL(int iduser, int idlastmessage,
+			int maxMsg, int idproject) throws RemoteException;
+
+	public boolean close() throws RemoteException;
+
+	public Project findProject(String name) throws RemoteException;
+
+	public byte[] getPicture(int userId, String path) throws RemoteException;
+
+	public boolean setPicture(int userId, String name, byte[] imageInByte)
+			throws RemoteException;
 }

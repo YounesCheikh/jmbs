@@ -125,7 +125,8 @@ public class ProfilePanel extends JPanel {
 		confirmpasswordField.setBounds(142, 266, 180, 28);
 		confirmpasswordField.setBorder(BorderFactory.createLineBorder(null));
 
-		profilePicturePanel = new ImagePanel(CurrentUser.DEFAULT_IMAGE.toString());
+		profilePicturePanel = new ImagePanel(
+				CurrentUser.DEFAULT_IMAGE.toString(), 70, 70);
 		profilePicturePanel.setBounds(6, 324, 70, 70);
 		profilePicturePanel.setBackground(Color.GRAY);
 
@@ -205,11 +206,20 @@ public class ProfilePanel extends JPanel {
 
 			public void actionPerformed(ActionEvent e) {
 
-				if (!profilePicturePathTextField.equals(""))
-					;
-				{
-					profilePicturePanel.setImage(
-							profilePicturePathTextField.getText(), 70, 70);
+				if (!profilePicturePathTextField.equals("")) {
+					byte[] imInByteTmp = ClientRequests
+							.pathToByte(profilePicturePathTextField.getText());
+					if (imInByteTmp != null) {
+						boolean pictureSetted = ClientRequests.setPicture(
+								CurrentUser.getId(), "test", imInByteTmp);
+						if (pictureSetted)
+							profilePicturePanel.setImage(
+									profilePicturePathTextField.getText(), 70,
+									70);
+					}
+					else {
+						SayToUser.warning("Wrong type!", "Please choose a right image format , 'JPG' , 'JPEG'...");
+					}
 				}
 				// This hashMap contains the values which we want to update
 				HashMap<String, Boolean> valuesToEdit = new HashMap<String, Boolean>();
@@ -366,8 +376,9 @@ public class ProfilePanel extends JPanel {
 									.createLineBorder(Color.red));
 						}
 					}
-
-					if (!updateSucess.equals("<b>Updates : <b><br />")) {
+					// If editing successed of some fields
+					if (!updateSucess.equals("<b>Updates : </b><br />")) {
+						// If All right
 						if (updateFailure.equals("<b>Failures : </b><br />")) {
 							SayToUser.success("Update Successed", updateSucess);
 						} else {

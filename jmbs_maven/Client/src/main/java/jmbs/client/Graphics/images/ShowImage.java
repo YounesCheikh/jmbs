@@ -1,6 +1,5 @@
 package jmbs.client.Graphics.images;
 
-import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
 import javax.swing.ImageIcon;

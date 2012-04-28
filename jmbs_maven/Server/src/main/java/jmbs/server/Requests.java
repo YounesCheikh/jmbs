@@ -28,8 +28,6 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.sql.Connection;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import jmbs.common.*;
 
@@ -280,9 +278,9 @@ public class Requests extends UnicastRemoteObject implements RemoteRequests {
         
         public ArrayList<Message> getLastetProjectTL(int iduser, int idlastmessage, int maxMsg, int idproject) throws RemoteException{
             ArrayList<Message> ra = new ArrayList<Message>();
-            if (new ProjectDAO(con).isUserInvolved(idproject, iduser)){
+            //if (new ProjectDAO(con).isUserInvolved(idproject, iduser)){
                 ra = new MessageDAO(con).getMessages(iduser, idlastmessage, maxMsg, idproject);
-            }
+            //}
 		
             return ra;
         }

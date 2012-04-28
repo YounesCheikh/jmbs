@@ -80,9 +80,7 @@ public class MyProjectsPanel extends JPanel {
 		JButton btnRefresh = new JButton("Refresh");
 		btnRefresh.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				CurrentUser.get().setProjects(
-						ClientRequests.getUserProjects(CurrentUser.getId()));
-				putList(CurrentUser.getProjects());
+				putList(ClientRequests.getOwnedProjects(CurrentUser.getId()));
 			}
 		});
 		panel.add(btnRefresh);
@@ -96,7 +94,7 @@ public class MyProjectsPanel extends JPanel {
 		prjctListPanel.setLayout(new MigLayout("", "[]", "[]"));
 		// ArrayList<Project> prjctList =
 		// RemoteRequests.getUserProjects(CurrentUser.)
-		putList(CurrentUser.getProjects());
+		putList(ClientRequests.getOwnedProjects(CurrentUser.getId()));
 		scrollPane.setViewportView(prjctListPanel);
 
 	}
