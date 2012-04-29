@@ -51,7 +51,7 @@ public class ConnectionFrame extends JFrame {
 			}
 		});
 		this.setTitle("Connect to JMBS!");
-		this.setSize(430, 430);
+		this.setSize(430, 360);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		// this.setLocationRelativeTo(null);
