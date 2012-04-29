@@ -30,13 +30,12 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.SoftBevelBorder;
 
 import jmbs.client.ClientRequests;
-import jmbs.common.Message;
 import jmbs.common.Project;
-import javax.swing.ScrollPaneConstants;
 
 public class SearchProjectPanel extends JPanel {
 
@@ -71,11 +70,10 @@ public class SearchProjectPanel extends JPanel {
 				plist = ClientRequests.searchForProject(textField.getText());
 				foundedPrjctsPanel.removeAll();
 				foundedPrjctsPanel.updateUI();
-				if (plist != null)
-				{
+				if (plist != null) {
 					ArrayList<Project> pListTmp = new ArrayList<Project>();
-					for(Project p: plist) {
-						if(p.getStatus()==Project.STATUS_OPENED)
+					for (Project p : plist) {
+						if (p.getStatus() == Project.STATUS_OPENED)
 							pListTmp.add(p);
 					}
 					foundedPrjctsPanel.putList(pListTmp);
@@ -85,7 +83,8 @@ public class SearchProjectPanel extends JPanel {
 		panel.add(btnSearch, BorderLayout.EAST);
 		foundedPrjctsPanel = new PrjctsListPanel();
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		scrollPane
+				.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		scrollPane.setViewportBorder(new SoftBevelBorder(BevelBorder.LOWERED,
 				null, null, null, null));
 		scrollPane.updateUI();

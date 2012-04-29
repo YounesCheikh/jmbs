@@ -18,53 +18,44 @@
  * 
  */
 
-package jmbs.client.Graphics;
+package jmbs.client.Graphics.users;
 
 import java.awt.Component;
 import java.util.ArrayList;
 
 import javax.swing.JPanel;
 
-import jmbs.common.Message;
+import jmbs.client.CurrentUser;
+import jmbs.common.User;
 import net.miginfocom.swing.MigLayout;
 
-public class TimeLinePanel extends JPanel {
+public class UsrLstPanel extends JPanel {
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -8369036368823849803L;
-	private static int idLastMessage = 0;
+	private static final long serialVersionUID = -346658870300155170L;
 
 	/**
 	 * Create the panel.
 	 */
-	public TimeLinePanel() {
-		// Set maximum width possible with difault height
+	public UsrLstPanel() {
 		setLayout(new MigLayout("", "[grow 80,fill]", "[]"));
-		// add(new MsgPanel(new Message()), "wrap", 0);
 	}
 
-	public void putMessage(Component obj) {
+	public void putUser(Component obj) {
 		// put new element and go to next row
 		this.add(obj, "wrap", 0);
 		this.updateUI();
 	}
 
-	public void putList(ArrayList<Message> msgList) {
-		if (msgList != null) {
-			for (Message m : msgList) {
-				putMessage(new MsgPanel(m));
-				idLastMessage = m.getId();
+	public void putList(ArrayList<User> userList) {
+		if (userList != null) {
+			for (User u : userList) {
+				// don't display the current user in the list
+				if (!u.equals(CurrentUser.get()))
+					putUser(new FlwUsrPanel(u));
 			}
 		}
-	}
-
-	public int getLastIdMsg() {
-		return idLastMessage;
-	}
-
-	public void setLastIdMsg(int id) {
-		idLastMessage = id;
 	}
 }

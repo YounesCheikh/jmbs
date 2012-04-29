@@ -22,6 +22,7 @@ package jmbs.client.Graphics;
 
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+
 import javax.swing.JFrame;
 
 import jmbs.client.SysConf;
@@ -54,7 +55,7 @@ public class ConnectionFrame extends JFrame {
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		// this.setLocationRelativeTo(null);
-		new SysConf().centerThisFrame(this);
+		SysConf.centerThisFrame(this);
 
 		ConnectionPanel cp = new ConnectionPanel(w, this);
 		this.getContentPane().add(cp);

@@ -213,14 +213,11 @@ public class MessageDAO extends DAO {
 		ArrayList<Message> msgList = new ArrayList<Message>();
 
 		set("SELECT message.* " + "FROM message,follows "
-				+ "WHERE (((follows.followed = message.iduser "
-				+ "AND follows.follower=?) "
-				+ "OR message.iduser=?) AND idmessage>? AND message.idproject=?) "
+				+ "WHERE ( idmessage>? AND message.idproject=?) "
 				+ "GROUP BY idmessage ORDER BY idmessage;");
-		setInt(1, idUser);
-		setInt(2, idUser);
-		setInt(3, idlastmessage);
-		setInt(4, idProject);
+
+		setInt(1, idlastmessage);
+		setInt(2, idProject);
 		ResultSet res = executeQuery();
 
 		UserDAO udao = new UserDAO(con);

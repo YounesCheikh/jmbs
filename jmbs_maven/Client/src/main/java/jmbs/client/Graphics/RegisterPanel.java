@@ -37,6 +37,8 @@ import javax.swing.JTextField;
 import jmbs.client.ClientRequests;
 import jmbs.client.HashPassword;
 import jmbs.client.ServerConnection;
+import jmbs.client.Graphics.images.ImagePanel;
+import jmbs.client.Graphics.others.SayToUser;
 import jmbs.common.User;
 import net.miginfocom.swing.MigLayout;
 
@@ -53,7 +55,6 @@ public class RegisterPanel extends JPanel {
 	private JTextField nameTextField;
 	private JLabel lblResp;
 	private RegisterFrame rf;
-
 	/**
 	 * Create the panel.
 	 */
@@ -98,7 +99,7 @@ public class RegisterPanel extends JPanel {
 	}
 
 	public RegisterPanel(final RegisterFrame rf) {
-		this.rf = rf; // Regsitration frame
+		this.rf = rf;
 		JLabel lblFirstName = new JLabel("First Name:");
 
 		JLabel lblLastName = new JLabel("Last Name:");
@@ -250,12 +251,13 @@ public class RegisterPanel extends JPanel {
 				lblResp.setForeground(new Color(255, 0, 0));
 
 			} else {
-				RegistrationSuccessed rs = new RegistrationSuccessed(
-						nameTextField.getText());
-				lblResp.setText("Right email");
-				lblResp.setForeground(new Color(0, 100, 0));
-				rf.setVisible(false);
-				rs.setVisible(true);
+				SayToUser
+						.success(
+								"Congratulations!",
+								"Thanks "
+										+ nameTextField.getText()
+										+ "! your registration has been successful. Now you can login using your email and password.");
+			rf.dispose();
 			}
 
 		}

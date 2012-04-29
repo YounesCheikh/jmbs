@@ -33,8 +33,11 @@ import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
+import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 
 import jmbs.client.ClientRequests;
@@ -42,11 +45,10 @@ import jmbs.client.CurrentUser;
 import jmbs.client.HashPassword;
 import jmbs.client.Graphics.images.ImageFileView;
 import jmbs.client.Graphics.images.ImageFilter;
+import jmbs.client.Graphics.images.ImagePanel;
 import jmbs.client.Graphics.images.ImagePreview;
+import jmbs.client.Graphics.others.SayToUser;
 import jmbs.common.User;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.ScrollPaneConstants;
 
 public class ProfilePanel extends JPanel {
 
@@ -219,9 +221,10 @@ public class ProfilePanel extends JPanel {
 							profilePicturePanel.setImage(
 									profilePicturePathTextField.getText(), 70,
 									70);
-					}
-					else {
-						SayToUser.warning("Wrong type!", "Please choose a right image format , 'JPG' , 'JPEG'...");
+					} else {
+						SayToUser
+								.warning("Wrong type!",
+										"Please choose a right image format , 'JPG' , 'JPEG'...");
 					}
 				}
 				// This hashMap contains the values which we want to update
@@ -405,16 +408,17 @@ public class ProfilePanel extends JPanel {
 		});
 		btnUpdate.setBounds(235, 519, 117, 29);
 		add(btnUpdate);
-		
+
 		JLabel lblAboutYou = new JLabel("About You:");
 		lblAboutYou.setBounds(9, 154, 89, 16);
 		add(lblAboutYou);
-		
+
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		scrollPane
+				.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		scrollPane.setBounds(9, 171, 330, 96);
 		add(scrollPane);
-		
+
 		JTextArea aboutTextArea = new JTextArea();
 		aboutTextArea.setLineWrap(true);
 		aboutTextArea.setText("A new user of JMBS!");

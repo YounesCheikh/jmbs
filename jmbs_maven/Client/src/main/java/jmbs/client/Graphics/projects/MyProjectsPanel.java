@@ -5,6 +5,8 @@ import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
@@ -17,11 +19,9 @@ import javax.swing.ScrollPaneConstants;
 
 import jmbs.client.ClientRequests;
 import jmbs.client.CurrentUser;
-import jmbs.client.Graphics.SayToUser;
+import jmbs.client.Graphics.others.SayToUser;
 import jmbs.common.Project;
 import net.miginfocom.swing.MigLayout;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
 
 public class MyProjectsPanel extends JPanel {
 

@@ -25,7 +25,7 @@ import javax.swing.UIManager.LookAndFeelInfo;
 
 import jmbs.client.Graphics.ConnectionFrame;
 import jmbs.client.Graphics.MainWindow;
-import jmbs.client.Graphics.SayToUser;
+import jmbs.client.Graphics.others.SayToUser;
 
 public class MainClient {
 	private static MainWindow window;

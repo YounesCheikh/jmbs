@@ -18,7 +18,6 @@
  * 
  */
 
-
 package jmbs.client.Graphics;
 
 import javax.swing.JFrame;

@@ -39,6 +39,7 @@ import jmbs.client.ClientRequests;
 import jmbs.client.CurrentUser;
 import jmbs.client.HashPassword;
 import jmbs.client.ServerConnection;
+import jmbs.client.Graphics.images.ImagePanel;
 import jmbs.common.User;
 import net.miginfocom.swing.MigLayout;
 
@@ -195,11 +196,10 @@ public class ConnectionPanel extends JPanel {
 		User u = ClientRequests.connectUser(this.emailTextField.getText(),
 				new HashPassword(listToString(passwordField.getPassword()))
 						.getHashed());
-		if(u==null) {
+		if (u == null) {
 			respLabel.setText("Connection impossible...");
 			respLabel.setForeground(new Color(100, 0, 0));
-		}
-		else if (u.getId() != -1) {
+		} else if (u.getId() != -1) {
 			cf.dispose();
 			new CurrentUser(u);
 			this.initMainWindow();

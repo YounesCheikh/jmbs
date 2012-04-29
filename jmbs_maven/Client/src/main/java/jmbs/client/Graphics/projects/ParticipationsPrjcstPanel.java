@@ -9,11 +9,11 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.ScrollPaneConstants;
 
 import jmbs.client.ClientRequests;
 import jmbs.client.CurrentUser;
 import jmbs.common.Project;
-import javax.swing.ScrollPaneConstants;
 
 public class ParticipationsPrjcstPanel extends JPanel {
 
@@ -42,7 +42,7 @@ public class ParticipationsPrjcstPanel extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				ArrayList<Project> pList = new ArrayList<Project>();
 				pList = ClientRequests.getUserProjects(CurrentUser.getId());
-				if (pList!=null)
+				if (pList != null)
 					CurrentUser.get().setProjects(pList);
 				prticptionPanel.putList(CurrentUser.getProjects());
 				lblProjectsFound.setText(("Projects Found: " + CurrentUser
@@ -52,7 +52,8 @@ public class ParticipationsPrjcstPanel extends JPanel {
 		prtcptionTopPanel.add(btnRefresh, BorderLayout.EAST);
 
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		scrollPane
+				.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		add(scrollPane, BorderLayout.CENTER);
 
 		prticptionPanel = new PrjctsListPanel();

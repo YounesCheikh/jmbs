@@ -18,8 +18,9 @@
  * 
  */
 
-package jmbs.client.Graphics;
+package jmbs.client.Graphics.messages;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
@@ -46,12 +47,6 @@ import jmbs.client.ClientRequests;
 import jmbs.client.CurrentUser;
 import jmbs.client.SysConf;
 import jmbs.common.Message;
-import net.miginfocom.swing.MigLayout;
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
-import javax.swing.LayoutStyle.ComponentPlacement;
-import javax.swing.border.BevelBorder;
-import javax.swing.border.SoftBevelBorder;
 
 public class NewMessageFrame extends JFrame {
 
@@ -65,13 +60,15 @@ public class NewMessageFrame extends JFrame {
 	private String newMsgStr;
 	private static Point point = new Point();
 	private JLabel lblNbchars;
+	private JPanel panel;
+	private JPanel panel_1;
 
 	/**
 	 * Create the frame.
 	 */
 	public NewMessageFrame(final TimeLinePanel tlpanel) {
-		//setLocationRelativeTo(null);
-		new SysConf().centerThisFrame(this);
+		// setLocationRelativeTo(null);
+		SysConf.centerThisFrame(this);
 		addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
@@ -93,7 +90,7 @@ public class NewMessageFrame extends JFrame {
 		setAlwaysOnTop(true);
 		setUndecorated(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 320, 209);
+		setSize(320, 209);
 		contentPane = new JPanel();
 		contentPane.setBackground(Color.DARK_GRAY);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -105,33 +102,6 @@ public class NewMessageFrame extends JFrame {
 		scrollPane
 				.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
-		JButton btnSend = new JButton("Send");
-		btnSend.setForeground(Color.LIGHT_GRAY);
-		btnSend.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, Color.BLACK, new Color(128, 128, 128), Color.BLACK, new Color(128, 128, 128)));
-		btnSend.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-
-				// prevent the to send the emepty and the very long messages (>600 chars) to the DB
-				if (textArea.getText().length() > 0 && textArea.getText().length()<=599) {
-					newMsgStr = textArea.getText();//replaceAll("'", "$'$");
-					Message m = new Message(CurrentUser.get(), newMsgStr,
-							new Timestamp(Calendar.getInstance().getTimeInMillis()));
-					Integer getIdMsg = 0;
-					getIdMsg = ClientRequests.addMessage(m);
-					System.out.println(""+getIdMsg);
-					if (!getIdMsg.equals(-1)) {
-						tlpanel.putMessage(new MsgPanel(new Message(
-								CurrentUser.get(), textArea.getText(),
-								new Timestamp(Calendar.getInstance().getTimeInMillis()))));
-						tlpanel.setLastIdMsg(getIdMsg);
-						textArea.setText("");
-						setVisible(false);
-					}
-
-				}
-			}
-		});
-
 		textArea = new JTextArea();
 		textArea.setWrapStyleWord(true);
 		textArea.addKeyListener(new KeyAdapter() {
@@ -140,54 +110,72 @@ public class NewMessageFrame extends JFrame {
 				if (textArea.getText().equals(""))
 					lblNbchars.setText("0");
 				else {
-					if(textArea.getText().length()>=599) lblNbchars.setForeground(Color.RED);
-					else lblNbchars.setForeground(getForeground());
+					if (textArea.getText().length() >= 599)
+						lblNbchars.setForeground(Color.RED);
+					else
+						lblNbchars.setForeground(getForeground());
 					lblNbchars.setText("" + (textArea.getText().length() + 1));
-				lblNbchars.updateUI();
+					lblNbchars.updateUI();
 				}
 			}
 		});
 		textArea.setLineWrap(true);
 		textArea.setBackground(new Color(245, 245, 245));
 		scrollPane.setViewportView(textArea);
+		contentPane.setLayout(new BorderLayout(0, 0));
+		contentPane.add(scrollPane);
+
+		panel = new JPanel();
+		contentPane.add(panel, BorderLayout.SOUTH);
+		panel.setLayout(new BorderLayout(0, 0));
 
 		JButton btnCancel = new JButton("Cancel");
-		btnCancel.setForeground(Color.LIGHT_GRAY);
-		btnCancel.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, Color.BLACK, new Color(128, 128, 128), Color.BLACK, new Color(128, 128, 128)));
+		panel.add(btnCancel, BorderLayout.WEST);
+		btnCancel.setForeground(Color.BLACK);
+
+		panel_1 = new JPanel();
+		panel.add(panel_1, BorderLayout.EAST);
+		panel_1.setLayout(new BorderLayout(0, 0));
+
+		JButton btnSend = new JButton("Send");
+		panel_1.add(btnSend, BorderLayout.EAST);
+		btnSend.setForeground(Color.BLACK);
+
+		lblNbchars = new JLabel("" + (textArea.getText().length()));
+		panel_1.add(lblNbchars, BorderLayout.CENTER);
+		lblNbchars.setForeground(Color.BLACK);
+		btnSend.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+
+				// prevent the to send the emepty and the very long messages
+				// (>600 chars) to the DB
+				if (textArea.getText().length() > 0
+						&& textArea.getText().length() <= 599) {
+					newMsgStr = textArea.getText();// replaceAll("'", "$'$");
+					Message m = new Message(CurrentUser.get(), newMsgStr,
+							new Timestamp(Calendar.getInstance()
+									.getTimeInMillis()));
+					Integer getIdMsg = 0;
+					getIdMsg = ClientRequests.addMessage(m);
+					System.out.println("" + getIdMsg);
+					if (!getIdMsg.equals(-1)) {
+						tlpanel.putMessage(new MsgPanel(new Message(CurrentUser
+								.get(), textArea.getText(), new Timestamp(
+								Calendar.getInstance().getTimeInMillis()))));
+						tlpanel.setLastIdMsg(getIdMsg);
+						textArea.setText("");
+						setVisible(false);
+					}
+
+				}
+			}
+		});
 		btnCancel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				textArea.setText("");
 				setVisible(false);
 			}
 		});
-
-		lblNbchars = new JLabel("" + (textArea.getText().length()));
-		lblNbchars.setForeground(Color.LIGHT_GRAY);
-		GroupLayout gl_contentPane = new GroupLayout(contentPane);
-		gl_contentPane.setHorizontalGroup(
-			gl_contentPane.createParallelGroup(Alignment.LEADING)
-				.addGroup(Alignment.TRAILING, gl_contentPane.createSequentialGroup()
-					.addContainerGap()
-					.addComponent(btnCancel, GroupLayout.PREFERRED_SIZE, 81, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED, 104, Short.MAX_VALUE)
-					.addComponent(lblNbchars, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(btnSend, GroupLayout.PREFERRED_SIZE, 74, GroupLayout.PREFERRED_SIZE)
-					.addGap(4))
-				.addComponent(scrollPane, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 310, Short.MAX_VALUE)
-		);
-		gl_contentPane.setVerticalGroup(
-			gl_contentPane.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 160, GroupLayout.PREFERRED_SIZE)
-					.addGap(4)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-							.addComponent(btnSend, GroupLayout.PREFERRED_SIZE, 33, GroupLayout.PREFERRED_SIZE)
-							.addComponent(lblNbchars))
-						.addComponent(btnCancel, GroupLayout.PREFERRED_SIZE, 33, GroupLayout.PREFERRED_SIZE))
-					.addContainerGap())
-		);
-		contentPane.setLayout(gl_contentPane);
 	}
 
 	/**

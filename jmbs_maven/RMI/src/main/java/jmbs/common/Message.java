@@ -34,9 +34,6 @@ public class Message implements Serializable {
 	private User owner;
 	private String message;
 	private Timestamp t;
-        private Project project;
-        private User editUser = null;
-        private Timestamp editTime = null;
 
 	public Message() {
 
@@ -56,23 +53,20 @@ public class Message implements Serializable {
 	 * @param t
 	 *            (String) title of the message
 	 */
-	public Message(int idmessage, User owner, String content, Timestamp createDate, Project p, User editUser, Timestamp editTime) {
+	public Message(int idmessage, User owner, String content,
+			Timestamp createDate, Project p, User editUser, Timestamp editTime) {
 		this.id = idmessage;
 		this.t = createDate;
 		this.message = content;
 		this.owner = owner;
-                this.project=p;
-                this.editUser=editUser;
-                this.editTime=editTime;
-                
+
 	}
-        
-        public Message(int id, User o, String m, Timestamp dt) {
+
+	public Message(int id, User o, String m, Timestamp dt) {
 		this.id = id;
 		this.t = dt;
 		this.message = m;
 		this.owner = o;
-                this.project=null;
 	}
 
 	/**
@@ -154,14 +148,14 @@ public class Message implements Serializable {
 		this.t = t;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString() {
 		return ("\nSent by " + owner.getFname() + " at " + t + ": " + message + "");
 	}
-	
-
 
 }

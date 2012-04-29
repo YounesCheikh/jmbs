@@ -32,6 +32,11 @@ import javax.swing.JSeparator;
 
 import jmbs.client.CurrentUser;
 import jmbs.client.SysConf;
+import jmbs.client.Graphics.messages.NewMessageFrame;
+import jmbs.client.Graphics.messages.TimeLinePanel;
+import jmbs.client.Graphics.others.AboutFrame;
+import jmbs.client.Graphics.others.Preferences;
+import jmbs.client.Graphics.users.UsersFrame;
 
 public class MainMenuBar extends JMenuBar {
 
@@ -40,12 +45,12 @@ public class MainMenuBar extends JMenuBar {
 	 */
 	private static final long serialVersionUID = 2765541073906585914L;
 	private static TimeLinePanel timelinepanel;
-	private NewMessageFrame nmFrame;
-	private AboutFrame about;
-	private UsersFrame uFrame;
-	private JFrame frmJmbsClient;
+	private static NewMessageFrame nmFrame;
+	private static AboutFrame about;
+	private static UsersFrame uFrame;
+	private static JFrame frmJmbsClient;
 	private MyApplicationListener listener;
-	private Preferences prfrm;
+	private static Preferences prfrm;
 	private boolean isMac = new SysConf().isMac() ? true : false;
 
 	/**
@@ -133,21 +138,7 @@ public class MainMenuBar extends JMenuBar {
 		JMenuItem mntmDisconnect = new JMenuItem("Disconnect");
 		mntmDisconnect.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				// Close all other jmbs frames
-
-				if (nmFrame.isVisible())
-					nmFrame.dispose();
-				if (uFrame.isVisible())
-					uFrame.dispose();
-				if (about.isVisible())
-					about.dispose();
-				if (prfrm.isVisible())
-					prfrm.dispose();
-
-				frmJmbsClient.dispose();
-				CurrentUser.disconnect();
-				ConnectionFrame cf = new ConnectionFrame(new MainWindow());
-				cf.setVisible(true);
+				disconnect();
 			}
 		});
 		mnFile.add(mntmDisconnect);
@@ -182,12 +173,28 @@ public class MainMenuBar extends JMenuBar {
 				mw.updateMainPanel(2);
 			}
 		});
-		//mntmProjects.setEnabled(false);
+		// mntmProjects.setEnabled(false);
 		mnActivities.add(mntmProjects);
 	}
 
 	public MyApplicationListener getApplicationListener() {
 		return listener;
+	}
+	
+	public static void disconnect() {
+		if (nmFrame.isVisible())
+			nmFrame.dispose();
+		if (uFrame.isVisible())
+			uFrame.dispose();
+		if (about.isVisible())
+			about.dispose();
+		if (prfrm.isVisible())
+			prfrm.dispose();
+
+		frmJmbsClient.dispose();
+		CurrentUser.disconnect();
+		ConnectionFrame cf = new ConnectionFrame(new MainWindow());
+		cf.setVisible(true);
 	}
 
 }

@@ -18,23 +18,26 @@
  * 
  */
 
-package jmbs.client.Graphics;
+package jmbs.client.Graphics.messages;
 
+import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
 
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
 import javax.swing.JEditorPane;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
+import javax.swing.border.EmptyBorder;
 
+import jmbs.client.Graphics.ColorStyle;
+import jmbs.client.Graphics.images.ImagePanel;
+import jmbs.client.Graphics.users.ShowUserProfileFrm;
 import jmbs.common.Message;
 
 public class MsgPanel extends JPanel {
@@ -52,17 +55,21 @@ public class MsgPanel extends JPanel {
 	private JEditorPane msgEditorPane;
 	private JButton btnUser;
 	private JLabel lblPrinttime;
+	private JPanel panel;
 
 	/**
 	 * Create the panel.
 	 */
 	public MsgPanel(final Message m) {
 
-		setBorder(UIManager.getBorder("TitledBorder.aquaVariant"));
+		setBorder(UIManager.getBorder("InsetBorder.aquaVariant"));
 
+		this.setPreferredSize(new JButton().getPreferredSize());
 		imgPanel = new ImagePanel("/img/avatar.jpg", 69, 69);
-
+		imgPanel.setPreferredSize(new Dimension(70, 70));
+		imgPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
 		txtPanel = new JPanel();
+		txtPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
 		msgEditorPane = new JEditorPane();
 		msgEditorPane.setBackground(UIManager.getColor("CheckBox.background"));
 		// msgEditorPane.setContentType("text/html");
@@ -84,75 +91,22 @@ public class MsgPanel extends JPanel {
 		btnUser.setHorizontalAlignment(SwingConstants.LEFT);
 		btnUser.setFont(new Font("Lucida Grande", Font.BOLD, 15));
 		btnUser.setBorderPainted(false);
+		setLayout(new BorderLayout(0, 0));
+		add(imgPanel, BorderLayout.WEST);
+		add(txtPanel);
+		txtPanel.setLayout(new BorderLayout(0, 0));
+		txtPanel.add(btnUser, BorderLayout.NORTH);
+		txtPanel.add(msgEditorPane);
+
+		panel = new JPanel();
+		txtPanel.add(panel, BorderLayout.SOUTH);
+		panel.setLayout(new BorderLayout(0, 0));
 
 		lblPrinttime = new JLabel(
 				new SimpleDateFormat("dd/MM/yyyy HH:mm").format(m
 						.getTimestamp()));
+		panel.add(lblPrinttime, BorderLayout.EAST);
 		lblPrinttime.setFont(new Font("Lucida Grande", Font.PLAIN, 10));
-
-		GroupLayout gl_txtPanel = new GroupLayout(txtPanel);
-		gl_txtPanel.setHorizontalGroup(gl_txtPanel
-				.createParallelGroup(Alignment.LEADING)
-				.addGroup(
-						gl_txtPanel.createSequentialGroup()
-								.addComponent(btnUser).addContainerGap())
-				.addGroup(
-						gl_txtPanel.createSequentialGroup()
-								.addContainerGap(124, Short.MAX_VALUE)
-								.addComponent(lblPrinttime).addGap(19))
-				.addGroup(
-						gl_txtPanel
-								.createSequentialGroup()
-								.addContainerGap()
-								.addComponent(msgEditorPane,
-										GroupLayout.PREFERRED_SIZE, 230,
-										Short.MAX_VALUE).addGap(8)));
-		gl_txtPanel.setVerticalGroup(gl_txtPanel.createParallelGroup(
-				Alignment.LEADING).addGroup(
-				gl_txtPanel
-						.createSequentialGroup()
-						.addComponent(btnUser)
-						.addPreferredGap(ComponentPlacement.RELATED)
-						.addComponent(msgEditorPane, GroupLayout.DEFAULT_SIZE,
-								365, Short.MAX_VALUE).addGap(6)
-						.addComponent(lblPrinttime)));
-		txtPanel.setLayout(gl_txtPanel);
-		GroupLayout groupLayout = new GroupLayout(this);
-		groupLayout.setHorizontalGroup(groupLayout.createParallelGroup(
-				Alignment.LEADING).addGroup(
-				groupLayout
-						.createSequentialGroup()
-						.addComponent(imgPanel, GroupLayout.PREFERRED_SIZE, 69,
-								GroupLayout.PREFERRED_SIZE)
-						.addPreferredGap(ComponentPlacement.RELATED)
-						.addComponent(txtPanel, GroupLayout.DEFAULT_SIZE, 246,
-								Short.MAX_VALUE)));
-		groupLayout
-				.setVerticalGroup(groupLayout
-						.createParallelGroup(Alignment.LEADING)
-						.addGroup(
-								groupLayout
-										.createSequentialGroup()
-										.addGap(16)
-										.addGroup(
-												groupLayout
-														.createParallelGroup(
-																Alignment.LEADING)
-														.addComponent(
-																txtPanel,
-																GroupLayout.DEFAULT_SIZE,
-																79,
-																Short.MAX_VALUE)
-														.addGroup(
-																groupLayout
-																		.createSequentialGroup()
-																		.addComponent(
-																				imgPanel,
-																				GroupLayout.DEFAULT_SIZE,
-																				70,
-																				Short.MAX_VALUE)
-																		.addGap(9)))));
-		setLayout(groupLayout);
 	}
 
 	public void setColors(String name) {

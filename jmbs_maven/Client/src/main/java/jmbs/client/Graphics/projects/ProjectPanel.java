@@ -58,7 +58,7 @@ public class ProjectPanel extends JPanel {
 				+ p.getUsers().size());
 
 		final JToggleButton tglbtnParticipate = new JToggleButton("Participate");
-		if (p.getStatus()==Project.STATUS_CLOSED) {
+		if (p.getStatus() == Project.STATUS_CLOSED) {
 			tglbtnParticipate.setEnabled(false);
 			tglbtnParticipate.setText("Closed");
 		}
@@ -80,41 +80,92 @@ public class ProjectPanel extends JPanel {
 
 		JSeparator separator = new JSeparator();
 		GroupLayout groupLayout = new GroupLayout(this);
-		groupLayout.setHorizontalGroup(
-			groupLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(groupLayout.createSequentialGroup()
-					.addGap(82)
-					.addComponent(separator, GroupLayout.PREFERRED_SIZE, 142, GroupLayout.PREFERRED_SIZE))
-				.addGroup(groupLayout.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addComponent(lblName, GroupLayout.DEFAULT_SIZE, 298, Short.MAX_VALUE)
-						.addGroup(groupLayout.createSequentialGroup()
-							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-								.addComponent(lblCreator)
-								.addComponent(lblParticipants, GroupLayout.PREFERRED_SIZE, 93, GroupLayout.PREFERRED_SIZE))
-							.addPreferredGap(ComponentPlacement.RELATED, 44, Short.MAX_VALUE)
-							.addComponent(tglbtnParticipate, GroupLayout.PREFERRED_SIZE, 104, GroupLayout.PREFERRED_SIZE)))
-					.addContainerGap())
-		);
-		groupLayout.setVerticalGroup(
-			groupLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(groupLayout.createSequentialGroup()
-					.addGap(5)
-					.addComponent(lblName)
-					.addGap(7)
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addGroup(Alignment.TRAILING, groupLayout.createSequentialGroup()
-							.addComponent(lblCreator)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(lblParticipants))
-						.addGroup(Alignment.TRAILING, groupLayout.createSequentialGroup()
-							.addComponent(tglbtnParticipate, GroupLayout.PREFERRED_SIZE, 40, GroupLayout.PREFERRED_SIZE)
-							.addGap(1)))
-					.addGap(0)
-					.addComponent(separator, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(28, Short.MAX_VALUE))
-		);
+		groupLayout
+				.setHorizontalGroup(groupLayout
+						.createParallelGroup(Alignment.LEADING)
+						.addGroup(
+								groupLayout
+										.createSequentialGroup()
+										.addGap(82)
+										.addComponent(separator,
+												GroupLayout.PREFERRED_SIZE,
+												142, GroupLayout.PREFERRED_SIZE))
+						.addGroup(
+								groupLayout
+										.createSequentialGroup()
+										.addContainerGap()
+										.addGroup(
+												groupLayout
+														.createParallelGroup(
+																Alignment.LEADING)
+														.addComponent(
+																lblName,
+																GroupLayout.DEFAULT_SIZE,
+																298,
+																Short.MAX_VALUE)
+														.addGroup(
+																groupLayout
+																		.createSequentialGroup()
+																		.addGroup(
+																				groupLayout
+																						.createParallelGroup(
+																								Alignment.LEADING)
+																						.addComponent(
+																								lblCreator)
+																						.addComponent(
+																								lblParticipants,
+																								GroupLayout.PREFERRED_SIZE,
+																								93,
+																								GroupLayout.PREFERRED_SIZE))
+																		.addPreferredGap(
+																				ComponentPlacement.RELATED,
+																				44,
+																				Short.MAX_VALUE)
+																		.addComponent(
+																				tglbtnParticipate,
+																				GroupLayout.PREFERRED_SIZE,
+																				104,
+																				GroupLayout.PREFERRED_SIZE)))
+										.addContainerGap()));
+		groupLayout
+				.setVerticalGroup(groupLayout
+						.createParallelGroup(Alignment.LEADING)
+						.addGroup(
+								groupLayout
+										.createSequentialGroup()
+										.addGap(5)
+										.addComponent(lblName)
+										.addGap(7)
+										.addGroup(
+												groupLayout
+														.createParallelGroup(
+																Alignment.LEADING)
+														.addGroup(
+																Alignment.TRAILING,
+																groupLayout
+																		.createSequentialGroup()
+																		.addComponent(
+																				lblCreator)
+																		.addPreferredGap(
+																				ComponentPlacement.RELATED)
+																		.addComponent(
+																				lblParticipants))
+														.addGroup(
+																Alignment.TRAILING,
+																groupLayout
+																		.createSequentialGroup()
+																		.addComponent(
+																				tglbtnParticipate,
+																				GroupLayout.PREFERRED_SIZE,
+																				40,
+																				GroupLayout.PREFERRED_SIZE)
+																		.addGap(1)))
+										.addGap(0)
+										.addComponent(separator,
+												GroupLayout.PREFERRED_SIZE,
+												GroupLayout.DEFAULT_SIZE,
+												GroupLayout.PREFERRED_SIZE)
+										.addContainerGap(28, Short.MAX_VALUE)));
 		setLayout(groupLayout);
 
 	}

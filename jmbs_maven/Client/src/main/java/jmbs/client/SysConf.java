@@ -76,7 +76,7 @@ public class SysConf {
 		return macSys;
 	}
 
-	public void centerThisFrame(JFrame window) {
+	public static void centerThisFrame(JFrame window) {
 		// Get the size of thescreen
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 		// Determine the new location of the window

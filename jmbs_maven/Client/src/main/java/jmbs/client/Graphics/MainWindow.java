@@ -6,31 +6,36 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 
 import javax.swing.ButtonGroup;
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.JSeparator;
+import javax.swing.JToolBar;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 
 import jmbs.client.ClientRequests;
 import jmbs.client.CurrentUser;
 import jmbs.client.ServerConnection;
 import jmbs.client.SysConf;
+import jmbs.client.Graphics.messages.MsgPanel;
+import jmbs.client.Graphics.messages.NewMessageFrame;
+import jmbs.client.Graphics.messages.TimeLinePanel;
+import jmbs.client.Graphics.others.AboutFrame;
+import jmbs.client.Graphics.others.Preferences;
 import jmbs.client.Graphics.projects.PrjectTabbedPane;
+import jmbs.client.Graphics.users.UsersFrame;
 import jmbs.common.Message;
-import javax.swing.JSeparator;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
 public class MainWindow {
 
@@ -51,6 +56,10 @@ public class MainWindow {
 	private JButton btnProfile;
 	private JScrollPane tlscrollPane;
 	private JPanel profpanel;
+	private JButton btnLogout;
+	private JToolBar toolBar;
+	private JSeparator separator_1;
+	private JButton btnRefresh;
 
 	public Preferences getPreferencesFrame() {
 		return this.prfrm;
@@ -95,7 +104,7 @@ public class MainWindow {
 		frmJmbsClient.setSize(520, 640);
 		frmJmbsClient.setMinimumSize(new Dimension(480, 600));
 		frmJmbsClient.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		new SysConf().centerThisFrame(frmJmbsClient);
+		SysConf.centerThisFrame(frmJmbsClient);
 		timelinepanel = new TimeLinePanel();
 		nmFrame = new NewMessageFrame(timelinepanel);
 		tlscrollPane = new JScrollPane();
@@ -120,76 +129,34 @@ public class MainWindow {
 
 		profpanel.add(profilescrollPane);
 
-		JPanel sidebarPanel = new JPanel();
-
 		mainPanel = new JPanel();
-		GroupLayout groupLayout = new GroupLayout(
-				frmJmbsClient.getContentPane());
-		groupLayout.setHorizontalGroup(groupLayout.createParallelGroup(
-				Alignment.LEADING).addGroup(
-				groupLayout
-						.createSequentialGroup()
-						.addContainerGap()
-						.addComponent(sidebarPanel, GroupLayout.PREFERRED_SIZE,
-								75, GroupLayout.PREFERRED_SIZE)
-						.addPreferredGap(ComponentPlacement.RELATED)
-						.addComponent(mainPanel, GroupLayout.DEFAULT_SIZE, 427,
-								Short.MAX_VALUE).addContainerGap()));
-		groupLayout.setVerticalGroup(groupLayout.createParallelGroup(
-				Alignment.TRAILING).addGroup(
-				Alignment.LEADING,
-				groupLayout
-						.createSequentialGroup()
-						.addContainerGap()
-						.addGroup(
-								groupLayout
-										.createParallelGroup(Alignment.LEADING)
-										.addComponent(sidebarPanel,
-												GroupLayout.DEFAULT_SIZE, 606,
-												Short.MAX_VALUE)
-										.addComponent(mainPanel,
-												GroupLayout.DEFAULT_SIZE, 606,
-												Short.MAX_VALUE))
-						.addContainerGap()));
 		mainPanel.setLayout(new BorderLayout(0, 0));
+		mainPanel.removeAll();
+		mainPanel.add(tlscrollPane, BorderLayout.CENTER);
+		mainPanel.updateUI();
+		frmJmbsClient.getContentPane().setLayout(new BorderLayout(0, 0));
+		frmJmbsClient.getContentPane().add(mainPanel);
+
+		toolBar = new JToolBar();
+		frmJmbsClient.getContentPane().add(toolBar, BorderLayout.WEST);
+		toolBar.setBackground(Color.DARK_GRAY);
+		toolBar.setRollover(true);
+		toolBar.setOrientation(SwingConstants.VERTICAL);
 
 		btnTimeline = new JButton("");
+		btnTimeline.setToolTipText("TimeLine");
+		toolBar.add(btnTimeline);
 		btnTimeline.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
 				btnTimeline.setIcon(new ImageIcon(getClass().getResource(
 						"/img/timeline.png")));
 			}
+
 			@Override
 			public void mouseExited(MouseEvent e) {
 				btnTimeline.setIcon(new ImageIcon(getClass().getResource(
 						"/img/timeline_off.png")));
-			}
-		});
-		btnProjects = new JButton("");
-		btnProjects.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				btnProjects.setIcon(new ImageIcon(getClass().getResource(
-						"/img/projects.png")));
-			}
-			@Override
-			public void mouseExited(MouseEvent e) {
-				btnProjects.setIcon(new ImageIcon(getClass().getResource(
-						"/img/projects_off.png")));
-			}
-		});
-		btnProfile = new JButton("");
-		btnProfile.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				btnProfile.setIcon(new ImageIcon(getClass().getResource(
-						"/img/profile_edit.png")));
-			}
-			@Override
-			public void mouseExited(MouseEvent e) {
-				btnProfile.setIcon(new ImageIcon(getClass().getResource(
-						"/img/profile_edit_off.png")));
 			}
 		});
 		btnTimeline.addActionListener(new ActionListener() {
@@ -203,6 +170,24 @@ public class MainWindow {
 		btnTimeline.setSelectedIcon(new ImageIcon(getClass().getResource(
 				"/img/timeline.png")));
 
+		sideBarBtns.add(btnTimeline);
+		btnTimeline.setSelected(true);
+		btnProjects = new JButton("");
+		toolBar.add(btnProjects);
+		btnProjects.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				btnProjects.setIcon(new ImageIcon(getClass().getResource(
+						"/img/projects.png")));
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				btnProjects.setIcon(new ImageIcon(getClass().getResource(
+						"/img/projects_off.png")));
+			}
+		});
+
 		btnProjects.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				updateMainPanel(2);
@@ -214,6 +199,22 @@ public class MainWindow {
 				"/img/projects_off.png")));
 		btnProjects.setSelectedIcon(new ImageIcon(getClass().getResource(
 				"/img/projects.png")));
+		sideBarBtns.add(btnProjects);
+		btnProfile = new JButton("");
+		toolBar.add(btnProfile);
+		btnProfile.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				btnProfile.setIcon(new ImageIcon(getClass().getResource(
+						"/img/profile_edit.png")));
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				btnProfile.setIcon(new ImageIcon(getClass().getResource(
+						"/img/profile_edit_off.png")));
+			}
+		});
 
 		btnProfile.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -226,25 +227,24 @@ public class MainWindow {
 				"/img/profile_edit_off.png")));
 		btnProfile.setSelectedIcon(new ImageIcon(getClass().getResource(
 				"/img/profile_edit.png")));
-		
-		JButton btnAdd = new JButton("");
-		btnAdd.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				getNmFrame().setVisible(true);
-			}
-		});
-		btnAdd.setBorderPainted(false);
-		btnAdd.setIcon(new ImageIcon(getClass().getResource("/img/add.png")));
+		sideBarBtns.add(btnProfile);
+
+		JSeparator separator = new JSeparator();
+		toolBar.add(separator);
 
 		final JButton btnUsers = new JButton("");
+		toolBar.add(btnUsers);
 		btnUsers.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				btnUsers.setIcon(new ImageIcon(getClass().getResource("/img/users.png")));
+				btnUsers.setIcon(new ImageIcon(getClass().getResource(
+						"/img/users.png")));
 			}
+
 			@Override
 			public void mouseExited(MouseEvent e) {
-				btnUsers.setIcon(new ImageIcon(getClass().getResource("/img/users_off.png")));
+				btnUsers.setIcon(new ImageIcon(getClass().getResource(
+						"/img/users_off.png")));
 			}
 		});
 		btnUsers.addActionListener(new ActionListener() {
@@ -252,19 +252,20 @@ public class MainWindow {
 				uFrame.setVisible(true);
 			}
 		});
-		btnUsers.setIcon(new ImageIcon(getClass().getResource("/img/users_off.png")));
+		btnUsers.setIcon(new ImageIcon(getClass().getResource(
+				"/img/users_off.png")));
 		btnUsers.setToolTipText("Users");
 		btnUsers.setBorderPainted(false);
 
-		JSeparator separator = new JSeparator();
-
 		final JButton btnPreferences = new JButton("");
+		toolBar.add(btnPreferences);
 		btnPreferences.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
 				btnPreferences.setIcon(new ImageIcon(getClass().getResource(
 						"/img/pref.png")));
 			}
+
 			@Override
 			public void mouseExited(MouseEvent e) {
 				btnPreferences.setIcon(new ImageIcon(getClass().getResource(
@@ -280,93 +281,86 @@ public class MainWindow {
 		btnPreferences.setIcon(new ImageIcon(getClass().getResource(
 				"/img/pref_off.png")));
 		btnPreferences.setBorderPainted(false);
-		GroupLayout gl_sidebarPanel = new GroupLayout(sidebarPanel);
-		gl_sidebarPanel
-				.setHorizontalGroup(gl_sidebarPanel
-						.createParallelGroup(Alignment.LEADING)
-						.addGroup(
-								gl_sidebarPanel
-										.createSequentialGroup()
-										.addGroup(
-												gl_sidebarPanel
-														.createParallelGroup(
-																Alignment.LEADING)
-														.addComponent(
-																btnTimeline,
-																GroupLayout.DEFAULT_SIZE,
-																69,
-																Short.MAX_VALUE)
-														.addComponent(
-																btnAdd,
-																GroupLayout.DEFAULT_SIZE,
-																69,
-																Short.MAX_VALUE)
-														.addComponent(
-																btnProjects,
-																GroupLayout.DEFAULT_SIZE,
-																69,
-																Short.MAX_VALUE)
-														.addComponent(
-																btnProfile,
-																GroupLayout.DEFAULT_SIZE,
-																69,
-																Short.MAX_VALUE)
-														.addComponent(
-																separator,
-																Alignment.TRAILING,
-																GroupLayout.DEFAULT_SIZE,
-																69,
-																Short.MAX_VALUE)
-														.addGroup(
-																Alignment.TRAILING,
-																gl_sidebarPanel
-																		.createSequentialGroup()
-																		.addContainerGap()
-																		.addComponent(
-																				btnUsers,
-																				GroupLayout.DEFAULT_SIZE,
-																				69,
-																				Short.MAX_VALUE))
-														.addGroup(
-																gl_sidebarPanel
-																		.createSequentialGroup()
-																		.addContainerGap()
-																		.addComponent(
-																				btnPreferences)))
-										.addContainerGap()));
-		gl_sidebarPanel.setVerticalGroup(gl_sidebarPanel.createParallelGroup(
-				Alignment.LEADING).addGroup(
-				gl_sidebarPanel
-						.createSequentialGroup()
-						.addContainerGap()
-						.addComponent(btnTimeline, GroupLayout.PREFERRED_SIZE,
-								64, GroupLayout.PREFERRED_SIZE)
-						.addPreferredGap(ComponentPlacement.RELATED)
-						.addComponent(btnProjects, GroupLayout.PREFERRED_SIZE,
-								52, GroupLayout.PREFERRED_SIZE)
-						.addPreferredGap(ComponentPlacement.RELATED)
-						.addComponent(btnProfile)
-						.addPreferredGap(ComponentPlacement.RELATED)
-						.addComponent(separator, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.DEFAULT_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addPreferredGap(ComponentPlacement.RELATED)
-						.addComponent(btnUsers, GroupLayout.PREFERRED_SIZE, 68,
-								GroupLayout.PREFERRED_SIZE)
-						.addPreferredGap(ComponentPlacement.RELATED)
-						.addComponent(btnPreferences)
-						.addPreferredGap(ComponentPlacement.RELATED, 241,
-								Short.MAX_VALUE).addComponent(btnAdd)));
-		sidebarPanel.setLayout(gl_sidebarPanel);
-		frmJmbsClient.getContentPane().setLayout(groupLayout);
 
-		sideBarBtns.add(btnTimeline);
-		sideBarBtns.add(btnProjects);
-		sideBarBtns.add(btnProfile);
-		mainPanel.removeAll();
-		mainPanel.add(tlscrollPane, BorderLayout.CENTER);
-		mainPanel.updateUI();
-		btnTimeline.setSelected(true);
+		separator_1 = new JSeparator();
+		toolBar.add(separator_1);
+
+		btnRefresh = new JButton("");
+		btnRefresh.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				checkNewMessages(timelinepanel.getLastIdMsg());
+			}
+		});
+
+		btnRefresh.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				btnRefresh.setIcon(new ImageIcon(getClass().getResource(
+						"/img/refreshmsgs.png")));
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				btnRefresh.setIcon(new ImageIcon(getClass().getResource(
+						"/img/refreshmsgs_off.png")));
+			}
+		});
+		btnRefresh.setToolTipText("Refresh");
+		btnRefresh.setBorderPainted(false);
+		btnRefresh.setIcon(new ImageIcon(getClass().getResource(
+				"/img/refreshmsgs_off.png")));
+		toolBar.add(btnRefresh);
+
+		final JButton btnAdd = new JButton("");
+		btnAdd.setToolTipText("Add New Message");
+		toolBar.add(btnAdd);
+		btnAdd.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				getNmFrame().setVisible(true);
+			}
+		});
+
+		btnAdd.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				btnAdd.setIcon(new ImageIcon(getClass().getResource(
+						"/img/add.png")));
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				btnAdd.setIcon(new ImageIcon(getClass().getResource(
+						"/img/add_off.png")));
+			}
+		});
+		btnAdd.setBorderPainted(false);
+		btnAdd.setIcon(new ImageIcon(getClass().getResource("/img/add_off.png")));
+
+		btnLogout = new JButton("");
+		btnLogout.setToolTipText("Logout");
+		toolBar.add(btnLogout);
+		btnLogout.setIcon(new ImageIcon(getClass().getResource(
+				"/img/logout_off.png")));
+		btnLogout.setBorderPainted(false);
+		btnLogout.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				MainMenuBar.disconnect();
+			}
+		});
+
+		btnLogout.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				btnLogout.setIcon(new ImageIcon(getClass().getResource(
+						"/img/logout.png")));
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				btnLogout.setIcon(new ImageIcon(getClass().getResource(
+						"/img/logout_off.png")));
+			}
+		});
 	}
 
 	/**

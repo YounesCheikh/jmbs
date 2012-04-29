@@ -17,7 +17,7 @@
  * @author Benjamin Babic http://bbabic.com
  * 
  */
-package jmbs.client.Graphics;
+package jmbs.client.Graphics.images;
 
 import java.awt.Graphics;
 import java.awt.Image;
@@ -191,7 +191,7 @@ public class ImagePanel extends JPanel {
 			image = thumbnail.getImage();
 			repaint();
 		}
-		
+
 	}
 
 	public void setImage(ImageIcon im, int width, int height) {
@@ -240,14 +240,15 @@ public class ImagePanel extends JPanel {
 			if (im != null) {
 				if (width > 0) {
 					if (image.getWidth(null) > width) {
-						thumbnail = new ImageIcon(image.getScaledInstance(width,
-								-1, Image.SCALE_DEFAULT));
+						thumbnail = new ImageIcon(image.getScaledInstance(
+								width, -1, Image.SCALE_DEFAULT));
 					}
 				}
 				if (height > 0) {
 					if (image.getHeight(null) > height) {
 						thumbnail = new ImageIcon(thumbnail.getImage()
-								.getScaledInstance(-1, height, Image.SCALE_DEFAULT));
+								.getScaledInstance(-1, height,
+										Image.SCALE_DEFAULT));
 					}
 				}
 				image = thumbnail.getImage();

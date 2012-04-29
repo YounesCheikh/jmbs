@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 
-import jmbs.client.Graphics.SayToUser;
+import jmbs.client.Graphics.others.SayToUser;
 import jmbs.common.Message;
 import jmbs.common.Project;
 import jmbs.common.User;
@@ -451,13 +451,12 @@ public class ClientRequests {
 		}
 		return retVal;
 	}
-	
+
 	public static boolean openProject(int idUser, int idProject) {
 		boolean retVal = false;
 		if (ServerConnection.server != null) {
 			try {
-				retVal = ServerConnection.server
-						.openProject(idUser, idProject);
+				retVal = ServerConnection.server.openProject(idUser, idProject);
 			} catch (RemoteException e) {
 				SayToUser.error("RemoteException", e.getMessage());
 			} catch (SecurityException e) {

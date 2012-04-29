@@ -19,16 +19,16 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.ScrollPaneConstants;
 
 import jmbs.client.ClientRequests;
 import jmbs.client.CurrentUser;
 import jmbs.client.ServerConnection;
-import jmbs.client.Graphics.MsgPanel;
-import jmbs.client.Graphics.SayToUser;
+import jmbs.client.Graphics.messages.MsgPanel;
+import jmbs.client.Graphics.others.SayToUser;
 import jmbs.common.Message;
 import jmbs.common.Project;
 import net.miginfocom.swing.MigLayout;
-import javax.swing.ScrollPaneConstants;
 
 public class PrjctsTimeLinePanel extends JPanel {
 
@@ -45,6 +45,7 @@ public class PrjctsTimeLinePanel extends JPanel {
 	private String newMsgStr;
 	private static ArrayList<Message> currentMsgList = null;
 	private static JButton btnSend;
+
 	/**
 	 * Create the panel.
 	 */
@@ -146,7 +147,8 @@ public class PrjctsTimeLinePanel extends JPanel {
 		panel.setLayout(gl_panel);
 
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		scrollPane
+				.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		add(scrollPane, BorderLayout.CENTER);
 
 		tlPanel = new JPanel();
@@ -175,7 +177,7 @@ public class PrjctsTimeLinePanel extends JPanel {
 		});
 
 		updatePrjctList();
-		
+
 		topPrjctsTLPanel.add(comboBox, BorderLayout.CENTER);
 
 		JButton btnRefresh = new JButton("");
@@ -241,7 +243,7 @@ public class PrjctsTimeLinePanel extends JPanel {
 				SELECTED_PROJECT_ID);
 		putList(currentMsgList);
 	}
-	
+
 	public static void updatePrjctList() {
 		String[] prjctsName = null;
 		ArrayList<Project> prjctList;
@@ -251,7 +253,7 @@ public class PrjctsTimeLinePanel extends JPanel {
 			if (p.getStatus() == Project.STATUS_OPENED)
 				nbPrjct++;
 		prjctsName = new String[nbPrjct];
-		if (!prjctList.isEmpty() && nbPrjct>0) {
+		if (!prjctList.isEmpty() && nbPrjct > 0) {
 			int i = 0;
 			for (Project p : prjctList) {
 				if (p.getStatus() == Project.STATUS_OPENED) {

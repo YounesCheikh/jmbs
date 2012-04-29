@@ -18,7 +18,7 @@
  * 
  */
 
-package jmbs.client.Graphics;
+package jmbs.client.Graphics.others;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -42,6 +42,7 @@ public class AboutFrame extends JFrame {
 	/**
 	 * Create the frame.
 	 */
+	// TODO: Set The default layout BorderLayout
 	public AboutFrame() {
 		setLocationRelativeTo(null);
 		setAlwaysOnTop(true);
@@ -50,7 +51,7 @@ public class AboutFrame extends JFrame {
 		// setBounds(100, 100, 339, 246);
 		setSize(340, 246);
 		// setLocationRelativeTo(new MainWindow().getFrame());
-		new SysConf().centerThisFrame(this);
+		SysConf.centerThisFrame(this);
 		JLabel lblHiThis = new JLabel("Hi , this program is blablablablablaal");
 
 		JLabel lblYounesBenjamin = new JLabel("Younes & Benjamin");

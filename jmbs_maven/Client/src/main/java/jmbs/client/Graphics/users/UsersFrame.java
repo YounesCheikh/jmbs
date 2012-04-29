@@ -18,7 +18,7 @@
  * 
  */
 
-package jmbs.client.Graphics;
+package jmbs.client.Graphics.users;
 
 import java.awt.BorderLayout;
 import java.awt.Font;
@@ -72,7 +72,7 @@ public class UsersFrame extends JFrame {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		// setBounds(100, 100, 460, 420);
 		setSize(460, 420);
-		new SysConf().centerThisFrame(this);
+		SysConf.centerThisFrame(this);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));

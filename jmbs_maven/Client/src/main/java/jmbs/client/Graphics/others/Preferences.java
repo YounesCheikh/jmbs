@@ -18,8 +18,7 @@
  * 
  */
 
-
-package jmbs.client.Graphics;
+package jmbs.client.Graphics.others;
 
 import java.awt.BorderLayout;
 import java.awt.Font;
@@ -45,6 +44,7 @@ import javax.swing.event.ChangeListener;
 import jmbs.client.ServerConfig;
 import jmbs.client.ServerConnection;
 import jmbs.client.SysConf;
+import jmbs.client.Graphics.MainWindow;
 
 import com.sun.awt.AWTUtilities;
 
@@ -78,15 +78,16 @@ public class Preferences extends JFrame {
 	private JButton btnRestoreAsDefault;
 	private JLabel lblMessages;
 	private JTextField limitedMsgTextField;
+
 	/**
 	 * Create the frame.
 	 */
 	public Preferences() {
-		
+
 		ButtonGroup groupDefaultOptions = new ButtonGroup();
 		ButtonGroup groupThemes = new ButtonGroup();
 		setTitle("JMBS: Preferences");
-		
+
 		setAlwaysOnTop(true);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 400, 360);
@@ -96,50 +97,52 @@ public class Preferences extends JFrame {
 		setContentPane(contentPane);
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		contentPane.add(tabbedPane, BorderLayout.CENTER);
-		new SysConf().centerThisFrame(this);
-		
+		SysConf.centerThisFrame(this);
+
 		JPanel generalPanel = new JPanel();
-		tabbedPane.addTab("General", new ImageIcon(getClass().getResource("/img/General-Alt.png")), generalPanel, null);
-		
+		tabbedPane.addTab("General",
+				new ImageIcon(getClass().getResource("/img/General-Alt.png")),
+				generalPanel, null);
+
 		lblNetwork = new JLabel("Network:");
 		lblNetwork.setBounds(6, 6, 64, 17);
 		lblNetwork.setFont(new Font("Lucida Grande", Font.BOLD, 14));
-		
+
 		lblAdresseIpserver = new JLabel("Adresse IP (Server): ");
 		lblAdresseIpserver.setBounds(6, 35, 123, 16);
-		
+
 		lblServerName = new JLabel("Server name:");
 		lblServerName.setBounds(6, 69, 80, 16);
-		
+
 		lblPort = new JLabel("Port:");
 		lblPort.setBounds(6, 103, 29, 16);
-		
+
 		ipTextField = new JTextField();
 		ipTextField.setBounds(135, 29, 134, 28);
 		ipTextField.setColumns(10);
-		
+
 		ServerConfig sconf = new ServerConfig();
-		
+
 		ipTextField.setText(sconf.getAdressIP());
-		
+
 		serverNameTextField = new JTextField();
 		serverNameTextField.setBounds(135, 63, 134, 28);
 		serverNameTextField.setColumns(10);
 		serverNameTextField.setText(sconf.getServerName());
-		
+
 		portTextField = new JTextField();
 		portTextField.setBounds(135, 97, 134, 28);
 		portTextField.setColumns(10);
-		portTextField.setText(""+sconf.getPort());
-		
+		portTextField.setText("" + sconf.getPort());
+
 		btnOk = new JButton("OK");
 		btnOk.setEnabled(false);
 		btnOk.setBounds(288, 253, 75, 29);
-		
+
 		btnApply = new JButton("Apply");
 		btnApply.setEnabled(false);
 		btnApply.setBounds(202, 253, 80, 29);
-		
+
 		btnCancel_1 = new JButton("Cancel");
 		btnCancel_1.setBounds(6, 253, 86, 29);
 		btnCancel_1.addActionListener(new ActionListener() {
@@ -147,23 +150,23 @@ public class Preferences extends JFrame {
 				dispose();
 			}
 		});
-		
+
 		btnRestoreAsDefault = new JButton("Reset To Default");
 		btnRestoreAsDefault.setEnabled(false);
 		btnRestoreAsDefault.setBounds(215, 218, 148, 29);
-		
+
 		JLabel labelMax = new JLabel("Limite Received Messages:");
 		labelMax.setBounds(6, 173, 177, 16);
-		
+
 		lblMessages = new JLabel("Messages:");
 		lblMessages.setBounds(6, 150, 73, 17);
 		lblMessages.setFont(new Font("Lucida Grande", Font.BOLD, 14));
-		
+
 		limitedMsgTextField = new JTextField();
 		limitedMsgTextField.setBounds(189, 173, 80, 28);
 		limitedMsgTextField.setColumns(10);
-		limitedMsgTextField.setText(""+ServerConnection.maxReceivedMsgs);
-		
+		limitedMsgTextField.setText("" + ServerConnection.maxReceivedMsgs);
+
 		JSeparator separator_1 = new JSeparator();
 		separator_1.setBounds(44, 131, 273, 12);
 		generalPanel.setLayout(null);
@@ -182,11 +185,14 @@ public class Preferences extends JFrame {
 		generalPanel.add(portTextField);
 		generalPanel.add(lblMessages);
 		generalPanel.add(separator_1);
-		
+
 		JPanel appearancePanel = new JPanel();
-		tabbedPane.addTab("appearance", new ImageIcon(getClass().getResource("/img/appearance.png")), appearancePanel, "appearance");
-		
-		JRadioButton rdbtnUseDefaultOptions = new JRadioButton("Use default options");
+		tabbedPane.addTab("appearance",
+				new ImageIcon(getClass().getResource("/img/appearance.png")),
+				appearancePanel, "appearance");
+
+		JRadioButton rdbtnUseDefaultOptions = new JRadioButton(
+				"Use default options");
 		rdbtnUseDefaultOptions.setBounds(16, 19, 155, 23);
 		rdbtnUseDefaultOptions.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -199,19 +205,20 @@ public class Preferences extends JFrame {
 				rdbtnGray.setEnabled(false);
 				rdbtnGray.setSelected(true);
 				rdbtnLight.setEnabled(false);
-				if(colorChanged)
+				if (colorChanged)
 					new MainWindow().setColors("");
-				
+
 				AWTUtilities.setWindowOpacity(frame, 1.0f);
 			}
 		});
 		rdbtnUseDefaultOptions.setSelected(true);
-		
-		JRadioButton rdbtnDontUseThe = new JRadioButton("Don't use the default options");
+
+		JRadioButton rdbtnDontUseThe = new JRadioButton(
+				"Don't use the default options");
 		rdbtnDontUseThe.setBounds(16, 68, 216, 23);
 		rdbtnDontUseThe.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+
 				chckbxTransparency.setEnabled(true);
 				lblThemes.setEnabled(true);
 				rdbtnDark.setEnabled(true);
@@ -219,20 +226,20 @@ public class Preferences extends JFrame {
 				rdbtnLight.setEnabled(true);
 			}
 		});
-		
+
 		groupDefaultOptions.add(rdbtnUseDefaultOptions);
 		groupDefaultOptions.add(rdbtnDontUseThe);
-		
+
 		chckbxTransparency = new JCheckBox("Opacity:");
 		chckbxTransparency.setBounds(60, 103, 84, 23);
 		chckbxTransparency.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(chckbxTransparency.isSelected()) {
+				if (chckbxTransparency.isSelected()) {
 					labelprecent.setEnabled(true);
 					slider.setEnabled(true);
-					AWTUtilities.setWindowOpacity(frame, slider.getValue()/100f);
-				}
-				else {
+					AWTUtilities.setWindowOpacity(frame,
+							slider.getValue() / 100f);
+				} else {
 					labelprecent.setEnabled(false);
 					slider.setEnabled(false);
 					AWTUtilities.setWindowOpacity(frame, 1.0f);
@@ -240,40 +247,40 @@ public class Preferences extends JFrame {
 			}
 		});
 		chckbxTransparency.setEnabled(false);
-		
+
 		slider = new JSlider();
 		slider.setBounds(50, 127, 260, 38);
 		slider.setEnabled(false);
 		slider.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
-				labelprecent.setText(slider.getValue()+"%");
-				AWTUtilities.setWindowOpacity(frame, slider.getValue()/100f);
+				labelprecent.setText(slider.getValue() + "%");
+				AWTUtilities.setWindowOpacity(frame, slider.getValue() / 100f);
 			}
 		});
 		slider.setPaintTicks(true);
 		slider.setPaintLabels(true);
-		
-		labelprecent = new JLabel(slider.getValue()+"%");
-		
+
+		labelprecent = new JLabel(slider.getValue() + "%");
+
 		labelprecent.setBounds(155, 107, 50, 16);
 		labelprecent.setEnabled(false);
-		
+
 		lblThemes = new JLabel("Themes:");
 		lblThemes.setBounds(50, 172, 57, 16);
 		lblThemes.setFont(new Font("Lucida Grande", Font.BOLD, 13));
-		
+
 		rdbtnDark = new JRadioButton("Dark");
-		
+
 		rdbtnDark.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				new MainWindow().setColors("dark");
 				colorChanged = true;
 			}
 		});
-		
+
 		rdbtnDark.setBounds(50, 200, 62, 23);
 		rdbtnDark.setEnabled(false);
-		
+
 		rdbtnGray = new JRadioButton("Gray");
 		rdbtnGray.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -283,26 +290,26 @@ public class Preferences extends JFrame {
 		rdbtnGray.setBounds(129, 200, 60, 23);
 		rdbtnGray.setEnabled(false);
 		rdbtnGray.setSelected(true);
-		
+
 		rdbtnLight = new JRadioButton("Light");
-		
+
 		rdbtnLight.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				new MainWindow().setColors("light");
 				colorChanged = true;
 			}
 		});
-		
+
 		rdbtnLight.setBounds(214, 200, 64, 23);
 		rdbtnLight.setEnabled(false);
-		
+
 		groupThemes.add(rdbtnDark);
 		groupThemes.add(rdbtnGray);
 		groupThemes.add(rdbtnLight);
-		
+
 		JSeparator separator = new JSeparator();
 		separator.setBounds(16, 43, 330, 12);
-		
+
 		JButton btnCancel = new JButton("Close");
 		btnCancel.setBounds(145, 247, 86, 29);
 		btnCancel.addActionListener(new ActionListener() {

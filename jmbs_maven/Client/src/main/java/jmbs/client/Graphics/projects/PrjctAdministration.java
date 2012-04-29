@@ -23,7 +23,7 @@ import javax.swing.border.TitledBorder;
 
 import jmbs.client.ClientRequests;
 import jmbs.client.CurrentUser;
-import jmbs.client.Graphics.ImagePanel;
+import jmbs.client.Graphics.images.ImagePanel;
 import jmbs.common.Project;
 
 public class PrjctAdministration extends JPanel {
@@ -34,11 +34,13 @@ public class PrjctAdministration extends JPanel {
 	private static final long serialVersionUID = -397969605352614394L;
 	private JPopupMenu popupMenu;
 	private ImagePanel panel;
+	private PrjctParameters pParamters;
 
 	/**
 	 * Create the panel.
 	 */
 	public PrjctAdministration(final Project p) {
+		pParamters = new PrjctParameters(p);
 		ButtonGroup prjctStatus = new ButtonGroup();
 		p.setUsers(ClientRequests.getProjectUsers(p.getId()));
 		setBorder(new TitledBorder(null, "", TitledBorder.LEADING,
@@ -98,6 +100,12 @@ public class PrjctAdministration extends JPanel {
 		popupMenu.add(separator);
 
 		JMenuItem mntmParamters = new JMenuItem("Paramters");
+		mntmParamters.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				pParamters.setVisible(true);
+				popupMenu.setVisible(false);
+			}
+		});
 		popupMenu.add(mntmParamters);
 
 		panel = new ImagePanel("/img/projectOn.png");
@@ -107,34 +115,75 @@ public class PrjctAdministration extends JPanel {
 			panel.setToolTipText("Closed Project");
 		}
 		GroupLayout groupLayout = new GroupLayout(this);
-		groupLayout.setHorizontalGroup(
-			groupLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(groupLayout.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING, false)
-						.addComponent(lblProjectname, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-						.addGroup(Alignment.LEADING, groupLayout.createSequentialGroup()
-							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-								.addComponent(lblParticipants)
-								.addComponent(lblCreatedOn, GroupLayout.PREFERRED_SIZE, 165, GroupLayout.PREFERRED_SIZE))
-							.addGap(134)
-							.addComponent(panel, GroupLayout.PREFERRED_SIZE, 51, GroupLayout.PREFERRED_SIZE)))
-					.addGap(2))
-		);
-		groupLayout.setVerticalGroup(
-			groupLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(groupLayout.createSequentialGroup()
-					.addContainerGap()
-					.addComponent(lblProjectname)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addGroup(groupLayout.createSequentialGroup()
-							.addComponent(lblCreatedOn)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(lblParticipants)
-							.addContainerGap())
-						.addComponent(panel, GroupLayout.DEFAULT_SIZE, 44, Short.MAX_VALUE)))
-		);
+		groupLayout
+				.setHorizontalGroup(groupLayout
+						.createParallelGroup(Alignment.LEADING)
+						.addGroup(
+								groupLayout
+										.createSequentialGroup()
+										.addContainerGap()
+										.addGroup(
+												groupLayout
+														.createParallelGroup(
+																Alignment.TRAILING,
+																false)
+														.addComponent(
+																lblProjectname,
+																Alignment.LEADING,
+																GroupLayout.DEFAULT_SIZE,
+																GroupLayout.DEFAULT_SIZE,
+																Short.MAX_VALUE)
+														.addGroup(
+																Alignment.LEADING,
+																groupLayout
+																		.createSequentialGroup()
+																		.addGroup(
+																				groupLayout
+																						.createParallelGroup(
+																								Alignment.LEADING)
+																						.addComponent(
+																								lblParticipants)
+																						.addComponent(
+																								lblCreatedOn,
+																								GroupLayout.PREFERRED_SIZE,
+																								165,
+																								GroupLayout.PREFERRED_SIZE))
+																		.addGap(134)
+																		.addComponent(
+																				panel,
+																				GroupLayout.PREFERRED_SIZE,
+																				51,
+																				GroupLayout.PREFERRED_SIZE)))
+										.addGap(2)));
+		groupLayout
+				.setVerticalGroup(groupLayout
+						.createParallelGroup(Alignment.LEADING)
+						.addGroup(
+								groupLayout
+										.createSequentialGroup()
+										.addContainerGap()
+										.addComponent(lblProjectname)
+										.addPreferredGap(
+												ComponentPlacement.RELATED)
+										.addGroup(
+												groupLayout
+														.createParallelGroup(
+																Alignment.LEADING)
+														.addGroup(
+																groupLayout
+																		.createSequentialGroup()
+																		.addComponent(
+																				lblCreatedOn)
+																		.addPreferredGap(
+																				ComponentPlacement.RELATED)
+																		.addComponent(
+																				lblParticipants)
+																		.addContainerGap())
+														.addComponent(
+																panel,
+																GroupLayout.DEFAULT_SIZE,
+																44,
+																Short.MAX_VALUE))));
 		setLayout(groupLayout);
 
 		if (p.getStatus() == Project.STATUS_OPENED) {
@@ -144,7 +193,6 @@ public class PrjctAdministration extends JPanel {
 			rdbtnActivate.setSelected(false);
 			rdbtnDesactivate.setSelected(true);
 		}
-		
 
 	}
 

@@ -18,7 +18,7 @@
  * 
  */
 
-package jmbs.client.Graphics;
+package jmbs.client.Graphics.others;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -38,6 +38,7 @@ import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 
 import jmbs.client.SysConf;
+import jmbs.client.Graphics.images.ImagePanel;
 
 public class SayToUser {
 
