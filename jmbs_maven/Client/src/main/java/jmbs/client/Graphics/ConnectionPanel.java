@@ -22,8 +22,6 @@ package jmbs.client.Graphics;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -44,6 +42,8 @@ import jmbs.client.HashPassword;
 import jmbs.client.ServerConnection;
 import jmbs.client.Graphics.images.ImagePanel;
 import jmbs.common.User;
+import net.miginfocom.swing.MigLayout;
+import javax.swing.ImageIcon;
 
 public class ConnectionPanel extends JPanel {
 
@@ -51,6 +51,7 @@ public class ConnectionPanel extends JPanel {
 	 * 
 	 */
 	private static final long serialVersionUID = 8035127754370206526L;
+	private JPanel panel;
 	private JTextField emailTextField;
 	private JPasswordField passwordField;
 	private JLabel respLabel; /*
@@ -82,134 +83,87 @@ public class ConnectionPanel extends JPanel {
 	public ConnectionPanel(MainWindow w, ConnectionFrame cf) {
 		this.w = w;
 		this.cf = cf;/* by default */
-
-		JPanel panel = new JPanel();
-		panel.setLayout(new BorderLayout(0, 0));
-		setLayout(new BorderLayout(0, 0));
-		add(panel, BorderLayout.CENTER);
-
-		JPanel southPanel = new JPanel();
-		panel.add(southPanel, BorderLayout.SOUTH);
-		southPanel.setLayout(new BorderLayout(0, 0));
-
-		JButton btnConnect = new JButton("Connect");
-		southPanel.add(btnConnect, BorderLayout.EAST);
-		btnConnect.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if (!verification(emailTextField.getText())) {
-					respLabel.setText("Enter a valide email please!");
-					respLabel.setForeground(Color.red);
-					// putElement(0, 3, respLabel);
-				} else if (!verification(passwordField.getPassword().length)) {
-					respLabel.setText("password less than 4 chars !");
-					respLabel.setForeground(Color.red);
-					// putElement(0, 3, respLabel);
-				} else {
-					checkConnection();
-				}
-			}
-		});
-
-		JCheckBox chckbxRememberMe = new JCheckBox("Remember me");
-		chckbxRememberMe.setHorizontalAlignment(SwingConstants.RIGHT);
-		southPanel.add(chckbxRememberMe, BorderLayout.CENTER);
-
-		JPanel panel_4 = new JPanel();
-		southPanel.add(panel_4, BorderLayout.SOUTH);
-		panel_4.setLayout(new BorderLayout(0, 0));
-
-		respLabel = new JLabel(" ");
-		panel_4.add(respLabel, BorderLayout.CENTER);
-
-		JSeparator separator = new JSeparator();
-		panel_4.add(separator, BorderLayout.NORTH);
-
-		JPanel topPanel = new JPanel();
-		topPanel.setPreferredSize(new Dimension(100, 170));
-		panel.add(topPanel, BorderLayout.NORTH);
-		topPanel.setLayout(new BorderLayout(0, 0));
-
-		ImagePanel logopanel = new ImagePanel("/img/jmbslogo_small.png");
-		logopanel.setPreferredSize(new Dimension(128, 128));
-		topPanel.add(logopanel, BorderLayout.CENTER);
+		setLayout(new BorderLayout());
 		JLabel lblConnectToJmbs = new JLabel("Connect to JMBS");
-		lblConnectToJmbs.setHorizontalAlignment(SwingConstants.CENTER);
-		topPanel.add(lblConnectToJmbs, BorderLayout.SOUTH);
 		lblConnectToJmbs.setFont(new Font("Dialog", Font.BOLD, 16));
-
-		JPanel panel_6 = new JPanel();
-		topPanel.add(panel_6, BorderLayout.NORTH);
-
-		JPanel panel_7 = new JPanel();
-		panel_7.setPreferredSize(new Dimension(145, 0));
-		topPanel.add(panel_7, BorderLayout.WEST);
-
-		JPanel panel_8 = new JPanel();
-		panel_8.setPreferredSize(new Dimension(145, 0));
-		topPanel.add(panel_8, BorderLayout.EAST);
-
-		JPanel centerPanel = new JPanel();
-		// centerPanel.setPreferredSize(new Dimension(100,60));
-		panel.add(centerPanel, BorderLayout.CENTER);
-		centerPanel.setLayout(new BorderLayout(0, 0));
-
-		JPanel panel_3 = new JPanel();
-		centerPanel.add(panel_3, BorderLayout.SOUTH);
-		panel_3.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
-
-		JLabel lblRegister = new JLabel("don't have account?");
-		panel_3.add(lblRegister);
-
-		JButton btnRegister = new JButton("Register");
-		panel_3.add(btnRegister);
-		btnRegister.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				rframe = new RegisterFrame();
-				rframe.setVisible(true);
-			}
-		});
-		btnRegister.setHorizontalAlignment(SwingConstants.LEFT);
-		btnRegister.setForeground(Color.BLUE);
-		btnRegister.setFont(new Font("Lucida Grande", Font.PLAIN, 14));
-		btnRegister.setBorderPainted(false);
-
-		JPanel panel_5 = new JPanel();
-		centerPanel.add(panel_5, BorderLayout.CENTER);
-		panel_5.setLayout(new BorderLayout(0, 0));
-
-		JPanel panel_1 = new JPanel();
-		panel_5.add(panel_1, BorderLayout.NORTH);
-		panel_1.setLayout(new BorderLayout(0, 0));
-
-		JLabel lblEmailAdress = new JLabel("Email Adress:");
-		lblEmailAdress.setHorizontalAlignment(SwingConstants.RIGHT);
-		panel_1.add(lblEmailAdress);
-
-		emailTextField = new JTextField();
-		panel_1.add(emailTextField, BorderLayout.EAST);
-		emailTextField.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				checkConnection();
-			}
-		});
-		emailTextField.setColumns(20);
-
-		JPanel panel_2 = new JPanel();
-		panel_5.add(panel_2, BorderLayout.SOUTH);
-		panel_2.setLayout(new BorderLayout(0, 0));
-
-		JLabel lblPassword = new JLabel("Password:");
-		lblPassword.setHorizontalAlignment(SwingConstants.RIGHT);
-		panel_2.add(lblPassword);
-
-		passwordField = new JPasswordField();
-		panel_2.add(passwordField, BorderLayout.EAST);
-		passwordField.setColumns(20);
-		passwordField.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				checkConnection();
-			}
-		});
+		
+				JLabel lblEmailAdress = new JLabel("Email Adress:");
+				
+						JLabel lblPassword = new JLabel("Password:");
+						
+								emailTextField = new JTextField();
+								emailTextField.addActionListener(new ActionListener() {
+									public void actionPerformed(ActionEvent e) {
+										checkConnection();
+									}
+								});
+								emailTextField.setColumns(20);
+								
+										passwordField = new JPasswordField();
+										passwordField.setColumns(20);
+										passwordField.addActionListener(new ActionListener() {
+											public void actionPerformed(ActionEvent e) {
+												checkConnection();
+											}
+										});
+										
+												respLabel = new JLabel(" "); 
+												
+														JCheckBox chckbxRememberMe = new JCheckBox("Remember me");
+														
+																JLabel lblRegister = new JLabel("don't have account?");
+																
+																		ImagePanel logopanel = new ImagePanel("/img/jmbslogo_small.png");
+																		
+																				JButton btnRegister = new JButton("Register");
+																				btnRegister.addActionListener(new ActionListener() {
+																					public void actionPerformed(ActionEvent e) {
+																						rframe = new RegisterFrame();
+																						rframe.setVisible(true);
+																					}
+																				});
+																				btnRegister.setHorizontalAlignment(SwingConstants.LEFT);
+																				btnRegister.setForeground(Color.BLUE);
+																				btnRegister.setFont(new Font("Lucida Grande", Font.PLAIN, 14));
+																				panel = new JPanel();
+																				panel.setBackground(new Color(204, 255, 255));
+																				panel.setLayout(new MigLayout("", "[63px][12px][10px][12px][102px,grow][6px][104px][][6px][96px]", "[20px][136px][28px][28px][23px][30px][12px][][][][36px][grow]"));
+																				btnRegister.setBorderPainted(false);
+																				panel.add(lblPassword, "cell 0 3,alignx left,aligny center");
+																				panel.add(passwordField, "cell 4 3 6 1,aligny top");
+																				panel.add(lblConnectToJmbs, "cell 4 0 3 1,alignx center,aligny top");
+																				panel.add(lblRegister, "cell 2 5 3 1,alignx left,aligny center");
+																				panel.add(btnRegister, "cell 6 5,growx,aligny top");
+																				
+																						JButton btnConnect = new JButton("Connect");
+																						btnConnect.addActionListener(new ActionListener() {
+																							public void actionPerformed(ActionEvent e) {
+																								if (!verification(emailTextField.getText())) {
+																									respLabel.setText("Enter a valide email please!");
+																									respLabel.setForeground(Color.red);
+																									// putElement(0, 3, respLabel);
+																								} else if (!verification(passwordField.getPassword().length)) {
+																									respLabel.setText("password less than 4 chars !");
+																									respLabel.setForeground(Color.red);
+																									// putElement(0, 3, respLabel);
+																								} else {
+																									checkConnection();
+																								}
+																							}
+																						});
+																						panel.add(btnConnect, "cell 6 7,alignx left,aligny bottom");
+																						
+																								JSeparator separator = new JSeparator();
+																								panel.add(separator, "cell 0 8 10 1,growx,aligny top");
+																								panel.add(respLabel, "cell 0 10 10 1,grow");
+																								panel.add(chckbxRememberMe, "cell 4 4 3 1,alignx center,aligny top");
+																								panel.add(lblEmailAdress, "cell 0 2 3 1,alignx left,aligny center");
+																								panel.add(emailTextField, "cell 4 2 6 1,aligny top");
+																								panel.add(logopanel, "cell 4 1 3 1,grow");
+																								
+																								add(panel);
+		
+		
 
 	}
 
