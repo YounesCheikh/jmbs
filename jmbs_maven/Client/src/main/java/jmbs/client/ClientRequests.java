@@ -151,12 +151,12 @@ public class ClientRequests {
 		}
 		return retVal;
 	}
-	
+
 	public static int addMessage(Message m, int projectId) {
 		int retVal = 0;
 		if (ServerConnection.server != null) {
 			try {
-				retVal = ServerConnection.server.addMessage(m,projectId);
+				retVal = ServerConnection.server.addMessage(m, projectId);
 			} catch (RemoteException e1) {
 				SayToUser.error("RemoteException", e1.getMessage());
 			}
@@ -416,12 +416,14 @@ public class ClientRequests {
 		}
 		return retVal;
 	}
-	
-	 public static ArrayList<Message> getLastetProjectTL(int iduser, int idlastmessage, int maxMsg, int idproject) {
+
+	public static ArrayList<Message> getLastetProjectTL(int iduser,
+			int idlastmessage, int maxMsg, int idproject) {
 		ArrayList<Message> retList = new ArrayList<Message>();
 		if (ServerConnection.server != null) {
 			try {
-				retList = ServerConnection.server.getLastetProjectTL( iduser,  idlastmessage,  maxMsg,  idproject);
+				retList = ServerConnection.server.getLastetProjectTL(iduser,
+						idlastmessage, maxMsg, idproject);
 			} catch (RemoteException e1) {
 				SayToUser.error("RemoteException", e1.getMessage());
 			}
@@ -430,6 +432,42 @@ public class ClientRequests {
 					"can't establish a reliable data connection to the server");
 		}
 		return retList;
+	}
+
+	public static boolean closeProject(int idUser, int idProject) {
+		boolean retVal = false;
+		if (ServerConnection.server != null) {
+			try {
+				retVal = ServerConnection.server
+						.closeProject(idUser, idProject);
+			} catch (RemoteException e) {
+				SayToUser.error("RemoteException", e.getMessage());
+			} catch (SecurityException e) {
+				SayToUser.error("SecurityException", e.getMessage());
+			}
+		} else {
+			SayToUser.error("Error connection!",
+					"can't establish a reliable data connection to the server");
+		}
+		return retVal;
+	}
+	
+	public static boolean openProject(int idUser, int idProject) {
+		boolean retVal = false;
+		if (ServerConnection.server != null) {
+			try {
+				retVal = ServerConnection.server
+						.openProject(idUser, idProject);
+			} catch (RemoteException e) {
+				SayToUser.error("RemoteException", e.getMessage());
+			} catch (SecurityException e) {
+				SayToUser.error("SecurityException", e.getMessage());
+			}
+		} else {
+			SayToUser.error("Error connection!",
+					"can't establish a reliable data connection to the server");
+		}
+		return retVal;
 	}
 
 }

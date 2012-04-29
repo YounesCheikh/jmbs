@@ -20,6 +20,8 @@ import jmbs.client.CurrentUser;
 import jmbs.client.Graphics.SayToUser;
 import jmbs.common.Project;
 import net.miginfocom.swing.MigLayout;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 
 public class MyProjectsPanel extends JPanel {
 
@@ -35,12 +37,24 @@ public class MyProjectsPanel extends JPanel {
 	 */
 	public MyProjectsPanel() {
 		setLayout(new BorderLayout(0, 0));
-
 		JPanel topMyPrjctPanel = new JPanel();
 		add(topMyPrjctPanel, BorderLayout.NORTH);
 		topMyPrjctPanel.setLayout(new BorderLayout(0, 0));
 
 		txtProjectName = new JTextField();
+		txtProjectName.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent e) {
+
+			}
+
+			@Override
+			public void focusGained(FocusEvent e) {
+				if (txtProjectName.getText().equals("Project Name...")) {
+					txtProjectName.setText("");
+				}
+			}
+		});
 		txtProjectName.setText("Project Name...");
 		topMyPrjctPanel.add(txtProjectName, BorderLayout.CENTER);
 		txtProjectName.setColumns(10);

@@ -28,6 +28,7 @@ import jmbs.client.Graphics.SayToUser;
 import jmbs.common.Message;
 import jmbs.common.Project;
 import net.miginfocom.swing.MigLayout;
+import javax.swing.ScrollPaneConstants;
 
 public class PrjctsTimeLinePanel extends JPanel {
 
@@ -36,14 +37,14 @@ public class PrjctsTimeLinePanel extends JPanel {
 	 */
 	private static final long serialVersionUID = -477407305599641329L;
 	private static int idLastMessage = 0;
-	private JPanel tlPanel;
-	private JComboBox comboBox;
-	private JTextArea textArea;
+	private static JPanel tlPanel;
+	private static JComboBox comboBox;
+	private static JTextArea textArea;
 	private static int SELECTED_PROJECT_ID = -1;
 	private static int CURRENT_SELECTED_COMBX_INDEX = -1;
 	private String newMsgStr;
-	private ArrayList<Message> currentMsgList = null;
-
+	private static ArrayList<Message> currentMsgList = null;
+	private static JButton btnSend;
 	/**
 	 * Create the panel.
 	 */
@@ -53,7 +54,7 @@ public class PrjctsTimeLinePanel extends JPanel {
 		JPanel panel = new JPanel();
 		add(panel, BorderLayout.SOUTH);
 
-		JButton btnSend = new JButton("Send");
+		btnSend = new JButton("Send");
 		btnSend.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (textArea.getText().length() > 0
@@ -145,6 +146,7 @@ public class PrjctsTimeLinePanel extends JPanel {
 		panel.setLayout(gl_panel);
 
 		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		add(scrollPane, BorderLayout.CENTER);
 
 		tlPanel = new JPanel();
@@ -172,25 +174,8 @@ public class PrjctsTimeLinePanel extends JPanel {
 			}
 		});
 
-		String[] prjctsName = null;
-		ArrayList<Project> prjctList;
-		prjctList = CurrentUser.getProjects();
-		prjctsName = new String[prjctList.size()];
-		if (!prjctList.isEmpty()) {
-			int i = 0;
-			for (Project p : prjctList) {
-				prjctsName[i] = p.getName();
-				i++;
-			}
-			CURRENT_SELECTED_COMBX_INDEX = 0;
-			SELECTED_PROJECT_ID = getCurrentProjectId(prjctsName[0]);
-			updateTLPanel();
-		} else {
-			prjctsName = new String[1];
-			prjctsName[0] = "";
-		}
-
-		comboBox.setModel(new DefaultComboBoxModel(prjctsName));
+		updatePrjctList();
+		
 		topPrjctsTLPanel.add(comboBox, BorderLayout.CENTER);
 
 		JButton btnRefresh = new JButton("");
@@ -204,13 +189,13 @@ public class PrjctsTimeLinePanel extends JPanel {
 		topPrjctsTLPanel.add(btnRefresh, BorderLayout.EAST);
 	}
 
-	public void putMessage(Component obj) {
+	public static void putMessage(Component obj) {
 		// put new element and go to next row
 		tlPanel.add(obj, "wrap", 0);
 		tlPanel.updateUI();
 	}
 
-	public void putList(ArrayList<Message> msgList) {
+	public static void putList(ArrayList<Message> msgList) {
 		if (msgList != null) {
 			for (Message m : msgList) {
 				putMessage(new MsgPanel(m));
@@ -223,11 +208,11 @@ public class PrjctsTimeLinePanel extends JPanel {
 		return idLastMessage;
 	}
 
-	public void setLastIdMsg(int id) {
+	public static void setLastIdMsg(int id) {
 		idLastMessage = id;
 	}
 
-	private int getCurrentProjectId(String prjctName) {
+	private static int getCurrentProjectId(String prjctName) {
 		int retVal = -1;
 		for (Project p : CurrentUser.getProjects()) {
 			if (p.getName().equals(prjctName)) {
@@ -238,7 +223,7 @@ public class PrjctsTimeLinePanel extends JPanel {
 		return retVal;
 	}
 
-	private void updateTLPanel() {
+	private static void updateTLPanel() {
 		setLastIdMsg(0);
 		tlPanel.removeAll();
 		currentMsgList = ClientRequests.getLastetProjectTL(CurrentUser.getId(),
@@ -255,5 +240,38 @@ public class PrjctsTimeLinePanel extends JPanel {
 				idLastMessage, ServerConnection.maxReceivedMsgs,
 				SELECTED_PROJECT_ID);
 		putList(currentMsgList);
+	}
+	
+	public static void updatePrjctList() {
+		String[] prjctsName = null;
+		ArrayList<Project> prjctList;
+		prjctList = CurrentUser.getProjects();
+		int nbPrjct = 0;
+		for (Project p : prjctList)
+			if (p.getStatus() == Project.STATUS_OPENED)
+				nbPrjct++;
+		prjctsName = new String[nbPrjct];
+		if (!prjctList.isEmpty() && nbPrjct>0) {
+			int i = 0;
+			for (Project p : prjctList) {
+				if (p.getStatus() == Project.STATUS_OPENED) {
+					prjctsName[i] = p.getName();
+					i++;
+				}
+			}
+			CURRENT_SELECTED_COMBX_INDEX = 0;
+			SELECTED_PROJECT_ID = getCurrentProjectId(prjctsName[0]);
+			btnSend.setEnabled(true);
+			textArea.setEnabled(true);
+		} else {
+			prjctsName = new String[1];
+			prjctsName[0] = "";
+			SELECTED_PROJECT_ID = -1;
+			btnSend.setEnabled(false);
+			textArea.setEnabled(false);
+		}
+		updateTLPanel();
+		comboBox.setModel(new DefaultComboBoxModel(prjctsName));
+		comboBox.updateUI();
 	}
 }

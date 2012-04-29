@@ -44,6 +44,9 @@ import jmbs.client.Graphics.images.ImageFileView;
 import jmbs.client.Graphics.images.ImageFilter;
 import jmbs.client.Graphics.images.ImagePreview;
 import jmbs.common.User;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.ScrollPaneConstants;
 
 public class ProfilePanel extends JPanel {
 
@@ -67,16 +70,16 @@ public class ProfilePanel extends JPanel {
 	public ProfilePanel(User currentUser) {
 
 		JLabel lblName = new JLabel("Name:");
-		lblName.setBounds(9, 46, 40, 16);
+		lblName.setBounds(90, 46, 40, 16);
 
 		JLabel lblLastName = new JLabel("Last Name:");
-		lblLastName.setBounds(9, 86, 70, 16);
+		lblLastName.setBounds(60, 86, 70, 16);
 
 		JLabel lblEmailAdress = new JLabel("Email Adress:");
-		lblEmailAdress.setBounds(9, 126, 85, 16);
+		lblEmailAdress.setBounds(45, 126, 85, 16);
 
 		JSeparator separator = new JSeparator();
-		separator.setBounds(9, 154, 267, 12);
+		separator.setBounds(36, 267, 267, 12);
 
 		JLabel lblPublicInformations = new JLabel("Public Informations");
 		lblPublicInformations.setBounds(84, 8, 162, 20);
@@ -84,19 +87,19 @@ public class ProfilePanel extends JPanel {
 		lblPublicInformations.setFont(new Font("Lucida Grande", Font.BOLD, 16));
 
 		JLabel lblChangePassword = new JLabel("Change Password");
-		lblChangePassword.setBounds(82, 172, 163, 20);
+		lblChangePassword.setBounds(95, 277, 163, 20);
 		lblChangePassword.setForeground(Color.RED);
 		lblChangePassword.setHorizontalAlignment(SwingConstants.CENTER);
 		lblChangePassword.setFont(new Font("Lucida Grande", Font.BOLD, 16));
 
 		JLabel lblOldPassword = new JLabel("Old Password:");
-		lblOldPassword.setBounds(6, 204, 89, 16);
+		lblOldPassword.setBounds(58, 309, 89, 16);
 
 		JLabel lblNewPassword = new JLabel("New Password:");
-		lblNewPassword.setBounds(6, 238, 94, 16);
+		lblNewPassword.setBounds(52, 349, 94, 16);
 
 		JLabel lblConfirmPassword = new JLabel("Confirm Password:");
-		lblConfirmPassword.setBounds(9, 272, 118, 16);
+		lblConfirmPassword.setBounds(29, 395, 118, 16);
 
 		nameTextField = new JTextField(currentUser.getName());
 		nameTextField.setBorder(BorderFactory.createLineBorder(null));
@@ -114,27 +117,27 @@ public class ProfilePanel extends JPanel {
 		emailTextField.setBorder(BorderFactory.createLineBorder(null));
 
 		passwordField = new JPasswordField();
-		passwordField.setBounds(142, 198, 180, 28);
+		passwordField.setBounds(159, 303, 180, 28);
 		passwordField.setBorder(BorderFactory.createLineBorder(null));
 
 		newpasswordField = new JPasswordField();
-		newpasswordField.setBounds(142, 232, 180, 28);
+		newpasswordField.setBounds(159, 343, 180, 28);
 		newpasswordField.setBorder(BorderFactory.createLineBorder(null));
 
 		confirmpasswordField = new JPasswordField();
-		confirmpasswordField.setBounds(142, 266, 180, 28);
+		confirmpasswordField.setBounds(159, 383, 180, 28);
 		confirmpasswordField.setBorder(BorderFactory.createLineBorder(null));
 
 		profilePicturePanel = new ImagePanel(
 				CurrentUser.DEFAULT_IMAGE.toString(), 70, 70);
-		profilePicturePanel.setBounds(6, 324, 70, 70);
+		profilePicturePanel.setBounds(9, 437, 70, 70);
 		profilePicturePanel.setBackground(Color.GRAY);
 
 		JSeparator separator_1 = new JSeparator();
-		separator_1.setBounds(9, 306, 264, 12);
+		separator_1.setBounds(6, 423, 346, 12);
 
 		JLabel lblProfilePicture = new JLabel("Profile Picture");
-		lblProfilePicture.setBounds(88, 326, 115, 20);
+		lblProfilePicture.setBounds(93, 447, 115, 20);
 		lblProfilePicture.setFont(new Font("Lucida Grande", Font.BOLD, 16));
 
 		JButton btnBrowse = new JButton("Browse");
@@ -170,10 +173,10 @@ public class ProfilePanel extends JPanel {
 				fc.setSelectedFile(null);
 			}
 		});
-		btnBrowse.setBounds(263, 365, 89, 29);
+		btnBrowse.setBounds(263, 480, 89, 29);
 
 		profilePicturePathTextField = new JTextField();
-		profilePicturePathTextField.setBounds(84, 364, 159, 28);
+		profilePicturePathTextField.setBounds(87, 479, 159, 28);
 		profilePicturePathTextField.setColumns(10);
 		setLayout(null);
 		add(lblPublicInformations);
@@ -198,7 +201,7 @@ public class ProfilePanel extends JPanel {
 		add(confirmpasswordField);
 
 		JSeparator separator_2 = new JSeparator();
-		separator_2.setBounds(9, 406, 343, 12);
+		separator_2.setBounds(6, 511, 343, 12);
 		add(separator_2);
 
 		JButton btnUpdate = new JButton("Update");
@@ -400,8 +403,22 @@ public class ProfilePanel extends JPanel {
 
 			}
 		});
-		btnUpdate.setBounds(116, 425, 117, 29);
+		btnUpdate.setBounds(235, 519, 117, 29);
 		add(btnUpdate);
+		
+		JLabel lblAboutYou = new JLabel("About You:");
+		lblAboutYou.setBounds(9, 154, 89, 16);
+		add(lblAboutYou);
+		
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		scrollPane.setBounds(9, 171, 330, 96);
+		add(scrollPane);
+		
+		JTextArea aboutTextArea = new JTextArea();
+		aboutTextArea.setLineWrap(true);
+		aboutTextArea.setText("A new user of JMBS!");
+		scrollPane.setViewportView(aboutTextArea);
 	}
 
 	public void resetAll(User currentUser) {
@@ -476,5 +493,4 @@ public class ProfilePanel extends JPanel {
 		}
 		return passConfirmed;
 	}
-
 }

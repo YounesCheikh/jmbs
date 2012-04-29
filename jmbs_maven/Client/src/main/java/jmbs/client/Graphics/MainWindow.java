@@ -4,16 +4,21 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 
+import javax.swing.ButtonGroup;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTabbedPane;
+import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.UIManager;
 
@@ -21,10 +26,7 @@ import jmbs.client.ClientRequests;
 import jmbs.client.CurrentUser;
 import jmbs.client.ServerConnection;
 import jmbs.client.SysConf;
-import jmbs.client.Graphics.projects.MyProjectsPanel;
-import jmbs.client.Graphics.projects.ParticipationsPrjcstPanel;
-import jmbs.client.Graphics.projects.PrjctsTimeLinePanel;
-import jmbs.client.Graphics.projects.SearchProjectPanel;
+import jmbs.client.Graphics.projects.PrjectTabbedPane;
 import jmbs.common.Message;
 
 public class MainWindow {
@@ -37,8 +39,8 @@ public class MainWindow {
 	private static UsersFrame uFrame;
 	private static ArrayList<Message> msgListTL;
 	private MainMenuBar menuBar;
-	private JTabbedPane tabbedPane;
 	private JPanel projectsPanel;
+	private PrjectTabbedPane prjctTabbedPanel;
 
 	public MainWindow() {
 		if (frmJmbsClient == null) {
@@ -53,6 +55,7 @@ public class MainWindow {
 	public static void initFrame() {
 		frmJmbsClient = null;
 	}
+
 	/**
 	 * Initialize the contents of the frame.
 	 * 
@@ -72,26 +75,22 @@ public class MainWindow {
 		ppanel = new ProfilePanel(CurrentUser.get());
 		about = new AboutFrame();
 		uFrame = new UsersFrame();
-
+		final ButtonGroup sideBarBtns = new ButtonGroup();
 		frmJmbsClient.setTitle("JMBS Client : " + CurrentUser.getFullName());
 		// frmJmbsClient.setBounds(100, 100, 365, 600);
-		frmJmbsClient.setSize(480, 640);
+		frmJmbsClient.setSize(520, 640);
 		frmJmbsClient.setMinimumSize(new Dimension(480, 600));
 		frmJmbsClient.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		// frmJmbsClient.setLocationRelativeTo(null);
 		// frmJmbsClient.setVisible(true);
 		new SysConf().centerThisFrame(frmJmbsClient);
-		// menuBar = new MainMenuBar(this);
-		// frmJmbsClient.setJMenuBar(menuBar);
-		tabbedPane = new JTabbedPane(JTabbedPane.LEFT);
-		tabbedPane.setBorder(null);
-		tabbedPane.setToolTipText("JMBS");
-		frmJmbsClient.getContentPane().add(tabbedPane, BorderLayout.CENTER);
 
 		timelinepanel = new TimeLinePanel();
 		nmFrame = new NewMessageFrame(timelinepanel);
-		JScrollPane tlscrollPane = new JScrollPane();
-		tabbedPane.addTab("TimeLine", null, tlscrollPane, null);
+		final JScrollPane tlscrollPane = new JScrollPane();
+		// tabbedPane.addTab("", new
+		// ImageIcon(getClass().getResource("/img/timeline.png")), tlscrollPane,
+		// "TimeLine");
 		tlscrollPane.setAutoscrolls(true);
 		tlscrollPane.getVerticalScrollBar().setUnitIncrement(30);
 		tlscrollPane
@@ -99,40 +98,18 @@ public class MainWindow {
 		tlscrollPane.setViewportView(timelinepanel);
 
 		projectsPanel = new JPanel();
-		tabbedPane.addTab("Projects", null, projectsPanel, null);
+		// tabbedPane.addTab("", new
+		// ImageIcon(getClass().getResource("/img/projects.png")),
+		// projectsPanel, "Projects");
 
-		JTabbedPane tabbedPane_1 = new JTabbedPane(JTabbedPane.TOP);
+		prjctTabbedPanel = new PrjectTabbedPane(projectsPanel);
 
-		PrjctsTimeLinePanel prjctTLPanel = new PrjctsTimeLinePanel();
-		tabbedPane_1.addTab("TimeLine", null, prjctTLPanel, null);
+		
 
-		SearchProjectPanel searchPrjctPanel = new SearchProjectPanel();
-		tabbedPane_1.addTab("Search For Project", null, searchPrjctPanel, null);
-
-		ParticipationsPrjcstPanel participationPrjctPanel = new ParticipationsPrjcstPanel();
-		tabbedPane_1.addTab("Participation", null, participationPrjctPanel,
-				null);
-
-		MyProjectsPanel myPrjctPanel = new MyProjectsPanel();
-		tabbedPane_1.addTab("My Projects", null, myPrjctPanel, null);
-		GroupLayout gl_projectsPanel = new GroupLayout(projectsPanel);
-		gl_projectsPanel.setHorizontalGroup(gl_projectsPanel
-				.createParallelGroup(Alignment.LEADING).addGroup(
-						gl_projectsPanel
-								.createSequentialGroup()
-								.addComponent(tabbedPane_1,
-										GroupLayout.DEFAULT_SIZE, 440,
-										Short.MAX_VALUE).addGap(0)));
-		gl_projectsPanel.setVerticalGroup(gl_projectsPanel.createParallelGroup(
-				Alignment.LEADING).addGroup(
-				gl_projectsPanel
-						.createSequentialGroup()
-						.addComponent(tabbedPane_1, GroupLayout.DEFAULT_SIZE,
-								997, Short.MAX_VALUE).addGap(7)));
-		projectsPanel.setLayout(gl_projectsPanel);
-
-		JPanel profpanel = new JPanel();
-		tabbedPane.addTab("Profile", null, profpanel, null);
+		final JPanel profpanel = new JPanel();
+		// tabbedPane.addTab("", new
+		// ImageIcon(getClass().getResource("/img/profile_edit.png")),
+		// profpanel, null);
 		profpanel.setLayout(new BorderLayout(0, 0));
 
 		JScrollPane profilescrollPane = new JScrollPane();
@@ -143,6 +120,133 @@ public class MainWindow {
 		profilescrollPane.setViewportView(ppanel);
 
 		profpanel.add(profilescrollPane);
+
+		JPanel sidebarPanel = new JPanel();
+
+		final JPanel mainPanel = new JPanel();
+		GroupLayout groupLayout = new GroupLayout(
+				frmJmbsClient.getContentPane());
+		groupLayout.setHorizontalGroup(
+			groupLayout.createParallelGroup(Alignment.LEADING)
+				.addGroup(groupLayout.createSequentialGroup()
+					.addContainerGap()
+					.addComponent(sidebarPanel, GroupLayout.PREFERRED_SIZE, 75, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(mainPanel, GroupLayout.DEFAULT_SIZE, 427, Short.MAX_VALUE)
+					.addContainerGap())
+		);
+		groupLayout.setVerticalGroup(
+			groupLayout.createParallelGroup(Alignment.TRAILING)
+				.addGroup(groupLayout.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
+						.addComponent(sidebarPanel, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 606, Short.MAX_VALUE)
+						.addComponent(mainPanel, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 606, Short.MAX_VALUE))
+					.addContainerGap())
+		);
+		mainPanel.setLayout(new BorderLayout(0, 0));
+
+		final JButton btnTimeline = new JButton("");
+		final JButton btnProjects = new JButton("");
+		final JButton btnProfile = new JButton("");
+		btnTimeline.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				mainPanel.removeAll();
+				mainPanel.add(tlscrollPane, BorderLayout.CENTER);
+				mainPanel.updateUI();
+				btnTimeline.setSelected(true);
+				btnProjects.setSelected(false);
+				btnProfile.setSelected(false);
+			}
+		});
+		btnTimeline.setBorderPainted(false);
+		btnTimeline.setIcon(new ImageIcon(getClass().getResource(
+				"/img/timeline.png")));
+
+		btnProjects.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				mainPanel.removeAll();
+				mainPanel.add(prjctTabbedPanel, BorderLayout.CENTER);
+				mainPanel.updateUI();
+				btnTimeline.setSelected(false);
+				btnProjects.setSelected(true);
+				btnProfile.setSelected(false);
+			}
+		});
+		btnProjects.setToolTipText("Projects");
+		btnProjects.setBorderPainted(false);
+		btnProjects.setIcon(new ImageIcon(getClass().getResource(
+				"/img/projects.png")));
+
+		btnProfile.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				mainPanel.removeAll();
+				mainPanel.add(profpanel, BorderLayout.CENTER);
+				mainPanel.updateUI();
+				btnTimeline.setSelected(false);
+				btnProjects.setSelected(false);
+				btnProfile.setSelected(true);
+			}
+		});
+		btnProfile.setToolTipText("Profile");
+		btnProfile.setBorderPainted(false);
+		btnProfile.setIcon(new ImageIcon(getClass().getResource(
+				"/img/profile_edit.png")));
+
+		JButton btnAdd = new JButton("");
+		btnAdd.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				getNmFrame().setVisible(true);
+			}
+		});
+		btnAdd.setBorderPainted(false);
+		btnAdd.setIcon(new ImageIcon(getClass().getResource("/img/add.png")));
+		
+		JButton btnUsers = new JButton("");
+		btnUsers.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				uFrame.setVisible(true);
+			}
+		});
+		btnUsers.setIcon(new ImageIcon(getClass().getResource("/img/users.png")));
+		btnUsers.setToolTipText("Users");
+		btnUsers.setBorderPainted(false);
+		GroupLayout gl_sidebarPanel = new GroupLayout(sidebarPanel);
+		gl_sidebarPanel.setHorizontalGroup(
+			gl_sidebarPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_sidebarPanel.createSequentialGroup()
+					.addGroup(gl_sidebarPanel.createParallelGroup(Alignment.LEADING)
+						.addComponent(btnUsers, GroupLayout.DEFAULT_SIZE, 69, Short.MAX_VALUE)
+						.addComponent(btnProfile, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+						.addComponent(btnProjects, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+						.addComponent(btnTimeline, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+						.addComponent(btnAdd, GroupLayout.DEFAULT_SIZE, 63, Short.MAX_VALUE))
+					.addContainerGap())
+		);
+		gl_sidebarPanel.setVerticalGroup(
+			gl_sidebarPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_sidebarPanel.createSequentialGroup()
+					.addContainerGap()
+					.addComponent(btnTimeline, GroupLayout.PREFERRED_SIZE, 70, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(btnProjects, GroupLayout.PREFERRED_SIZE, 70, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(btnProfile, GroupLayout.PREFERRED_SIZE, 70, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(btnUsers, GroupLayout.PREFERRED_SIZE, 68, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED, 260, Short.MAX_VALUE)
+					.addComponent(btnAdd))
+		);
+		sidebarPanel.setLayout(gl_sidebarPanel);
+		frmJmbsClient.getContentPane().setLayout(groupLayout);
+
+		sideBarBtns.add(btnTimeline);
+		sideBarBtns.add(btnProjects);
+		sideBarBtns.add(btnProfile);
+		mainPanel.removeAll();
+		mainPanel.add(tlscrollPane, BorderLayout.CENTER);
+		mainPanel.updateUI();
+		btnTimeline.setSelected(true);
 	}
 
 	/**
@@ -208,10 +312,6 @@ public class MainWindow {
 	public void setMenuBar() {
 		menuBar = new MainMenuBar(this);
 		frmJmbsClient.setJMenuBar(menuBar);
-	}
-
-	public JTabbedPane getTabbedPane() {
-		return tabbedPane;
 	}
 
 	public JPanel getProjectsPanel() {

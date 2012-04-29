@@ -23,6 +23,7 @@ package jmbs.client.Graphics;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -178,7 +179,7 @@ public class MainMenuBar extends JMenuBar {
 		mntmProjects.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				mw.getTabbedPane().setSelectedComponent(mw.getProjectsPanel());
+				//mw.getTabbedPane().setSelectedComponent(mw.getProjectsPanel());
 			}
 		});
 		//mntmProjects.setEnabled(false);

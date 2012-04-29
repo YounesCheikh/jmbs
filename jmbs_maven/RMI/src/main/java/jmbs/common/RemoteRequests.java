@@ -202,6 +202,21 @@ public interface RemoteRequests extends Remote {
 			throws RemoteException, SecurityException;
 
 	/**
+	 * opens a project if the user is authorized to close it.
+	 * 
+	 * @param idUser
+	 *            - the user who wants to close the project
+	 * @param idProject
+	 *            - the project to close
+	 * @return true if the operation was sucessful
+	 * @throws RemoteException
+	 * @throws SecurityException
+	 *             if user has not requiered access level
+	 */
+	public boolean openProject(int idUser, int idProject)
+			throws RemoteException, SecurityException;
+	
+	/**
 	 * search for projects where the user is participated
 	 * 
 	 * @param idUser

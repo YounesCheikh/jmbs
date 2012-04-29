@@ -47,6 +47,11 @@ import jmbs.client.CurrentUser;
 import jmbs.client.SysConf;
 import jmbs.common.Message;
 import net.miginfocom.swing.MigLayout;
+import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.Alignment;
+import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.border.BevelBorder;
+import javax.swing.border.SoftBevelBorder;
 
 public class NewMessageFrame extends JFrame {
 
@@ -88,8 +93,9 @@ public class NewMessageFrame extends JFrame {
 		setAlwaysOnTop(true);
 		setUndecorated(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 320, 220);
+		setBounds(100, 100, 320, 209);
 		contentPane = new JPanel();
+		contentPane.setBackground(Color.DARK_GRAY);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 
@@ -100,6 +106,8 @@ public class NewMessageFrame extends JFrame {
 				.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
 		JButton btnSend = new JButton("Send");
+		btnSend.setForeground(Color.LIGHT_GRAY);
+		btnSend.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, Color.BLACK, new Color(128, 128, 128), Color.BLACK, new Color(128, 128, 128)));
 		btnSend.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
@@ -142,10 +150,10 @@ public class NewMessageFrame extends JFrame {
 		textArea.setLineWrap(true);
 		textArea.setBackground(new Color(245, 245, 245));
 		scrollPane.setViewportView(textArea);
-		contentPane.setLayout(new MigLayout("", "[81px][148px][81px]",
-				"[156px][42px]"));
 
 		JButton btnCancel = new JButton("Cancel");
+		btnCancel.setForeground(Color.LIGHT_GRAY);
+		btnCancel.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, Color.BLACK, new Color(128, 128, 128), Color.BLACK, new Color(128, 128, 128)));
 		btnCancel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				setVisible(false);
@@ -153,10 +161,33 @@ public class NewMessageFrame extends JFrame {
 		});
 
 		lblNbchars = new JLabel("" + (textArea.getText().length()));
-		contentPane.add(lblNbchars, "cell 0 1");
-		contentPane.add(btnCancel, "cell 1 1,alignx right,growy");
-		contentPane.add(btnSend, "cell 2 1,grow");
-		contentPane.add(scrollPane, "cell 0 0 3 1,grow");
+		lblNbchars.setForeground(Color.LIGHT_GRAY);
+		GroupLayout gl_contentPane = new GroupLayout(contentPane);
+		gl_contentPane.setHorizontalGroup(
+			gl_contentPane.createParallelGroup(Alignment.LEADING)
+				.addGroup(Alignment.TRAILING, gl_contentPane.createSequentialGroup()
+					.addContainerGap()
+					.addComponent(btnCancel, GroupLayout.PREFERRED_SIZE, 81, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED, 104, Short.MAX_VALUE)
+					.addComponent(lblNbchars, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(btnSend, GroupLayout.PREFERRED_SIZE, 74, GroupLayout.PREFERRED_SIZE)
+					.addGap(4))
+				.addComponent(scrollPane, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 310, Short.MAX_VALUE)
+		);
+		gl_contentPane.setVerticalGroup(
+			gl_contentPane.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 160, GroupLayout.PREFERRED_SIZE)
+					.addGap(4)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+							.addComponent(btnSend, GroupLayout.PREFERRED_SIZE, 33, GroupLayout.PREFERRED_SIZE)
+							.addComponent(lblNbchars))
+						.addComponent(btnCancel, GroupLayout.PREFERRED_SIZE, 33, GroupLayout.PREFERRED_SIZE))
+					.addContainerGap())
+		);
+		contentPane.setLayout(gl_contentPane);
 	}
 
 	/**

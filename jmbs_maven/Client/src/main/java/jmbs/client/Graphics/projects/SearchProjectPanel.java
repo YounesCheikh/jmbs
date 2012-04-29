@@ -34,7 +34,9 @@ import javax.swing.border.BevelBorder;
 import javax.swing.border.SoftBevelBorder;
 
 import jmbs.client.ClientRequests;
+import jmbs.common.Message;
 import jmbs.common.Project;
+import javax.swing.ScrollPaneConstants;
 
 public class SearchProjectPanel extends JPanel {
 
@@ -70,12 +72,20 @@ public class SearchProjectPanel extends JPanel {
 				foundedPrjctsPanel.removeAll();
 				foundedPrjctsPanel.updateUI();
 				if (plist != null)
-					foundedPrjctsPanel.putList(plist);
+				{
+					ArrayList<Project> pListTmp = new ArrayList<Project>();
+					for(Project p: plist) {
+						if(p.getStatus()==Project.STATUS_OPENED)
+							pListTmp.add(p);
+					}
+					foundedPrjctsPanel.putList(pListTmp);
+				}
 			}
 		});
 		panel.add(btnSearch, BorderLayout.EAST);
 		foundedPrjctsPanel = new PrjctsListPanel();
 		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		scrollPane.setViewportBorder(new SoftBevelBorder(BevelBorder.LOWERED,
 				null, null, null, null));
 		scrollPane.updateUI();

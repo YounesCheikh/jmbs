@@ -30,7 +30,7 @@ import java.util.ArrayList;
 public class User implements Serializable {
 
 	private static final long serialVersionUID = -379020318303370555L;
-        
+
 	private String name;
 	private String fname;
 	private String mail;
@@ -42,12 +42,10 @@ public class User implements Serializable {
 	private ArrayList<User> follows = new ArrayList<User>();
 	private String pic = new String();
 
-	
-	public User()
-	{
+	public User() {
 		this.id = -1;
 	}
-	
+
 	/**
 	 * Creates a user from given informations. Some attributes are not created
 	 * by default because they are mostly unused or could trigger unwanted
@@ -67,7 +65,7 @@ public class User implements Serializable {
 		this.mail = m;
 		this.id = 0;
 	}
-	
+
 	/**
 	 * Creates a user with his id.
 	 * 
@@ -80,13 +78,14 @@ public class User implements Serializable {
 	 * @param id
 	 *            user's id
 	 */
-	public User(String n, String f, String m, int id, String picName, int authlvl) {
+	public User(String n, String f, String m, int id, String picName,
+			int authlvl) {
 		this.name = n;
 		this.fname = f;
 		this.mail = m;
 		this.id = id;
 		this.pic = picName;
-                this.accesslevel = authlvl;
+		this.accesslevel = authlvl;
 	}
 
 	/*
