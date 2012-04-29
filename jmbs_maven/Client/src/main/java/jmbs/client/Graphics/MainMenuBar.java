@@ -45,7 +45,7 @@ public class MainMenuBar extends JMenuBar {
 	private UsersFrame uFrame;
 	private JFrame frmJmbsClient;
 	private MyApplicationListener listener;
-	private Preferences prfrm = new Preferences();;
+	private Preferences prfrm;
 	private boolean isMac = new SysConf().isMac() ? true : false;
 
 	/**
@@ -65,6 +65,7 @@ public class MainMenuBar extends JMenuBar {
 		about = mw.getAbout();
 		uFrame = mw.getuFrame();
 		mw.getMsgListTL();
+		prfrm = mw.getPreferencesFrame();
 
 		setBackground(Color.LIGHT_GRAY);
 		// frmJmbsClient.setJMenuBar(this);

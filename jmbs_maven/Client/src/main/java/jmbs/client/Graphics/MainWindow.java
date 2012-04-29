@@ -28,6 +28,7 @@ import jmbs.client.ServerConnection;
 import jmbs.client.SysConf;
 import jmbs.client.Graphics.projects.PrjectTabbedPane;
 import jmbs.common.Message;
+import javax.swing.JSeparator;
 
 public class MainWindow {
 
@@ -41,6 +42,11 @@ public class MainWindow {
 	private MainMenuBar menuBar;
 	private JPanel projectsPanel;
 	private PrjectTabbedPane prjctTabbedPanel;
+	private Preferences prfrm;
+	
+	public Preferences getPreferencesFrame() {
+		return this.prfrm;
+	}
 
 	public MainWindow() {
 		if (frmJmbsClient == null) {
@@ -75,6 +81,7 @@ public class MainWindow {
 		ppanel = new ProfilePanel(CurrentUser.get());
 		about = new AboutFrame();
 		uFrame = new UsersFrame();
+		prfrm = new Preferences();
 		final ButtonGroup sideBarBtns = new ButtonGroup();
 		frmJmbsClient.setTitle("JMBS Client : " + CurrentUser.getFullName());
 		// frmJmbsClient.setBounds(100, 100, 365, 600);
@@ -137,11 +144,11 @@ public class MainWindow {
 		);
 		groupLayout.setVerticalGroup(
 			groupLayout.createParallelGroup(Alignment.TRAILING)
-				.addGroup(groupLayout.createSequentialGroup()
+				.addGroup(Alignment.LEADING, groupLayout.createSequentialGroup()
 					.addContainerGap()
-					.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
-						.addComponent(sidebarPanel, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 606, Short.MAX_VALUE)
-						.addComponent(mainPanel, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 606, Short.MAX_VALUE))
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addComponent(sidebarPanel, GroupLayout.DEFAULT_SIZE, 606, Short.MAX_VALUE)
+						.addComponent(mainPanel, GroupLayout.DEFAULT_SIZE, 606, Short.MAX_VALUE))
 					.addContainerGap())
 		);
 		mainPanel.setLayout(new BorderLayout(0, 0));
@@ -211,30 +218,52 @@ public class MainWindow {
 		btnUsers.setIcon(new ImageIcon(getClass().getResource("/img/users.png")));
 		btnUsers.setToolTipText("Users");
 		btnUsers.setBorderPainted(false);
+		
+		JSeparator separator = new JSeparator();
+		
+		JButton btnPreferences = new JButton("");
+		btnPreferences.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				prfrm.setVisible(true);
+			}
+		});
+		btnPreferences.setToolTipText("Preferences");
+		btnPreferences.setIcon(new ImageIcon(getClass().getResource("/img/pref.png")));
+		btnPreferences.setBorderPainted(false);
 		GroupLayout gl_sidebarPanel = new GroupLayout(sidebarPanel);
 		gl_sidebarPanel.setHorizontalGroup(
 			gl_sidebarPanel.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_sidebarPanel.createSequentialGroup()
 					.addGroup(gl_sidebarPanel.createParallelGroup(Alignment.LEADING)
-						.addComponent(btnUsers, GroupLayout.DEFAULT_SIZE, 69, Short.MAX_VALUE)
-						.addComponent(btnProfile, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-						.addComponent(btnProjects, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-						.addComponent(btnTimeline, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-						.addComponent(btnAdd, GroupLayout.DEFAULT_SIZE, 63, Short.MAX_VALUE))
+						.addComponent(btnTimeline, GroupLayout.DEFAULT_SIZE, 69, Short.MAX_VALUE)
+						.addComponent(btnAdd, GroupLayout.DEFAULT_SIZE, 69, Short.MAX_VALUE)
+						.addComponent(btnProjects, GroupLayout.DEFAULT_SIZE, 69, Short.MAX_VALUE)
+						.addComponent(btnProfile, GroupLayout.DEFAULT_SIZE, 69, Short.MAX_VALUE)
+						.addComponent(separator, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 69, Short.MAX_VALUE)
+						.addGroup(Alignment.TRAILING, gl_sidebarPanel.createSequentialGroup()
+							.addContainerGap()
+							.addComponent(btnUsers, GroupLayout.DEFAULT_SIZE, 69, Short.MAX_VALUE))
+						.addGroup(gl_sidebarPanel.createSequentialGroup()
+							.addContainerGap()
+							.addComponent(btnPreferences)))
 					.addContainerGap())
 		);
 		gl_sidebarPanel.setVerticalGroup(
 			gl_sidebarPanel.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_sidebarPanel.createSequentialGroup()
 					.addContainerGap()
-					.addComponent(btnTimeline, GroupLayout.PREFERRED_SIZE, 70, GroupLayout.PREFERRED_SIZE)
+					.addComponent(btnTimeline, GroupLayout.PREFERRED_SIZE, 64, GroupLayout.PREFERRED_SIZE)
 					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(btnProjects, GroupLayout.PREFERRED_SIZE, 70, GroupLayout.PREFERRED_SIZE)
+					.addComponent(btnProjects, GroupLayout.PREFERRED_SIZE, 52, GroupLayout.PREFERRED_SIZE)
 					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(btnProfile, GroupLayout.PREFERRED_SIZE, 70, GroupLayout.PREFERRED_SIZE)
+					.addComponent(btnProfile)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(separator, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(btnUsers, GroupLayout.PREFERRED_SIZE, 68, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED, 260, Short.MAX_VALUE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(btnPreferences)
+					.addPreferredGap(ComponentPlacement.RELATED, 241, Short.MAX_VALUE)
 					.addComponent(btnAdd))
 		);
 		sidebarPanel.setLayout(gl_sidebarPanel);
