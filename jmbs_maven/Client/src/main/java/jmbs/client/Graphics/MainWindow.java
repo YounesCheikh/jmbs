@@ -43,7 +43,13 @@ public class MainWindow {
 	private JPanel projectsPanel;
 	private PrjectTabbedPane prjctTabbedPanel;
 	private Preferences prfrm;
-	
+	private JPanel mainPanel;
+	private JButton btnTimeline;
+	private JButton btnProjects;
+	private JButton btnProfile;
+	private JScrollPane tlscrollPane;
+	private JPanel profpanel;
+
 	public Preferences getPreferencesFrame() {
 		return this.prfrm;
 	}
@@ -94,7 +100,7 @@ public class MainWindow {
 
 		timelinepanel = new TimeLinePanel();
 		nmFrame = new NewMessageFrame(timelinepanel);
-		final JScrollPane tlscrollPane = new JScrollPane();
+		tlscrollPane = new JScrollPane();
 		// tabbedPane.addTab("", new
 		// ImageIcon(getClass().getResource("/img/timeline.png")), tlscrollPane,
 		// "TimeLine");
@@ -111,9 +117,7 @@ public class MainWindow {
 
 		prjctTabbedPanel = new PrjectTabbedPane(projectsPanel);
 
-		
-
-		final JPanel profpanel = new JPanel();
+		profpanel = new JPanel();
 		// tabbedPane.addTab("", new
 		// ImageIcon(getClass().getResource("/img/profile_edit.png")),
 		// profpanel, null);
@@ -130,40 +134,43 @@ public class MainWindow {
 
 		JPanel sidebarPanel = new JPanel();
 
-		final JPanel mainPanel = new JPanel();
+		mainPanel = new JPanel();
 		GroupLayout groupLayout = new GroupLayout(
 				frmJmbsClient.getContentPane());
-		groupLayout.setHorizontalGroup(
-			groupLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(groupLayout.createSequentialGroup()
-					.addContainerGap()
-					.addComponent(sidebarPanel, GroupLayout.PREFERRED_SIZE, 75, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(mainPanel, GroupLayout.DEFAULT_SIZE, 427, Short.MAX_VALUE)
-					.addContainerGap())
-		);
-		groupLayout.setVerticalGroup(
-			groupLayout.createParallelGroup(Alignment.TRAILING)
-				.addGroup(Alignment.LEADING, groupLayout.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addComponent(sidebarPanel, GroupLayout.DEFAULT_SIZE, 606, Short.MAX_VALUE)
-						.addComponent(mainPanel, GroupLayout.DEFAULT_SIZE, 606, Short.MAX_VALUE))
-					.addContainerGap())
-		);
+		groupLayout.setHorizontalGroup(groupLayout.createParallelGroup(
+				Alignment.LEADING).addGroup(
+				groupLayout
+						.createSequentialGroup()
+						.addContainerGap()
+						.addComponent(sidebarPanel, GroupLayout.PREFERRED_SIZE,
+								75, GroupLayout.PREFERRED_SIZE)
+						.addPreferredGap(ComponentPlacement.RELATED)
+						.addComponent(mainPanel, GroupLayout.DEFAULT_SIZE, 427,
+								Short.MAX_VALUE).addContainerGap()));
+		groupLayout.setVerticalGroup(groupLayout.createParallelGroup(
+				Alignment.TRAILING).addGroup(
+				Alignment.LEADING,
+				groupLayout
+						.createSequentialGroup()
+						.addContainerGap()
+						.addGroup(
+								groupLayout
+										.createParallelGroup(Alignment.LEADING)
+										.addComponent(sidebarPanel,
+												GroupLayout.DEFAULT_SIZE, 606,
+												Short.MAX_VALUE)
+										.addComponent(mainPanel,
+												GroupLayout.DEFAULT_SIZE, 606,
+												Short.MAX_VALUE))
+						.addContainerGap()));
 		mainPanel.setLayout(new BorderLayout(0, 0));
 
-		final JButton btnTimeline = new JButton("");
-		final JButton btnProjects = new JButton("");
-		final JButton btnProfile = new JButton("");
+		btnTimeline = new JButton("");
+		btnProjects = new JButton("");
+		btnProfile = new JButton("");
 		btnTimeline.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				mainPanel.removeAll();
-				mainPanel.add(tlscrollPane, BorderLayout.CENTER);
-				mainPanel.updateUI();
-				btnTimeline.setSelected(true);
-				btnProjects.setSelected(false);
-				btnProfile.setSelected(false);
+				updateMainPanel(1);
 			}
 		});
 		btnTimeline.setBorderPainted(false);
@@ -172,12 +179,7 @@ public class MainWindow {
 
 		btnProjects.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				mainPanel.removeAll();
-				mainPanel.add(prjctTabbedPanel, BorderLayout.CENTER);
-				mainPanel.updateUI();
-				btnTimeline.setSelected(false);
-				btnProjects.setSelected(true);
-				btnProfile.setSelected(false);
+				updateMainPanel(2);
 			}
 		});
 		btnProjects.setToolTipText("Projects");
@@ -187,12 +189,7 @@ public class MainWindow {
 
 		btnProfile.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				mainPanel.removeAll();
-				mainPanel.add(profpanel, BorderLayout.CENTER);
-				mainPanel.updateUI();
-				btnTimeline.setSelected(false);
-				btnProjects.setSelected(false);
-				btnProfile.setSelected(true);
+				updateMainPanel(3);
 			}
 		});
 		btnProfile.setToolTipText("Profile");
@@ -208,7 +205,7 @@ public class MainWindow {
 		});
 		btnAdd.setBorderPainted(false);
 		btnAdd.setIcon(new ImageIcon(getClass().getResource("/img/add.png")));
-		
+
 		JButton btnUsers = new JButton("");
 		btnUsers.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -218,9 +215,9 @@ public class MainWindow {
 		btnUsers.setIcon(new ImageIcon(getClass().getResource("/img/users.png")));
 		btnUsers.setToolTipText("Users");
 		btnUsers.setBorderPainted(false);
-		
+
 		JSeparator separator = new JSeparator();
-		
+
 		JButton btnPreferences = new JButton("");
 		btnPreferences.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -228,44 +225,86 @@ public class MainWindow {
 			}
 		});
 		btnPreferences.setToolTipText("Preferences");
-		btnPreferences.setIcon(new ImageIcon(getClass().getResource("/img/pref.png")));
+		btnPreferences.setIcon(new ImageIcon(getClass().getResource(
+				"/img/pref.png")));
 		btnPreferences.setBorderPainted(false);
 		GroupLayout gl_sidebarPanel = new GroupLayout(sidebarPanel);
-		gl_sidebarPanel.setHorizontalGroup(
-			gl_sidebarPanel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_sidebarPanel.createSequentialGroup()
-					.addGroup(gl_sidebarPanel.createParallelGroup(Alignment.LEADING)
-						.addComponent(btnTimeline, GroupLayout.DEFAULT_SIZE, 69, Short.MAX_VALUE)
-						.addComponent(btnAdd, GroupLayout.DEFAULT_SIZE, 69, Short.MAX_VALUE)
-						.addComponent(btnProjects, GroupLayout.DEFAULT_SIZE, 69, Short.MAX_VALUE)
-						.addComponent(btnProfile, GroupLayout.DEFAULT_SIZE, 69, Short.MAX_VALUE)
-						.addComponent(separator, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 69, Short.MAX_VALUE)
-						.addGroup(Alignment.TRAILING, gl_sidebarPanel.createSequentialGroup()
-							.addContainerGap()
-							.addComponent(btnUsers, GroupLayout.DEFAULT_SIZE, 69, Short.MAX_VALUE))
-						.addGroup(gl_sidebarPanel.createSequentialGroup()
-							.addContainerGap()
-							.addComponent(btnPreferences)))
-					.addContainerGap())
-		);
-		gl_sidebarPanel.setVerticalGroup(
-			gl_sidebarPanel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_sidebarPanel.createSequentialGroup()
-					.addContainerGap()
-					.addComponent(btnTimeline, GroupLayout.PREFERRED_SIZE, 64, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(btnProjects, GroupLayout.PREFERRED_SIZE, 52, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(btnProfile)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(separator, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(btnUsers, GroupLayout.PREFERRED_SIZE, 68, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(btnPreferences)
-					.addPreferredGap(ComponentPlacement.RELATED, 241, Short.MAX_VALUE)
-					.addComponent(btnAdd))
-		);
+		gl_sidebarPanel
+				.setHorizontalGroup(gl_sidebarPanel
+						.createParallelGroup(Alignment.LEADING)
+						.addGroup(
+								gl_sidebarPanel
+										.createSequentialGroup()
+										.addGroup(
+												gl_sidebarPanel
+														.createParallelGroup(
+																Alignment.LEADING)
+														.addComponent(
+																btnTimeline,
+																GroupLayout.DEFAULT_SIZE,
+																69,
+																Short.MAX_VALUE)
+														.addComponent(
+																btnAdd,
+																GroupLayout.DEFAULT_SIZE,
+																69,
+																Short.MAX_VALUE)
+														.addComponent(
+																btnProjects,
+																GroupLayout.DEFAULT_SIZE,
+																69,
+																Short.MAX_VALUE)
+														.addComponent(
+																btnProfile,
+																GroupLayout.DEFAULT_SIZE,
+																69,
+																Short.MAX_VALUE)
+														.addComponent(
+																separator,
+																Alignment.TRAILING,
+																GroupLayout.DEFAULT_SIZE,
+																69,
+																Short.MAX_VALUE)
+														.addGroup(
+																Alignment.TRAILING,
+																gl_sidebarPanel
+																		.createSequentialGroup()
+																		.addContainerGap()
+																		.addComponent(
+																				btnUsers,
+																				GroupLayout.DEFAULT_SIZE,
+																				69,
+																				Short.MAX_VALUE))
+														.addGroup(
+																gl_sidebarPanel
+																		.createSequentialGroup()
+																		.addContainerGap()
+																		.addComponent(
+																				btnPreferences)))
+										.addContainerGap()));
+		gl_sidebarPanel.setVerticalGroup(gl_sidebarPanel.createParallelGroup(
+				Alignment.LEADING).addGroup(
+				gl_sidebarPanel
+						.createSequentialGroup()
+						.addContainerGap()
+						.addComponent(btnTimeline, GroupLayout.PREFERRED_SIZE,
+								64, GroupLayout.PREFERRED_SIZE)
+						.addPreferredGap(ComponentPlacement.RELATED)
+						.addComponent(btnProjects, GroupLayout.PREFERRED_SIZE,
+								52, GroupLayout.PREFERRED_SIZE)
+						.addPreferredGap(ComponentPlacement.RELATED)
+						.addComponent(btnProfile)
+						.addPreferredGap(ComponentPlacement.RELATED)
+						.addComponent(separator, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.DEFAULT_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addPreferredGap(ComponentPlacement.RELATED)
+						.addComponent(btnUsers, GroupLayout.PREFERRED_SIZE, 68,
+								GroupLayout.PREFERRED_SIZE)
+						.addPreferredGap(ComponentPlacement.RELATED)
+						.addComponent(btnPreferences)
+						.addPreferredGap(ComponentPlacement.RELATED, 241,
+								Short.MAX_VALUE).addComponent(btnAdd)));
 		sidebarPanel.setLayout(gl_sidebarPanel);
 		frmJmbsClient.getContentPane().setLayout(groupLayout);
 
@@ -351,5 +390,19 @@ public class MainWindow {
 		msgListTL = ClientRequests.getLatestTL(CurrentUser.getId(), idLastMsg,
 				ServerConnection.maxReceivedMsgs);
 		timelinepanel.putList(msgListTL);
+	}
+
+	public void updateMainPanel(int sideBarItem) {
+		mainPanel.removeAll();
+		if (sideBarItem == 1)
+			mainPanel.add(tlscrollPane, BorderLayout.CENTER);
+		else if (sideBarItem == 2)
+			mainPanel.add(prjctTabbedPanel, BorderLayout.CENTER);
+		else if (sideBarItem == 3)
+			mainPanel.add(profpanel, BorderLayout.CENTER);
+		btnTimeline.setSelected(sideBarItem == 1);
+		btnProjects.setSelected(sideBarItem == 2);
+		btnProfile.setSelected(sideBarItem == 3);
+		mainPanel.updateUI();
 	}
 }

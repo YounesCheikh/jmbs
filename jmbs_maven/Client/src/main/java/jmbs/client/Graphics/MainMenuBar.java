@@ -179,8 +179,7 @@ public class MainMenuBar extends JMenuBar {
 		JMenuItem mntmProjects = new JMenuItem("Projects");
 		mntmProjects.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				//mw.getTabbedPane().setSelectedComponent(mw.getProjectsPanel());
+				mw.updateMainPanel(2);
 			}
 		});
 		//mntmProjects.setEnabled(false);
