@@ -29,6 +29,8 @@ import jmbs.client.SysConf;
 import jmbs.client.Graphics.projects.PrjectTabbedPane;
 import jmbs.common.Message;
 import javax.swing.JSeparator;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class MainWindow {
 
@@ -90,20 +92,13 @@ public class MainWindow {
 		prfrm = new Preferences();
 		final ButtonGroup sideBarBtns = new ButtonGroup();
 		frmJmbsClient.setTitle("JMBS Client : " + CurrentUser.getFullName());
-		// frmJmbsClient.setBounds(100, 100, 365, 600);
 		frmJmbsClient.setSize(520, 640);
 		frmJmbsClient.setMinimumSize(new Dimension(480, 600));
 		frmJmbsClient.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		// frmJmbsClient.setLocationRelativeTo(null);
-		// frmJmbsClient.setVisible(true);
 		new SysConf().centerThisFrame(frmJmbsClient);
-
 		timelinepanel = new TimeLinePanel();
 		nmFrame = new NewMessageFrame(timelinepanel);
 		tlscrollPane = new JScrollPane();
-		// tabbedPane.addTab("", new
-		// ImageIcon(getClass().getResource("/img/timeline.png")), tlscrollPane,
-		// "TimeLine");
 		tlscrollPane.setAutoscrolls(true);
 		tlscrollPane.getVerticalScrollBar().setUnitIncrement(30);
 		tlscrollPane
@@ -111,16 +106,9 @@ public class MainWindow {
 		tlscrollPane.setViewportView(timelinepanel);
 
 		projectsPanel = new JPanel();
-		// tabbedPane.addTab("", new
-		// ImageIcon(getClass().getResource("/img/projects.png")),
-		// projectsPanel, "Projects");
-
 		prjctTabbedPanel = new PrjectTabbedPane(projectsPanel);
 
 		profpanel = new JPanel();
-		// tabbedPane.addTab("", new
-		// ImageIcon(getClass().getResource("/img/profile_edit.png")),
-		// profpanel, null);
 		profpanel.setLayout(new BorderLayout(0, 0));
 
 		JScrollPane profilescrollPane = new JScrollPane();
@@ -166,8 +154,44 @@ public class MainWindow {
 		mainPanel.setLayout(new BorderLayout(0, 0));
 
 		btnTimeline = new JButton("");
+		btnTimeline.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				btnTimeline.setIcon(new ImageIcon(getClass().getResource(
+						"/img/timeline.png")));
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				btnTimeline.setIcon(new ImageIcon(getClass().getResource(
+						"/img/timeline_off.png")));
+			}
+		});
 		btnProjects = new JButton("");
+		btnProjects.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				btnProjects.setIcon(new ImageIcon(getClass().getResource(
+						"/img/projects.png")));
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				btnProjects.setIcon(new ImageIcon(getClass().getResource(
+						"/img/projects_off.png")));
+			}
+		});
 		btnProfile = new JButton("");
+		btnProfile.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				btnProfile.setIcon(new ImageIcon(getClass().getResource(
+						"/img/profile_edit.png")));
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				btnProfile.setIcon(new ImageIcon(getClass().getResource(
+						"/img/profile_edit_off.png")));
+			}
+		});
 		btnTimeline.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				updateMainPanel(1);
@@ -175,6 +199,8 @@ public class MainWindow {
 		});
 		btnTimeline.setBorderPainted(false);
 		btnTimeline.setIcon(new ImageIcon(getClass().getResource(
+				"/img/timeline_off.png")));
+		btnTimeline.setSelectedIcon(new ImageIcon(getClass().getResource(
 				"/img/timeline.png")));
 
 		btnProjects.addActionListener(new ActionListener() {
@@ -185,6 +211,8 @@ public class MainWindow {
 		btnProjects.setToolTipText("Projects");
 		btnProjects.setBorderPainted(false);
 		btnProjects.setIcon(new ImageIcon(getClass().getResource(
+				"/img/projects_off.png")));
+		btnProjects.setSelectedIcon(new ImageIcon(getClass().getResource(
 				"/img/projects.png")));
 
 		btnProfile.addActionListener(new ActionListener() {
@@ -195,8 +223,10 @@ public class MainWindow {
 		btnProfile.setToolTipText("Profile");
 		btnProfile.setBorderPainted(false);
 		btnProfile.setIcon(new ImageIcon(getClass().getResource(
+				"/img/profile_edit_off.png")));
+		btnProfile.setSelectedIcon(new ImageIcon(getClass().getResource(
 				"/img/profile_edit.png")));
-
+		
 		JButton btnAdd = new JButton("");
 		btnAdd.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -206,19 +236,41 @@ public class MainWindow {
 		btnAdd.setBorderPainted(false);
 		btnAdd.setIcon(new ImageIcon(getClass().getResource("/img/add.png")));
 
-		JButton btnUsers = new JButton("");
+		final JButton btnUsers = new JButton("");
+		btnUsers.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				btnUsers.setIcon(new ImageIcon(getClass().getResource("/img/users.png")));
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				btnUsers.setIcon(new ImageIcon(getClass().getResource("/img/users_off.png")));
+			}
+		});
 		btnUsers.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				uFrame.setVisible(true);
 			}
 		});
-		btnUsers.setIcon(new ImageIcon(getClass().getResource("/img/users.png")));
+		btnUsers.setIcon(new ImageIcon(getClass().getResource("/img/users_off.png")));
 		btnUsers.setToolTipText("Users");
 		btnUsers.setBorderPainted(false);
 
 		JSeparator separator = new JSeparator();
 
-		JButton btnPreferences = new JButton("");
+		final JButton btnPreferences = new JButton("");
+		btnPreferences.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				btnPreferences.setIcon(new ImageIcon(getClass().getResource(
+						"/img/pref.png")));
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				btnPreferences.setIcon(new ImageIcon(getClass().getResource(
+						"/img/pref_off.png")));
+			}
+		});
 		btnPreferences.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				prfrm.setVisible(true);
@@ -226,7 +278,7 @@ public class MainWindow {
 		});
 		btnPreferences.setToolTipText("Preferences");
 		btnPreferences.setIcon(new ImageIcon(getClass().getResource(
-				"/img/pref.png")));
+				"/img/pref_off.png")));
 		btnPreferences.setBorderPainted(false);
 		GroupLayout gl_sidebarPanel = new GroupLayout(sidebarPanel);
 		gl_sidebarPanel
