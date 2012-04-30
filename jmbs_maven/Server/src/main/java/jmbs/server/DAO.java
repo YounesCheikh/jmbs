@@ -27,6 +27,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Contains all the possible ways to set a request to the db.
@@ -156,4 +158,12 @@ public abstract class DAO implements Serializable {
 			System.err.println("Unable to set date: "+ dt);
 		}
 	}
+        
+        protected void close(ResultSet rs){
+            try {
+                rs.close();
+            } catch (SQLException ex) {
+                //Logger.getLogger(DAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
 }
