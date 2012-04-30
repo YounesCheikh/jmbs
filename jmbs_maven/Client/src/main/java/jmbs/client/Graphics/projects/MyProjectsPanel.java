@@ -70,9 +70,7 @@ public class MyProjectsPanel extends JPanel {
 		JButton btnCreate = new JButton("Create");
 		btnCreate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				boolean created = false;
-				created = (ClientRequests.createProject(
-						txtProjectName.getText(), CurrentUser.getId()) != null);
+				boolean created = ClientRequests.createProject(txtProjectName.getText(), CurrentUser.getId()) ;
 				if (created)
 					SayToUser.success("Successed", "The project "
 							+ txtProjectName.getText() + " has been created");

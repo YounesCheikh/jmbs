@@ -212,11 +212,11 @@ public class ClientRequests {
 		return retList;
 	}
 
-	public static Project createProject(String name, int iduser) {
-		Project retVal = null;
+	public static boolean createProject(String name, int iduser) {
+		boolean b = false;
 		if (ServerConnection.server != null) {
 			try {
-				retVal = ServerConnection.server.createProject(name, iduser);
+				b = ServerConnection.server.createProject(name, iduser);
 			} catch (SecurityException e) {
 				SayToUser.warning("SecurityException", e.getMessage());
 			} catch (RemoteException e) {
@@ -226,7 +226,7 @@ public class ClientRequests {
 			SayToUser.error("Error connection!",
 					"can't establish a reliable data connection to the server");
 		}
-		return retVal;
+		return b;
 	}
 
 	public static ArrayList<Project> searchForProject(String likeName) {

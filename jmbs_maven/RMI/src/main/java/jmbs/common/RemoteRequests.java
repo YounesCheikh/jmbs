@@ -183,8 +183,7 @@ public interface RemoteRequests extends Remote {
 	 * @throws SecurityException
 	 *             if user is not allowed to create Project
 	 */
-	public Project createProject(String name, int iduser)
-			throws RemoteException, SecurityException;
+	public boolean createProject(String name, int iduser) throws RemoteException, SecurityException;
 
 	/**
 	 * Closes a project if the user is authorized to close it.
