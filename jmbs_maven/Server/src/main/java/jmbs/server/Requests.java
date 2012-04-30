@@ -259,7 +259,8 @@ public class Requests extends UnicastRemoteObject implements RemoteRequests {
      *
      * @param name - project name
      * @param iduser - user's id
-     * @return
+     * @return true if project is created
+     * @deprecated 
      * @throws SecurityException if user is not allowed to create Project
      */
     public boolean createProject(String name, int iduser) throws RemoteException, SecurityException {
@@ -275,6 +276,32 @@ public class Requests extends UnicastRemoteObject implements RemoteRequests {
         }
 
         return b;
+    }
+    
+     /**
+     * Creates a project with all the options.
+     * @param name - project name
+     * @param iduser - owner id
+     * @param activation - true to activate
+     * @param edit - true to enable message edditing by the owner
+     * @param supress - true to enable messsage deleting by the owner
+     * @param privacy - true to set it as a public project
+     * @return int - the created project id or -1
+     * @throws SecurityException if user is not authorised to create the project
+     */
+    public int createProject(String name, int iduser, boolean activation, boolean edit, boolean supress, boolean privacy) throws RemoteException, SecurityException{
+        ProjectDAO pdao = new ProjectDAO(con);
+        SecurityDAO sdao = new SecurityDAO(con);
+        int ret = -1;
+
+        if (sdao.isAccessLevelSufficiant(iduser, UserDAO.CREATE_ACCESS_LEVEL)) {
+            ret = pdao.createProject(name, iduser, activation, edit, supress, privacy);
+        } else {
+            throw new SecurityException("You are not authorized to create a project.\n "
+                    + "Please contact your administator for further informations.");
+        }
+
+        return ret;
     }
 
     // TODO send a mail and check if used.

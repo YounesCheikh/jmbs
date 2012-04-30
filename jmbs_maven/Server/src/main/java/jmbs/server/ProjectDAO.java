@@ -39,13 +39,12 @@ import jmbs.common.User;
  */
 public class ProjectDAO extends DAO {
 
-    
     private static final int DEFAULT_ACTIVATION = 1;
     private static final int DEFAULT_EDIT_OPTION = 1;
     private static final int DEFAULT_SUPRESS_OPTION = 1;
     private static final int DEFAULT_PRIVACY = 1;
-    
-     /**
+
+    /**
      * Creates a new ProjectDAO.
      *
      * @param c Connection object describing the connection to the database
@@ -78,7 +77,7 @@ public class ProjectDAO extends DAO {
 
     /**
      * Re-Opens a closed project.
-     * 
+     *
      * @param idproject - the project id
      * @return true if the project was re-opened false if not
      */
@@ -97,17 +96,17 @@ public class ProjectDAO extends DAO {
     }
 
     /**
-     * Creates a project in the database with all default options.\n
-     * Project created with this method will be opened to public, it messages
-     * will be editable and deletable by his owner.
-     * 
+     * Creates a project in the database with all default options.\n Project
+     * created with this method will be opened to public, it messages will be
+     * editable and deletable by his owner.
+     *
      * @param name - the new project name
      * @param iduser - the id of the creator
-     * @return 
+     * @deprecated 
+     * @return true if project is created
      */
     public boolean createProject(String name, int iduser) {
         boolean b = false;
-
         Timestamp currentTime = new Timestamp(Calendar.getInstance().getTimeInMillis());
 
         if (!this.exists(name)) { // If the project does not already exists
@@ -120,45 +119,56 @@ public class ProjectDAO extends DAO {
             setInt(4, 0); // starts with 0 involved users
             setInt(5, DEFAULT_EDIT_OPTION);
             setInt(6, DEFAULT_SUPRESS_OPTION);
-            setInt(7, DEFAULT_PRIVACY); 
+            setInt(7, DEFAULT_PRIVACY);
             setTimestamp(8, currentTime);
             b = executeUpdate();
         }
 
         return b;
     }
-    
-    public int createProject(String name, int iduser, int activation, int edit, int supress, int privacy) {
-        int ret = -1;
-        boolean res;
-        Timestamp currentTime = new Timestamp(Calendar.getInstance().getTimeInMillis());
 
-        if (!this.exists(name)) { // If the project does not already exists
+    /**
+     * Creates a project with all the options.
+     * @param name - project name
+     * @param iduser - owner id
+     * @param activation - true to activate
+     * @param edit - true to enable message edditing by the owner
+     * @param supress - true to enable messsage deleting by the owner
+     * @param privacy - true to set it as a public project
+     * @return int - the created project id or -1
+     */
+    public int createProject(String name, int iduser, boolean activation, boolean edit, boolean supress, boolean privacy) {
+        int id = -1;
+        Timestamp currentTime = new Timestamp(Calendar.getInstance().getTimeInMillis());
+        //Conversion
+        int active = activation? 1 : 0;
+        int editable = edit? 1 : 0;
+        int deletable = supress? 1 : 0;
+        int priv = privacy? 1 : 0;
+        
+        if (!this.exists(name)) {
+            // If the project does not already exists
             set("INSERT INTO projects "
                     + "(name,idowner,status,nbsuscribers,iseditallowed,issupressionallowed,ispublic,creationtime) "
-                    + "VALUES (?,?,?,?,?,?,?,?);",
-                    Statement.RETURN_GENERATED_KEYS);
+                    + "VALUES (?,?,?,?,?,?,?,?);", Statement.RETURN_GENERATED_KEYS);
             setString(1, name);
             setInt(2, iduser);
-            setInt(3, activation);
+            setInt(3, active);
             setInt(4, 0); // starts with 0 involved users
-            setInt(5, edit);
-            setInt(6, supress);
-            setInt(7, privacy); 
-            setTimestamp(8, currentTime);
-            res = executeUpdate();
-
-            if (res) {
-                try {
-                    ResultSet rs = getGeneratedKeys();
-                    ret = rs.getInt("idproject");
-                } catch (SQLException e) {
-                    
-                }
+            setInt(5, editable);
+            setInt(6, deletable);
+            setInt(7, priv);
+            setTimestamp(8, currentTime);           
+            try {
+                ResultSet rs = getGeneratedKeys();
+                id = rs.getInt("idProject");
+                close(rs);
+            } catch (SQLException ex) {
+                //Logger.getLogger(ProjectDAO.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
 
-        return ret;
+        return id;
     }
 
     public boolean exists(String name) {
