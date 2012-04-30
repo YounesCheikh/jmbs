@@ -23,11 +23,10 @@ package jmbs.client.Graphics.messages;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.text.SimpleDateFormat;
 
-import javax.swing.JButton;
 import javax.swing.JEditorPane;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -53,7 +52,7 @@ public class MsgPanel extends JPanel {
 	private ImagePanel imgPanel;
 	private JPanel txtPanel;
 	private JEditorPane msgEditorPane;
-	private JButton btnUser;
+	private JLabel btnUser;
 	private JLabel lblPrinttime;
 	private JPanel panel;
 
@@ -64,7 +63,7 @@ public class MsgPanel extends JPanel {
 
 		setBorder(UIManager.getBorder("InsetBorder.aquaVariant"));
 
-		this.setPreferredSize(new JButton().getPreferredSize());
+		// this.setPreferredSize(new Dimension(326, 210));
 		imgPanel = new ImagePanel("/img/avatar.jpg", 69, 69);
 		imgPanel.setPreferredSize(new Dimension(70, 70));
 		imgPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
@@ -82,15 +81,15 @@ public class MsgPanel extends JPanel {
 		// msgEditorPane.setText("<html><body><strong>"+m.getOwner().getFullName()+"</strong><br />"+"<p>"+m.getMessage()+"</p><br />");
 		// msgEditorPane.setText(msgEditorPane.getText()+"<p >19/03/2012 23:30:12</p>"+"</body></html>");
 
-		btnUser = new JButton(m.getOwner().getFullName());
-		btnUser.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+		btnUser = new JLabel(m.getOwner().getFullName());
+		btnUser.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
 				new ShowUserProfileFrm(m.getOwner());
 			}
 		});
 		btnUser.setHorizontalAlignment(SwingConstants.LEFT);
 		btnUser.setFont(new Font("Lucida Grande", Font.BOLD, 15));
-		btnUser.setBorderPainted(false);
 		setLayout(new BorderLayout(0, 0));
 		add(imgPanel, BorderLayout.WEST);
 		add(txtPanel);
@@ -99,6 +98,7 @@ public class MsgPanel extends JPanel {
 		txtPanel.add(msgEditorPane);
 
 		panel = new JPanel();
+		panel.setBorder(new EmptyBorder(10, 0, 0, 0));
 		txtPanel.add(panel, BorderLayout.SOUTH);
 		panel.setLayout(new BorderLayout(0, 0));
 

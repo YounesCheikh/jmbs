@@ -166,9 +166,14 @@ public class ImagePanel extends JPanel {
 	public void setImage(String im) {
 		try {
 			this.image = ImageIO.read(new File(im));
-			repaint();
+			this.repaint();
 		} catch (IOException e) {
-			System.out.println(e.getMessage());
+			try {
+				image = ImageIO.read(getClass().getResource(im));
+				this.repaint();
+			} catch (IOException ioe) {
+				System.out.println("Error:" + ioe.getMessage());
+			}
 		}
 
 	}
@@ -255,12 +260,34 @@ public class ImagePanel extends JPanel {
 				repaint();
 			}
 		} catch (IOException e) {
-			System.out.println(e.getMessage());
+			try {
+				image = ImageIO.read(getClass().getResource(im));
+				if (im != null) {
+					if (width > 0) {
+						if (image.getWidth(null) > width) {
+							thumbnail = new ImageIcon(image.getScaledInstance(
+									width, -1, Image.SCALE_DEFAULT));
+						}
+					}
+					if (height > 0) {
+						if (image.getHeight(null) > height) {
+							thumbnail = new ImageIcon(thumbnail.getImage()
+									.getScaledInstance(-1, height,
+											Image.SCALE_DEFAULT));
+						}
+					}
+					image = thumbnail.getImage();
+					repaint();
+				}
+			} catch (IOException ioe) {
+				System.out.println("Error:" + ioe.getMessage());
+			}
 		}
 
 	}
 
 	public void paint(Graphics g) {
+		super.paintComponent(g);
 		if (image != null)
 			g.drawImage(image, 0, 0, null);
 	}
