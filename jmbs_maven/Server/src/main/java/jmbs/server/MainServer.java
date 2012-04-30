@@ -42,23 +42,8 @@ public class MainServer {
 	 */
 	public static void main(String[] args) {
                 
-		FileInputStream propFile;
-		try {
-			propFile = new FileInputStream("properties.cfg");
-			Properties p = new Properties(System.getProperties());
-			p.load(propFile);
-			propFile.close();
-			System.setProperties(p);
-			//System.out.println(p.toString());
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		//ClassLoader.getSystemClassLoader().getSystemResource("jmbs/common/");
-		 //System.setProperty("java.rmi.server.codebase",ClassLoader.getSystemResource("jmbs/common/").toString());
+		 System.getProperties().put("java.rmi.server.codebase",ClassLoader.getSystemResource("jmbs/common/").toString());
 		try {
 			UnicastRemoteObject.unexportObject(LocateRegistry.createRegistry(1099),true);
 		} catch (NoSuchObjectException e1) {
