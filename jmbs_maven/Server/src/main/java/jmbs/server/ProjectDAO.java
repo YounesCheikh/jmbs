@@ -75,8 +75,10 @@ public class ProjectDAO extends DAO {
 				.getTimeInMillis());
 
 		if (!this.exists(name)) {
-			set("INSERT INTO projects (name,idowner,status,nbsuscribers,iseditallowed,issupressionallowed,ispublic,creationtime) VALUES (?,?,?,?,?,?,?,?);",
-					Statement.RETURN_GENERATED_KEYS);
+			set("INSERT INTO projects "
+                                + "(name,idowner,status,nbsuscribers,iseditallowed,issupressionallowed,ispublic,creationtime) "
+                                + "VALUES (?,?,?,?,?,?,?,?);",
+				Statement.RETURN_GENERATED_KEYS);
 			setString(1, name);
 			setInt(2, iduser);
 			setInt(3, 1); // is activate by default
@@ -282,9 +284,9 @@ public class ProjectDAO extends DAO {
 		return b;
 	}
 
-	public boolean isUserInvolved(int idproject, int iduser) {
+	public boolean participates(int idproject, int iduser) {
 		boolean b;
-		set("SELECT idproject FROM projects WHERE idproject=? AND iduser=?;");
+		set("SELECT idproject FROM participate WHERE idproject=? AND iduser=?;");
 		setInt(1, idproject);
 		setInt(2, iduser);
 		ResultSet rs = executeQuery();
@@ -297,4 +299,8 @@ public class ProjectDAO extends DAO {
 		}
 		return b;
 	}
+        
+        public boolean isInvolved(int idUser, int idProject){
+            return (participates(idProject, idUser) || isOwner(idUser, idProject));
+        }
 }
