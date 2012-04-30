@@ -9,6 +9,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
+import javax.swing.JTable;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.border.EmptyBorder;
 
@@ -67,11 +68,6 @@ public class PrjctParameters extends JFrame {
 		usersScrollPane
 				.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		tabbedPane.addTab("Users Managements", null, usersScrollPane, null);
-
-		JPanel usersPanel = new JPanel();
-		usersScrollPane.setViewportView(usersPanel);
-		usersPanel.setLayout(new BorderLayout(0, 0));
-
 		JScrollPane managersScrollPane = new JScrollPane();
 		tabbedPane.addTab("Project Managers", null, managersScrollPane, null);
 

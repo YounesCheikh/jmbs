@@ -1,6 +1,7 @@
 package jmbs.client.Graphics.projects;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
@@ -31,6 +32,8 @@ public class MyProjectsPanel extends JPanel {
 	private static final long serialVersionUID = 8278854644898217652L;
 	private JTextField txtProjectName;
 	JPanel prjctListPanel;
+	private JCheckBox chckbxClosed;
+	private JCheckBox chckbxOpened;
 
 	/**
 	 * Create the panel.
@@ -52,10 +55,12 @@ public class MyProjectsPanel extends JPanel {
 			public void focusGained(FocusEvent e) {
 				if (txtProjectName.getText().equals("Project Name...")) {
 					txtProjectName.setText("");
+					txtProjectName.setForeground(Color.black);
 				}
 			}
 		});
 		txtProjectName.setText("Project Name...");
+		txtProjectName.setForeground(Color.LIGHT_GRAY);
 		topMyPrjctPanel.add(txtProjectName, BorderLayout.CENTER);
 		txtProjectName.setColumns(10);
 
@@ -85,10 +90,10 @@ public class MyProjectsPanel extends JPanel {
 		JLabel lblShowProjects = new JLabel("Show Projects:");
 		panel.add(lblShowProjects);
 
-		JCheckBox chckbxClosed = new JCheckBox("Closed");
+		chckbxClosed = new JCheckBox("Closed");
 		panel.add(chckbxClosed);
 
-		JCheckBox chckbxOpened = new JCheckBox("Active");
+		chckbxOpened = new JCheckBox("Active");
 		panel.add(chckbxOpened);
 
 		JButton btnRefresh = new JButton("Refresh");
@@ -123,9 +128,21 @@ public class MyProjectsPanel extends JPanel {
 		if (projectList != null) {
 			prjctListPanel.removeAll();
 			prjctListPanel.updateUI();
-			for (Project p : projectList) {
-				putProject(new PrjctAdministration(p));
+
+			if (chckbxClosed.isSelected()) {
+				for (Project p : projectList) {
+					if (p.getStatus() == Project.STATUS_CLOSED)
+						putProject(new PrjctAdministration(p));
+				}
 			}
+			
+			if (chckbxOpened.isSelected()) {
+				for (Project p : projectList) {
+					if (p.getStatus() == Project.STATUS_OPENED)
+						putProject(new PrjctAdministration(p));
+				}
+			}
+
 		}
 	}
 
