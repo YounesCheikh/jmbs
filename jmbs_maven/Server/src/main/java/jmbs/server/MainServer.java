@@ -20,11 +20,15 @@
 
 package jmbs.server;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.rmi.NoSuchObjectException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.server.UnicastRemoteObject;
 import java.sql.SQLException;
+import java.util.Properties;
 
 /**
  * @author ycheikh
@@ -37,20 +41,41 @@ public class MainServer {
 	 * @throws SQLException
 	 */
 	public static void main(String[] args) {
-		System.getProperties().put("java.rmi.server.codebase",
-				ClassLoader.getSystemResource("jmbs/common/").toString());
+                
+		FileInputStream propFile;
 		try {
-			UnicastRemoteObject.unexportObject(
-					LocateRegistry.createRegistry(1099), true);
+			propFile = new FileInputStream("properties.cfg");
+			Properties p = new Properties(System.getProperties());
+			p.load(propFile);
+			propFile.close();
+			System.setProperties(p);
+			//System.out.println(p.toString());
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		//ClassLoader.getSystemClassLoader().getSystemResource("jmbs/common/");
+		 //System.setProperty("java.rmi.server.codebase",ClassLoader.getSystemResource("jmbs/common/").toString());
+		try {
+			UnicastRemoteObject.unexportObject(LocateRegistry.createRegistry(1099),true);
 		} catch (NoSuchObjectException e1) {
+			// TODO Auto-generated catch block
+			//e1.printStackTrace();
 			System.out.println(e1.getMessage());
 		} catch (RemoteException e1) {
+			// TODO Auto-generated catch block
+			//e1.printStackTrace();
 			System.out.println(e1.getMessage());
 		}
 		try {
 			LocateRegistry.createRegistry(1099);
 		} catch (RemoteException e) {
-			System.err.println(e.getMessage());
+			// TODO Auto-generated catch block
+			//e.printStackTrace();
+			System.err.println("Failed to create a rigistry on port 1099.\nRMIREGISTRY already in used:\n"+e.getMessage());
 			System.exit(-1);
 		}
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {

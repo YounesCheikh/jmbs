@@ -55,8 +55,8 @@ public class ServerConnection {
 
 			System.setSecurityManager(new RMISecurityManager());
 			try {
-				ServerConnection.addressIP = "120.0.0.1";
-				ServerConnection.name = RemoteServer.REMOTE_NAME;
+				ServerConnection.addressIP = "127.0.0.1";
+				ServerConnection.name = "serverjmbs";
 				ServerConnection.port = 1099;
 				Registry registry = LocateRegistry.getRegistry(addressIP, port);
 				main = (RemoteServer) registry.lookup(RemoteServer.REMOTE_NAME);

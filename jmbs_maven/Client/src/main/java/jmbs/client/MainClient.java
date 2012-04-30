@@ -39,7 +39,6 @@ public class MainClient {
 	public static void main(String[] args) {
 		System.setProperty("java.security.policy", ClassLoader
 				.getSystemResource("security.policy").toString());
-		System.setProperty("java.rmi.server.hostname", "127.0.0.1");
 		System.setProperty("java.rmi.server.codebase", ClassLoader
 				.getSystemResource("jmbs/common/").toString());
 		setMacConf.setUIMngr();
