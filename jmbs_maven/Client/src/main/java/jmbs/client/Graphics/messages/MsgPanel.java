@@ -63,7 +63,7 @@ public class MsgPanel extends JPanel {
 
 		setBorder(UIManager.getBorder("InsetBorder.aquaVariant"));
 
-		// this.setPreferredSize(new Dimension(326, 210));
+		this.setPreferredSize(new Dimension(10, 10));
 		imgPanel = new ImagePanel("/img/avatar.jpg", 69, 69);
 		imgPanel.setPreferredSize(new Dimension(70, 70));
 		imgPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
