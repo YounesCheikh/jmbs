@@ -212,11 +212,35 @@ public class ClientRequests {
 		return retList;
 	}
 
+	/**
+	 * 
+	 * @param name
+	 * @param iduser
+	 * @return true if the project created succesfully
+	 * @deprecated 
+	 */
 	public static boolean createProject(String name, int iduser) {
 		boolean b = false;
 		if (ServerConnection.server != null) {
 			try {
 				b = ServerConnection.server.createProject(name, iduser);
+			} catch (SecurityException e) {
+				SayToUser.warning("SecurityException", e.getMessage());
+			} catch (RemoteException e) {
+				SayToUser.error("RemoteException", e.getMessage());
+			}
+		} else {
+			SayToUser.error("Error connection!",
+					"can't establish a reliable data connection to the server");
+		}
+		return b;
+	}
+	
+	public static int createProject(String name, int iduser,int activation, boolean edit, boolean supress, boolean privacy) {
+		int b = -1;
+		if (ServerConnection.server != null) {
+			try {
+				b = ServerConnection.server.createProject(name, iduser,activation,edit,supress,privacy);
 			} catch (SecurityException e) {
 				SayToUser.warning("SecurityException", e.getMessage());
 			} catch (RemoteException e) {

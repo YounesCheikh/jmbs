@@ -20,7 +20,6 @@ import javax.swing.ScrollPaneConstants;
 
 import jmbs.client.ClientRequests;
 import jmbs.client.CurrentUser;
-import jmbs.client.Graphics.others.SayToUser;
 import jmbs.common.Project;
 import net.miginfocom.swing.MigLayout;
 
@@ -70,15 +69,7 @@ public class MyProjectsPanel extends JPanel {
 		JButton btnCreate = new JButton("Create");
 		btnCreate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				boolean created = false;
-				created = (ClientRequests.createProject(
-						txtProjectName.getText(), CurrentUser.getId()));
-				if (created)
-					SayToUser.success("Successed", "The project "
-							+ txtProjectName.getText() + " has been created");
-				else
-					SayToUser.error("Permission denied",
-							"You don't have access to do this!");
+				new CreateProject(txtProjectName.getText());
 			}
 		});
 		topMyPrjctPanel.add(btnCreate, BorderLayout.EAST);
