@@ -137,6 +137,10 @@ public class Project implements Serializable {
     	return this.creationTime;
     }
     
+    public void setUsers(ArrayList<User> users){
+        this.users=users;
+    }
+    
     /**
      * @return the name
      */
