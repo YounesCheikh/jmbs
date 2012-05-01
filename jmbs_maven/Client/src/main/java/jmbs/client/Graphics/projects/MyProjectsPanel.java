@@ -70,7 +70,9 @@ public class MyProjectsPanel extends JPanel {
 		JButton btnCreate = new JButton("Create");
 		btnCreate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				boolean created = ClientRequests.createProject(txtProjectName.getText(), CurrentUser.getId()) ;
+				boolean created = false;
+				created = (ClientRequests.createProject(
+						txtProjectName.getText(), CurrentUser.getId()));
 				if (created)
 					SayToUser.success("Successed", "The project "
 							+ txtProjectName.getText() + " has been created");
@@ -127,17 +129,23 @@ public class MyProjectsPanel extends JPanel {
 			prjctListPanel.removeAll();
 			prjctListPanel.updateUI();
 
-			if (chckbxClosed.isSelected()) {
+			if (!chckbxClosed.isSelected() && !chckbxOpened.isSelected()) {
 				for (Project p : projectList) {
-					if (p.getStatus() == Project.STATUS_CLOSED)
-						putProject(new PrjctAdministration(p));
+					putProject(new PrjctAdministration(p));
 				}
-			}
-			
-			if (chckbxOpened.isSelected()) {
-				for (Project p : projectList) {
-					if (p.getStatus() == Project.STATUS_OPENED)
-						putProject(new PrjctAdministration(p));
+			} else {
+				if (chckbxClosed.isSelected()) {
+					for (Project p : projectList) {
+						if (p.getStatus() == Project.STATUS_CLOSED)
+							putProject(new PrjctAdministration(p));
+					}
+				}
+
+				if (chckbxOpened.isSelected()) {
+					for (Project p : projectList) {
+						if (p.getStatus() == Project.STATUS_OPENED)
+							putProject(new PrjctAdministration(p));
+					}
 				}
 			}
 
