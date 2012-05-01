@@ -32,11 +32,9 @@ import javax.swing.JSeparator;
 
 import jmbs.client.CurrentUser;
 import jmbs.client.SysConf;
-import jmbs.client.Graphics.messages.NewMessageFrame;
 import jmbs.client.Graphics.messages.TimeLinePanel;
 import jmbs.client.Graphics.others.AboutFrame;
 import jmbs.client.Graphics.others.Preferences;
-import jmbs.client.Graphics.users.UsersFrame;
 
 public class MainMenuBar extends JMenuBar {
 
@@ -45,9 +43,7 @@ public class MainMenuBar extends JMenuBar {
 	 */
 	private static final long serialVersionUID = 2765541073906585914L;
 	private static TimeLinePanel timelinepanel;
-	private static NewMessageFrame nmFrame;
 	private static AboutFrame about;
-	private static UsersFrame uFrame;
 	private static JFrame frmJmbsClient;
 	private MyApplicationListener listener;
 	private static Preferences prfrm;
@@ -66,9 +62,7 @@ public class MainMenuBar extends JMenuBar {
 
 		frmJmbsClient = mw.getFrame();
 		timelinepanel = mw.getTLPanel();
-		nmFrame = mw.getNmFrame();
 		about = mw.getAbout();
-		uFrame = mw.getuFrame();
 		mw.getMsgListTL();
 		prfrm = mw.getPreferencesFrame();
 
@@ -83,8 +77,7 @@ public class MainMenuBar extends JMenuBar {
 		JMenuItem mntmNewMessage = new JMenuItem("New Message");
 		mntmNewMessage.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				// Open the new Frame to write a new message
-				nmFrame.setVisible(true);
+				mw.updateNewMsgPane();
 			}
 		});
 		mnFile.add(mntmNewMessage);
@@ -161,8 +154,7 @@ public class MainMenuBar extends JMenuBar {
 		JMenuItem mntmUsers = new JMenuItem("Users");
 		mntmUsers.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				// uFrame = new UsersFrame();
-				uFrame.setVisible(true);
+				mw.updateMainPanel(4);
 			}
 		});
 		mnActivities.add(mntmUsers);
@@ -180,12 +172,8 @@ public class MainMenuBar extends JMenuBar {
 	public MyApplicationListener getApplicationListener() {
 		return listener;
 	}
-	
+
 	public static void disconnect() {
-		if (nmFrame.isVisible())
-			nmFrame.dispose();
-		if (uFrame.isVisible())
-			uFrame.dispose();
 		if (about.isVisible())
 			about.dispose();
 		if (prfrm.isVisible())

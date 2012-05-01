@@ -1,23 +1,3 @@
-/**
- * JMBS: Java Micro Blogging System
- *
- * Copyright (C) 2012  
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY.
- * See the GNU General Public License for more details.
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- * @author Younes CHEIKH http://cyounes.com
- * @author Benjamin Babic http://bbabic.com
- * 
- */
-
 package jmbs.client.Graphics.users;
 
 import java.awt.BorderLayout;
@@ -28,7 +8,6 @@ import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -39,16 +18,14 @@ import javax.swing.border.EmptyBorder;
 
 import jmbs.client.ClientRequests;
 import jmbs.client.CurrentUser;
-import jmbs.client.SysConf;
 import jmbs.common.User;
-import net.miginfocom.swing.MigLayout;
 
-public class UsersFrame extends JFrame {
+public class UsersMngmntPanel extends JPanel {
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 4074857690054435001L;
+	private static final long serialVersionUID = 4560886266133006166L;
 	private JPanel contentPane;
 	private JTextField nameTextField;
 	private UsrLstPanel resultSearchPanel;
@@ -61,25 +38,13 @@ public class UsersFrame extends JFrame {
 	private JLabel lblPeopleYouFollow;
 
 	/**
-	 * Create the frame.
+	 * Create the panel.
 	 */
-	public UsersFrame() {
-		setResizable(false);
-		setAlwaysOnTop(true);
-		// setLocationRelativeTo(new MainWindow().getFrame());
-		setLocationRelativeTo(nameTextField);
-		setTitle("Users management ");
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		// setBounds(100, 100, 460, 420);
-		setSize(460, 420);
-		SysConf.centerThisFrame(this);
+	public UsersMngmntPanel() {
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		contentPane.setLayout(new BorderLayout(0, 0));
-		setContentPane(contentPane);
 
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		contentPane.add(tabbedPane, BorderLayout.CENTER);
 
 		JPanel searchUsersPanel = new JPanel();
 		tabbedPane.addTab("Search", null, searchUsersPanel, null);
@@ -87,10 +52,14 @@ public class UsersFrame extends JFrame {
 
 		JPanel panel = new JPanel();
 		searchUsersPanel.add(panel, BorderLayout.NORTH);
+		panel.setLayout(new BorderLayout(0, 0));
 
-		JLabel lblSearchForUser = new JLabel("Search for user: ");
+		JPanel panel_2 = new JPanel();
+		panel.add(panel_2, BorderLayout.NORTH);
+		panel_2.setLayout(new BorderLayout(0, 0));
 
 		nameTextField = new JTextField();
+		panel_2.add(nameTextField, BorderLayout.CENTER);
 		nameTextField.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				resultSearchPanel.removeAll();
@@ -106,11 +75,9 @@ public class UsersFrame extends JFrame {
 			}
 		});
 		nameTextField.setColumns(10);
-		byNameCheckBox = new JCheckBox("By name");
-
-		chckbxByForeName = new JCheckBox("By forename");
 
 		JButton btnSearch = new JButton("Search");
+		panel_2.add(btnSearch, BorderLayout.EAST);
 		btnSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				resultSearchPanel.removeAll();
@@ -134,13 +101,13 @@ public class UsersFrame extends JFrame {
 			}
 		});
 
-		panel.setLayout(new MigLayout("", "[102px][124px][6px][112px][85px]",
-				"[29px][23px]"));
-		panel.add(lblSearchForUser, "cell 0 0,alignx left,growy");
-		panel.add(nameTextField, "cell 1 0 3 1,grow");
-		panel.add(btnSearch, "cell 4 0,alignx left,aligny top");
-		panel.add(byNameCheckBox, "cell 1 1,growx,aligny top");
-		panel.add(chckbxByForeName, "cell 3 1,alignx left,aligny top");
+		JPanel panel_3 = new JPanel();
+		panel.add(panel_3, BorderLayout.CENTER);
+		byNameCheckBox = new JCheckBox("By name");
+		panel_3.add(byNameCheckBox);
+
+		chckbxByForeName = new JCheckBox("By forename");
+		panel_3.add(chckbxByForeName);
 
 		JPanel searchContainerPanel = new JPanel();
 		searchUsersPanel.add(searchContainerPanel, BorderLayout.CENTER);
@@ -224,6 +191,11 @@ public class UsersFrame extends JFrame {
 				flwrLstPanel.updateUI();
 			}
 		});
+		setLayout(new BorderLayout(0, 0));
 		panel_1.add(btnRefresh_1, BorderLayout.EAST);
+		contentPane.setLayout(new BorderLayout(0, 0));
+		contentPane.add(tabbedPane);
+		add(contentPane);
 	}
+
 }

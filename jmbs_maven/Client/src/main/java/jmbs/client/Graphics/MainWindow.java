@@ -29,12 +29,12 @@ import jmbs.client.CurrentUser;
 import jmbs.client.ServerConnection;
 import jmbs.client.SysConf;
 import jmbs.client.Graphics.messages.MsgPanel;
-import jmbs.client.Graphics.messages.NewMessageFrame;
+import jmbs.client.Graphics.messages.NewMessagePanel;
 import jmbs.client.Graphics.messages.TimeLinePanel;
 import jmbs.client.Graphics.others.AboutFrame;
 import jmbs.client.Graphics.others.Preferences;
 import jmbs.client.Graphics.projects.PrjectTabbedPane;
-import jmbs.client.Graphics.users.UsersFrame;
+import jmbs.client.Graphics.users.UsersMngmntPanel;
 import jmbs.common.Message;
 
 public class MainWindow {
@@ -42,10 +42,9 @@ public class MainWindow {
 	private static JFrame frmJmbsClient = null;
 	private static TimeLinePanel timelinepanel;
 	private static ProfilePanel ppanel;
-	private static NewMessageFrame nmFrame;
 	private static AboutFrame about;
-	private static UsersFrame uFrame;
 	private static ArrayList<Message> msgListTL;
+	private UsersMngmntPanel usersMngmntPanel;
 	private MainMenuBar menuBar;
 	private JPanel projectsPanel;
 	private PrjectTabbedPane prjctTabbedPanel;
@@ -54,12 +53,15 @@ public class MainWindow {
 	private JButton btnTimeline;
 	private JButton btnProjects;
 	private JButton btnProfile;
+	private JButton btnUsers;
 	private JScrollPane tlscrollPane;
 	private JPanel profpanel;
 	private JButton btnLogout;
 	private JToolBar toolBar;
 	private JSeparator separator_1;
 	private JButton btnRefresh;
+	private NewMessagePanel newMsgPanel;
+	private JPanel tlpan;
 
 	public Preferences getPreferencesFrame() {
 		return this.prfrm;
@@ -97,22 +99,14 @@ public class MainWindow {
 		});
 		ppanel = new ProfilePanel(CurrentUser.get());
 		about = new AboutFrame();
-		uFrame = new UsersFrame();
 		prfrm = new Preferences();
+		usersMngmntPanel = new UsersMngmntPanel();
 		final ButtonGroup sideBarBtns = new ButtonGroup();
 		frmJmbsClient.setTitle("JMBS Client : " + CurrentUser.getFullName());
 		frmJmbsClient.setSize(520, 640);
 		frmJmbsClient.setMinimumSize(new Dimension(480, 600));
 		frmJmbsClient.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		SysConf.centerThisFrame(frmJmbsClient);
-		timelinepanel = new TimeLinePanel();
-		nmFrame = new NewMessageFrame(timelinepanel);
-		tlscrollPane = new JScrollPane();
-		tlscrollPane.setAutoscrolls(true);
-		tlscrollPane.getVerticalScrollBar().setUnitIncrement(30);
-		tlscrollPane
-				.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-		tlscrollPane.setViewportView(timelinepanel);
 
 		projectsPanel = new JPanel();
 		prjctTabbedPanel = new PrjectTabbedPane(projectsPanel);
@@ -132,10 +126,25 @@ public class MainWindow {
 		mainPanel = new JPanel();
 		mainPanel.setLayout(new BorderLayout(0, 0));
 		mainPanel.removeAll();
-		mainPanel.add(tlscrollPane, BorderLayout.CENTER);
 		mainPanel.updateUI();
 		frmJmbsClient.getContentPane().setLayout(new BorderLayout(0, 0));
 		frmJmbsClient.getContentPane().add(mainPanel);
+
+		tlpan = new JPanel();
+		mainPanel.add(tlpan, BorderLayout.CENTER);
+		tlpan.setLayout(new BorderLayout(0, 0));
+		timelinepanel = new TimeLinePanel();
+		tlscrollPane = new JScrollPane();
+		tlpan.add(tlscrollPane);
+		tlscrollPane.setAutoscrolls(true);
+		tlscrollPane.getVerticalScrollBar().setUnitIncrement(30);
+		tlscrollPane
+				.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		tlscrollPane.setViewportView(timelinepanel);
+
+		newMsgPanel = new NewMessagePanel(timelinepanel);
+
+		tlpan.add(newMsgPanel, BorderLayout.SOUTH);
 
 		toolBar = new JToolBar();
 		frmJmbsClient.getContentPane().add(toolBar, BorderLayout.WEST);
@@ -221,6 +230,7 @@ public class MainWindow {
 				updateMainPanel(3);
 			}
 		});
+
 		btnProfile.setToolTipText("Profile");
 		btnProfile.setBorderPainted(false);
 		btnProfile.setIcon(new ImageIcon(getClass().getResource(
@@ -229,10 +239,7 @@ public class MainWindow {
 				"/img/profile_edit.png")));
 		sideBarBtns.add(btnProfile);
 
-		JSeparator separator = new JSeparator();
-		toolBar.add(separator);
-
-		final JButton btnUsers = new JButton("");
+		btnUsers = new JButton("");
 		toolBar.add(btnUsers);
 		btnUsers.addMouseListener(new MouseAdapter() {
 			@Override
@@ -249,13 +256,19 @@ public class MainWindow {
 		});
 		btnUsers.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				uFrame.setVisible(true);
+				// uFrame.setVisible(true);
+				updateMainPanel(4);
 			}
 		});
 		btnUsers.setIcon(new ImageIcon(getClass().getResource(
 				"/img/users_off.png")));
+		btnUsers.setSelectedIcon(new ImageIcon(getClass().getResource(
+				"/img/users.png")));
 		btnUsers.setToolTipText("Users");
 		btnUsers.setBorderPainted(false);
+
+		JSeparator separator = new JSeparator();
+		toolBar.add(separator);
 
 		final JButton btnPreferences = new JButton("");
 		toolBar.add(btnPreferences);
@@ -316,10 +329,10 @@ public class MainWindow {
 		toolBar.add(btnAdd);
 		btnAdd.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				getNmFrame().setVisible(true);
+				updateNewMsgPane();
 			}
 		});
-
+		newMsgPanel.setVisible(false);
 		btnAdd.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
@@ -347,7 +360,6 @@ public class MainWindow {
 				MainMenuBar.disconnect();
 			}
 		});
-
 		btnLogout.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
@@ -361,6 +373,7 @@ public class MainWindow {
 						"/img/logout_off.png")));
 			}
 		});
+		
 	}
 
 	/**
@@ -391,19 +404,16 @@ public class MainWindow {
 		for (Component c : timelinepanel.getComponents()) {
 			((MsgPanel) c).setColors(name);
 		}
+		tlpan.add(newMsgPanel, BorderLayout.SOUTH);
 		frmJmbsClient.setVisible(true);
 	}
 
-	public NewMessageFrame getNmFrame() {
-		return nmFrame;
+	public NewMessagePanel getNmPanel() {
+		return newMsgPanel;
 	}
 
 	public AboutFrame getAbout() {
 		return about;
-	}
-
-	public UsersFrame getuFrame() {
-		return uFrame;
 	}
 
 	public ArrayList<Message> getMsgListTL() {
@@ -420,7 +430,6 @@ public class MainWindow {
 
 	public void resetProfilePanel() {
 		ppanel.resetAll(CurrentUser.get());
-		uFrame = new UsersFrame(); // TODO: Provisoir !
 	}
 
 	public void setMenuBar() {
@@ -441,14 +450,34 @@ public class MainWindow {
 	public void updateMainPanel(int sideBarItem) {
 		mainPanel.removeAll();
 		if (sideBarItem == 1)
-			mainPanel.add(tlscrollPane, BorderLayout.CENTER);
+			mainPanel.add(tlpan, BorderLayout.CENTER);
 		else if (sideBarItem == 2)
 			mainPanel.add(prjctTabbedPanel, BorderLayout.CENTER);
 		else if (sideBarItem == 3)
 			mainPanel.add(profpanel, BorderLayout.CENTER);
+		else if (sideBarItem == 4)
+			mainPanel.add(usersMngmntPanel, BorderLayout.CENTER);
 		btnTimeline.setSelected(sideBarItem == 1);
 		btnProjects.setSelected(sideBarItem == 2);
 		btnProfile.setSelected(sideBarItem == 3);
+		btnUsers.setSelected(sideBarItem == 4);
 		mainPanel.updateUI();
 	}
+
+	private void showNewMsgPan() {
+		newMsgPanel.setVisible(true);
+	}
+
+	private void hideNewMsgPan() {
+		newMsgPanel.setVisible(false);
+	}
+
+	public void updateNewMsgPane() {
+		if (newMsgPanel.isVisible()) {
+			hideNewMsgPan();
+		} else {
+			showNewMsgPan();
+		}
+	}
+
 }
