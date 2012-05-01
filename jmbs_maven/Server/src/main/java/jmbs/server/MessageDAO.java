@@ -75,7 +75,7 @@ public class MessageDAO extends DAO {
             editUser = uDAO.getUser(editUserId);
         }
         if (projectId != 0) {
-            p = pDAO.findProject(projectId);
+            p = pDAO.getProject(projectId);
         }
 
         m = new Message(rs.getInt("idmessage"), owner, rs.getString("content"),

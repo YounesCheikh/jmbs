@@ -29,9 +29,8 @@ import jmbs.common.Project;
 import jmbs.common.User;
 
 /**
- * extends
- *
- * @see DAO \n This class represents the project data access object. It will
+ * extends @see DAO \n
+ * This class represents the project data access object. It will
  * access the database given by the connection parameter in his constructor to
  * make the given requests.
  *
@@ -39,9 +38,21 @@ import jmbs.common.User;
  */
 public class ProjectDAO extends DAO {
 
+    /**
+     * @deprecated
+     */
     private static final int DEFAULT_ACTIVATION = 1;
+    /**
+     * @deprecated
+     */
     private static final int DEFAULT_EDIT_OPTION = 1;
+    /**
+     * @deprecated
+     */
     private static final int DEFAULT_SUPRESS_OPTION = 1;
+    /**
+     * @deprecated
+     */
     private static final int DEFAULT_PRIVACY = 1;
 
     /**
@@ -131,17 +142,16 @@ public class ProjectDAO extends DAO {
      * Creates a project with all the options.
      * @param name - project name
      * @param iduser - owner id
-     * @param activation - true to activate
+     * @param activation - 1 to activate
      * @param edit - true to enable message edditing by the owner
      * @param supress - true to enable messsage deleting by the owner
      * @param privacy - true to set it as a public project
      * @return int - the created project id or -1
      */
-    public int createProject(String name, int iduser, boolean activation, boolean edit, boolean supress, boolean privacy) {
+    public int createProject(String name, int iduser, int activation, boolean edit, boolean supress, boolean privacy) {
         int id = -1;
         Timestamp currentTime = new Timestamp(Calendar.getInstance().getTimeInMillis());
-        //Conversion
-        int active = activation? 1 : 0;
+        //Conversio
         int editable = edit? 1 : 0;
         int deletable = supress? 1 : 0;
         int priv = privacy? 1 : 0;
@@ -153,7 +163,7 @@ public class ProjectDAO extends DAO {
                     + "VALUES (?,?,?,?,?,?,?,?);", Statement.RETURN_GENERATED_KEYS);
             setString(1, name);
             setInt(2, iduser);
-            setInt(3, active);
+            setInt(3, activation);
             setInt(4, 0); // starts with 0 involved users
             setInt(5, editable);
             setInt(6, deletable);
@@ -175,12 +185,13 @@ public class ProjectDAO extends DAO {
         // xpost from /UserDAO.
         set("SELECT name FROM projects WHERE name=?;");
         setString(1, name);
-        ResultSet res = executeQuery();
+        ResultSet rs = executeQuery();
         boolean ret = false;
 
         try {
-            res.getInt("idproject");
+            rs.getInt("idproject");
             ret = true;
+            close(rs);
         } catch (SQLException e) { // project does not exist we can do something
             // here if we really want to waste time ...
         }
@@ -192,12 +203,13 @@ public class ProjectDAO extends DAO {
         // xpost from /UserDAO.
         set("SELECT name FROM projects WHERE idproject=?;");
         setInt(1, idprj);
-        ResultSet res = executeQuery();
-        boolean ret = false;
+        ResultSet rs = executeQuery();
+        boolean ret = false;  
 
         try {
-            res.getString("name");
+            rs.getString("name");
             ret = true;
+            close(rs);
         } catch (SQLException e) { // project does not exist we can do something
             // here if we really want to waste time ...
         }
@@ -218,43 +230,38 @@ public class ProjectDAO extends DAO {
     }
 
     /**
-     * find a project using his id. Returns null if there are no projects found
-     * for that id
+     * Get a project using his id.
      *
      * @param id id of the project
+     * @return Project - the project or null if there are no
      */
-    public Project findProject(int id) {
+    public Project getProject(int id) {
         Project p = null;
 
         set("SELECT * FROM projects WHERE idproject=? ;");
         setInt(1, id);
-        ResultSet res = executeQuery();
+        ResultSet rs = executeQuery();
 
         try {
-            p = getProject(res);
+            p = getProject(rs);
+            close(rs);
         } catch (SQLException e) {
-            System.out.println("Unable to find project with id=" + id + ".");
+            //System.out.println("Unable to find project with id=" + id + ".");
         }
-
-        try {
-            res.close();
-        } catch (SQLException e) {
-            System.out.println("Database acess error !\n Unable to close connection !");
-        }
-
+        
         return p;
     }
 
-    public Project findProject(String name) {
+    public Project getProject(String name) {
         Project p = null;
-        UserDAO udao = new UserDAO(con);
 
         set("SELECT * FROM projects WHERE name=? ;");
         setString(1, name);
-        ResultSet res = executeQuery();
+        ResultSet rs = executeQuery();
 
         try {
-            p = getProject(res);
+            p = getProject(rs);
+            close(rs);
         } catch (SQLException e) {
             System.out.println("Unable to find any project with name containg "
                     + name);
@@ -263,12 +270,18 @@ public class ProjectDAO extends DAO {
         return p;
     }
 
+    /**
+     * Find all projects by name.
+     * @deprecated
+     * @param name project name
+     * @return Array of found projects
+     */
     public ArrayList<Project> findProjects(String name) {
         ArrayList<Project> found = new ArrayList<Project>();
-        UserDAO udao = new UserDAO(con);
 
-        set("SELECT * FROM projects WHERE name LIKE ? ;");
+        set("SELECT * FROM projects WHERE name LIKE ? AND ispublic=?;");
         setString(1, "%" + name + "%");
+        setInt(2,1); //
         ResultSet res = executeQuery();
 
         try {
@@ -282,7 +295,45 @@ public class ProjectDAO extends DAO {
 
         return found;
     }
+    
+    /**
+     * Returns the array of visible projects to a user
+     * @param name
+     * @param iduser
+     * @return 
+     */    
+    public ArrayList<Project> findProjects(String name, int iduser) {
+        ArrayList<Project> found = new ArrayList<Project>();
 
+        set("SELECT projects.* FROM projects,participate,users WHERE "
+                + "(projects.name LIKE ? "
+                + "AND (ispublic=1 "
+                + "OR (participate.idproject=projects.idproject AND participate.iduser=?) "
+                + "OR projects.idowner=? "
+                + "OR (users.iduser=? AND users.authlvl<=?))) "
+                + "GROUP BY projects.idproject;");
+        
+        setString(1, "%" + name + "%");
+        setInt(2,iduser);
+        setInt(3,iduser);
+        setInt(4,iduser);
+        setInt(5,UserDAO.ADMIN_ACCESS_LEVEL);
+        ResultSet rs = executeQuery();
+
+        try {
+            do {
+                found.add(getProject(rs));
+            } while (rs.next());
+            close(rs);
+        } catch (SQLException e) {
+            System.out.println("Unable to find any project with name containg "
+                    + name);
+        }
+
+        return found;
+    }
+
+    //TODO change user create method with RsultSet
     /**
      * Lists all the users in the project without filling their Project array
      *
@@ -324,6 +375,7 @@ public class ProjectDAO extends DAO {
 
         try {
             b = (iduser == rs.getInt("idowner"));
+            close(rs);
         } catch (SQLException e) {
             b = false;
         }
@@ -339,6 +391,7 @@ public class ProjectDAO extends DAO {
         try {
 
             b = (rs.getInt("status") == 1);
+            close(rs);
         } catch (SQLException e) {
             b = false;
         }
@@ -355,6 +408,7 @@ public class ProjectDAO extends DAO {
         try {
             rs.getInt("idproject");
             b = true;
+            close(rs);
         } catch (SQLException e) {
             b = false;
         }

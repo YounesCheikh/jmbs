@@ -166,14 +166,14 @@ public interface RemoteRequests extends Remote {
      *
      * @param name - project name
      * @param iduser - owner id
-     * @param activation - true to activate
+     * @param activation - 1 to activate
      * @param edit - true to enable message edditing by the owner
      * @param supress - true to enable messsage deleting by the owner
      * @param privacy - true to set it as a public project
      * @return int - the created project id or -1
      * @throws SecurityException if user is not authorised to create the project
      */
-    public int createProject(String name, int iduser, boolean activation, boolean edit, boolean supress, boolean privacy) throws RemoteException, SecurityException;
+    public int createProject(String name, int iduser, int activation, boolean edit, boolean supress, boolean privacy) throws RemoteException, SecurityException;
 
     /**
      * Closes a project if the user is authorized to close it.

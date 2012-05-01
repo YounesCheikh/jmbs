@@ -282,14 +282,14 @@ public class Requests extends UnicastRemoteObject implements RemoteRequests {
      * Creates a project with all the options.
      * @param name - project name
      * @param iduser - owner id
-     * @param activation - true to activate
+     * @param activation - 1 to activate
      * @param edit - true to enable message edditing by the owner
      * @param supress - true to enable messsage deleting by the owner
      * @param privacy - true to set it as a public project
      * @return int - the created project id or -1
      * @throws SecurityException if user is not authorised to create the project
      */
-    public int createProject(String name, int iduser, boolean activation, boolean edit, boolean supress, boolean privacy) throws RemoteException, SecurityException{
+    public int createProject(String name, int iduser, int activation, boolean edit, boolean supress, boolean privacy) throws RemoteException, SecurityException{
         ProjectDAO pdao = new ProjectDAO(con);
         SecurityDAO sdao = new SecurityDAO(con);
         int ret = -1;
@@ -400,10 +400,35 @@ public class Requests extends UnicastRemoteObject implements RemoteRequests {
         return this.participate(iduser, idproject, UserDAO.DEFAULT_ACCESS_LEVEL);
     }
 
-    public ArrayList<Project> searchForProject(String likeName)
-            throws RemoteException {
+    /** This method returns all the projects where the project name is like the
+     * given parameter regardless to project privacy setting.\n It is strongly
+     * adviced not to use this method ! 
+     * 
+     * @deprecated
+     * @param likeName
+     * @return
+     * @throws RemoteException 
+     */
+    public ArrayList<Project> searchForProject(String likeName) throws RemoteException {
         ProjectDAO pdao = new ProjectDAO(con);
         ArrayList<Project> found = pdao.findProjects(likeName);
+
+        return found;
+    }
+    
+    /**
+     * This method returns all the projects a user a able to see
+     * regarding the project provacy settings and the user accesslevel where 
+     * the project name is like the given parameter.
+     * 
+     * @param likeName name of the project to search for
+     * @param userId id of the researcher
+     * @return Array of found projects
+     * @throws RemoteException 
+     */
+    public ArrayList<Project> searchForProject(String likeName, int userId) throws RemoteException {
+        ProjectDAO pdao = new ProjectDAO(con);
+        ArrayList<Project> found = pdao.findProjects(likeName,userId);
 
         return found;
     }
@@ -413,8 +438,7 @@ public class Requests extends UnicastRemoteObject implements RemoteRequests {
      *
      * @see jmbs.common.RemoteServer#searchFor(java.lang.String)
      */
-    public ArrayList<User> searchUser(String userName, int param)
-            throws RemoteException {
+    public ArrayList<User> searchUser(String userName, int param) throws RemoteException {
         UserDAO udao = new UserDAO(con);
 
         if (param != DAO.BY_NAME && param != DAO.BY_FORNAME
@@ -431,8 +455,7 @@ public class Requests extends UnicastRemoteObject implements RemoteRequests {
      *
      * @see jmbs.common.RemoteServer#unFollow(int, int)
      */
-    public boolean unFollow(int idfollower, int idfollowed)
-            throws RemoteException {
+    public boolean unFollow(int idfollower, int idfollowed) throws RemoteException {
         UserDAO udao = new UserDAO(con);
         boolean rb = udao.unFollow(idfollower, idfollowed);
 
@@ -447,13 +470,12 @@ public class Requests extends UnicastRemoteObject implements RemoteRequests {
         return ret;
     }
 
-    public ArrayList<Project> getOwnedProjects(int userid)
-            throws RemoteException {
+    public ArrayList<Project> getOwnedProjects(int userid) throws RemoteException {
         return new UserDAO(con).getOwnedProjects(userid);
     }
 
     public Project findProject(String name) throws RemoteException {
-        return new ProjectDAO(con).findProject(name);
+        return new ProjectDAO(con).getProject(name);
     }
 
     public byte[] getPicture(int userId, String path) throws RemoteException {
