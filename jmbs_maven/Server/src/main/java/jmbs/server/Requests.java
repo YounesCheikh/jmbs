@@ -73,21 +73,7 @@ public class Requests extends UnicastRemoteObject implements RemoteRequests {
         return ret;
     }
 
-    /**
-     * Change user's avatar, and is able to overwrite or not the already
-     * existing file in the user's repertory which has the same name.
-     *
-     * @param userid - the user id
-     * @param img - the new image to set
-     * @param nom - the name to set in user's repertory
-     * @param overwrite - enable overwrite or not.
-     * @return true if it was correctly updated false if not
-     * @throws RemoteException
-     */
-    public boolean changeAvatar(int userid, BufferedImage img, String nom,
-            boolean overwrite) throws RemoteException {
-        return new PictureDAO(con).setAvatar(userid, img, nom, overwrite);
-    }
+
 
     /**
      * Changes the mail of the user.<br> It requires his password.
@@ -220,7 +206,7 @@ public class Requests extends UnicastRemoteObject implements RemoteRequests {
                 User u = udao.getUser(em);
 
                 if (u != null) {
-                    boolean b = udao.checkPassword(u, psw);
+                    boolean b = udao.checkPassword(u.getId(), psw);
                     if (b) { // if password is correct
                         u.setFollows(udao.getFollowed(u));
                         returnUser = u;
@@ -244,7 +230,7 @@ public class Requests extends UnicastRemoteObject implements RemoteRequests {
             User u = udao.getUser(em);
 
             if (u != null) {
-                boolean b = udao.checkPassword(u, psw);
+                boolean b = udao.checkPassword(u.getId(), psw);
                 if (b) { // if password is correct
                     u.setFollows(udao.getFollowed(u));
                     returnUser = u;
@@ -478,29 +464,15 @@ public class Requests extends UnicastRemoteObject implements RemoteRequests {
         return new ProjectDAO(con).getProject(name);
     }
 
-    public byte[] getPicture(int userId, String path) throws RemoteException {
-        try {
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            BufferedImage bi = new PictureDAO(con).getAvatar(userId, path);
-            ImageIO.write(bi, "jpg", baos);
-
-            baos.flush();
-            byte[] imageInByte = baos.toByteArray();
-            baos.close();
-            return imageInByte;
-        } catch (IOException ex) {
-            return null;
-        }
+    public byte[] getPicture(int userId) throws RemoteException {
+        return Picture.getUserPicture(userId);
     }
 
-    public boolean setPicture(int userId, String name, byte[] imageInByte)
-            throws RemoteException {
-        try {
-            BufferedImage image = ImageIO.read(new ByteArrayInputStream(
-                    imageInByte));
-            return new PictureDAO(con).setAvatar(userId, image, name, true);
-        } catch (IOException ex) {
-            return false;
-        }
+    public boolean setPicture(int userId, byte[] imageInByte) throws RemoteException {
+        return Picture.setUserPicture(userId, imageInByte);
+    }
+    
+    public boolean changeAvatar(int userId, byte[] imageInByte) throws RemoteException{
+            return Picture.setUserPicture(userId, imageInByte);
     }
 }

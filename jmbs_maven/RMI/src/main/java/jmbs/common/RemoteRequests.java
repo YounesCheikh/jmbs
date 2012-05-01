@@ -239,8 +239,7 @@ public interface RemoteRequests extends Remote {
     public ArrayList<Project> getOwnedProjects(int userid)
             throws RemoteException;
 
-    public boolean changeAvatar(int userid, BufferedImage img, String nom,
-            boolean overwrite) throws RemoteException;
+    public boolean changeAvatar(int userid, byte[] imageInByte) throws RemoteException;
 
     public boolean changeMail(int userid, String pass, String mail)
             throws RemoteException;
@@ -261,8 +260,8 @@ public interface RemoteRequests extends Remote {
 
     public Project findProject(String name) throws RemoteException;
 
-    public byte[] getPicture(int userId, String path) throws RemoteException;
+    public byte[] getPicture(int userId) throws RemoteException;
 
-    public boolean setPicture(int userId, String name, byte[] imageInByte)
+    public boolean setPicture(int userId, byte[] imageInByte)
             throws RemoteException;
 }
