@@ -216,7 +216,7 @@ public class ProfilePanel extends JPanel {
 							.pathToByte(profilePicturePathTextField.getText());
 					if (imInByteTmp != null) {
 						boolean pictureSetted = ClientRequests.setPicture(
-								CurrentUser.getId(), "test", imInByteTmp);
+								CurrentUser.getId(), imInByteTmp);
 						if (pictureSetted)
 							profilePicturePanel.setImage(
 									profilePicturePathTextField.getText(), 70,

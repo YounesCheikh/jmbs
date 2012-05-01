@@ -425,11 +425,11 @@ public class ClientRequests {
 		}
 	}
 
-	public static boolean setPicture(int userId, String name, byte[] imageInByte) {
+	public static boolean setPicture(int userId, byte[] imageInByte) {
 		boolean retVal = false;
 		if (ServerConnection.server != null) {
 			try {
-				retVal = ServerConnection.server.setPicture(userId, name,
+				retVal = ServerConnection.server.setPicture(userId,
 						imageInByte);
 			} catch (RemoteException e) {
 				SayToUser.error("RemoteException", e.getMessage());

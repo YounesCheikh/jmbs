@@ -125,7 +125,7 @@ public class CurrentUser implements Serializable {
 		return u.getFollows();
 	}
 
-	public static String getPic() {
+	public static byte[] getPic() {
 		return u.getPic();
 	}
 
