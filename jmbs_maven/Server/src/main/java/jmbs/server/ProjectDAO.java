@@ -342,29 +342,19 @@ public class ProjectDAO extends DAO {
      */
     public ArrayList<User> getUsers(int id) {
         ArrayList<User> u = new ArrayList<User>();
-        int userid;
-
         set("SELECT users.* FROM participate,users WHERE participate.idproject=? AND users.iduser=participate.iduser;");
         setInt(1, id);
         ResultSet res = executeQuery();
 
         try {
             do {
-                userid = res.getInt("iduser");
-                u.add(new User(res.getString("name"),
-                        res.getString("forename"), res.getString("email"),
-                        userid, res.getString("picture"), res.getInt("authlvl")));
+                u.add(new UserDAO(con).getUser(res));
             } while (res.next());
-
+            close(res);
         } catch (SQLException e) {
-            System.out.println("Unable to find project with id=" + id + ".");
+            
         }
 
-        try {
-            res.close();
-        } catch (SQLException e) {
-            System.err.println("Database acess error !\n Unable to close connection !");
-        }
         return u;
     }
 

@@ -125,7 +125,7 @@ public class MessageDAO extends DAO {
      */
     public int addMessage(Message m, int projectId) {
         int messageId = -1;
-        
+        //TODO secure it !! 
         set("INSERT INTO "
                 + "message(content, \"time\", iduser,idproject) "
                 + "VALUES (?,?,?,?);",

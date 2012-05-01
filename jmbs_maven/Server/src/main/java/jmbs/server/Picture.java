@@ -26,14 +26,15 @@ import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 
-public abstract class Picture {
+public class Picture {
 
     private final static String DEFAULT_SEPARATOR = "/";
     private final static String DEFAULT_PATH = ".";
-    private final static String DEFAULT_AVATAR_NAME = "Avatar";
-    private final static String DEFAULT_FORMAT = "png";
+    private final static String DEFAULT_AVATAR_NAME = "avatar.jpg";
+    private final static String DEFAULT_FORMAT = "jpg";
+    private final static String DEFAULT_AVATAR_PATH = "./avatar.jpg";
 
-    private static boolean createUserRepertory(int userid) {
+    public static boolean createUserRepertory(int userid) {
         File f = new File(getRepertoryPath(userid));
         boolean ret = false;
 
@@ -72,7 +73,7 @@ public abstract class Picture {
     }
 
     private static String getAvatarPath(int userid) {
-        return (getRepertoryPath(userid) + DEFAULT_AVATAR_NAME + userid);
+        return (getRepertoryPath(userid) + DEFAULT_AVATAR_NAME);
     }
 
     private static BufferedImage getPicture(String path) {
@@ -81,7 +82,11 @@ public abstract class Picture {
         try {
             img = ImageIO.read(new File(path));
         } catch (IOException e) {
-            System.err.println("Error on filepath no files named: " + path);
+            try {
+                img = ImageIO.read(new File(DEFAULT_AVATAR_PATH));
+            } catch (IOException ex) {
+                System.err.println("Error on filepath no files named: " + path);
+            }
         }
 
         return img;
@@ -108,20 +113,22 @@ public abstract class Picture {
 
     private static byte[] convert(BufferedImage im) {
         byte[] imageInByte = null;
-        try {
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            ImageIO.write(im, DEFAULT_FORMAT, baos);
+        if (im != null) {
+            try {
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                ImageIO.write(im, DEFAULT_FORMAT, baos);
 
-            baos.flush();
-            imageInByte = baos.toByteArray();
-            baos.close();
-        } catch (IOException e) {
-            //Logger.getLogger(PictureDAO.class.getName()).log(Level.SEVERE, null, e);
+                baos.flush();
+                imageInByte = baos.toByteArray();
+                baos.close();
+            } catch (IOException e) {
+                //Logger.getLogger(PictureDAO.class.getName()).log(Level.SEVERE, null, e);
+            }
         }
         return imageInByte;
     }
-    
-    private static BufferedImage convert(byte[] ib){
+
+    private static BufferedImage convert(byte[] ib) {
         BufferedImage im = null;
         try {
             im = ImageIO.read(new ByteArrayInputStream(ib));
@@ -130,15 +137,15 @@ public abstract class Picture {
         }
         return im;
     }
-    
-    public static byte[] getUserPicture(int userId){
-        return convert(getPicture(getAvatarPath(userId))); 
+
+    public static byte[] getUserPicture(int userId) {
+        return convert(getPicture(getAvatarPath(userId)));
+    }
+
+    public static boolean setUserPicture(int userId, byte[] pic) {
+        return setPicture(userId, convert(pic), DEFAULT_FORMAT);
+
     }
     
-    public static boolean setUserPicture(int userId, byte[] pic){
-        return setPicture(userId,convert(pic),DEFAULT_FORMAT);
-        
-    }
-    
-    
+
 }

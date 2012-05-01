@@ -25,7 +25,10 @@ package jmbs.server;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import jmbs.common.Project;
 import jmbs.common.User;
 
@@ -56,13 +59,18 @@ public class UserDAO extends DAO {
     public boolean addUser(User u, String pass) {
         boolean b = false;
         if (!checkMail(u.getMail())) {
-            set("INSERT INTO users(name, forename, email, pass, authlvl) VALUES (?,?,?,?,?);");
-            setString(1, u.getName());
-            setString(2, u.getFname());
-            setString(3, u.getMail());
-            setString(4, pass);
-            setInt(5, DEFAULT_ACCESS_LEVEL);
-            b = executeUpdate();
+            try {
+                set("INSERT INTO users(name, forename, email, pass, authlvl) VALUES (?,?,?,?,?);",Statement.RETURN_GENERATED_KEYS);
+                setString(1, u.getName());
+                setString(2, u.getFname());
+                setString(3, u.getMail());
+                setString(4, pass);
+                setInt(5, DEFAULT_ACCESS_LEVEL);
+                b = executeUpdate();
+                Picture.createUserRepertory(getGeneratedKeys().getInt("iduser"));
+            } catch (SQLException ex) {
+                Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
         } else {
             System.err.println("Email already used.");
         }
@@ -77,13 +85,18 @@ public class UserDAO extends DAO {
         if (s.isAccessLevelSufficiant(adminId, ADMIN_ACCESS_LEVEL)) {
             if (s.getAccessLevel(adminId) <= authlvl) {
                 if (!checkMail(u.getMail())) {
-                    set("INSERT INTO users(name, forename, email, pass, authlvl) VALUES (?,?,?,?,?);");
-                    setString(1, u.getName());
-                    setString(2, u.getFname());
-                    setString(3, u.getMail());
-                    setString(4, pass);
-                    setInt(5, authlvl);
-                    b = executeUpdate();
+                    try {
+                        set("INSERT INTO users(name, forename, email, pass, authlvl) VALUES (?,?,?,?,?);",Statement.RETURN_GENERATED_KEYS);
+                        setString(1, u.getName());
+                        setString(2, u.getFname());
+                        setString(3, u.getMail());
+                        setString(4, pass);
+                        setInt(5, authlvl);
+                        b = executeUpdate();
+                        Picture.createUserRepertory(getGeneratedKeys().getInt("iduser"));
+                    } catch (SQLException ex) {
+                        //Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 } else {
                     System.err.println("Email already used.");
                 }
