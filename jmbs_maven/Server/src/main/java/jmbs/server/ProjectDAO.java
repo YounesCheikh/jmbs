@@ -170,11 +170,12 @@ public class ProjectDAO extends DAO {
             setInt(7, priv);
             setTimestamp(8, currentTime);           
             try {
+                executeUpdate();
                 ResultSet rs = getGeneratedKeys();
                 id = rs.getInt("idProject");
                 close(rs);
-            } catch (SQLException ex) {
-                //Logger.getLogger(ProjectDAO.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (SQLException e) {
+                //Logger.getLogger(ProjectDAO.class.getName()).log(Level.SEVERE, null, e);
             }
         }
 
