@@ -395,11 +395,9 @@ public class UserDAO extends DAO {
         try {
             do {
                 p.add(pdao.getProject(res));
-                close(res);
             } while (res.next());
-
+            close(res);
         } catch (SQLException e) {
-            System.err.println("This user has no projects/n ");
             // TODO determine if this error is due to a wrong user name or a
             // lack of projects.
         }
