@@ -129,8 +129,8 @@ public class ProfilePanel extends JPanel {
 		confirmpasswordField.setBounds(159, 383, 180, 28);
 		confirmpasswordField.setBorder(BorderFactory.createLineBorder(null));
 
-		profilePicturePanel = new ImagePanel(
-				CurrentUser.DEFAULT_IMAGE.toString(), 70, 70);
+		profilePicturePanel = new ImagePanel(ClientRequests.convert(CurrentUser
+				.getPic()), 70, 70);
 		profilePicturePanel.setBounds(9, 437, 70, 70);
 		profilePicturePanel.setBackground(Color.GRAY);
 

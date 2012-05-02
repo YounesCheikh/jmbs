@@ -87,7 +87,8 @@ public class NewMessagePanel extends JPanel {
 		panel_1.setLayout(new BorderLayout(0, 0));
 
 		JButton btnSend = new JButton("Send");
-		btnSend.setIcon(new ImageIcon(getClass().getResource("/img/btn_send.png")));
+		btnSend.setIcon(new ImageIcon(getClass().getResource(
+				"/img/btn_send.png")));
 		btnSend.setBorder(new EmptyBorder(10, 15, 10, 15));
 		panel_1.add(btnSend, BorderLayout.EAST);
 		btnSend.setForeground(Color.BLACK);
@@ -121,8 +122,8 @@ public class NewMessagePanel extends JPanel {
 				}
 			}
 		});
-		contentPane.setPreferredSize(new Dimension(100,150));
-		//setVisible(false);
+		contentPane.setPreferredSize(new Dimension(100, 150));
+		// setVisible(false);
 		add(contentPane);
 
 	}

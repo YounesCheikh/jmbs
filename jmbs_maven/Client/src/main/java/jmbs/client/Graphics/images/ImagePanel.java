@@ -22,6 +22,8 @@ package jmbs.client.Graphics.images;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
+import java.awt.image.CropImageFilter;
+import java.awt.image.FilteredImageSource;
 import java.io.File;
 import java.io.IOException;
 
@@ -62,18 +64,7 @@ public class ImagePanel extends JPanel {
 			}
 		}
 
-		if (width > 0) {
-			if (image.getWidth(null) > width) {
-				thumbnail = new ImageIcon(image.getScaledInstance(width, -1,
-						Image.SCALE_DEFAULT));
-			}
-		}
-		if (height > 0) {
-			if (image.getHeight(null) > height) {
-				thumbnail = new ImageIcon(thumbnail.getImage()
-						.getScaledInstance(-1, height, Image.SCALE_DEFAULT));
-			}
-		}
+		scale(width, height);
 		image = thumbnail.getImage();
 	}
 
@@ -84,18 +75,7 @@ public class ImagePanel extends JPanel {
 	public ImagePanel(BufferedImage bImage, int width, int height) {
 		image = bImage;
 		if (bImage != null) {
-			if (width > 0) {
-				if (image.getWidth(null) > width) {
-					thumbnail = new ImageIcon(image.getScaledInstance(width,
-							-1, Image.SCALE_DEFAULT));
-				}
-			}
-			if (height > 0) {
-				if (image.getHeight(null) > height) {
-					thumbnail = new ImageIcon(thumbnail.getImage()
-							.getScaledInstance(-1, height, Image.SCALE_DEFAULT));
-				}
-			}
+			scale(width, height);
 			if (thumbnail != null)
 				image = thumbnail.getImage();
 		}
@@ -109,18 +89,7 @@ public class ImagePanel extends JPanel {
 	public ImagePanel(ImageIcon imico, int width, int height) {
 		image = imico.getImage();
 		if (imico != null) {
-			if (width > 0) {
-				if (image.getWidth(null) > width) {
-					thumbnail = new ImageIcon(image.getScaledInstance(width,
-							-1, Image.SCALE_DEFAULT));
-				}
-			}
-			if (height > 0) {
-				if (image.getHeight(null) > height) {
-					thumbnail = new ImageIcon(thumbnail.getImage()
-							.getScaledInstance(-1, height, Image.SCALE_DEFAULT));
-				}
-			}
+			scale(width, height);
 			image = thumbnail.getImage();
 		}
 
@@ -133,18 +102,7 @@ public class ImagePanel extends JPanel {
 	public ImagePanel(Image ima, int width, int height) {
 		image = ima;
 		if (ima != null) {
-			if (width > 0) {
-				if (image.getWidth(null) > width) {
-					thumbnail = new ImageIcon(image.getScaledInstance(width,
-							-1, Image.SCALE_DEFAULT));
-				}
-			}
-			if (height > 0) {
-				if (image.getHeight(null) > height) {
-					thumbnail = new ImageIcon(thumbnail.getImage()
-							.getScaledInstance(-1, height, Image.SCALE_DEFAULT));
-				}
-			}
+			scale(width, height);
 			image = thumbnail.getImage();
 		}
 	}
@@ -182,18 +140,7 @@ public class ImagePanel extends JPanel {
 	public void setImage(Image im, int width, int height) {
 		this.image = im;
 		if (im != null) {
-			if (width > 0) {
-				if (image.getWidth(null) > width) {
-					thumbnail = new ImageIcon(image.getScaledInstance(width,
-							-1, Image.SCALE_DEFAULT));
-				}
-			}
-			if (height > 0) {
-				if (image.getHeight(null) > height) {
-					thumbnail = new ImageIcon(thumbnail.getImage()
-							.getScaledInstance(-1, height, Image.SCALE_DEFAULT));
-				}
-			}
+			scale(width, height);
 			image = thumbnail.getImage();
 			repaint();
 		}
@@ -203,18 +150,7 @@ public class ImagePanel extends JPanel {
 	public void setImage(ImageIcon im, int width, int height) {
 		this.image = im.getImage();
 		if (im != null) {
-			if (width > 0) {
-				if (image.getWidth(null) > width) {
-					thumbnail = new ImageIcon(image.getScaledInstance(width,
-							-1, Image.SCALE_DEFAULT));
-				}
-			}
-			if (height > 0) {
-				if (image.getHeight(null) > height) {
-					thumbnail = new ImageIcon(thumbnail.getImage()
-							.getScaledInstance(-1, height, Image.SCALE_DEFAULT));
-				}
-			}
+			scale(width, height);
 			image = thumbnail.getImage();
 			repaint();
 		}
@@ -223,18 +159,7 @@ public class ImagePanel extends JPanel {
 	public void setImage(BufferedImage im, int width, int height) {
 		this.image = im;
 		if (im != null) {
-			if (width > 0) {
-				if (image.getWidth(null) > width) {
-					thumbnail = new ImageIcon(image.getScaledInstance(width,
-							-1, Image.SCALE_DEFAULT));
-				}
-			}
-			if (height > 0) {
-				if (image.getHeight(null) > height) {
-					thumbnail = new ImageIcon(thumbnail.getImage()
-							.getScaledInstance(-1, height, Image.SCALE_DEFAULT));
-				}
-			}
+			scale(width, height);
 			image = thumbnail.getImage();
 			repaint();
 		}
@@ -244,19 +169,7 @@ public class ImagePanel extends JPanel {
 		try {
 			this.image = ImageIO.read(new File(im));
 			if (im != null) {
-				if (width > 0) {
-					if (image.getWidth(null) > width) {
-						thumbnail = new ImageIcon(image.getScaledInstance(
-								width, -1, Image.SCALE_DEFAULT));
-					}
-				}
-				if (height > 0) {
-					if (image.getHeight(null) > height) {
-						thumbnail = new ImageIcon(thumbnail.getImage()
-								.getScaledInstance(-1, height,
-										Image.SCALE_DEFAULT));
-					}
-				}
+				scale(width, height);
 				image = thumbnail.getImage();
 				repaint();
 			}
@@ -264,19 +177,7 @@ public class ImagePanel extends JPanel {
 			try {
 				image = ImageIO.read(getClass().getResource(im));
 				if (im != null) {
-					if (width > 0) {
-						if (image.getWidth(null) > width) {
-							thumbnail = new ImageIcon(image.getScaledInstance(
-									width, -1, Image.SCALE_DEFAULT));
-						}
-					}
-					if (height > 0) {
-						if (image.getHeight(null) > height) {
-							thumbnail = new ImageIcon(thumbnail.getImage()
-									.getScaledInstance(-1, height,
-											Image.SCALE_DEFAULT));
-						}
-					}
+					scale(width, height);
 					image = thumbnail.getImage();
 					repaint();
 				}
@@ -291,5 +192,27 @@ public class ImagePanel extends JPanel {
 		super.paintComponent(g);
 		if (image != null)
 			g.drawImage(image, 0, 0, null);
+	}
+
+	private void scale(int width, int height) {
+		/*
+		 * if (width > 0 && width<=height) { if (image.getWidth(null) > width) {
+		 * thumbnail = new ImageIcon(image.getScaledInstance(width, -1,
+		 * Image.SCALE_SMOOTH)); } return; }
+		 * 
+		 * if (height > 0 && height<=width) { if (image.getHeight(null) >
+		 * height) { thumbnail = new ImageIcon(thumbnail.getImage()
+		 * .getScaledInstance(-1, height, Image.SCALE_SMOOTH)); } return; }
+		 */
+		int min = image.getWidth(null) < image.getHeight(null) ? image
+				.getWidth(null) : image.getHeight(null);
+		Image im = createImage(new FilteredImageSource(image.getSource(),
+				new CropImageFilter(0, 0, min, min)));
+		image = im;
+		if (image.getWidth(null) > width || image.getHeight(null) > height) {
+			thumbnail = new ImageIcon(image.getScaledInstance(width, height,
+					Image.SCALE_SMOOTH));
+		}
+
 	}
 }

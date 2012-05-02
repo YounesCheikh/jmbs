@@ -52,7 +52,7 @@ public class FlwUsrPanel extends JPanel {
 		setBorder(new TitledBorder(null, "", TitledBorder.LEADING,
 				TitledBorder.TOP, null, null));
 
-		ImagePanel panel = new ImagePanel("/img/avatar.jpg", 70, 70);
+		ImagePanel panel = new ImagePanel(ClientRequests.convert(u.getPic()), 70, 70);
 		panel.setPreferredSize(new Dimension(70, 70));
 		panel.setAlignmentX(Component.LEFT_ALIGNMENT);
 

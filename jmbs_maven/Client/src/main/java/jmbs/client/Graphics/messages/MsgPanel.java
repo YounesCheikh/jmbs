@@ -25,12 +25,8 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 
-import javax.imageio.ImageIO;
 import javax.swing.JEditorPane;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -38,6 +34,7 @@ import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 
+import jmbs.client.ClientRequests;
 import jmbs.client.Graphics.ColorStyle;
 import jmbs.client.Graphics.images.ImagePanel;
 import jmbs.client.Graphics.users.ShowUserProfileFrm;
@@ -68,7 +65,8 @@ public class MsgPanel extends JPanel {
 		setBorder(UIManager.getBorder("InsetBorder.aquaVariant"));
 
 		this.setPreferredSize(new Dimension(10, 10));
-		imgPanel = new ImagePanel(convert(m.getOwner().getPic()), 69, 69);
+		imgPanel = new ImagePanel(
+				ClientRequests.convert(m.getOwner().getPic()), 69, 69);
 		imgPanel.setPreferredSize(new Dimension(70, 70));
 		imgPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
 		txtPanel = new JPanel();
@@ -124,14 +122,4 @@ public class MsgPanel extends JPanel {
 		lblPrinttime.setForeground(cs.getSecondFontColor()); // Color 3
 	}
 
-	private static BufferedImage convert(byte[] ib) {
-		BufferedImage im = null;
-		try {
-			im = ImageIO.read(new ByteArrayInputStream(ib));
-		} catch (IOException e) {
-			// Logger.getLogger(PictureDAO.class.getName()).log(Level.SEVERE,
-			// null, e);
-		}
-		return im;
-	}
 }

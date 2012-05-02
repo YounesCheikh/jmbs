@@ -103,7 +103,6 @@ public class PrjctAdministration extends JPanel {
 		popupMenu.add(mntmParamters);
 
 		panel = new ImagePanel("/img/project_opened.png");
-		
 
 		panel.setToolTipText("Opened Project");
 		if (p.getStatus() == Project.STATUS_CLOSED) {
@@ -116,7 +115,7 @@ public class PrjctAdministration extends JPanel {
 				popupMenu.show(panel, e.getX(), e.getY());
 			}
 		});
-		
+
 		panel.setPreferredSize(new Dimension(48, 68));
 		add(lblProjectname, BorderLayout.NORTH);
 		add(panel, BorderLayout.EAST);

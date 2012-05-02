@@ -28,7 +28,7 @@ public class PrjectTabbedPane extends JTabbedPane {
 				"Write and read Message into/From Project");
 
 		SearchProjectPanel searchPrjctPanel = new SearchProjectPanel();
-		addTab("Search For Project",
+		addTab("Find Project",
 				new ImageIcon(getClass().getResource("/img/searchproject.png")),
 				searchPrjctPanel, "Search for new project");
 

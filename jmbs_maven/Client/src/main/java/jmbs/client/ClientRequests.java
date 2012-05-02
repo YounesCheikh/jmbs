@@ -517,5 +517,16 @@ public class ClientRequests {
 		}
 		return retVal;
 	}
+	
+	public static BufferedImage convert(byte[] ib) {
+		BufferedImage im = null;
+		try {
+			im = ImageIO.read(new ByteArrayInputStream(ib));
+		} catch (IOException e) {
+			// Logger.getLogger(PictureDAO.class.getName()).log(Level.SEVERE,
+			// null, e);
+		}
+		return im;
+	}
 
 }
