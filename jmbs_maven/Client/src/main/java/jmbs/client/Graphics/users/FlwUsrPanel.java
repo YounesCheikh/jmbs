@@ -64,9 +64,9 @@ public class FlwUsrPanel extends JPanel {
 		add(panel, BorderLayout.WEST);
 		add(lblUserName, BorderLayout.CENTER);
 
-		final JLabel btnFollow = new JLabel("follow");
+		final JLabel btnFollow = new JLabel("");
 		btnFollow.setHorizontalAlignment(SwingConstants.CENTER);
-		btnFollow.setFont(new Font("Lucida Grande", Font.BOLD, 13));
+		//btnFollow.setFont(new Font("Lucida Grande", Font.BOLD, 13));
 
 		btnFollow.addMouseListener(new MouseAdapter() {
 			@Override
@@ -75,11 +75,11 @@ public class FlwUsrPanel extends JPanel {
 					if (CurrentUser.getFollows().contains(u)) {
 						btnFollow.setIcon(new ImageIcon(getClass().getResource(
 								"/img/u_unfollow.png")));
-						btnFollow.setText("unfollow");
+						btnFollow.setToolTipText("unfollow");
 					} else {
 						btnFollow.setIcon(new ImageIcon(getClass().getResource(
 								"/img/u_follow.png")));
-						btnFollow.setText("follow");
+						btnFollow.setToolTipText("follow");
 					}
 				}
 			}
@@ -90,11 +90,11 @@ public class FlwUsrPanel extends JPanel {
 					if (!CurrentUser.getFollows().contains(u)) {
 						btnFollow.setIcon(new ImageIcon(getClass().getResource(
 								"/img/u_follow_off.png")));
-						btnFollow.setText("follow");
+						btnFollow.setToolTipText("following");
 					} else {
 						btnFollow.setIcon(new ImageIcon(getClass().getResource(
 								"/img/u_following.png")));
-						btnFollow.setText("following");
+						btnFollow.setToolTipText("following");
 					}
 				}
 			}
@@ -107,13 +107,13 @@ public class FlwUsrPanel extends JPanel {
 						CurrentUser.getFollows().add(u);
 						btnFollow.setIcon(new ImageIcon(getClass().getResource(
 								"/img/u_following.png")));
-						btnFollow.setText("following");
+						btnFollow.setToolTipText("following");
 					} else {
 						ClientRequests.unFollow(CurrentUser.getId(), u.getId());
 						CurrentUser.getFollows().remove(u);
 						btnFollow.setIcon(new ImageIcon(getClass().getResource(
 								"/img/u_follow_off.png")));
-						btnFollow.setText("follow");
+						btnFollow.setToolTipText("follow");
 					}
 				}
 			}
@@ -122,15 +122,15 @@ public class FlwUsrPanel extends JPanel {
 		if (CurrentUser.getFollows().contains(u)) {
 			btnFollow.setIcon(new ImageIcon(getClass().getResource(
 					"/img/u_following.png")));
-			btnFollow.setText("following");
+			//btnFollow.setText("following");
 		} else {
 			if (CurrentUser.get().equals(u)) {
 				btnFollow.setEnabled(false);
-				btnFollow.setText("");
+				//btnFollow.setText("");
 			} else {
 				btnFollow.setIcon(new ImageIcon(getClass().getResource(
 						"/img/u_follow_off" + ".png")));
-				btnFollow.setText("follow");
+				btnFollow.setToolTipText("follow");
 			}
 		}
 		add(btnFollow, BorderLayout.EAST);

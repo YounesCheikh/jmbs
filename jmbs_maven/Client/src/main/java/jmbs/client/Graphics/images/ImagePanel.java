@@ -96,7 +96,8 @@ public class ImagePanel extends JPanel {
 							.getScaledInstance(-1, height, Image.SCALE_DEFAULT));
 				}
 			}
-			image = thumbnail.getImage();
+			if (thumbnail != null)
+				image = thumbnail.getImage();
 		}
 
 	}
