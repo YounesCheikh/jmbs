@@ -93,7 +93,7 @@ public class Picture {
     }
 
     private static boolean setPicture(int userid, BufferedImage img, String format) {
-        String nom = DEFAULT_AVATAR_NAME + userid;
+        String nom = DEFAULT_AVATAR_NAME;
         String path = getRepertoryPath(userid) + nom;
         boolean ret;
 
