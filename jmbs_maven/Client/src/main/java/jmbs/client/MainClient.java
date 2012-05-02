@@ -48,12 +48,13 @@ public class MainClient {
 				boolean themeNimbusFound = false;
 				for (LookAndFeelInfo info : UIManager
 						.getInstalledLookAndFeels()) {
-					System.out.println(info.getName());
+					//System.out.println(info.getName());
 					if ("Mac OS X".equals(info.getName())) {
 						themeMacFound = true;
 						break;
 					} else if ("Nimbus".equals(info.getName())) {
 						themeNimbusFound = true;
+						break;
 					}
 				}
 				if (themeMacFound)

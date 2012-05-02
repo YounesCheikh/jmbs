@@ -177,6 +177,7 @@ public class ShowUserProfileFrm extends JFrame {
 								"/img/u_follow_off.png")));
 						btnFollow.setToolTipText("follow");
 					}
+					UsersMngmntPanel.updateFollowingList();
 				}
 			}
 		});

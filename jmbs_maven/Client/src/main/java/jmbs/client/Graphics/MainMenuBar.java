@@ -85,7 +85,7 @@ public class MainMenuBar extends JMenuBar {
 		JMenuItem mntmRefresh = new JMenuItem("Refresh");
 		mntmRefresh.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				mw.checkNewMessages(timelinepanel.getLastIdMsg());
+				MainWindow.checkNewMessages(timelinepanel.getLastIdMsg());
 			}
 		});
 		mnFile.add(mntmRefresh);

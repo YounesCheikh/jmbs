@@ -13,6 +13,7 @@ import javax.swing.ScrollPaneConstants;
 
 import jmbs.client.ClientRequests;
 import jmbs.client.CurrentUser;
+import jmbs.client.DataProcessing.AutoRefresh;
 import jmbs.common.Project;
 
 public class ParticipationsPrjcstPanel extends JPanel {
@@ -21,7 +22,8 @@ public class ParticipationsPrjcstPanel extends JPanel {
 	 * 
 	 */
 	private static final long serialVersionUID = 5578775335517479170L;
-	PrjctsListPanel prticptionPanel;
+	private static PrjctsListPanel prticptionPanel;
+	private static JLabel lblProjectsFound;
 
 	/**
 	 * Create the panel.
@@ -33,20 +35,14 @@ public class ParticipationsPrjcstPanel extends JPanel {
 		add(prtcptionTopPanel, BorderLayout.NORTH);
 		prtcptionTopPanel.setLayout(new BorderLayout(0, 0));
 
-		final JLabel lblProjectsFound = new JLabel("Projects Found: "
+		lblProjectsFound = new JLabel("Projects Found: "
 				+ CurrentUser.getProjects().size());
 		prtcptionTopPanel.add(lblProjectsFound, BorderLayout.WEST);
 
 		JButton btnRefresh = new JButton("Refresh");
 		btnRefresh.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ArrayList<Project> pList = new ArrayList<Project>();
-				pList = ClientRequests.getUserProjects(CurrentUser.getId());
-				if (pList != null)
-					CurrentUser.get().setProjects(pList);
-				prticptionPanel.putList(CurrentUser.getProjects());
-				lblProjectsFound.setText(("Projects Found: " + CurrentUser
-						.getProjects().size()));
+				updateList();
 			}
 		});
 		prtcptionTopPanel.add(btnRefresh, BorderLayout.EAST);
@@ -59,6 +55,21 @@ public class ParticipationsPrjcstPanel extends JPanel {
 		prticptionPanel = new PrjctsListPanel();
 		scrollPane.setViewportView(prticptionPanel);
 		prticptionPanel.putList(CurrentUser.getProjects());
+		
+		AutoRefresh autoRefresh = new AutoRefresh();
+		autoRefresh.participationsRefresh(600); // 10 minutes
+	}
+
+	public static void updateList() {
+		ArrayList<Project> pList = new ArrayList<Project>();
+		pList = ClientRequests.getUserProjects(CurrentUser.getId());
+		if (pList != null) {
+			if (!pList.equals(CurrentUser.getProjects()))
+				CurrentUser.get().setProjects(pList);
+		}
+		prticptionPanel.putList(CurrentUser.getProjects());
+		lblProjectsFound.setText(("Projects Found: " + CurrentUser
+				.getProjects().size()));
 	}
 
 }

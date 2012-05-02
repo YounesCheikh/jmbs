@@ -39,12 +39,6 @@ public class CurrentUser implements Serializable {
 		DEFAULT_IMAGE = "/img/avatar.jpg";
 		if (get() == null) {
 			CurrentUser.set(receivedUser);
-			// try {
-			// u.setPicture(ImageIO.read(DEFAULT_IMAGE));
-			// } catch (IOException e) {
-			// System.out.println("file :" + DEFAULT_IMAGE + "not found\n"
-			// + e.getMessage());
-			// }
 			ArrayList<Project> userPrjcsList = ClientRequests.getUserProjects(u
 					.getId());
 			if (userPrjcsList != null) {

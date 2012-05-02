@@ -236,7 +236,7 @@ public class ConnectionPanel extends JPanel {
 		this.w.getTLPanel().revalidate();
 		// check for new messages from the server and display them on the
 		// timeline panel
-		this.w.checkNewMessages(0);
+		MainWindow.checkNewMessages(0);
 		// Resetting the profile panel
 		this.w.resetProfilePanel();
 		// setting the menubar

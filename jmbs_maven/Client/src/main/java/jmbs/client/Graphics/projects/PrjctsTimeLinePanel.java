@@ -24,6 +24,7 @@ import javax.swing.ScrollPaneConstants;
 import jmbs.client.ClientRequests;
 import jmbs.client.CurrentUser;
 import jmbs.client.ServerConnection;
+import jmbs.client.DataProcessing.AutoRefresh;
 import jmbs.client.Graphics.messages.MsgPanel;
 import jmbs.client.Graphics.others.SayToUser;
 import jmbs.common.Message;
@@ -189,6 +190,9 @@ public class PrjctsTimeLinePanel extends JPanel {
 			}
 		});
 		topPrjctsTLPanel.add(btnRefresh, BorderLayout.EAST);
+		
+		AutoRefresh autoRefresh = new AutoRefresh();
+		autoRefresh.prjctsTimeLineRefresh(60);
 	}
 
 	public static void putMessage(Component obj) {
@@ -237,7 +241,7 @@ public class PrjctsTimeLinePanel extends JPanel {
 		tlPanel.updateUI();
 	}
 
-	public void checkNewMessages() {
+	public static void checkNewMessages() {
 		currentMsgList = ClientRequests.getLastetProjectTL(CurrentUser.getId(),
 				idLastMessage, ServerConnection.maxReceivedMsgs,
 				SELECTED_PROJECT_ID);

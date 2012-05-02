@@ -18,6 +18,7 @@ import javax.swing.border.EmptyBorder;
 
 import jmbs.client.ClientRequests;
 import jmbs.client.CurrentUser;
+import jmbs.client.DataProcessing.AutoRefresh;
 import jmbs.common.User;
 
 public class UsersMngmntPanel extends JPanel {
@@ -29,13 +30,13 @@ public class UsersMngmntPanel extends JPanel {
 	private JPanel contentPane;
 	private JTextField nameTextField;
 	private UsrLstPanel resultSearchPanel;
-	private UsrLstPanel flwngUsrsLstPanel;
-	private UsrLstPanel flwrLstPanel;
-	ArrayList<User> flwrList = new ArrayList<User>();
+	private static UsrLstPanel flwngUsrsLstPanel;
+	private static UsrLstPanel flwrLstPanel;
+	static ArrayList<User> flwrList = new ArrayList<User>();
 	private JCheckBox byNameCheckBox;
 	private JCheckBox chckbxByForeName;
-	private JLabel lblYourFollowers;
-	private JLabel lblPeopleYouFollow;
+	private static JLabel lblYourFollowers;
+	private static JLabel lblPeopleYouFollow;
 
 	/**
 	 * Create the panel.
@@ -145,13 +146,7 @@ public class UsersMngmntPanel extends JPanel {
 		JButton btnRefresh = new JButton("Refresh");
 		btnRefresh.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				flwngUsrsLstPanel.removeAll();
-				flwngUsrsLstPanel.putList(CurrentUser.getFollows());
-				flwngUsrsLstPanel.repaint();
-				flwngUsrsLstPanel.validate();
-				flwngUsrsLstPanel.updateUI();
-				lblPeopleYouFollow.setText("People you follow: "
-						+ CurrentUser.getFollows().size());
+				updateFollowingList();
 			}
 		});
 		topFlwngPanel.add(btnRefresh, BorderLayout.EAST);
@@ -182,13 +177,7 @@ public class UsersMngmntPanel extends JPanel {
 		JButton btnRefresh_1 = new JButton("Refresh");
 		btnRefresh_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				flwrLstPanel.removeAll();
-				flwrList = ClientRequests.getFollowers(CurrentUser.get());
-				flwrLstPanel.putList(flwrList);
-				lblYourFollowers.setText("Your Followers: " + flwrList.size());
-				flwrLstPanel.repaint();
-				flwrLstPanel.validate();
-				flwrLstPanel.updateUI();
+				updateFollowersList();
 			}
 		});
 		setLayout(new BorderLayout(0, 0));
@@ -196,6 +185,30 @@ public class UsersMngmntPanel extends JPanel {
 		contentPane.setLayout(new BorderLayout(0, 0));
 		contentPane.add(tabbedPane);
 		add(contentPane);
+		
+		AutoRefresh autoRefresh = new AutoRefresh();
+		autoRefresh.followingRefresh(120);
+		autoRefresh.followersRefresh(120);
+	}
+	
+	public static void updateFollowingList() {
+		flwngUsrsLstPanel.removeAll();
+		flwngUsrsLstPanel.putList(CurrentUser.getFollows());
+		flwngUsrsLstPanel.repaint();
+		flwngUsrsLstPanel.validate();
+		flwngUsrsLstPanel.updateUI();
+		lblPeopleYouFollow.setText("People you follow: "
+				+ CurrentUser.getFollows().size());
+	}
+	
+	public static void updateFollowersList() {
+		flwrLstPanel.removeAll();
+		flwrList = ClientRequests.getFollowers(CurrentUser.get());
+		flwrLstPanel.putList(flwrList);
+		lblYourFollowers.setText("Your Followers: " + flwrList.size());
+		flwrLstPanel.repaint();
+		flwrLstPanel.validate();
+		flwrLstPanel.updateUI();
 	}
 
 }

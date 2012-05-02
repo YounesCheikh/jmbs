@@ -28,6 +28,7 @@ import jmbs.client.ClientRequests;
 import jmbs.client.CurrentUser;
 import jmbs.client.ServerConnection;
 import jmbs.client.SysConf;
+import jmbs.client.DataProcessing.AutoRefresh;
 import jmbs.client.Graphics.messages.MsgPanel;
 import jmbs.client.Graphics.messages.NewMessagePanel;
 import jmbs.client.Graphics.messages.TimeLinePanel;
@@ -373,7 +374,9 @@ public class MainWindow {
 						"/img/logout_off.png")));
 			}
 		});
-		
+
+		AutoRefresh autoRefresh = new AutoRefresh();
+		autoRefresh.timeLineRefresh(10);
 	}
 
 	/**
@@ -441,7 +444,7 @@ public class MainWindow {
 		return projectsPanel;
 	}
 
-	public void checkNewMessages(int idLastMsg) {
+	public static void checkNewMessages(int idLastMsg) {
 		msgListTL = ClientRequests.getLatestTL(CurrentUser.getId(), idLastMsg,
 				ServerConnection.maxReceivedMsgs);
 		timelinepanel.putList(msgListTL);

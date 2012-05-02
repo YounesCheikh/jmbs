@@ -115,6 +115,7 @@ public class FlwUsrPanel extends JPanel {
 								"/img/u_follow_off.png")));
 						btnFollow.setToolTipText("follow");
 					}
+					UsersMngmntPanel.updateFollowingList();
 				}
 			}
 		});
