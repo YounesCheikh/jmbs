@@ -38,7 +38,6 @@ import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 
-import jmbs.client.CurrentUser;
 import jmbs.client.Graphics.ColorStyle;
 import jmbs.client.Graphics.images.ImagePanel;
 import jmbs.client.Graphics.users.ShowUserProfileFrm;
@@ -124,14 +123,15 @@ public class MsgPanel extends JPanel {
 		btnUser.setBackground(cs.getWindowBackground()); // Color 0
 		lblPrinttime.setForeground(cs.getSecondFontColor()); // Color 3
 	}
-	
+
 	private static BufferedImage convert(byte[] ib) {
-        BufferedImage im = null;
-        try {
-            im = ImageIO.read(new ByteArrayInputStream(ib));
-        } catch (IOException e) {
-            //Logger.getLogger(PictureDAO.class.getName()).log(Level.SEVERE, null, e);
-        }
-        return im;
-    }
+		BufferedImage im = null;
+		try {
+			im = ImageIO.read(new ByteArrayInputStream(ib));
+		} catch (IOException e) {
+			// Logger.getLogger(PictureDAO.class.getName()).log(Level.SEVERE,
+			// null, e);
+		}
+		return im;
+	}
 }
