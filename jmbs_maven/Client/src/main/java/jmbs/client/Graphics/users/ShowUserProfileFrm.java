@@ -43,6 +43,7 @@ import jmbs.client.CurrentUser;
 import jmbs.client.SysConf;
 import jmbs.client.Graphics.images.ImagePanel;
 import jmbs.common.User;
+import javax.swing.SwingConstants;
 
 public class ShowUserProfileFrm extends JFrame {
 
@@ -125,56 +126,75 @@ public class ShowUserProfileFrm extends JFrame {
 		rightPanel.add(panel, BorderLayout.CENTER);
 		panel.setBackground(Color.GRAY);
 
-		final JButton btnFollow = new JButton("");
-		if (CurrentUser.get().equals(u)) {
-			btnFollow.setEnabled(false);
-		}
+		final JLabel btnFollow = new JLabel("follow");
+		btnFollow.setHorizontalAlignment(SwingConstants.CENTER);
+		btnFollow.setFont(new Font("Lucida Grande", Font.BOLD, 13));
+
 		btnFollow.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				if (CurrentUser.getFollows().contains(u)) {
-					btnFollow.setIcon(new ImageIcon(getClass().getResource(
-							"/img/unfollow.png")));
-				} else {
-					btnFollow.setIcon(new ImageIcon(getClass().getResource(
-							"/img/follow.png")));
+				if (!CurrentUser.get().equals(u)) {
+					if (CurrentUser.getFollows().contains(u)) {
+						btnFollow.setIcon(new ImageIcon(getClass().getResource(
+								"/img/u_unfollow.png")));
+						btnFollow.setText("unfollow");
+					} else {
+						btnFollow.setIcon(new ImageIcon(getClass().getResource(
+								"/img/u_follow.png")));
+						btnFollow.setText("follow");
+					}
 				}
 			}
 
 			@Override
 			public void mouseExited(MouseEvent e) {
-				if (!CurrentUser.getFollows().contains(u)) {
-					btnFollow.setIcon(new ImageIcon(getClass().getResource(
-							"/img/follow_off.png")));
-				} else {
-					btnFollow.setIcon(new ImageIcon(getClass().getResource(
-							"/img/unfollow_off.png")));
+				if (!CurrentUser.get().equals(u)) {
+					if (!CurrentUser.getFollows().contains(u)) {
+						btnFollow.setIcon(new ImageIcon(getClass().getResource(
+								"/img/u_follow_off.png")));
+						btnFollow.setText("follow");
+					} else {
+						btnFollow.setIcon(new ImageIcon(getClass().getResource(
+								"/img/u_following.png")));
+						btnFollow.setText("following");
+					}
+				}
+			}
+
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if (!CurrentUser.get().equals(u)) {
+					if (!CurrentUser.getFollows().contains(u)) {
+						ClientRequests.follows(CurrentUser.getId(), u.getId());
+						CurrentUser.getFollows().add(u);
+						btnFollow.setIcon(new ImageIcon(getClass().getResource(
+								"/img/u_following.png")));
+						btnFollow.setText("following");
+					} else {
+						ClientRequests.unFollow(CurrentUser.getId(), u.getId());
+						CurrentUser.getFollows().remove(u);
+						btnFollow.setIcon(new ImageIcon(getClass().getResource(
+								"/img/u_follow_off.png")));
+						btnFollow.setText("follow");
+					}
 				}
 			}
 		});
-		btnFollow.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if (!CurrentUser.getFollows().contains(u)) {
-					ClientRequests.follows(CurrentUser.getId(), u.getId());
-					CurrentUser.getFollows().add(u);
-					btnFollow.setIcon(new ImageIcon(getClass().getResource(
-							"/img/unfollow_off.png")));
-				} else {
-					ClientRequests.unFollow(CurrentUser.getId(), u.getId());
-					CurrentUser.getFollows().remove(u);
-					btnFollow.setIcon(new ImageIcon(getClass().getResource(
-							"/img/follow_off.png")));
-				}
+
+		if (CurrentUser.getFollows().contains(u)) {
+			btnFollow.setIcon(new ImageIcon(getClass().getResource(
+					"/img/u_following.png")));
+			btnFollow.setText("following");
+		} else {
+			if (CurrentUser.get().equals(u)) {
+				btnFollow.setEnabled(false);
+				btnFollow.setText("");
+			} else {
+				btnFollow.setIcon(new ImageIcon(getClass().getResource(
+						"/img/u_follow_off" + ".png")));
+				btnFollow.setText("follow");
 			}
-		});
-		btnFollow.setBorderPainted(false);
-		btnFollow.setPreferredSize(new Dimension(128, 32));
-		if (CurrentUser.getFollows().contains(u))
-			btnFollow.setIcon(new ImageIcon(getClass().getResource(
-					"/img/unfollow_off.png")));
-		else
-			btnFollow.setIcon(new ImageIcon(getClass().getResource(
-					"/img/follow_off" + ".png")));
+		}
 		// add(tglbtnFollow, BorderLayout.EAST);
 		rightPanel.add(btnFollow, BorderLayout.SOUTH);
 

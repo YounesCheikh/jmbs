@@ -253,6 +253,11 @@ public class ClientRequests {
 		return b;
 	}
 
+	/**
+	 * @deprecated
+	 * @param likeName
+	 * @return
+	 */
 	public static ArrayList<Project> searchForProject(String likeName) {
 		ArrayList<Project> retList = null;
 		if (ServerConnection.server != null) {
@@ -272,6 +277,26 @@ public class ClientRequests {
 		}
 		return retList;
 	}
+	
+	 public static ArrayList<Project> searchForProject(String likeName, int userId)  {
+		 ArrayList<Project> retList = null;
+			if (ServerConnection.server != null) {
+				try {
+					retList = ServerConnection.server.searchForProject(likeName,userId);
+					if (retList != null) {
+						for (Project p : retList) {
+							p.setUsers(ClientRequests.getProjectUsers(p.getId()));
+						}
+					}
+				} catch (RemoteException e) {
+					SayToUser.error("RemoteException", e.getMessage());
+				}
+			} else {
+				SayToUser.error("Error connection!",
+						"can't establish a reliable data connection to the server");
+			}
+			return retList;
+	 }
 
 	public static boolean unParticipate(int idUser, int idProject) {
 		boolean retVal = false;

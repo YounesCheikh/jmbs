@@ -35,6 +35,7 @@ import javax.swing.border.BevelBorder;
 import javax.swing.border.SoftBevelBorder;
 
 import jmbs.client.ClientRequests;
+import jmbs.client.CurrentUser;
 import jmbs.common.Project;
 
 public class SearchProjectPanel extends JPanel {
@@ -67,7 +68,7 @@ public class SearchProjectPanel extends JPanel {
 		btnSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				ArrayList<Project> plist = new ArrayList<Project>();
-				plist = ClientRequests.searchForProject(textField.getText());
+				plist = ClientRequests.searchForProject(textField.getText(),CurrentUser.getId());
 				foundedPrjctsPanel.removeAll();
 				foundedPrjctsPanel.updateUI();
 				if (plist != null) {

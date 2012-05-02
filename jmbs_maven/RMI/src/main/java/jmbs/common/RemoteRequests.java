@@ -19,7 +19,6 @@
  */
 package jmbs.common;
 
-import java.awt.image.BufferedImage;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
@@ -111,10 +110,25 @@ public interface RemoteRequests extends Remote {
      * @param likeName the name of project
      * @return a list of projects
      * @throws RemoteException
+     * @
      */
     public ArrayList<Project> searchForProject(String likeName)
             throws RemoteException;
 
+    
+    /**
+     * This method returns all the projects a user a able to see
+     * regarding the project provacy settings and the user accesslevel where 
+     * the project name is like the given parameter.
+     * 
+     * @param likeName name of the project to search for
+     * @param userId id of the researcher
+     * @return Array of found projects
+     * @throws RemoteException 
+     */
+    public ArrayList<Project> searchForProject(String likeName, int userId) throws RemoteException ;
+    
+    
     /**
      * participate a user into a project with the default authorization level
      *

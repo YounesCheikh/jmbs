@@ -49,6 +49,7 @@ public class CurrentUser implements Serializable {
 					.getId());
 			if (userPrjcsList != null) {
 				u.setProjects(userPrjcsList);
+				System.out.println(u.getProjects().size());
 			} else {
 				u.setProjects(new ArrayList<Project>());
 			}
