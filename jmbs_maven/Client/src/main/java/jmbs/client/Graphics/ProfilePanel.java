@@ -43,7 +43,6 @@ import javax.swing.SwingConstants;
 import jmbs.client.ClientRequests;
 import jmbs.client.CurrentUser;
 import jmbs.client.HashPassword;
-import jmbs.client.Graphics.images.ImageFileView;
 import jmbs.client.Graphics.images.ImageFilter;
 import jmbs.client.Graphics.images.ImagePanel;
 import jmbs.client.Graphics.images.ImagePreview;
@@ -154,7 +153,7 @@ public class ProfilePanel extends JPanel {
 					fc.setAcceptAllFileFilterUsed(false);
 
 					// Add custom icons for file types.
-					fc.setFileView(new ImageFileView());
+					// fc.setFileView(new ImageFileView());
 
 					// Add the preview pane.
 					fc.setAccessory(new ImagePreview(fc));
@@ -217,6 +216,7 @@ public class ProfilePanel extends JPanel {
 					if (imInByteTmp != null) {
 						boolean pictureSetted = ClientRequests.setPicture(
 								CurrentUser.getId(), imInByteTmp);
+						CurrentUser.get().setPic(imInByteTmp);
 						if (pictureSetted)
 							profilePicturePanel.setImage(
 									profilePicturePathTextField.getText(), 70,
