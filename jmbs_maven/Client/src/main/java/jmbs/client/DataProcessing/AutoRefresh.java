@@ -19,58 +19,91 @@ import jmbs.client.Graphics.users.UsersMngmntPanel;
  * 
  */
 public class AutoRefresh {
+	private static Timer timeLine ;
+	private static Timer prjctTimeline;
+	private static Timer participations;
+	private static Timer following;
+	private static Timer followers;
 	public AutoRefresh() {
 
 	}
 
 	public void timeLineRefresh(int delay) {
-		Timer timer = new Timer(delay * 1000, new ActionListener() {
+		timeLine = new Timer(delay * 1000, new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				MainWindow.checkNewMessages(TimeLinePanel.idLastMessage);
 			}
 		});
-		timer.start();
+		timeLine.start();
 	}
 
 	public void prjctsTimeLineRefresh(int delay) {
-		Timer timer = new Timer(delay * 1000, new ActionListener() {
+		prjctTimeline = new Timer(delay * 1000, new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				PrjctsTimeLinePanel.checkNewMessages();
 			}
 		});
-		timer.start();
+		prjctTimeline.start();
 	}
 
 	public void participationsRefresh(int delay) {
-		Timer timer = new Timer(delay * 1000, new ActionListener() {
+		participations = new Timer(delay * 1000, new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				ParticipationsPrjcstPanel.updateList();
 			}
 		});
-		timer.start();
+		participations.start();
 	}
 
 	public void followingRefresh(int delay) {
-		Timer timer = new Timer(delay * 1000, new ActionListener() {
+		following= new Timer(delay * 1000, new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				UsersMngmntPanel.updateFollowingList();
 			}
 		});
-		timer.start();
+		following.start();
 	}
 
 	public void followersRefresh(int delay) {
-		Timer timer = new Timer(delay * 1000, new ActionListener() {
+		followers = new Timer(delay * 1000, new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				UsersMngmntPanel.updateFollowersList();
 			}
 		});
-		timer.start();
+		followers.start();
+	}
+	
+	public static void stopRefreshTimeline(){
+		timeLine.stop();
+	}
+	
+	public static void stopRefreshPrjctTL(){
+		prjctTimeline.stop();
+	}
+	
+	public static void stopRefreshParticipations() {
+		participations.stop();
+	}
+	
+	public static void stopRefreshFollowing(){
+		following.stop();
+	}
+	
+	public static void stopRefreshFollowers(){
+		followers.stop();
+	}
+	
+	public static void stopAll() {
+		stopRefreshFollowers();
+		stopRefreshFollowing();
+		stopRefreshParticipations();
+		stopRefreshPrjctTL();
+		stopRefreshTimeline();
 	}
 
 }
