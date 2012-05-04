@@ -1,7 +1,7 @@
 /**
  * 
  */
-package jmbs.client.DataProcessing;
+package jmbs.client.DataTreatment;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

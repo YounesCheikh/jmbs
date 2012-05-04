@@ -37,10 +37,13 @@ public class MainClient {
 	private static SysConf setMacConf = new SysConf();
 
 	public static void main(String[] args) {
+		
 		System.setProperty("java.security.policy", ClassLoader
 				.getSystemResource("security.policy").toString());
 		System.setProperty("java.rmi.server.codebase", ClassLoader
 				.getSystemResource("jmbs/common/").toString());
+		System.setProperty("java.rmi.server.hostname", "192.168.1.10");
+		
 		setMacConf.setUIMngr();
 		if (!setMacConf.isMac()) {
 			try {

@@ -18,7 +18,7 @@ import javax.swing.border.EmptyBorder;
 
 import jmbs.client.ClientRequests;
 import jmbs.client.CurrentUser;
-import jmbs.client.DataProcessing.AutoRefresh;
+import jmbs.client.DataTreatment.AutoRefresh;
 import jmbs.common.User;
 
 public class UsersMngmntPanel extends JPanel {

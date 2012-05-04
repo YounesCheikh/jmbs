@@ -24,7 +24,7 @@ import javax.swing.ScrollPaneConstants;
 import jmbs.client.ClientRequests;
 import jmbs.client.CurrentUser;
 import jmbs.client.ServerConnection;
-import jmbs.client.DataProcessing.AutoRefresh;
+import jmbs.client.DataTreatment.AutoRefresh;
 import jmbs.client.Graphics.messages.MsgPanel;
 import jmbs.client.Graphics.others.SayToUser;
 import jmbs.common.Message;

@@ -23,7 +23,7 @@ package jmbs.client;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-import jmbs.client.DataProcessing.AutoRefresh;
+import jmbs.client.DataTreatment.AutoRefresh;
 import jmbs.common.Project;
 import jmbs.common.User;
 

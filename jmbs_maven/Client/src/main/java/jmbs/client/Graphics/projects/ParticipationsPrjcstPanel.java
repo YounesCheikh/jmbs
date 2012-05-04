@@ -13,7 +13,7 @@ import javax.swing.ScrollPaneConstants;
 
 import jmbs.client.ClientRequests;
 import jmbs.client.CurrentUser;
-import jmbs.client.DataProcessing.AutoRefresh;
+import jmbs.client.DataTreatment.AutoRefresh;
 import jmbs.common.Project;
 
 public class ParticipationsPrjcstPanel extends JPanel {

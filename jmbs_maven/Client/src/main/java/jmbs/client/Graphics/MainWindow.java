@@ -28,7 +28,7 @@ import jmbs.client.ClientRequests;
 import jmbs.client.CurrentUser;
 import jmbs.client.ServerConnection;
 import jmbs.client.SysConf;
-import jmbs.client.DataProcessing.AutoRefresh;
+import jmbs.client.DataTreatment.AutoRefresh;
 import jmbs.client.Graphics.messages.MsgPanel;
 import jmbs.client.Graphics.messages.NewMessagePanel;
 import jmbs.client.Graphics.messages.TimeLinePanel;

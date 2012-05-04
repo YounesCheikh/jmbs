@@ -1,4 +1,4 @@
-/**
+/*
  * JMBS: Java Micro Blogging System
  *
  * Copyright (C) 2012  
@@ -20,7 +20,9 @@
 
 package jmbs.client;
 
+import java.net.MalformedURLException;
 import java.rmi.AccessException;
+import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RMISecurityManager;
 import java.rmi.RemoteException;
@@ -53,15 +55,16 @@ public class ServerConnection {
 	public ServerConnection() {
 		if (main == null) {
 
-			System.setSecurityManager(new RMISecurityManager());
+			if (System.getSecurityManager() == null) {
+				System.setSecurityManager(new RMISecurityManager());
+			}
 			try {
-				ServerConnection.addressIP = "127.0.0.1";
-				ServerConnection.name = "serverjmbs";
+				ServerConnection.addressIP = "localhost";
 				ServerConnection.port = 1099;
 				Registry registry = LocateRegistry.getRegistry(addressIP, port);
 				main = (RemoteServer) registry.lookup(RemoteServer.REMOTE_NAME);
 				key = main.connect();
-				server = (RemoteRequests) registry.lookup(key);
+				server = (RemoteRequests) Naming.lookup(key);
 
 			} catch (SecurityException se) {
 				SayToUser.error("SecurityException", se.getMessage());
@@ -79,6 +82,10 @@ public class ServerConnection {
 				SayToUser.error("NotBoundException", e.getMessage());
 				server = null;
 				main = null;
+			} catch (MalformedURLException e) {
+				// TODO Auto-generated catch block
+				// e.printStackTrace();
+				System.out.println(e.getMessage());
 			}
 
 		}

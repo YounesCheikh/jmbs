@@ -1,4 +1,4 @@
-/**
+/*
  * JMBS: Java Micro Blogging System
  *
  * Copyright (C) 2012  
@@ -25,7 +25,6 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.regex.Pattern;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -40,9 +39,14 @@ import jmbs.client.ClientRequests;
 import jmbs.client.CurrentUser;
 import jmbs.client.HashPassword;
 import jmbs.client.ServerConnection;
+import jmbs.client.DataTreatment.LoginTreatment;
 import jmbs.client.Graphics.images.ImagePanel;
 import jmbs.common.User;
 import net.miginfocom.swing.MigLayout;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class ConnectionPanel extends JPanel {
 
@@ -53,6 +57,10 @@ public class ConnectionPanel extends JPanel {
 	private JPanel panel;
 	private JTextField emailTextField;
 	private JPasswordField passwordField;
+	private JCheckBox chckbxRememberMe;
+	private boolean savedIdentity = false;
+	private boolean passwordChanged = false;
+	private final LoginTreatment lt = new LoginTreatment();
 	private JLabel respLabel; /*
 							 * this will be used to say to the user if there is
 							 * a wrong password or email
@@ -80,6 +88,7 @@ public class ConnectionPanel extends JPanel {
 	 *            the connection frame
 	 */
 	public ConnectionPanel(MainWindow w, ConnectionFrame cf) {
+
 		this.w = w;
 		this.cf = cf;/* by default */
 		setLayout(new BorderLayout());
@@ -91,6 +100,15 @@ public class ConnectionPanel extends JPanel {
 		JLabel lblPassword = new JLabel("Password:");
 
 		emailTextField = new JTextField();
+		emailTextField.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				if (lt.isSaved(emailTextField.getText()) != null) {
+					passwordField.setText("********");
+					savedIdentity = true;
+				}
+			}
+		});
 		emailTextField.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				checkConnection();
@@ -99,6 +117,20 @@ public class ConnectionPanel extends JPanel {
 		emailTextField.setColumns(20);
 
 		passwordField = new JPasswordField();
+		passwordField.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyTyped(KeyEvent e) {
+				if (e.getKeyChar()!='\n') {
+					passwordChanged = true;
+				}
+			}
+		});
+		passwordField.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent e) {
+				
+			}
+		});
 		passwordField.setColumns(20);
 		passwordField.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -108,7 +140,7 @@ public class ConnectionPanel extends JPanel {
 
 		respLabel = new JLabel(" ");
 
-		JCheckBox chckbxRememberMe = new JCheckBox("Remember me");
+		chckbxRememberMe = new JCheckBox("Remember me");
 
 		JLabel lblRegister = new JLabel("don't have account?");
 
@@ -139,11 +171,11 @@ public class ConnectionPanel extends JPanel {
 		JButton btnConnect = new JButton("Connect");
 		btnConnect.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (!verification(emailTextField.getText())) {
+				if (!lt.isMailCorrect(emailTextField.getText())) {
 					respLabel.setText("Enter a valide email please!");
 					respLabel.setForeground(Color.red);
 					// putElement(0, 3, respLabel);
-				} else if (!verification(passwordField.getPassword().length)) {
+				} else if (!lt.hasMinLenght(passwordField.getPassword().length)) {
 					respLabel.setText("password less than 4 chars !");
 					respLabel.setForeground(Color.red);
 					// putElement(0, 3, respLabel);
@@ -167,50 +199,37 @@ public class ConnectionPanel extends JPanel {
 	}
 
 	/**
-	 * verify the email
-	 * 
-	 * @param mail
-	 *            adress mail
-	 * @return true if the user has entred a right email adress
-	 */
-	private boolean verification(String mail) {
-		boolean correctMail = Pattern.matches(
-				"^[_a-z0-9-]+(\\.[_a-z0-9-]+)*@[a-z0-9-]+(\\.[a-z0-9-]+)+$",
-				mail);
-		return (correctMail);
-	}
-
-	/**
-	 * verify the password length
-	 * 
-	 * @param passwdLength
-	 *            the password length
-	 * @return true if password length >= 4
-	 */
-	private boolean verification(int passwdLength) {
-		boolean correctPasswd = (passwdLength >= 4);
-		return (correctPasswd);
-	}
-
-	/**
 	 * this methode update the response Label 'respLabel'
 	 */
 	private void checkConnection() {
 		new ServerConnection();
 		respLabel.setText("Connection to server...");
 		respLabel.setForeground(new Color(0, 100, 0));
-
+		String hashedPass = new String();
+		if (savedIdentity && !passwordChanged) {
+			hashedPass = lt.isSaved(emailTextField.getText());
+		}
+		else {
+			hashedPass = new HashPassword(lt.arrayToString(passwordField.getPassword()))
+			.getHashed();
+		}
 		User u = ClientRequests.connectUser(this.emailTextField.getText(),
-				new HashPassword(listToString(passwordField.getPassword()))
-						.getHashed());
+				hashedPass);
 		if (u == null) {
 			respLabel.setText("Connection impossible...");
 			respLabel.setForeground(new Color(100, 0, 0));
 		} else if (u.getId() != -1) {
+			if (chckbxRememberMe.isSelected() && !lt.arrayToString(passwordField.getPassword()).equals("********")) {
+				lt.savePassword(
+						emailTextField.getText(),
+						new HashPassword(lt.arrayToString(passwordField
+								.getPassword())).getHashed());
+			}
 			cf.dispose();
 			new CurrentUser(u);
 			this.initMainWindow();
 		} else if (u.getId() == -1) {
+			savedIdentity = false;
 			respLabel
 					.setText("Wrong password or wrong email, Please try again!");
 			respLabel.setForeground(new Color(200, 0, 0));
@@ -245,11 +264,4 @@ public class ConnectionPanel extends JPanel {
 		this.w.getFrame().setVisible(true);
 	}
 
-	private String listToString(char[] list) {
-		String retStr = new String();
-		for (char c : list) {
-			retStr += c;
-		}
-		return retStr;
-	}
 }
