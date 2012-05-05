@@ -42,7 +42,7 @@ public class MainClient {
 				.getSystemResource("security.policy").toString());
 		System.setProperty("java.rmi.server.codebase", ClassLoader
 				.getSystemResource("jmbs/common/").toString());
-		System.setProperty("java.rmi.server.hostname", "192.168.1.10");
+		System.setProperty("java.rmi.server.hostname", "localhost");
 		
 		setMacConf.setUIMngr();
 		if (!setMacConf.isMac()) {
