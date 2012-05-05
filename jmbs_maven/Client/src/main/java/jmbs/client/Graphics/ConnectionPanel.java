@@ -101,6 +101,13 @@ public class ConnectionPanel extends JPanel {
 		JLabel lblPassword = new JLabel("Password:");
 
 		emailTextField = new JTextField();
+		emailTextField.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				savedIdentity = false;
+				passwordChanged = false;
+			}
+		});
 		emailTextField.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusLost(FocusEvent e) {
@@ -121,7 +128,7 @@ public class ConnectionPanel extends JPanel {
 		passwordField.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyTyped(KeyEvent e) {
-				if (e.getKeyChar()!='\n') {
+				if (e.getKeyChar() != '\n') {
 					passwordChanged = true;
 				}
 			}
@@ -129,7 +136,7 @@ public class ConnectionPanel extends JPanel {
 		passwordField.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusGained(FocusEvent e) {
-				
+
 			}
 		});
 		passwordField.setColumns(20);
@@ -209,10 +216,9 @@ public class ConnectionPanel extends JPanel {
 		String hashedPass = new String();
 		if (savedIdentity && !passwordChanged) {
 			hashedPass = lt.isSaved(emailTextField.getText());
-		}
-		else {
-			hashedPass = new HashPassword(lt.arrayToString(passwordField.getPassword()))
-			.getHashed();
+		} else {
+			hashedPass = new HashPassword(lt.arrayToString(passwordField
+					.getPassword())).getHashed();
 		}
 		User u = ClientRequests.connectUser(this.emailTextField.getText(),
 				hashedPass);
@@ -220,7 +226,9 @@ public class ConnectionPanel extends JPanel {
 			respLabel.setText("Connection impossible...");
 			respLabel.setForeground(new Color(100, 0, 0));
 		} else if (u.getId() != -1) {
-			if (chckbxRememberMe.isSelected() && !lt.arrayToString(passwordField.getPassword()).equals("********")) {
+			if (chckbxRememberMe.isSelected()
+					&& !lt.arrayToString(passwordField.getPassword()).equals(
+							"********")) {
 				lt.savePassword(
 						emailTextField.getText(),
 						new HashPassword(lt.arrayToString(passwordField

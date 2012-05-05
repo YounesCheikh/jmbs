@@ -5,6 +5,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import jmbs.client.CurrentUser;
 import jmbs.client.DataTreatment.ImageTreatment;
 import jmbs.common.Message;
 import jmbs.common.User;
@@ -22,29 +23,31 @@ public class MsgDAO extends CacheDAO {
 	}
 
 	private void createTable() {
-		set("CREATE TABLE IF NOT EXISTS messages (id integer primary key,"
+		set("CREATE TABLE IF NOT EXISTS messages (idcurrentuser integer not null, id integer primary key,"
 				+ " content string, time timestamp, iduser integer, username string , userfname string, picpath string );");
 		executeUpdate();
 	}
 
 	protected void insertMessage(Message m) {
 		String query = new String();
-		query += "insert into messages values(?, ?, ?, ?, ?, ?, ?)";
+		query += "insert into messages values(?, ?, ?, ?, ?, ?, ?, ?)";
 		set(query);
-		setInt(1, m.getId());
-		setString(2, m.getMessage());
-		setTimestamp(3, m.getTimestamp());
-		setInt(4, m.getOwner().getId());
-		setString(5, m.getOwner().getName());
-		setString(6, m.getOwner().getFname());
-		setString(7, "upics/" + m.getOwner().getId() + ".jpg");
+		setInt(1, CurrentUser.getId());
+		setInt(2, m.getId());
+		setString(3, m.getMessage());
+		setTimestamp(4, m.getTimestamp());
+		setInt(5, m.getOwner().getId());
+		setString(6, m.getOwner().getName());
+		setString(7, m.getOwner().getFname());
+		setString(8, "upics/" + m.getOwner().getId() + ".jpg");
 		executeUpdate();
 	}
 
 	protected ArrayList<Message> getMessages() {
 		ArrayList<Message> msgList = new ArrayList<Message>();
 
-		set("SELECT * FROM messages;");
+		set("SELECT * FROM messages where idcurrentuser = ?;");
+		setInt(1, CurrentUser.getId());
 		ResultSet rs = executeQuery();
 
 		try {

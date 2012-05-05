@@ -63,7 +63,7 @@ public abstract class CacheDAO implements Serializable {
 			res = stmt.executeQuery();
 			res.next();
 		} catch (SQLException e) {
-			System.err.println("Unable to execute query.\n"+e.getMessage());
+			//System.err.println("Unable to execute query.\n"+e.getMessage());
 		}
 
 		return res;
@@ -76,7 +76,7 @@ public abstract class CacheDAO implements Serializable {
 			stmt.executeUpdate();
 			b = true;
 		} catch (SQLException e) {
-			System.err.println("Unable to execute query.\n"+e.getMessage());
+			//System.err.println("Unable to execute query.\n"+e.getMessage());
 			b = false;
 		}
 

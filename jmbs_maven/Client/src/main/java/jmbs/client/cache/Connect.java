@@ -53,19 +53,6 @@ public class Connect {
 
 	}
 
-	public Connect(int iduser) {
-		try { // create a database connection
-			Class.forName(DEFAUlT_DRIVER);
-			connection = DriverManager.getConnection(DEFAULT_URL + "cache_"
-					+ iduser + ".db");
-		} catch (ClassNotFoundException e) {
-			System.out.println(e.getMessage());
-		} catch (SQLException e) {
-			System.out.println(e.getMessage());
-		}
-
-	}
-
 	/**
 	 * Returns the Connection.<br>
 	 * NOTE: it must be closed after using.
