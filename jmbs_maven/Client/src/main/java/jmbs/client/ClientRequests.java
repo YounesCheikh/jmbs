@@ -1,14 +1,7 @@
 package jmbs.client;
 
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
-
-import javax.imageio.ImageIO;
 
 import jmbs.client.Graphics.others.SayToUser;
 import jmbs.common.Message;
@@ -217,7 +210,7 @@ public class ClientRequests {
 	 * @param name
 	 * @param iduser
 	 * @return true if the project created succesfully
-	 * @deprecated 
+	 * @deprecated
 	 */
 	public static boolean createProject(String name, int iduser) {
 		boolean b = false;
@@ -235,12 +228,14 @@ public class ClientRequests {
 		}
 		return b;
 	}
-	
-	public static int createProject(String name, int iduser,int activation, boolean edit, boolean supress, boolean privacy) {
+
+	public static int createProject(String name, int iduser, int activation,
+			boolean edit, boolean supress, boolean privacy) {
 		int b = -1;
 		if (ServerConnection.server != null) {
 			try {
-				b = ServerConnection.server.createProject(name, iduser,activation,edit,supress,privacy);
+				b = ServerConnection.server.createProject(name, iduser,
+						activation, edit, supress, privacy);
 			} catch (SecurityException e) {
 				SayToUser.warning("SecurityException", e.getMessage());
 			} catch (RemoteException e) {
@@ -277,26 +272,28 @@ public class ClientRequests {
 		}
 		return retList;
 	}
-	
-	 public static ArrayList<Project> searchForProject(String likeName, int userId)  {
-		 ArrayList<Project> retList = null;
-			if (ServerConnection.server != null) {
-				try {
-					retList = ServerConnection.server.searchForProject(likeName,userId);
-					if (retList != null) {
-						for (Project p : retList) {
-							p.setUsers(ClientRequests.getProjectUsers(p.getId()));
-						}
+
+	public static ArrayList<Project> searchForProject(String likeName,
+			int userId) {
+		ArrayList<Project> retList = null;
+		if (ServerConnection.server != null) {
+			try {
+				retList = ServerConnection.server.searchForProject(likeName,
+						userId);
+				if (retList != null) {
+					for (Project p : retList) {
+						p.setUsers(ClientRequests.getProjectUsers(p.getId()));
 					}
-				} catch (RemoteException e) {
-					SayToUser.error("RemoteException", e.getMessage());
 				}
-			} else {
-				SayToUser.error("Error connection!",
-						"can't establish a reliable data connection to the server");
+			} catch (RemoteException e) {
+				SayToUser.error("RemoteException", e.getMessage());
 			}
-			return retList;
-	 }
+		} else {
+			SayToUser.error("Error connection!",
+					"can't establish a reliable data connection to the server");
+		}
+		return retList;
+	}
 
 	public static boolean unParticipate(int idUser, int idProject) {
 		boolean retVal = false;
@@ -426,36 +423,12 @@ public class ClientRequests {
 		return retList;
 	}
 
-	public static byte[] pathToByte(String path) {
-		try {
-			ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			BufferedImage bi = ImageIO.read(new File(path));
-			ImageIO.write(bi, "jpg", baos);
-			baos.flush();
-			byte[] imageInByte = baos.toByteArray();
-			baos.close();
-			return imageInByte;
-		} catch (IOException ex) {
-			return null;
-		}
-	}
-
-	public static BufferedImage byteToImage(byte[] imageInByte) {
-		try {
-			BufferedImage image = ImageIO.read(new ByteArrayInputStream(
-					imageInByte));
-			return image;
-		} catch (IOException ex) {
-			return null;
-		}
-	}
-
 	public static boolean setPicture(int userId, byte[] imageInByte) {
 		boolean retVal = false;
 		if (ServerConnection.server != null) {
 			try {
-				retVal = ServerConnection.server.setPicture(userId,
-						imageInByte);
+				retVal = ServerConnection.server
+						.setPicture(userId, imageInByte);
 			} catch (RemoteException e) {
 				SayToUser.error("RemoteException", e.getMessage());
 			}
@@ -516,17 +489,6 @@ public class ClientRequests {
 					"can't establish a reliable data connection to the server");
 		}
 		return retVal;
-	}
-	
-	public static BufferedImage convert(byte[] ib) {
-		BufferedImage im = null;
-		try {
-			im = ImageIO.read(new ByteArrayInputStream(ib));
-		} catch (IOException e) {
-			// Logger.getLogger(PictureDAO.class.getName()).log(Level.SEVERE,
-			// null, e);
-		}
-		return im;
 	}
 
 }

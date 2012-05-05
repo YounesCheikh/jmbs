@@ -21,7 +21,7 @@ package jmbs.client.DataTreatment;
 import java.util.HashMap;
 import java.util.regex.Pattern;
 
-import jmbs.client.cache.CacheRequests;
+import jmbs.client.cache.CacheIdentityRequests;
 
 /**
  * @author <a href="mailto:younes.cheikh@gmail.com">Younes CHEIKH</a>
@@ -78,7 +78,7 @@ public class LoginTreatment {
 	}
 
 	public void savePassword(String mail, String pass) {
-		CacheRequests cr = new CacheRequests();
+		CacheIdentityRequests cr = new CacheIdentityRequests();
 		HashMap<String, String> identities = cr.getIdentities();
 		if (identities.containsKey(mail)) {
 			if (!identities.get(mail).equals(pass)) {
@@ -91,12 +91,12 @@ public class LoginTreatment {
 
 	public String isSaved(String mail) {
 		String retStr = null;
-		CacheRequests cr = new CacheRequests();
+		CacheIdentityRequests cr = new CacheIdentityRequests();
 		HashMap<String, String> identities = cr.getIdentities();
 		if (identities.containsKey(mail)) {
 			retStr = identities.get(mail);
 		}
 		return retStr;
 	}
-	
+
 }

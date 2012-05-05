@@ -36,6 +36,7 @@ import jmbs.client.Graphics.others.AboutFrame;
 import jmbs.client.Graphics.others.Preferences;
 import jmbs.client.Graphics.projects.PrjectTabbedPane;
 import jmbs.client.Graphics.users.UsersMngmntPanel;
+import jmbs.client.cache.CacheMsgRequests;
 import jmbs.common.Message;
 
 public class MainWindow {
@@ -63,6 +64,7 @@ public class MainWindow {
 	private JButton btnRefresh;
 	private NewMessagePanel newMsgPanel;
 	private JPanel tlpan;
+	private static CacheMsgRequests cache;
 
 	public Preferences getPreferencesFrame() {
 		return this.prfrm;
@@ -98,6 +100,7 @@ public class MainWindow {
 				System.exit(0);
 			}
 		});
+		cache = new CacheMsgRequests();
 		ppanel = new ProfilePanel(CurrentUser.get());
 		about = new AboutFrame();
 		prfrm = new Preferences();
@@ -444,10 +447,34 @@ public class MainWindow {
 		return projectsPanel;
 	}
 
-	public static void checkNewMessages(int idLastMsg) {
-		msgListTL = ClientRequests.getLatestTL(CurrentUser.getId(), idLastMsg,
-				ServerConnection.maxReceivedMsgs);
+	public static void checkCacheMsgs() {
+		msgListTL = cache.getMessages();
 		timelinepanel.putList(msgListTL);
+		int max = 0;
+		for (Message m : msgListTL) {
+			if (m.getId() > max)
+				max = m.getId();
+		}
+		timelinepanel.setLastIdMsg(max);
+		System.out.println(timelinepanel.getLastIdMsg());
+	}
+
+	public static void checkNewMessages(int idLastMsg) {
+		ArrayList<Message> listTmp = new ArrayList<Message>();
+		listTmp = ClientRequests.getLatestTL(CurrentUser.getId(), idLastMsg,
+				ServerConnection.maxReceivedMsgs);
+		for (Message m : listTmp) {
+			boolean found = false;
+			for (Message m2 : msgListTL) {
+				if (m2.getId() == m.getId())
+					found = true;
+			}
+			if (!found) {
+				msgListTL.add(m);
+				cache.addMessage(m);
+			}
+		}
+		timelinepanel.putList(listTmp);
 	}
 
 	public void updateMainPanel(int sideBarItem) {

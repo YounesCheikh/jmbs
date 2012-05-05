@@ -41,6 +41,7 @@ import jmbs.client.HashPassword;
 import jmbs.client.ServerConnection;
 import jmbs.client.DataTreatment.LoginTreatment;
 import jmbs.client.Graphics.images.ImagePanel;
+import jmbs.client.Graphics.messages.TimeLinePanel;
 import jmbs.common.User;
 import net.miginfocom.swing.MigLayout;
 import java.awt.event.FocusAdapter;
@@ -255,7 +256,8 @@ public class ConnectionPanel extends JPanel {
 		this.w.getTLPanel().revalidate();
 		// check for new messages from the server and display them on the
 		// timeline panel
-		MainWindow.checkNewMessages(0);
+		MainWindow.checkCacheMsgs();
+		MainWindow.checkNewMessages(TimeLinePanel.idLastMessage);
 		// Resetting the profile panel
 		this.w.resetProfilePanel();
 		// setting the menubar

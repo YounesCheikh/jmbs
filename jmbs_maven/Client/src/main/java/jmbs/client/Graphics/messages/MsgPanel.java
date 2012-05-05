@@ -34,7 +34,7 @@ import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 
-import jmbs.client.ClientRequests;
+import jmbs.client.DataTreatment.ImageTreatment;
 import jmbs.client.Graphics.ColorStyle;
 import jmbs.client.Graphics.images.ImagePanel;
 import jmbs.client.Graphics.users.ShowUserProfileFrm;
@@ -66,7 +66,7 @@ public class MsgPanel extends JPanel {
 
 		this.setPreferredSize(new Dimension(10, 10));
 		imgPanel = new ImagePanel(
-				ClientRequests.convert(m.getOwner().getPic()), 69, 69);
+				ImageTreatment.convert(m.getOwner().getPic()), 69, 69);
 		imgPanel.setPreferredSize(new Dimension(70, 70));
 		imgPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
 		txtPanel = new JPanel();

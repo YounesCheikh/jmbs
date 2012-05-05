@@ -30,9 +30,9 @@ import java.sql.SQLException;
  * 
  */
 public class Connect {
-	
+
 	private static final String DB_FILE_PATH = "cache.db";
-	private static final String DEFAULT_URL = "jdbc:sqlite:";
+	private static final String DEFAULT_URL = "jdbc:sqlite:./cache/";
 	private static final String DEFAUlT_DRIVER = "org.sqlite.JDBC";
 	private Connection connection = null;
 
@@ -41,15 +41,29 @@ public class Connect {
 	 * configuration file.
 	 */
 	public Connect() {
-			try { // create a database connection
-				Class.forName(DEFAUlT_DRIVER);
-				connection = DriverManager.getConnection(DEFAULT_URL+DB_FILE_PATH);
-			} catch (ClassNotFoundException e) {
-				System.out.println(e.getMessage());
-			} catch (SQLException e) {
-				System.out.println(e.getMessage());
-			}
-			
+		try { // create a database connection
+			Class.forName(DEFAUlT_DRIVER);
+			connection = DriverManager
+					.getConnection(DEFAULT_URL + DB_FILE_PATH);
+		} catch (ClassNotFoundException e) {
+			System.out.println(e.getMessage());
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
+
+	}
+
+	public Connect(int iduser) {
+		try { // create a database connection
+			Class.forName(DEFAUlT_DRIVER);
+			connection = DriverManager.getConnection(DEFAULT_URL + "cache_"
+					+ iduser + ".db");
+		} catch (ClassNotFoundException e) {
+			System.out.println(e.getMessage());
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
+
 	}
 
 	/**
@@ -60,6 +74,16 @@ public class Connect {
 	 */
 	public Connection getConnection() {
 		return connection;
+	}
+	
+	public void close(){
+		try {
+			connection.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			//e.printStackTrace();
+			System.out.println(e.getMessage());
+		}
 	}
 
 }

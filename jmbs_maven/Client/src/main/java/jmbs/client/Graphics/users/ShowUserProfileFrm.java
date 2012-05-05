@@ -42,6 +42,7 @@ import javax.swing.border.EmptyBorder;
 import jmbs.client.ClientRequests;
 import jmbs.client.CurrentUser;
 import jmbs.client.SysConf;
+import jmbs.client.DataTreatment.ImageTreatment;
 import jmbs.client.Graphics.images.ImagePanel;
 import jmbs.common.User;
 
@@ -121,7 +122,7 @@ public class ShowUserProfileFrm extends JFrame {
 		topPanel.add(rightPanel, BorderLayout.EAST);
 		rightPanel.setLayout(new BorderLayout(0, 0));
 
-		ImagePanel panel = new ImagePanel(ClientRequests.convert(u.getPic()), 70, 70);
+		ImagePanel panel = new ImagePanel(ImageTreatment.convert(u.getPic()), 70, 70);
 		panel.setPreferredSize(new Dimension(70, 70));
 		rightPanel.add(panel, BorderLayout.CENTER);
 		panel.setBackground(Color.GRAY);

@@ -43,6 +43,7 @@ import javax.swing.SwingConstants;
 import jmbs.client.ClientRequests;
 import jmbs.client.CurrentUser;
 import jmbs.client.HashPassword;
+import jmbs.client.DataTreatment.ImageTreatment;
 import jmbs.client.Graphics.images.ImageFilter;
 import jmbs.client.Graphics.images.ImagePanel;
 import jmbs.client.Graphics.images.ImagePreview;
@@ -129,7 +130,7 @@ public class ProfilePanel extends JPanel {
 		confirmpasswordField.setBounds(159, 383, 180, 28);
 		confirmpasswordField.setBorder(BorderFactory.createLineBorder(null));
 
-		profilePicturePanel = new ImagePanel(ClientRequests.convert(CurrentUser
+		profilePicturePanel = new ImagePanel(ImageTreatment.convert(CurrentUser
 				.getPic()), 70, 70);
 		profilePicturePanel.setBounds(9, 437, 70, 70);
 		profilePicturePanel.setBackground(Color.GRAY);
@@ -211,7 +212,7 @@ public class ProfilePanel extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 
 				if (!profilePicturePathTextField.equals("")) {
-					byte[] imInByteTmp = ClientRequests
+					byte[] imInByteTmp = ImageTreatment
 							.pathToByte(profilePicturePathTextField.getText());
 					if (imInByteTmp != null) {
 						boolean pictureSetted = ClientRequests.setPicture(

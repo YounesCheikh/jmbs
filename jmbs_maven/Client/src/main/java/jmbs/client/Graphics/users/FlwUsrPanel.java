@@ -35,6 +35,7 @@ import javax.swing.border.TitledBorder;
 
 import jmbs.client.ClientRequests;
 import jmbs.client.CurrentUser;
+import jmbs.client.DataTreatment.ImageTreatment;
 import jmbs.client.Graphics.images.ImagePanel;
 import jmbs.common.User;
 
@@ -52,7 +53,7 @@ public class FlwUsrPanel extends JPanel {
 		setBorder(new TitledBorder(null, "", TitledBorder.LEADING,
 				TitledBorder.TOP, null, null));
 
-		ImagePanel panel = new ImagePanel(ClientRequests.convert(u.getPic()), 70, 70);
+		ImagePanel panel = new ImagePanel(ImageTreatment.convert(u.getPic()), 70, 70);
 		panel.setPreferredSize(new Dimension(70, 70));
 		panel.setAlignmentX(Component.LEFT_ALIGNMENT);
 

@@ -22,6 +22,7 @@ import javax.swing.border.TitledBorder;
 
 import jmbs.client.ClientRequests;
 import jmbs.client.CurrentUser;
+import jmbs.client.cache.CacheMsgRequests;
 import jmbs.common.Message;
 
 public class NewMessagePanel extends JPanel {
@@ -37,13 +38,13 @@ public class NewMessagePanel extends JPanel {
 	private JLabel lblNbchars;
 	private JPanel panel;
 	private JPanel panel_1;
-
+	private CacheMsgRequests cmr;
 	/**
 	 * Create the panel.
 	 */
 	public NewMessagePanel(final TimeLinePanel tlpanel) {
 		setLayout(new BorderLayout(0, 0));
-
+		cmr = new CacheMsgRequests();
 		newMsgStr = new String();
 		contentPane = new JPanel();
 		contentPane.setBackground(Color.DARK_GRAY);
@@ -111,9 +112,11 @@ public class NewMessagePanel extends JPanel {
 					getIdMsg = ClientRequests.addMessage(m);
 					System.out.println("" + getIdMsg);
 					if (!getIdMsg.equals(-1)) {
-						tlpanel.putMessage(new MsgPanel(new Message(CurrentUser
+						Message m1 = new Message(CurrentUser
 								.get(), textArea.getText(), new Timestamp(
-								Calendar.getInstance().getTimeInMillis()))));
+								Calendar.getInstance().getTimeInMillis()));
+						cmr.addMessage(m1);
+						tlpanel.putMessage(new MsgPanel(m1));
 						tlpanel.setLastIdMsg(getIdMsg);
 						textArea.setText("");
 						setVisible(false);

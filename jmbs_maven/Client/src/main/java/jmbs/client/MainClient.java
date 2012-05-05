@@ -23,6 +23,7 @@ package jmbs.client;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 
+import jmbs.client.DataTreatment.SetEnv;
 import jmbs.client.Graphics.ConnectionFrame;
 import jmbs.client.Graphics.MainWindow;
 import jmbs.client.Graphics.others.SayToUser;
@@ -72,8 +73,8 @@ public class MainClient {
 		new SayToUser();
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
+				new SetEnv();
 				cf = new ConnectionFrame(window);
-				// AWTUtilities.setWindowOpacity(cf, 0.99f);
 				cf.setVisible(true);
 			}
 		});

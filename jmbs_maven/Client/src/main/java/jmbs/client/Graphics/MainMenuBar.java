@@ -35,6 +35,8 @@ import jmbs.client.SysConf;
 import jmbs.client.Graphics.messages.TimeLinePanel;
 import jmbs.client.Graphics.others.AboutFrame;
 import jmbs.client.Graphics.others.Preferences;
+import jmbs.client.cache.CacheIdentityRequests;
+import jmbs.client.cache.CacheMsgRequests;
 
 public class MainMenuBar extends JMenuBar {
 
@@ -114,7 +116,12 @@ public class MainMenuBar extends JMenuBar {
 		mnFile.add(mntmPreferences);
 
 		JMenuItem mntmEmptyCache = new JMenuItem("Empty cache");
-		mntmEmptyCache.setEnabled(false);
+		mntmEmptyCache.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				CacheIdentityRequests.removeAllIdentities();
+				CacheMsgRequests.removeAllMsgs();
+			}
+		});
 		mnFile.add(mntmEmptyCache);
 
 		JSeparator separator_2 = new JSeparator();
