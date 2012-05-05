@@ -96,6 +96,20 @@ public class User implements Serializable {
         this.pic = pic;
         this.accesslevel = authlvl;
     }
+    
+    /**
+     * Creates a user with his id.
+     *
+     * @param n user's name
+     * @param pic byte[] picture
+     * @param id user's id
+     */
+    public User(int id, String n, String f,  byte[] pic) {
+        this.name = n;
+        this.id = id;
+        this.pic = pic;
+        this.fname = f;
+    }
 
     /*
      * (non-Javadoc) 2 users are not even comparable if they have no id given by
