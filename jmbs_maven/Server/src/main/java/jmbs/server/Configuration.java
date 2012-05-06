@@ -40,7 +40,7 @@ public final class Configuration { /* Singleton pattern for configuration file. 
 	private static final String DEFAULT_LOGIN = "postgres";
 	private static final String DEFAULT_PASSWORD = "postgres";
 	
-	private static Configuration instance = null;
+	private static volatile Configuration instance = null;
 	private String url;
 	private String login;
 	private String password;

@@ -23,15 +23,10 @@ import java.util.HashMap;
 
 public class CacheIdentityRequests {
 
-	private static Connection con = new Connect().getConnection();
+	private static Connection con = Connect.getInstance().getConnection();
 
 	public CacheIdentityRequests() {
-
 	}
-
-	/******************************************************************/
-	/************************* IDENTITIES *****************************/
-	/******************************************************************/
 
 	public void insertIdentity(String mail, String pass) {
 		IdentityDAO idao = new IdentityDAO(con);

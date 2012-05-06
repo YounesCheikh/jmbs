@@ -20,7 +20,6 @@
 
 package jmbs.common;
 
-import java.io.Serializable;
 import java.sql.*;
 
 /**

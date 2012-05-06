@@ -26,7 +26,7 @@ import jmbs.common.Message;
 
 public class CacheMsgRequests {
 
-	private static Connection con = new Connect().getConnection();
+	private static Connection con = Connect.getInstance().getConnection();
 
 	public CacheMsgRequests() {
 
@@ -61,5 +61,4 @@ public class CacheMsgRequests {
 			// Ignore
 		}
 	}
-
 }

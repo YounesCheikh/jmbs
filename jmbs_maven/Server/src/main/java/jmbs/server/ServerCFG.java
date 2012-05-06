@@ -10,7 +10,7 @@ package jmbs.server;
  */
 public class ServerCFG {
     
-    private static ServerCFG instance = null;
+    private static volatile ServerCFG instance = null;
     
     public final static ServerCFG getInstance() {
 		if (instance == null) 
