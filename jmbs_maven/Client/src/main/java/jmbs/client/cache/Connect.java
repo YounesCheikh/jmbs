@@ -1,4 +1,4 @@
-/**
+/*
  * JMBS: Java Micro Blogging System
  *
  * Copyright (C) 2012  
@@ -13,9 +13,6 @@
  * See the GNU General Public License for more details.
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- * @author Younes CHEIKH http://cyounes.com
- * @author Benjamin Babic http://bbabic.com
- * 
  */
 
 package jmbs.client.cache;
@@ -34,7 +31,7 @@ public class Connect {
 	private static final String DB_FILE_PATH = "cache.db";
 	private static final String DEFAULT_URL = "jdbc:sqlite:./cache/";
 	private static final String DEFAUlT_DRIVER = "org.sqlite.JDBC";
-	private Connection connection = null;
+	private static Connection connection = null;
 
 	/**
 	 * Creates a Connection object created using the parameters of the
@@ -61,16 +58,6 @@ public class Connect {
 	 */
 	public Connection getConnection() {
 		return connection;
-	}
-	
-	public void close(){
-		try {
-			connection.close();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			//e.printStackTrace();
-			System.out.println(e.getMessage());
-		}
 	}
 
 }

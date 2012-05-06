@@ -1,4 +1,4 @@
-/**
+/*
  * JMBS: Java Micro Blogging System
  *
  * Copyright (C) 2012  
@@ -13,9 +13,6 @@
  * See the GNU General Public License for more details.
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- * @author Younes CHEIKH http://cyounes.com
- * @author Benjamin Babic http://bbabic.com
- * 
  */
 
 package jmbs.client.Graphics.others;
@@ -43,7 +40,7 @@ import javax.swing.event.ChangeListener;
 
 import jmbs.client.ServerConfig;
 import jmbs.client.ServerConnection;
-import jmbs.client.SysConf;
+import jmbs.client.DataTreatment.FramesConf;
 import jmbs.client.Graphics.MainWindow;
 
 import com.sun.awt.AWTUtilities;
@@ -97,7 +94,7 @@ public class Preferences extends JFrame {
 		setContentPane(contentPane);
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		contentPane.add(tabbedPane, BorderLayout.CENTER);
-		SysConf.centerThisFrame(this);
+		FramesConf.centerThisFrame(this);
 
 		JPanel generalPanel = new JPanel();
 		tabbedPane.addTab("General",
@@ -128,7 +125,7 @@ public class Preferences extends JFrame {
 		serverNameTextField = new JTextField();
 		serverNameTextField.setBounds(135, 63, 134, 28);
 		serverNameTextField.setColumns(10);
-		serverNameTextField.setText(sconf.getServerName());
+		serverNameTextField.setText("");
 
 		portTextField = new JTextField();
 		portTextField.setBounds(135, 97, 134, 28);

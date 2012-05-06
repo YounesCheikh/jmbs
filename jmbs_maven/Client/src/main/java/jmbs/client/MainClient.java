@@ -1,4 +1,4 @@
-/**
+/*
  * JMBS: Java Micro Blogging System
  *
  * Copyright (C) 2012  
@@ -13,9 +13,6 @@
  * See the GNU General Public License for more details.
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- * @author Younes CHEIKH http://cyounes.com
- * @author Benjamin Babic http://bbabic.com
- * 
  */
 
 package jmbs.client;
@@ -28,24 +25,43 @@ import jmbs.client.Graphics.ConnectionFrame;
 import jmbs.client.Graphics.MainWindow;
 import jmbs.client.Graphics.others.SayToUser;
 
+/**
+ * @author <a href="mailto:younes.cheikh@gmail.com">Younes CHEIKH</a>
+ * @author Benjamin Babic
+ * @since 06-05-2012
+ * @version 1.0
+ */
+
 public class MainClient {
 	private static MainWindow window;
-	/**
-	 * The Connection Window
-	 */
 	private static ConnectionFrame cf;
-
 	private static SysConf setMacConf = new SysConf();
 
+	
+	/**
+	 * @param args Ignored
+	 */
 	public static void main(String[] args) {
 		
+		/*
+		 * setting the properties
+		 * # the security policy
+		 * # the codebase for rmi
+		 * # the hostname for rmi server
+		 */
 		System.setProperty("java.security.policy", ClassLoader
 				.getSystemResource("security.policy").toString());
 		System.setProperty("java.rmi.server.codebase", ClassLoader
 				.getSystemResource("jmbs/common/").toString());
 		System.setProperty("java.rmi.server.hostname", "localhost");
 		
+		/*
+		 * set the user Interface Manager
+		 */
 		setMacConf.setUIMngr();
+		/*
+		 * If the current OS is not a mac, use the Nimbus lookandfeel theme as default (if exists).
+		 */
 		if (!setMacConf.isMac()) {
 			try {
 				boolean themeMacFound = false;
@@ -70,10 +86,17 @@ public class MainClient {
 			}
 		}
 
+		/*
+		 * Initilize the SayToUser Class
+		 */
 		new SayToUser();
+		/*
+		 * Set the environment (Create the default directories of not exist).
+		 */
+		new SetEnv();
+		
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
-				new SetEnv();
+			public void run() { // Run the Application
 				cf = new ConnectionFrame(window);
 				cf.setVisible(true);
 			}

@@ -13,12 +13,9 @@
  * See the GNU General Public License for more details.
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- * @author Younes CHEIKH http://cyounes.com
- * @author Benjamin Babic http://bbabic.com
- * 
  */
 
-package jmbs.client;
+package jmbs.client.DataTreatment;
 
 import java.math.BigInteger;
 import java.security.MessageDigest;

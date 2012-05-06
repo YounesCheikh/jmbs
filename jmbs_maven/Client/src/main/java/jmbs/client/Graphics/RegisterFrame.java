@@ -1,4 +1,4 @@
-/**
+/*
  * JMBS: Java Micro Blogging System
  *
  * Copyright (C) 2012  
@@ -13,9 +13,6 @@
  * See the GNU General Public License for more details.
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- * @author Younes CHEIKH http://cyounes.com
- * @author Benjamin Babic http://bbabic.com
- * 
  */
 
 package jmbs.client.Graphics;
@@ -30,8 +27,14 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import jmbs.client.SysConf;
+import jmbs.client.DataTreatment.FramesConf;
 
+/**
+ * @author <a href="mailto:younes.cheikh@gmail.com">Younes CHEIKH</a>
+ * @author Benjamin Babic
+ * @since 06-05-2012
+ * @version 1.0
+ */
 public class RegisterFrame extends JFrame {
 
 	/**
@@ -47,7 +50,7 @@ public class RegisterFrame extends JFrame {
 	public RegisterFrame() {
 
 		// setLocationRelativeTo(null);
-		SysConf.centerThisFrame(this);
+		FramesConf.centerThisFrame(this);
 
 		addMouseListener(new MouseAdapter() {
 			@Override

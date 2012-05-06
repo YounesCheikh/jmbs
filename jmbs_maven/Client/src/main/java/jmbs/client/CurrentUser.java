@@ -1,4 +1,4 @@
-/**
+/*
  * JMBS: Java Micro Blogging System
  *
  * Copyright (C) 2012  
@@ -13,9 +13,6 @@
  * See the GNU General Public License for more details.
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- * @author Younes CHEIKH http://cyounes.com
- * @author Benjamin Babic http://bbabic.com
- * 
  */
 
 package jmbs.client;
@@ -27,15 +24,20 @@ import jmbs.client.DataTreatment.AutoRefresh;
 import jmbs.common.Project;
 import jmbs.common.User;
 
+/**
+ * @author <a href="mailto:younes.cheikh@gmail.com">Younes CHEIKH</a>
+ * @author Benjamin Babic
+ * @since 06-05-2012
+ * @version 1.0
+ */
 public class CurrentUser implements Serializable {
-
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 44433007358974855L;
 	private static User u = null;
 	public static String DEFAULT_IMAGE = null;
 
+	/**
+	 * @param receivedUser : the user sent by the server
+	 */
 	public CurrentUser(User receivedUser) {
 		DEFAULT_IMAGE = "/img/avatar.jpg";
 		if (get() == null) {
@@ -46,23 +48,30 @@ public class CurrentUser implements Serializable {
 				u.setProjects(userPrjcsList);
 				System.out.println(u.getProjects().size());
 			} else {
+				// Set the user projects with empty arraylist
 				u.setProjects(new ArrayList<Project>());
 			}
 		}
 	}
 
-	public CurrentUser() {
-
-	}
-
+	/**
+	 * @return the current user 
+	 */
 	public static User get() {
 		return u;
 	}
 
+	/**
+	 * this method is used usually to set the current user to null
+	 * @param u: set the current user as u
+	 */
 	private static void set(User u) {
 		CurrentUser.u = u;
 	}
 
+	/**
+	 * disconnect the current user from server
+	 */
 	public static void disconnect() {
 		AutoRefresh.stopAll();
 		ClientRequests.logOut(u.getId());
@@ -70,64 +79,66 @@ public class CurrentUser implements Serializable {
 	}
 
 	/**
-	 * @return the name
+	 * @return current user name
 	 */
 	public static String getName() {
 		return u.getName();
 	}
 
+	/**
+	 * @return current user full name
+	 */
 	public static String getFullName() {
 		return u.getFullName();
 	}
 
 	/**
-	 * @return the fore name
+	 * @return current user forname
 	 */
 	public static String getFname() {
 		return u.getFname();
 	}
 
 	/**
-	 * @return the email
+	 * @return current user adress mail
 	 */
 	public static String getMail() {
 		return u.getMail();
 	}
 
 	/**
-	 * @return the User id
+	 * @return current user id
 	 */
 	public static int getId() {
 		return u.getId();
 	}
 
 	/**
-	 * @return the access level
+	 * @return current user access level
 	 */
 	public static int getAccesslevel() {
 		return u.getAccesslevel();
 	}
 
 	/**
-	 * @return the projects // TODO: more advanced equality check
+	 * @return current user projects
 	 */
 	public static ArrayList<Project> getProjects() {
 		return u.getProjects();
 	}
 
 	/**
-	 * @return the followed users
+	 * @return a list of users who are followed by the current users
 	 */
 	public static ArrayList<User> getFollows() {
 		return u.getFollows();
 	}
 
+	/**
+	 * @return current user picture as array of bytes
+	 */
 	public static byte[] getPic() {
 		return u.getPic();
 	}
-
-	// public static BufferedImage getPicture() {
-	// return u.getPicture();
-	// }
 
 }

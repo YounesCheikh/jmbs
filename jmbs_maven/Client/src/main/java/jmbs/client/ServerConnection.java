@@ -13,9 +13,6 @@
  * See the GNU General Public License for more details.
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- * @author Younes CHEIKH http://cyounes.com
- * @author Benjamin Babic http://bbabic.com
- * 
  */
 
 package jmbs.client;
@@ -33,6 +30,12 @@ import jmbs.client.Graphics.others.SayToUser;
 import jmbs.common.RemoteRequests;
 import jmbs.common.RemoteServer;
 
+/**
+ * @author <a href="mailto:younes.cheikh@gmail.com">Younes CHEIKH</a>
+ * @author Benjamin Babic
+ * @since 06-05-2012
+ * @version 1.0
+ */
 public class ServerConnection {
 	private static RemoteServer main = null;
 	public static RemoteRequests server = null;
@@ -40,18 +43,26 @@ public class ServerConnection {
 	private static String addressIP;
 
 	private static int port;
-	private static String name;
-
 	public static int maxReceivedMsgs = 30;
 
+	/**
+	 * @return the maximum of messages want to receive from server
+	 */
 	public int getMaxReceivedMsgs() {
 		return maxReceivedMsgs;
 	}
 
+	/**
+	 * @param maxReceivedMsgs
+	 *            set the maxium of messages want to receive from server
+	 */
 	public void setMaxReceivedMsgs(int maxReceivedMsgs) {
 		ServerConnection.maxReceivedMsgs = maxReceivedMsgs;
 	}
 
+	/**
+	 * create a connection between the client and the server
+	 */
 	public ServerConnection() {
 		if (main == null) {
 
@@ -83,41 +94,54 @@ public class ServerConnection {
 				server = null;
 				main = null;
 			} catch (MalformedURLException e) {
-				// TODO Auto-generated catch block
-				// e.printStackTrace();
 				System.out.println(e.getMessage());
 			}
 
 		}
 	}
 
-	public void setNewConfiguration(String ip, int port, String name) {
+	/**
+	 * Setting a new configuration to connect to the server
+	 * 
+	 * @param ip
+	 *            ip adress of the server
+	 * @param port
+	 *            port to establish connection
+	 */
+	public void setNewConfiguration(String ip, int port) {
 		ServerConnection.addressIP = ip;
 		ServerConnection.port = port;
-		ServerConnection.name = name;
 	}
 
+	/**
+	 * @return the adress ip of the current connection's configuration
+	 */
 	public String getAddressIP() {
 		return addressIP;
 	}
 
+	/**
+	 * @param addressIP
+	 *            : set the adress ip of the current connection's configuration
+	 */
 	public void setAddressIP(String addressIP) {
 		ServerConnection.addressIP = addressIP;
 	}
 
+	/**
+	 * @return the port where the current configuration establish the
+	 *         connecition
+	 */
 	public int getPort() {
 		return port;
 	}
 
+	/**
+	 * @param port
+	 *            set the port where the current configuration establish the
+	 *            connecition
+	 */
 	public void setPort(int port) {
 		ServerConnection.port = port;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		ServerConnection.name = name;
 	}
 }

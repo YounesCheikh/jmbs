@@ -1,4 +1,4 @@
-/**
+/*
  * JMBS: Java Micro Blogging System
  *
  * Copyright (C) 2012  
@@ -13,9 +13,6 @@
  * See the GNU General Public License for more details.
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- * @author Younes CHEIKH http://cyounes.com
- * @author Benjamin Babic http://bbabic.com
- * 
  */
 
 package jmbs.client.Graphics;
@@ -25,7 +22,7 @@ import java.awt.event.WindowEvent;
 
 import javax.swing.JFrame;
 
-import jmbs.client.SysConf;
+import jmbs.client.DataTreatment.FramesConf;
 
 public class ConnectionFrame extends JFrame {
 
@@ -37,7 +34,7 @@ public class ConnectionFrame extends JFrame {
 	/**
 	 * Create the frame.
 	 * 
-	 * @param MainWindow
+	 * @param w
 	 *            , need this to display it after a successed connection
 	 */
 	public ConnectionFrame(MainWindow w) {
@@ -55,7 +52,7 @@ public class ConnectionFrame extends JFrame {
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		// this.setLocationRelativeTo(null);
-		SysConf.centerThisFrame(this);
+		FramesConf.centerThisFrame(this);
 
 		ConnectionPanel cp = new ConnectionPanel(w, this);
 		this.getContentPane().add(cp);

@@ -1,6 +1,20 @@
-/**
- * 
+/*
+ * JMBS: Java Micro Blogging System
+ *
+ * Copyright (C) 2012  
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY.
+ * See the GNU General Public License for more details.
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package jmbs.client;
 
 import java.io.File;
@@ -11,20 +25,24 @@ import java.io.IOException;
 import java.util.Properties;
 
 /**
- * @author ycheikh
- * 
+ * @author <a href="mailto:younes.cheikh@gmail.com">Younes CHEIKH</a>
+ * @author Benjamin Babic
+ * @since 06-05-2012
+ * @version 1.0
  */
 public final class ServerConfig {
 	private static final String CONFIGURATION_FILE_PATH = "server.config";
 	private static final String DEFAULT_ADRESS_IP = "127.0.0.1";
-	private static final String DEFAULT_SERVER_NAME = "serverjmbs";
 	private static final int DEFAULT_PORT = 1099;
 
 	private static ServerConfig instance = null;
 	private String adressIP;
-	private String serverName;
 	private int port;
 
+	/**
+	 * Load the configuration from the file 'server.config' 
+	 * generate file contains the default configuration if the file does not exist.
+	 */
 	public ServerConfig() {
 		Properties prop = new Properties();
 
@@ -33,7 +51,7 @@ public final class ServerConfig {
 			in = new FileInputStream(CONFIGURATION_FILE_PATH);
 			prop.load(in);
 			adressIP = prop.getProperty("IP");
-			serverName = prop.getProperty("NAME");
+			prop.getProperty("NAME");
 			port = Integer.parseInt(prop.getProperty("PORT"));
 			in.close();
 		} catch (FileNotFoundException e) { // Generating default configuration
@@ -44,13 +62,11 @@ public final class ServerConfig {
 			try {
 				FileOutputStream out = new FileOutputStream(config);
 				prop.setProperty("IP", DEFAULT_ADRESS_IP);
-				prop.setProperty("NAME", DEFAULT_SERVER_NAME);
 				prop.setProperty("PORT", new String("" + DEFAULT_PORT));
 				prop.store(out, "[AUTO-GENERATED CONFIGURATION FILE]");
 				out.flush();
 				out.close();
 				adressIP = DEFAULT_ADRESS_IP;
-				serverName = DEFAULT_SERVER_NAME;
 				port = DEFAULT_PORT;
 				System.out
 						.println("Configuration file was sucessfully generated.");
@@ -81,14 +97,17 @@ public final class ServerConfig {
 		return instance;
 	}
 
+	/**
+	 * @return get the server adress ip for the current connection.
+	 */
 	public String getAdressIP() {
 		return adressIP;
 	}
 
-	public String getServerName() {
-		return serverName;
-	}
-
+	/**
+	 * @return the port where the application establish the connection to the
+	 *         server
+	 */
 	public int getPort() {
 		return port;
 	}

@@ -1,4 +1,4 @@
-/**
+/*
  * JMBS: Java Micro Blogging System
  *
  * Copyright (C) 2012  
@@ -13,9 +13,6 @@
  * See the GNU General Public License for more details.
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- * @author Younes CHEIKH http://cyounes.com
- * @author Benjamin Babic http://bbabic.com
- * 
  */
 
 package jmbs.client.Graphics.users;
@@ -41,7 +38,7 @@ import javax.swing.border.EmptyBorder;
 
 import jmbs.client.ClientRequests;
 import jmbs.client.CurrentUser;
-import jmbs.client.SysConf;
+import jmbs.client.DataTreatment.FramesConf;
 import jmbs.client.DataTreatment.ImageTreatment;
 import jmbs.client.Graphics.images.ImagePanel;
 import jmbs.common.User;
@@ -65,7 +62,7 @@ public class ShowUserProfileFrm extends JFrame {
 		setLocationByPlatform(true);
 		// setBounds(100, 100, 320, 300);
 		setSize(320, 300);
-		SysConf.centerThisFrame(this);
+		FramesConf.centerThisFrame(this);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -122,7 +119,8 @@ public class ShowUserProfileFrm extends JFrame {
 		topPanel.add(rightPanel, BorderLayout.EAST);
 		rightPanel.setLayout(new BorderLayout(0, 0));
 
-		ImagePanel panel = new ImagePanel(ImageTreatment.convert(u.getPic()), 70, 70);
+		ImagePanel panel = new ImagePanel(ImageTreatment.convert(u.getPic()),
+				70, 70);
 		panel.setPreferredSize(new Dimension(70, 70));
 		rightPanel.add(panel, BorderLayout.CENTER);
 		panel.setBackground(Color.GRAY);

@@ -1,4 +1,4 @@
-/**
+/*
  * JMBS: Java Micro Blogging System
  *
  * Copyright (C) 2012  
@@ -13,9 +13,6 @@
  * See the GNU General Public License for more details.
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- * @author Younes CHEIKH http://cyounes.com
- * @author Benjamin Babic http://bbabic.com
- * 
  */
 
 package jmbs.client.Graphics.others;
@@ -30,7 +27,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.LayoutStyle.ComponentPlacement;
 
-import jmbs.client.SysConf;
+import jmbs.client.DataTreatment.FramesConf;
 
 public class AboutFrame extends JFrame {
 
@@ -51,7 +48,7 @@ public class AboutFrame extends JFrame {
 		// setBounds(100, 100, 339, 246);
 		setSize(340, 246);
 		// setLocationRelativeTo(new MainWindow().getFrame());
-		SysConf.centerThisFrame(this);
+		FramesConf.centerThisFrame(this);
 		JLabel lblHiThis = new JLabel("Hi , this program is blablablablablaal");
 
 		JLabel lblYounesBenjamin = new JLabel("Younes & Benjamin");

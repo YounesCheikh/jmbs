@@ -13,10 +13,8 @@
  * See the GNU General Public License for more details.
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- * @author Younes CHEIKH http://cyounes.com
- * @author Benjamin Babic http://bbabic.com
- * 
  */
+
 package jmbs.client.Graphics;
 
 import java.awt.Color;
@@ -42,7 +40,7 @@ import javax.swing.SwingConstants;
 
 import jmbs.client.ClientRequests;
 import jmbs.client.CurrentUser;
-import jmbs.client.HashPassword;
+import jmbs.client.DataTreatment.HashPassword;
 import jmbs.client.DataTreatment.ImageTreatment;
 import jmbs.client.Graphics.images.ImageFilter;
 import jmbs.client.Graphics.images.ImagePanel;

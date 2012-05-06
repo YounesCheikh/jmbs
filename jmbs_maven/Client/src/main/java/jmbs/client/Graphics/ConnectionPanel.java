@@ -13,9 +13,6 @@
  * See the GNU General Public License for more details.
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- * @author Younes CHEIKH http://cyounes.com
- * @author Benjamin Babic http://bbabic.com
- * 
  */
 
 package jmbs.client.Graphics;
@@ -25,6 +22,10 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -37,17 +38,13 @@ import javax.swing.SwingConstants;
 
 import jmbs.client.ClientRequests;
 import jmbs.client.CurrentUser;
-import jmbs.client.HashPassword;
 import jmbs.client.ServerConnection;
+import jmbs.client.DataTreatment.HashPassword;
 import jmbs.client.DataTreatment.LoginTreatment;
 import jmbs.client.Graphics.images.ImagePanel;
 import jmbs.client.Graphics.messages.TimeLinePanel;
 import jmbs.common.User;
 import net.miginfocom.swing.MigLayout;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 
 public class ConnectionPanel extends JPanel {
 

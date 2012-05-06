@@ -1,4 +1,4 @@
-/**
+/*
  * JMBS: Java Micro Blogging System
  *
  * Copyright (C) 2012  
@@ -13,9 +13,6 @@
  * See the GNU General Public License for more details.
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- * @author Younes CHEIKH http://cyounes.com
- * @author Benjamin Babic http://bbabic.com
- * 
  */
 
 package jmbs.client.Graphics.others;
@@ -37,7 +34,7 @@ import javax.swing.JScrollPane;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 
-import jmbs.client.SysConf;
+import jmbs.client.DataTreatment.FramesConf;
 import jmbs.client.Graphics.images.ImagePanel;
 
 public class SayToUser {
@@ -58,7 +55,7 @@ public class SayToUser {
 		dialog.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		dialog.setResizable(false);
 		dialog.setSize(460, 220);
-		new SysConf().centerThisDialog(dialog);
+		FramesConf.centerThisDialog(dialog);
 		dialog.getContentPane().setLayout(null);
 		contentPanel.setBounds(0, 0, 460, 163);
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));

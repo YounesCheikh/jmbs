@@ -31,6 +31,8 @@ package jmbs.client.Graphics.images;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+
+
 import java.io.File;
 
 import javax.swing.filechooser.FileFilter;

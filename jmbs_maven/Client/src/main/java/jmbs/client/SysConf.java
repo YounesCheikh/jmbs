@@ -1,4 +1,4 @@
-/**
+/*
  * JMBS: Java Micro Blogging System
  *
  * Copyright (C) 2012  
@@ -13,30 +13,36 @@
  * See the GNU General Public License for more details.
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- * @author Younes CHEIKH http://cyounes.com
- * @author Benjamin Babic http://bbabic.com
- * 
  */
 
 package jmbs.client;
 
-import java.awt.Dimension;
-import java.awt.Toolkit;
-
-import javax.swing.JDialog;
-import javax.swing.JFrame;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
+/**
+ * @author <a href="mailto:younes.cheikh@gmail.com">Younes CHEIKH</a>
+ * @author Benjamin Babic
+ * @since 06-05-2012
+ * @version 1.0
+ */
 public class SysConf {
 
 	private static boolean macSys = false;
 	private static boolean alreadyTested = false;
 
+	/**
+	 * This class setup the mac environment , it allows the JVM to use the mac
+	 * menu
+	 */
 	public SysConf() {
 
 	}
 
+	/**
+	 * @param appName
+	 *            the application name ((JMBS-CLIENT))
+	 */
 	private static void macSetup(String appName) {
 		String os = System.getProperty("os.name").toLowerCase();
 		macSys = os.startsWith("mac os x");
@@ -49,6 +55,9 @@ public class SysConf {
 
 	}
 
+	/**
+	 * Set the User interface manager
+	 */
 	public void setUIMngr() {
 		if (!alreadyTested) {
 			alreadyTested = true;
@@ -57,46 +66,22 @@ public class SysConf {
 				UIManager.setLookAndFeel(UIManager
 						.getSystemLookAndFeelClassName());
 			} catch (ClassNotFoundException e) {
-				// TODO Auto-generated catch block
-				// e.printStackTrace();
+				// Ignore
 			} catch (InstantiationException e) {
-				// TODO Auto-generated catch block
-				// e.printStackTrace();
+				// Ignore
 			} catch (IllegalAccessException e) {
-				// TODO Auto-generated catch block
-				// e.printStackTrace();
+				// Ignore
 			} catch (UnsupportedLookAndFeelException e) {
-				// TODO Auto-generated catch block
-				// e.printStackTrace();
+				// Ignore
 			}
 		}
 	}
 
+	/**
+	 * @return true if the current OS is Mac
+	 */
 	public boolean isMac() {
 		return macSys;
 	}
 
-	public static void centerThisFrame(JFrame window) {
-		// Get the size of thescreen
-		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-		// Determine the new location of the window
-		int w = window.getSize().width;
-		int h = window.getSize().height;
-		int x = (dim.width - w) / 2;
-		int y = (dim.height - h) / 2;
-		// Move the window
-		window.setLocation(x, y);
-	}
-
-	public void centerThisDialog(JDialog window) {
-		// Get the size of thescreen
-		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-		// Determine the new location of the window
-		int w = window.getSize().width;
-		int h = window.getSize().height;
-		int x = (dim.width - w) / 2;
-		int y = (dim.height - h) / 2;
-		// Move the window
-		window.setLocation(x, y);
-	}
 }

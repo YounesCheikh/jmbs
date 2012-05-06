@@ -1,4 +1,4 @@
-/**
+/*
  * JMBS: Java Micro Blogging System
  *
  * Copyright (C) 2012  
@@ -13,9 +13,6 @@
  * See the GNU General Public License for more details.
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- * @author Younes CHEIKH http://cyounes.com
- * @author Benjamin Babic http://bbabic.com
- * 
  */
 
 package jmbs.client.Graphics;
@@ -35,17 +32,21 @@ import javax.swing.JSeparator;
 import javax.swing.JTextField;
 
 import jmbs.client.ClientRequests;
-import jmbs.client.HashPassword;
 import jmbs.client.ServerConnection;
+import jmbs.client.DataTreatment.HashPassword;
 import jmbs.client.Graphics.images.ImagePanel;
 import jmbs.client.Graphics.others.SayToUser;
 import jmbs.common.User;
 import net.miginfocom.swing.MigLayout;
 
+/**
+ * @author <a href="mailto:younes.cheikh@gmail.com">Younes CHEIKH</a>
+ * @author Benjamin Babic
+ * @since 06-05-2012
+ * @version 1.0
+ */
 public class RegisterPanel extends JPanel {
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = -369667228660691604L;
 
 	private JPasswordField confirmPasswordField;
@@ -59,18 +60,27 @@ public class RegisterPanel extends JPanel {
 	 * Create the panel.
 	 */
 
+	/**
+	 * @return true if the nameTextfiled is not empty
+	 */
 	private boolean rightName() {
 		if (nameTextField.getText().equals(""))
 			return false;
 		return true;
 	}
 
+	/**
+	 * @return true if fnameTextfield is not empty
+	 */
 	private boolean rightFName() {
 		if (fnameTextField.getText().equals(""))
 			return false;
 		return true;
 	}
 
+	/**
+	 * @return true if the emailTextfield contains a valid adress mail
+	 */
 	private boolean rightEmail() {
 		boolean correctMail = Pattern.matches(
 				"^[_a-z0-9-]+(\\.[_a-z0-9-]+)*@[a-z0-9-]+(\\.[a-z0-9-]+)+$",
@@ -78,10 +88,17 @@ public class RegisterPanel extends JPanel {
 		return correctMail;
 	}
 
+	/**
+	 * @param pf passwordfiled
+	 * @return true if password length > 4 charcters
+	 */
 	private boolean rightPassword(JPasswordField pf) {
 		return pf.getPassword().length >= 4;
 	}
 
+	/**
+	 * @return true if the passwordFiled and confirmedPasswordfiled contain the same password
+	 */
 	private boolean confirmedPassword() {
 		String strPass = new HashPassword(
 				listToString(passwordField.getPassword())).getHashed();
@@ -90,6 +107,10 @@ public class RegisterPanel extends JPanel {
 		return strPass.equals(strConfirmedPass);
 	}
 
+	/**
+	 * @param list array of chars
+	 * @return string converted from array
+	 */
 	private String listToString(char[] list) {
 		String retStr = new String();
 		for (char c : list) {
@@ -98,6 +119,9 @@ public class RegisterPanel extends JPanel {
 		return retStr;
 	}
 
+	/**
+	 * @param rf RegistrerFrame 
+	 */
 	public RegisterPanel(final RegisterFrame rf) {
 		this.rf = rf;
 		JLabel lblFirstName = new JLabel("First Name:");
@@ -200,6 +224,9 @@ public class RegisterPanel extends JPanel {
 
 	}
 
+	/**
+	 * confirm the entred data by the user in the text fields
+	 */
 	private void analysis() {
 		new ServerConnection();
 		nameTextField.setBorder(BorderFactory.createLineBorder(Color.GREEN));

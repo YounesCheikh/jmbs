@@ -1,3 +1,20 @@
+/*
+ * JMBS: Java Micro Blogging System
+ *
+ * Copyright (C) 2012  
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY.
+ * See the GNU General Public License for more details.
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package jmbs.client.Graphics.projects;
 
 import java.awt.BorderLayout;
@@ -15,7 +32,7 @@ import javax.swing.border.EmptyBorder;
 
 import jmbs.client.ClientRequests;
 import jmbs.client.CurrentUser;
-import jmbs.client.SysConf;
+import jmbs.client.DataTreatment.FramesConf;
 import jmbs.client.Graphics.others.SayToUser;
 import jmbs.common.Project;
 
@@ -31,11 +48,12 @@ public class CreateProject extends JFrame {
 	private JComboBox comboBox_privacy;
 	private JComboBox comboBox_delete;
 	private JComboBox comboBox_edition;
+
 	/**
 	 * Create the frame.
 	 */
 	public CreateProject(String projectName) {
-		SysConf.centerThisFrame(this);
+		FramesConf.centerThisFrame(this);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
@@ -110,26 +128,29 @@ public class CreateProject extends JFrame {
 		panel_5.add(btnCreate);
 		setVisible(true);
 	}
-	
+
 	private void create() {
 		int created = -1;
-		
-		int activation = comboBox_status.getSelectedIndex()==0? Project.STATUS_CLOSED: Project.STATUS_OPENED;
-		boolean edit = comboBox_edition.getSelectedIndex()==0? Project.DISABLE_EDIT: Project.ENABLE_EDIT;
-		boolean supress = comboBox_delete.getSelectedIndex()==0? Project.DISABLE_DELETE: Project.ENABLE_DELETE;
-		boolean privacy = comboBox_privacy.getSelectedIndex()==0? Project.PRIVACY_PRIVATE: Project.PRIVACY_PUBLIC;
-		
-		created = ClientRequests.createProject(
-				textField.getText(), CurrentUser.getId(), activation,edit,supress,privacy);
+
+		int activation = comboBox_status.getSelectedIndex() == 0 ? Project.STATUS_CLOSED
+				: Project.STATUS_OPENED;
+		boolean edit = comboBox_edition.getSelectedIndex() == 0 ? Project.DISABLE_EDIT
+				: Project.ENABLE_EDIT;
+		boolean supress = comboBox_delete.getSelectedIndex() == 0 ? Project.DISABLE_DELETE
+				: Project.ENABLE_DELETE;
+		boolean privacy = comboBox_privacy.getSelectedIndex() == 0 ? Project.PRIVACY_PRIVATE
+				: Project.PRIVACY_PUBLIC;
+
+		created = ClientRequests.createProject(textField.getText(),
+				CurrentUser.getId(), activation, edit, supress, privacy);
 		System.out.println(created);
-		if (created!=-1) {
+		if (created != -1) {
 			dispose();
-			SayToUser.success("Successed", "The project "
-					+ textField.getText() + " has been created");
-		}
-		else {
-			SayToUser.warning("Warning", "The project "
-					+ textField.getText() + " can't be created, please try again ");
+			SayToUser.success("Successed", "The project " + textField.getText()
+					+ " has been created");
+		} else {
+			SayToUser.warning("Warning", "The project " + textField.getText()
+					+ " can't be created, please try again ");
 		}
 	}
 }
