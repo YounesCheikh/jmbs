@@ -23,6 +23,7 @@
  */
 package jmbs.server;
 
+import jmbs.common.DAO;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -158,7 +159,6 @@ public class MessageDAO extends DAO {
      */
     public ArrayList<Message> getMessages(int idUser, int idLastMessage, int numberOfMessages) {
         ArrayList<Message> msgList = new ArrayList<Message>();
-        UserDAO udao = new UserDAO(con);
         
         set("SELECT message.* FROM message,follows "
                 + "WHERE (("

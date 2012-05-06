@@ -22,6 +22,7 @@
  */
 package jmbs.server;
 
+import jmbs.common.DAO;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -49,6 +50,16 @@ public class UserDAO extends DAO {
         super(c);
     }
 
+    //TODO: create mail checking system
+    //TODO: finish syntaxic analyser
+    //TODO: add About section in a user
+    //TODO: add auto-disconnect security
+    //TODO: add method to grant new access level
+    //TODO: add edit & supress message
+    //TODO: change project name
+    //TODO: (change privacy on a project ...) 
+    //TODO: have fun !
+    
     /**
      * Adds a new user in the Database.
      *

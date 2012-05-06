@@ -19,6 +19,7 @@
  */
 package jmbs.server;
 
+import jmbs.common.DAO;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.sql.Connection;

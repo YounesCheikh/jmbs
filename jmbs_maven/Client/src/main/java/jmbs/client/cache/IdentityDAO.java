@@ -21,13 +21,10 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
+import jmbs.common.DAO;
 
-public class IdentityDAO extends CacheDAO {
+public class IdentityDAO extends DAO {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 5185528505889859689L;
 
 	protected IdentityDAO(Connection c) {
 		super(c);

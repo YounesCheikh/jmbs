@@ -22,6 +22,7 @@
  */
 package jmbs.server;
 
+import jmbs.common.DAO;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Calendar;

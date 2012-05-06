@@ -1,5 +1,6 @@
 package jmbs.server;
 
+import jmbs.common.DAO;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;

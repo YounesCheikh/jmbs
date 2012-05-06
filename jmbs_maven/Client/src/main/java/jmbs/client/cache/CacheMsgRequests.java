@@ -21,7 +21,6 @@ import java.io.File;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
-
 import jmbs.client.DataTreatment.ImageTreatment;
 import jmbs.common.Message;
 
@@ -33,9 +32,6 @@ public class CacheMsgRequests {
 
 	}
 
-	/******************************************************************/
-	/************************* MESSAGES *******************************/
-	/******************************************************************/
 	public void addMessage(Message m) {
 		File f = new File("upics/+" + m.getOwner().getId() + ".jpg");
 		if (!f.exists()) {

@@ -21,18 +21,13 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-
 import jmbs.client.CurrentUser;
 import jmbs.client.DataTreatment.ImageTreatment;
+import jmbs.common.DAO;
 import jmbs.common.Message;
 import jmbs.common.User;
 
-public class MsgDAO extends CacheDAO {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 5446207367173067814L;
+public class MsgDAO extends DAO {
 
 	public MsgDAO(Connection c) {
 		super(c);
@@ -40,15 +35,20 @@ public class MsgDAO extends CacheDAO {
 	}
 
 	private void createTable() {
-		set("CREATE TABLE IF NOT EXISTS messages (idcurrentuser integer not null, id integer primary key,"
-				+ " content string, time timestamp, iduser integer, username string , userfname string, picpath string );");
+		set("CREATE TABLE IF NOT EXISTS messages "
+                        + "(idcurrentuser integer not null, "
+                        + "id integer primary key, "
+                        + "content string, "
+                        + "time timestamp, "
+                        + "iduser integer, "
+                        + "username string, "
+                        + "userfname string, "
+                        + "picpath string);");
 		executeUpdate();
 	}
 
 	protected void insertMessage(Message m) {
-		String query = new String();
-		query += "insert into messages values(?, ?, ?, ?, ?, ?, ?, ?)";
-		set(query);
+		set("INSERT INTO messages VALUES(?, ?, ?, ?, ?, ?, ?, ?)");
 		setInt(1, CurrentUser.getId());
 		setInt(2, m.getId());
 		setString(3, m.getMessage());
@@ -63,7 +63,7 @@ public class MsgDAO extends CacheDAO {
 	protected ArrayList<Message> getMessages() {
 		ArrayList<Message> msgList = new ArrayList<Message>();
 
-		set("SELECT * FROM messages where idcurrentuser = ?;");
+		set("SELECT * FROM messages WHERE idcurrentuser = ?;");
 		setInt(1, CurrentUser.getId());
 		ResultSet rs = executeQuery();
 
