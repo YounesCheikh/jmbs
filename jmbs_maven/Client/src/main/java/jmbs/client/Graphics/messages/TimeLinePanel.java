@@ -64,4 +64,14 @@ public class TimeLinePanel extends JPanel {
 	public void setLastIdMsg(int id) {
 		idLastMessage = id;
 	}
+	
+	public void removeMsgPanel(MsgPanel mp) {
+		for(Component c: this.getComponents()) {
+			if(c.equals(mp)) {
+				this.remove(c);
+				this.updateUI();
+				return;
+			}
+		}
+	}
 }

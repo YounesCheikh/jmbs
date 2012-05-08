@@ -23,6 +23,8 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.AdjustmentEvent;
+import java.awt.event.AdjustmentListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
@@ -53,13 +55,13 @@ import jmbs.client.Graphics.others.AboutFrame;
 import jmbs.client.Graphics.others.Preferences;
 import jmbs.client.Graphics.projects.PrjectTabbedPane;
 import jmbs.client.Graphics.users.UsersMngmntPanel;
-import jmbs.client.cache.CacheMsgRequests;
+import jmbs.client.cache.CacheRequests;
 import jmbs.common.Message;
 
 public class MainWindow {
 
 	private static JFrame frmJmbsClient = null;
-	private static TimeLinePanel timelinepanel;
+	public static TimeLinePanel timelinepanel;
 	private static ProfilePanel ppanel;
 	private static AboutFrame about;
 	private static ArrayList<Message> msgListTL;
@@ -81,7 +83,7 @@ public class MainWindow {
 	private JButton btnRefresh;
 	private NewMessagePanel newMsgPanel;
 	private JPanel tlpan;
-	private static CacheMsgRequests cache;
+	private CacheRequests cache;
 
 	public Preferences getPreferencesFrame() {
 		return this.prfrm;
@@ -117,11 +119,11 @@ public class MainWindow {
 				System.exit(0);
 			}
 		});
-		cache = new CacheMsgRequests();
+		cache = new CacheRequests();
 		ppanel = new ProfilePanel(CurrentUser.get());
 		about = new AboutFrame();
 		prfrm = new Preferences();
-		usersMngmntPanel = new UsersMngmntPanel();
+		usersMngmntPanel = new UsersMngmntPanel(this);
 		final ButtonGroup sideBarBtns = new ButtonGroup();
 		frmJmbsClient.setTitle("JMBS Client : " + CurrentUser.getFullName());
 		frmJmbsClient.setSize(520, 640);
@@ -130,7 +132,7 @@ public class MainWindow {
 		FramesConf.centerThisFrame(frmJmbsClient);
 
 		projectsPanel = new JPanel();
-		prjctTabbedPanel = new PrjectTabbedPane(projectsPanel);
+		prjctTabbedPanel = new PrjectTabbedPane(projectsPanel, this);
 
 		profpanel = new JPanel();
 		profpanel.setLayout(new BorderLayout(0, 0));
@@ -156,8 +158,9 @@ public class MainWindow {
 		tlpan.setLayout(new BorderLayout(0, 0));
 		timelinepanel = new TimeLinePanel();
 		tlscrollPane = new JScrollPane();
+		tlscrollPane.getVerticalScrollBar().addAdjustmentListener(
+				new GetMessages());
 		tlpan.add(tlscrollPane);
-		tlscrollPane.setAutoscrolls(true);
 		tlscrollPane.getVerticalScrollBar().setUnitIncrement(30);
 		tlscrollPane
 				.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
@@ -395,7 +398,7 @@ public class MainWindow {
 			}
 		});
 
-		AutoRefresh autoRefresh = new AutoRefresh();
+		AutoRefresh autoRefresh = new AutoRefresh(this);
 		autoRefresh.timeLineRefresh(10);
 	}
 
@@ -419,15 +422,15 @@ public class MainWindow {
 		cs.setDefaultColors(defaultColors);
 		frmJmbsClient.setVisible(false);
 		frmJmbsClient.setBackground(cs.getWindowBackground()); // color 0
-		frmJmbsClient.getContentPane().setBackground(cs.getWindowBackground()); // Color
-																				// 0
+		frmJmbsClient.setForeground(cs.getWindowBackground());
+		frmJmbsClient.getContentPane().setBackground(cs.getWindowBackground()); // Color 0
+		frmJmbsClient.getContentPane().setForeground(cs.getWindowBackground()); // Color
 		timelinepanel.setBackground(cs.getTimeLineBackground()); // Color 1
-		// tabbedPane.setBackground(cs.getWindowBackground()); // Color 0
-		// tlpanel.setBackground(cs.getWindowBackground()); // Color 0
+
 		for (Component c : timelinepanel.getComponents()) {
 			((MsgPanel) c).setColors(name);
 		}
-		tlpan.add(newMsgPanel, BorderLayout.SOUTH);
+		//tlpan.add(newMsgPanel, BorderLayout.SOUTH);
 		frmJmbsClient.setVisible(true);
 	}
 
@@ -464,7 +467,7 @@ public class MainWindow {
 		return projectsPanel;
 	}
 
-	public static void checkCacheMsgs() {
+	public void checkCacheMsgs() {
 		msgListTL = cache.getMessages();
 		timelinepanel.putList(msgListTL);
 		int max = 0;
@@ -476,7 +479,7 @@ public class MainWindow {
 		System.out.println(timelinepanel.getLastIdMsg());
 	}
 
-	public static void checkNewMessages(int idLastMsg) {
+	public void checkNewMessages(int idLastMsg) {
 		ArrayList<Message> listTmp = new ArrayList<Message>();
 		listTmp = ClientRequests.getLatestTL(CurrentUser.getId(), idLastMsg,
 				ServerConnection.maxReceivedMsgs);
@@ -524,6 +527,20 @@ public class MainWindow {
 			hideNewMsgPan();
 		} else {
 			showNewMsgPan();
+		}
+	}
+
+	public class GetMessages implements AdjustmentListener {
+		public void adjustmentValueChanged(AdjustmentEvent ae) {
+			if (ae.getValue() + tlscrollPane.getVerticalScrollBar().getHeight() == tlscrollPane
+					.getVerticalScrollBar().getMaximum()) {
+				// TODO: Replace the lastidmessage by firstidmessage 0 >
+				ClientRequests.getOldestTL(CurrentUser.getId(), 0,
+						ServerConnection.maxReceivedMsgs);
+			} else if (ae.getValue() == 0) {
+				checkNewMessages(timelinepanel.getLastIdMsg());
+			}
+
 		}
 	}
 

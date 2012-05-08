@@ -62,7 +62,7 @@ public class ConnectionFrame extends JFrame {
 	private JCheckBox chckbxRememberMe;
 	private boolean savedIdentity = false;
 	private boolean passwordChanged = false;
-	private final LoginTreatment lt = new LoginTreatment();
+	private LoginTreatment lt ;
 	private JLabel respLabel; /*
 							 * this will be used to say to the user if there is
 							 * a wrong password or email
@@ -80,6 +80,7 @@ public class ConnectionFrame extends JFrame {
 	 *            , need this to display it after a successed connection
 	 */
 	public ConnectionFrame(MainWindow w) {
+		lt = new LoginTreatment();
 		setResizable(false);
 		setLocationRelativeTo(null);
 		addWindowListener(new WindowAdapter() {
@@ -273,8 +274,8 @@ public class ConnectionFrame extends JFrame {
 		this.w.getTLPanel().revalidate();
 		// check for new messages from the server and display them on the
 		// timeline panel
-		MainWindow.checkCacheMsgs();
-		MainWindow.checkNewMessages(TimeLinePanel.idLastMessage);
+		this.w.checkCacheMsgs();
+		this.w.checkNewMessages(TimeLinePanel.idLastMessage);
 		// Resetting the profile panel
 		this.w.resetProfilePanel();
 		// setting the menubar

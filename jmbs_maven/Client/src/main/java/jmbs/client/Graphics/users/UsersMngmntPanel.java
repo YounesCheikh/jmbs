@@ -36,6 +36,7 @@ import javax.swing.border.EmptyBorder;
 import jmbs.client.ClientRequests;
 import jmbs.client.CurrentUser;
 import jmbs.client.DataTreatment.AutoRefresh;
+import jmbs.client.Graphics.MainWindow;
 import jmbs.common.User;
 
 public class UsersMngmntPanel extends JPanel {
@@ -58,7 +59,7 @@ public class UsersMngmntPanel extends JPanel {
 	/**
 	 * Create the panel.
 	 */
-	public UsersMngmntPanel() {
+	public UsersMngmntPanel(final MainWindow mw) {
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
@@ -203,7 +204,7 @@ public class UsersMngmntPanel extends JPanel {
 		contentPane.add(tabbedPane);
 		add(contentPane);
 		
-		AutoRefresh autoRefresh = new AutoRefresh();
+		AutoRefresh autoRefresh = new AutoRefresh(mw);
 		autoRefresh.followingRefresh(120);
 		autoRefresh.followersRefresh(120);
 	}

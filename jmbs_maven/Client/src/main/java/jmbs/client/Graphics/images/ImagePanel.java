@@ -193,15 +193,7 @@ public class ImagePanel extends JPanel {
 	}
 
 	private void scale(int width, int height) {
-		/*
-		 * if (width > 0 && width<=height) { if (image.getWidth(null) > width) {
-		 * thumbnail = new ImageIcon(image.getScaledInstance(width, -1,
-		 * Image.SCALE_SMOOTH)); } return; }
-		 * 
-		 * if (height > 0 && height<=width) { if (image.getHeight(null) >
-		 * height) { thumbnail = new ImageIcon(thumbnail.getImage()
-		 * .getScaledInstance(-1, height, Image.SCALE_SMOOTH)); } return; }
-		 */
+
 		int min = image.getWidth(null) < image.getHeight(null) ? image
 				.getWidth(null) : image.getHeight(null);
 		Image im = createImage(new FilteredImageSource(image.getSource(),

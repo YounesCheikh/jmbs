@@ -32,7 +32,7 @@ public class IdentityDAO extends DAO {
 	}
 
 	private void createTable() {
-		set("CREATE TABLE IF NOT EXISTS identity (mail string primary key, pass string);");
+		set("CREATE TABLE IF NOT EXISTS identity (mail STRING PRIMARY KEY, pass STRING NOT NULL);");
 		executeUpdate();
 	}
 

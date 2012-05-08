@@ -18,21 +18,29 @@
 package jmbs.client.Graphics.messages;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.text.SimpleDateFormat;
 
 import javax.swing.JEditorPane;
 import javax.swing.JLabel;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 
+import jmbs.client.ClientRequests;
+import jmbs.client.CurrentUser;
 import jmbs.client.DataTreatment.ImageTreatment;
 import jmbs.client.Graphics.ColorStyle;
+import jmbs.client.Graphics.MainWindow;
 import jmbs.client.Graphics.images.ImagePanel;
 import jmbs.client.Graphics.users.ShowUserProfileFrm;
 import jmbs.common.Message;
@@ -53,11 +61,15 @@ public class MsgPanel extends JPanel {
 	private JLabel btnUser;
 	private JLabel lblPrinttime;
 	private JPanel panel;
+	private int panelID;
+	private JPopupMenu popupMenu;
+	private JMenuItem mntmRemove;
 
 	/**
 	 * Create the panel.
 	 */
 	public MsgPanel(final Message m) {
+		panelID = m.getId();
 
 		setBorder(UIManager.getBorder("InsetBorder.aquaVariant"));
 
@@ -106,6 +118,22 @@ public class MsgPanel extends JPanel {
 						.getTimestamp()));
 		panel.add(lblPrinttime, BorderLayout.EAST);
 		lblPrinttime.setFont(new Font("Lucida Grande", Font.PLAIN, 10));
+
+		popupMenu = new JPopupMenu();
+		addPopup(this, popupMenu);
+
+		mntmRemove = new JMenuItem("Remove");
+		mntmRemove.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (ClientRequests.removeMessage(m.getId()))
+					removeMe();
+				
+			}
+		});
+		popupMenu.add(mntmRemove);
+		if (m.getOwner().getId()!=CurrentUser.getId()) {
+			mntmRemove.setEnabled(false);
+		}
 	}
 
 	public void setColors(String name) {
@@ -119,4 +147,31 @@ public class MsgPanel extends JPanel {
 		lblPrinttime.setForeground(cs.getSecondFontColor()); // Color 3
 	}
 
+	public int getID() {
+		return panelID;
+	}
+
+	private void removeMe() {
+		MainWindow.timelinepanel.removeMsgPanel(this);
+	}
+
+	private static void addPopup(Component component, final JPopupMenu popup) {
+		component.addMouseListener(new MouseAdapter() {
+			public void mousePressed(MouseEvent e) {
+				if (e.isPopupTrigger()) {
+					showMenu(e);
+				}
+			}
+
+			public void mouseReleased(MouseEvent e) {
+				if (e.isPopupTrigger()) {
+					showMenu(e);
+				}
+			}
+
+			private void showMenu(MouseEvent e) {
+				popup.show(e.getComponent(), e.getX(), e.getY());
+			}
+		});
+	}
 }

@@ -21,16 +21,33 @@ import java.io.File;
 
 public class SetEnv {
 	
+	public static final String CACHE_PIC_PATH = "cache/upics/";
+
 	public SetEnv() {
-		createCacheDirectory();
+		// createCacheDirectory();
 		createProfilePicsDirectory();
 	}
-	
-	private void createCacheDirectory() {
-		new File("cache").mkdir();
-	}
-	
+
 	private void createProfilePicsDirectory() {
-		new File("upics").mkdir();
+		new File(CACHE_PIC_PATH).mkdirs();
+	}
+
+	public static void removeFile(File r) {
+		if (r.isDirectory()) {
+			removeDirectory(r);
+		}
+		System.out.println(r.delete());
+	}
+
+	public static void removeDirectory(File r) {
+		File[] fileList = r.listFiles();
+		for (int i = 0; i < fileList.length; i++) {
+			if (fileList[i].isDirectory()) {
+				removeDirectory(fileList[i]);
+				System.out.println(fileList[i].delete());
+			} else {
+				System.out.println(fileList[i].delete());
+			}
+		}
 	}
 }

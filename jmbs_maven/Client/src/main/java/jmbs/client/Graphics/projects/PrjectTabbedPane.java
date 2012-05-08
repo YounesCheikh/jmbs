@@ -24,6 +24,7 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
 import jmbs.client.CurrentUser;
+import jmbs.client.Graphics.MainWindow;
 
 public class PrjectTabbedPane extends JTabbedPane {
 
@@ -35,10 +36,10 @@ public class PrjectTabbedPane extends JTabbedPane {
 	/**
 	 * Create the panel.
 	 */
-	public PrjectTabbedPane(JPanel projectsPanel) {
+	public PrjectTabbedPane(JPanel projectsPanel, final MainWindow mw) {
 		super(JTabbedPane.TOP);
 
-		PrjctsTimeLinePanel prjctTLPanel = new PrjctsTimeLinePanel();
+		PrjctsTimeLinePanel prjctTLPanel = new PrjctsTimeLinePanel(mw);
 		addTab("TimeLine",
 				new ImageIcon(getClass().getResource(
 						"/img/timeline_project.png")), prjctTLPanel,
@@ -49,7 +50,7 @@ public class PrjectTabbedPane extends JTabbedPane {
 				new ImageIcon(getClass().getResource("/img/searchproject.png")),
 				searchPrjctPanel, "Search for new project");
 
-		ParticipationsPrjcstPanel participationPrjctPanel = new ParticipationsPrjcstPanel();
+		ParticipationsPrjcstPanel participationPrjctPanel = new ParticipationsPrjcstPanel(mw);
 		addTab("Participation",
 				new ImageIcon(getClass().getResource("/img/participation.png")),
 				participationPrjctPanel, "Projects where you are participated");

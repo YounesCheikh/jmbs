@@ -70,4 +70,8 @@ public class Connect {
     public Connection getConnection() {
         return connection;
     }
+    
+    public static void initInstantce() {
+    	instance  = null;
+    }
 }

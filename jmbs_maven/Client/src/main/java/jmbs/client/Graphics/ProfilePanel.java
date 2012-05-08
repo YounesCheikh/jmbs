@@ -210,8 +210,8 @@ public class ProfilePanel extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 
 				if (!profilePicturePathTextField.equals("")) {
-					byte[] imInByteTmp = ImageTreatment
-							.pathToByte(profilePicturePathTextField.getText());
+					ImageTreatment imt = new ImageTreatment();
+					byte[] imInByteTmp = imt.preparedImage(profilePicturePathTextField.getText());
 					if (imInByteTmp != null) {
 						boolean pictureSetted = ClientRequests.setPicture(
 								CurrentUser.getId(), imInByteTmp);

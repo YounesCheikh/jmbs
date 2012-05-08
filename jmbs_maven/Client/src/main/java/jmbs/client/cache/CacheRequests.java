@@ -21,15 +21,37 @@ import java.io.File;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
+
 import jmbs.client.DataTreatment.ImageTreatment;
 import jmbs.common.Message;
 
-public class CacheMsgRequests {
+public class CacheRequests {
 
-	private static Connection con = Connect.getInstance().getConnection();
+	private static Connection con ;
 
-	public CacheMsgRequests() {
+	public CacheRequests() {
+		con = Connect.getInstance().getConnection();
+	}
+	public void insertIdentity(String mail, String pass) {
+		IdentityDAO idao = new IdentityDAO(con);
+		idao.add(mail, pass);
+	}
 
+	public HashMap<String, String> getIdentities() {
+		IdentityDAO idao = new IdentityDAO(con);
+		HashMap<String, String> retMap = idao.getIdentities();
+		return retMap;
+	}
+
+	public void updatePassword(String mail, String hashedPassword) {
+		IdentityDAO idao = new IdentityDAO(con);
+		idao.updatePassword(mail, hashedPassword);
+	}
+
+	public static void removeAllIdentities() {
+		IdentityDAO idao = new IdentityDAO(con);
+		idao.deleteAll();
 	}
 
 	public void addMessage(Message m) {
@@ -53,12 +75,14 @@ public class CacheMsgRequests {
 		MsgDAO mdao = new MsgDAO(con);
 		mdao.deleteAll();
 	}
-	
+
 	public static void closeConnection() {
+		Connect.initInstantce();
 		try {
 			con.close();
 		} catch (SQLException e) {
 			// Ignore
 		}
 	}
+
 }

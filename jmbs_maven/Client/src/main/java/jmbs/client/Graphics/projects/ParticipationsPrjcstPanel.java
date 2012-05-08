@@ -31,6 +31,7 @@ import javax.swing.ScrollPaneConstants;
 import jmbs.client.ClientRequests;
 import jmbs.client.CurrentUser;
 import jmbs.client.DataTreatment.AutoRefresh;
+import jmbs.client.Graphics.MainWindow;
 import jmbs.common.Project;
 
 public class ParticipationsPrjcstPanel extends JPanel {
@@ -45,7 +46,7 @@ public class ParticipationsPrjcstPanel extends JPanel {
 	/**
 	 * Create the panel.
 	 */
-	public ParticipationsPrjcstPanel() {
+	public ParticipationsPrjcstPanel(final MainWindow mw) {
 		setLayout(new BorderLayout(0, 0));
 
 		JPanel prtcptionTopPanel = new JPanel();
@@ -73,7 +74,7 @@ public class ParticipationsPrjcstPanel extends JPanel {
 		scrollPane.setViewportView(prticptionPanel);
 		prticptionPanel.putList(CurrentUser.getProjects());
 		
-		AutoRefresh autoRefresh = new AutoRefresh();
+		AutoRefresh autoRefresh = new AutoRefresh(mw);
 		autoRefresh.participationsRefresh(600); // 10 minutes
 	}
 

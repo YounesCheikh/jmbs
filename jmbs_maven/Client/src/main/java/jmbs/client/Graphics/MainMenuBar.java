@@ -20,6 +20,7 @@ package jmbs.client.Graphics;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -29,11 +30,11 @@ import javax.swing.JSeparator;
 
 import jmbs.client.CurrentUser;
 import jmbs.client.SysConf;
+import jmbs.client.DataTreatment.SetEnv;
 import jmbs.client.Graphics.messages.TimeLinePanel;
 import jmbs.client.Graphics.others.AboutFrame;
 import jmbs.client.Graphics.others.Preferences;
-import jmbs.client.cache.CacheIdentityRequests;
-import jmbs.client.cache.CacheMsgRequests;
+import jmbs.client.cache.CacheRequests;
 
 public class MainMenuBar extends JMenuBar {
 
@@ -84,7 +85,7 @@ public class MainMenuBar extends JMenuBar {
 		JMenuItem mntmRefresh = new JMenuItem("Refresh");
 		mntmRefresh.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				MainWindow.checkNewMessages(timelinepanel.getLastIdMsg());
+				mw.checkNewMessages(timelinepanel.getLastIdMsg());
 			}
 		});
 		mnFile.add(mntmRefresh);
@@ -115,8 +116,10 @@ public class MainMenuBar extends JMenuBar {
 		JMenuItem mntmEmptyCache = new JMenuItem("Empty cache");
 		mntmEmptyCache.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				CacheIdentityRequests.removeAllIdentities();
-				CacheMsgRequests.removeAllMsgs();
+				CacheRequests.removeAllIdentities();
+				CacheRequests.removeAllMsgs();
+				SetEnv.removeFile(new File(SetEnv.CACHE_PIC_PATH));
+				new SetEnv();
 			}
 		});
 		mnFile.add(mntmEmptyCache);
@@ -183,7 +186,7 @@ public class MainMenuBar extends JMenuBar {
 		if (prfrm.isVisible())
 			prfrm.dispose();
 		frmJmbsClient.dispose();
-		CacheMsgRequests.closeConnection();
+		CacheRequests.closeConnection();
 		CurrentUser.disconnect();
 		ConnectionFrame cf = new ConnectionFrame(new MainWindow());
 		cf.setVisible(true);

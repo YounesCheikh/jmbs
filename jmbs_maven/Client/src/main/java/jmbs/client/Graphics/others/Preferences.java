@@ -44,6 +44,9 @@ import jmbs.client.DataTreatment.FramesConf;
 import jmbs.client.Graphics.MainWindow;
 
 import com.sun.awt.AWTUtilities;
+import javax.swing.SwingConstants;
+import javax.swing.JComboBox;
+import javax.swing.DefaultComboBoxModel;
 
 @SuppressWarnings("restriction")
 public class Preferences extends JFrame {
@@ -62,24 +65,27 @@ public class Preferences extends JFrame {
 	private JRadioButton rdbtnLight;
 	private JFrame frame = new MainWindow().getFrame();
 	private static boolean colorChanged = false;
-	private JLabel lblNetwork;
 	private JLabel lblAdresseIpserver;
-	private JLabel lblServerName;
 	private JLabel lblPort;
 	private JTextField ipTextField;
-	private JTextField serverNameTextField;
 	private JTextField portTextField;
 	private JButton btnOk;
 	private JButton btnApply;
 	private JButton btnCancel_1;
 	private JButton btnRestoreAsDefault;
-	private JLabel lblMessages;
 	private JTextField limitedMsgTextField;
+	private JPanel panel;
+	private JPanel panel_1;
+	private JPanel msgpanel;
+	private JPanel panel_3;
+	private JPanel panel_4;
+	private JPanel panel_5;
 
 	/**
 	 * Create the frame.
 	 */
 	public Preferences() {
+		setResizable(false);
 
 		ButtonGroup groupDefaultOptions = new ButtonGroup();
 		ButtonGroup groupThemes = new ButtonGroup();
@@ -87,7 +93,7 @@ public class Preferences extends JFrame {
 
 		setAlwaysOnTop(true);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 400, 360);
+		setBounds(100, 100, 410, 360);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));
@@ -101,36 +107,7 @@ public class Preferences extends JFrame {
 				new ImageIcon(getClass().getResource("/img/General-Alt.png")),
 				generalPanel, null);
 
-		lblNetwork = new JLabel("Network:");
-		lblNetwork.setBounds(6, 6, 64, 17);
-		lblNetwork.setFont(new Font("Lucida Grande", Font.BOLD, 14));
-
-		lblAdresseIpserver = new JLabel("Adresse IP (Server): ");
-		lblAdresseIpserver.setBounds(6, 35, 123, 16);
-
-		lblServerName = new JLabel("Server name:");
-		lblServerName.setBounds(6, 69, 80, 16);
-
-		lblPort = new JLabel("Port:");
-		lblPort.setBounds(6, 103, 29, 16);
-
-		ipTextField = new JTextField();
-		ipTextField.setBounds(135, 29, 134, 28);
-		ipTextField.setColumns(10);
-
 		ServerConfig sconf = new ServerConfig();
-
-		ipTextField.setText(sconf.getAdressIP());
-
-		serverNameTextField = new JTextField();
-		serverNameTextField.setBounds(135, 63, 134, 28);
-		serverNameTextField.setColumns(10);
-		serverNameTextField.setText("");
-
-		portTextField = new JTextField();
-		portTextField.setBounds(135, 97, 134, 28);
-		portTextField.setColumns(10);
-		portTextField.setText("" + sconf.getPort());
 
 		btnOk = new JButton("OK");
 		btnOk.setEnabled(false);
@@ -151,37 +128,75 @@ public class Preferences extends JFrame {
 		btnRestoreAsDefault = new JButton("Reset To Default");
 		btnRestoreAsDefault.setEnabled(false);
 		btnRestoreAsDefault.setBounds(215, 218, 148, 29);
-
-		JLabel labelMax = new JLabel("Limite Received Messages:");
-		labelMax.setBounds(6, 173, 177, 16);
-
-		lblMessages = new JLabel("Messages:");
-		lblMessages.setBounds(6, 150, 73, 17);
-		lblMessages.setFont(new Font("Lucida Grande", Font.BOLD, 14));
-
-		limitedMsgTextField = new JTextField();
-		limitedMsgTextField.setBounds(189, 173, 80, 28);
-		limitedMsgTextField.setColumns(10);
-		limitedMsgTextField.setText("" + ServerConnection.maxReceivedMsgs);
-
-		JSeparator separator_1 = new JSeparator();
-		separator_1.setBounds(44, 131, 273, 12);
 		generalPanel.setLayout(null);
 		generalPanel.add(btnCancel_1);
 		generalPanel.add(btnApply);
 		generalPanel.add(btnOk);
 		generalPanel.add(btnRestoreAsDefault);
-		generalPanel.add(lblNetwork);
-		generalPanel.add(labelMax);
-		generalPanel.add(limitedMsgTextField);
-		generalPanel.add(lblAdresseIpserver);
-		generalPanel.add(lblServerName);
-		generalPanel.add(lblPort);
-		generalPanel.add(ipTextField);
-		generalPanel.add(serverNameTextField);
-		generalPanel.add(portTextField);
-		generalPanel.add(lblMessages);
-		generalPanel.add(separator_1);
+
+		JPanel netwoPanel = new JPanel();
+		netwoPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Server Configuration:"));
+		netwoPanel.setBounds(6, 6, 367, 84);
+		generalPanel.add(netwoPanel);
+		netwoPanel.setLayout(new BorderLayout(0, 0));
+
+		panel = new JPanel();
+		netwoPanel.add(panel, BorderLayout.NORTH);
+		panel.setLayout(new BorderLayout(0, 0));
+
+		lblAdresseIpserver = new JLabel("Adresse IP (Server): ");
+		lblAdresseIpserver.setHorizontalAlignment(SwingConstants.RIGHT);
+		panel.add(lblAdresseIpserver, BorderLayout.CENTER);
+
+		ipTextField = new JTextField();
+		panel.add(ipTextField, BorderLayout.EAST);
+		ipTextField.setColumns(10);
+
+		ipTextField.setText(sconf.getAdressIP());
+		
+				panel_1 = new JPanel();
+				netwoPanel.add(panel_1, BorderLayout.SOUTH);
+				panel_1.setLayout(new BorderLayout(0, 0));
+				
+						portTextField = new JTextField();
+						panel_1.add(portTextField, BorderLayout.EAST);
+						portTextField.setColumns(10);
+						portTextField.setText("" + sconf.getPort());
+		
+				lblPort = new JLabel("Port:");
+				lblPort.setHorizontalAlignment(SwingConstants.RIGHT);
+				panel_1.add(lblPort, BorderLayout.CENTER);
+				
+				msgpanel = new JPanel();
+				msgpanel.setBounds(6, 102, 367, 104);
+				generalPanel.add(msgpanel);
+						msgpanel.setLayout(new BorderLayout(0, 0));
+										
+										panel_3 = new JPanel();
+										msgpanel.add(panel_3, BorderLayout.NORTH);
+										
+												JLabel labelMax = new JLabel("Limite Received Messages:");
+												panel_3.add(labelMax);
+										
+												limitedMsgTextField = new JTextField();
+												panel_3.add(limitedMsgTextField);
+												limitedMsgTextField.setColumns(3);
+												limitedMsgTextField.setText("" + ServerConnection.maxReceivedMsgs);
+												
+												panel_4 = new JPanel();
+												msgpanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Messages: "));
+												msgpanel.add(panel_4, BorderLayout.CENTER);
+												panel_4.setLayout(new BorderLayout(0, 0));
+												
+												panel_5 = new JPanel();
+												panel_4.add(panel_5, BorderLayout.NORTH);
+												
+												JLabel lblAutoRefreshAfter = new JLabel("Auto refresh after: ");
+												panel_5.add(lblAutoRefreshAfter);
+												
+												JComboBox comboBox = new JComboBox();
+												comboBox.setModel(new DefaultComboBoxModel(new String[] {"30 seconds", "1 minutes", "2 minutes", "5 minutes", "10 minutes", "Disable"}));
+												panel_5.add(comboBox);
 
 		JPanel appearancePanel = new JPanel();
 		tabbedPane.addTab("appearance",

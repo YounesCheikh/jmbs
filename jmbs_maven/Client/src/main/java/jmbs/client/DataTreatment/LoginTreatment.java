@@ -19,8 +19,7 @@ package jmbs.client.DataTreatment;
 
 import java.util.HashMap;
 import java.util.regex.Pattern;
-
-import jmbs.client.cache.CacheIdentityRequests;
+import jmbs.client.cache.CacheRequests;
 
 /**
  * @author <a href="mailto:younes.cheikh@gmail.com">Younes CHEIKH</a>
@@ -29,6 +28,9 @@ import jmbs.client.cache.CacheIdentityRequests;
  * 
  */
 public class LoginTreatment {
+
+	private CacheRequests cr = new CacheRequests();
+	private HashMap<String, String> identities = cr.getIdentities();
 
 	public LoginTreatment() {
 
@@ -77,8 +79,7 @@ public class LoginTreatment {
 	}
 
 	public void savePassword(String mail, String pass) {
-		CacheIdentityRequests cr = new CacheIdentityRequests();
-		HashMap<String, String> identities = cr.getIdentities();
+
 		if (identities.containsKey(mail)) {
 			if (!identities.get(mail).equals(pass)) {
 				cr.updatePassword(mail, pass);
@@ -90,8 +91,6 @@ public class LoginTreatment {
 
 	public String isSaved(String mail) {
 		String retStr = null;
-		CacheIdentityRequests cr = new CacheIdentityRequests();
-		HashMap<String, String> identities = cr.getIdentities();
 		if (identities.containsKey(mail)) {
 			retStr = identities.get(mail);
 		}

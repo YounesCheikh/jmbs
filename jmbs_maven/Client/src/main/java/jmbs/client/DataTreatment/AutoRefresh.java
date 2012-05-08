@@ -38,15 +38,17 @@ public class AutoRefresh {
 	private static Timer participations;
 	private static Timer following;
 	private static Timer followers;
-	public AutoRefresh() {
-
+	private MainWindow w;
+	
+	public AutoRefresh(MainWindow w) {
+		this.w = w;
 	}
 
 	public void timeLineRefresh(int delay) {
 		timeLine = new Timer(delay * 1000, new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				MainWindow.checkNewMessages(TimeLinePanel.idLastMessage);
+				w.checkNewMessages(TimeLinePanel.idLastMessage);
 			}
 		});
 		timeLine.start();

@@ -42,6 +42,7 @@ import jmbs.client.ClientRequests;
 import jmbs.client.CurrentUser;
 import jmbs.client.ServerConnection;
 import jmbs.client.DataTreatment.AutoRefresh;
+import jmbs.client.Graphics.MainWindow;
 import jmbs.client.Graphics.messages.MsgPanel;
 import jmbs.client.Graphics.others.SayToUser;
 import jmbs.common.Message;
@@ -67,7 +68,7 @@ public class PrjctsTimeLinePanel extends JPanel {
 	/**
 	 * Create the panel.
 	 */
-	public PrjctsTimeLinePanel() {
+	public PrjctsTimeLinePanel(final MainWindow mw) {
 		setLayout(new BorderLayout(0, 0));
 
 		JPanel panel = new JPanel();
@@ -208,7 +209,7 @@ public class PrjctsTimeLinePanel extends JPanel {
 		});
 		topPrjctsTLPanel.add(btnRefresh, BorderLayout.EAST);
 		
-		AutoRefresh autoRefresh = new AutoRefresh();
+		AutoRefresh autoRefresh = new AutoRefresh(mw);
 		autoRefresh.prjctsTimeLineRefresh(60);
 	}
 
