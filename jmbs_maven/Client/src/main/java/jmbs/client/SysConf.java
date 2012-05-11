@@ -14,7 +14,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package jmbs.client;
 
 import javax.swing.UIManager;
@@ -28,60 +27,58 @@ import javax.swing.UnsupportedLookAndFeelException;
  */
 public class SysConf {
 
-	private static boolean macSys = false;
-	private static boolean alreadyTested = false;
+    private static boolean macSys = false;
+    private static boolean alreadyTested = false;
 
-	/**
-	 * This class setup the mac environment , it allows the JVM to use the mac
-	 * menu
-	 */
-	public SysConf() {
+    /**
+     * This class setup the mac environment , it allows the JVM to use the mac
+     * menu
+     */
+    public SysConf() {
+    }
 
-	}
+    /**
+     * @param appName the application name ((JMBS-CLIENT))
+     */
+    private static void macSetup(String appName) {
+        String os = System.getProperty("os.name").toLowerCase();
+        macSys = os.startsWith("mac os x");
+        if (!macSys) {
+            return;
+        }
 
-	/**
-	 * @param appName
-	 *            the application name ((JMBS-CLIENT))
-	 */
-	private static void macSetup(String appName) {
-		String os = System.getProperty("os.name").toLowerCase();
-		macSys = os.startsWith("mac os x");
-		if (!macSys)
-			return;
+        System.setProperty("apple.laf.useScreenMenuBar", "true");
+        System.setProperty("com.apple.mrj.application.apple.menu.about.name",
+                appName);
 
-		System.setProperty("apple.laf.useScreenMenuBar", "true");
-		System.setProperty("com.apple.mrj.application.apple.menu.about.name",
-				appName);
+    }
 
-	}
+    /**
+     * Set the User interface manager
+     */
+    public void setUIMngr() {
+        if (!alreadyTested) {
+            alreadyTested = true;
+            macSetup("JMBS");
+            try {
+                UIManager.setLookAndFeel(
+                        UIManager.getSystemLookAndFeelClassName());
+            } catch (ClassNotFoundException e) {
+                // Ignore
+            } catch (InstantiationException e) {
+                // Ignore
+            } catch (IllegalAccessException e) {
+                // Ignore
+            } catch (UnsupportedLookAndFeelException e) {
+                // Ignore
+            }
+        }
+    }
 
-	/**
-	 * Set the User interface manager
-	 */
-	public void setUIMngr() {
-		if (!alreadyTested) {
-			alreadyTested = true;
-			macSetup("JMBS");
-			try {
-				UIManager.setLookAndFeel(UIManager
-						.getSystemLookAndFeelClassName());
-			} catch (ClassNotFoundException e) {
-				// Ignore
-			} catch (InstantiationException e) {
-				// Ignore
-			} catch (IllegalAccessException e) {
-				// Ignore
-			} catch (UnsupportedLookAndFeelException e) {
-				// Ignore
-			}
-		}
-	}
-
-	/**
-	 * @return true if the current OS is Mac
-	 */
-	public boolean isMac() {
-		return macSys;
-	}
-
+    /**
+     * @return true if the current OS is Mac
+     */
+    public boolean isMac() {
+        return macSys;
+    }
 }

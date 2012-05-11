@@ -26,7 +26,7 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 
-import jmbs.client.Graphics.others.SayToUser;
+import jmbs.client.gui.others.SayToUser;
 import jmbs.common.RemoteRequests;
 import jmbs.common.RemoteServer;
 
@@ -38,11 +38,19 @@ import jmbs.common.RemoteServer;
  */
 public class ServerConnection {
 	private static RemoteServer main = null;
+        
+        /**
+         * the interface
+         */
 	public static RemoteRequests server = null;
 	private static String key = null;
 	private static String addressIP;
 
 	private static int port;
+        
+        /**
+         * the maximum number of messages requested from server
+         */
 	public static int maxReceivedMsgs = 30;
 
 	/**

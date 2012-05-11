@@ -19,11 +19,10 @@ package jmbs.client;
 
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
-
-import jmbs.client.DataTreatment.SetEnv;
-import jmbs.client.Graphics.ConnectionFrame;
-import jmbs.client.Graphics.MainWindow;
-import jmbs.client.Graphics.others.SayToUser;
+import jmbs.client.dataTreatment.SetEnv;
+import jmbs.client.gui.ConnectionFrame;
+import jmbs.client.gui.MainWindow;
+import jmbs.client.gui.others.SayToUser;
 
 /**
  * @author <a href="mailto:younes.cheikh@gmail.com">Younes CHEIKH</a>

@@ -24,6 +24,8 @@ import java.sql.SQLException;
  * Class connect using the singleton Configuration to set a connection to the
  * database.
  *
+ * @author Benjamin Babic
+ * @author <a href="http://cyounes.com/">Younes CHEIKH</a>
  */
 public class Connect {
 
@@ -38,7 +40,7 @@ public class Connect {
      * configuration file.
      */
     private Connect() {
-        try { 
+        try {
             Class.forName(DEFAUlT_DRIVER);
             connection = DriverManager.getConnection(DEFAULT_URL + DB_FILE_PATH);
         } catch (ClassNotFoundException e) {
@@ -47,8 +49,11 @@ public class Connect {
             System.out.println(e.getMessage());
         }
     }
-    
 
+    /**
+     * 
+     * @return instance
+     */
     public static Connect getInstance() {
         if (instance == null) // we try to avoid using synchronized when not
         // Useful
@@ -70,8 +75,11 @@ public class Connect {
     public Connection getConnection() {
         return connection;
     }
-    
+
+    /**
+     * init the instance to null
+     */
     public static void initInstantce() {
-    	instance  = null;
+        instance = null;
     }
 }
