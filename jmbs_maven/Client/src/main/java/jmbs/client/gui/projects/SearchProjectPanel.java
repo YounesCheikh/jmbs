@@ -65,7 +65,7 @@ public class SearchProjectPanel extends JPanel {
 		btnSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				ArrayList<Project> plist = new ArrayList<Project>();
-				plist = ClientRequests.searchForProject(textField.getText(),CurrentUser.getId());
+				plist = ClientRequests.searchForProject(textField.getText(), CurrentUser.getId());
 				foundedPrjctsPanel.removeAll();
 				foundedPrjctsPanel.updateUI();
 				if (plist != null) {

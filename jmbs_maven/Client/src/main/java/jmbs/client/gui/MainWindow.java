@@ -95,7 +95,7 @@ public class MainWindow {
      * 
      * @return the Main Frame
      */
-    public JFrame getFrame() {
+    public static JFrame getFrame() {
         return frmJmbsClient;
     }
 

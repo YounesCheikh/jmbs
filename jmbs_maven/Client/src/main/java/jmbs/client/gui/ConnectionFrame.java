@@ -20,8 +20,25 @@ package jmbs.client.gui;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.event.*;
-import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JSeparator;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+
 import jmbs.client.ClientRequests;
 import jmbs.client.CurrentUser;
 import jmbs.client.ServerConnection;
@@ -30,11 +47,13 @@ import jmbs.client.dataTreatment.HashPassword;
 import jmbs.client.dataTreatment.LoginTreatment;
 import jmbs.client.gui.images.ImagePanel;
 import jmbs.client.gui.messages.TimeLinePanel;
+import jmbs.client.gui.others.LoadingApplicationFrame;
 import jmbs.common.User;
 import net.miginfocom.swing.MigLayout;
 
 /**
  * Connection Frame
+ * 
  * @author <a href="http://cyounes.com/">Younes CHEIKH</a>
  * @author Benjamin Babic
  */
@@ -50,7 +69,7 @@ public class ConnectionFrame extends JFrame {
 	private JCheckBox chckbxRememberMe;
 	private boolean savedIdentity = false;
 	private boolean passwordChanged = false;
-	private LoginTreatment lt ;
+	private LoginTreatment lt;
 	private JLabel respLabel; /*
 							 * this will be used to say to the user if there is
 							 * a wrong password or email
@@ -240,16 +259,18 @@ public class ConnectionFrame extends JFrame {
 			respLabel
 					.setText("Wrong password or wrong email, Please try again!");
 			respLabel.setForeground(new Color(200, 0, 0));
+			FramesConf.mouveThisFrame(this);
 		}
 	}
 
 	private void initMainWindow() {
+		new LoadingApplicationFrame();
 		MainWindow.initFrame();
 		this.w = new MainWindow(); // Initialize new Main Window
 
 		// Setting the frame Title
-		this.w.getFrame()
-				.setTitle("JMBS Client : " + CurrentUser.getFullName());
+		MainWindow.getFrame().setTitle(
+				"JMBS Client : " + CurrentUser.getFullName());
 		// Empty the List of messages if not
 		this.w.initMsgListTL();
 		// set the id of the last received message at 0
@@ -269,7 +290,8 @@ public class ConnectionFrame extends JFrame {
 		// setting the menubar
 		this.w.setMenuBar();
 		// Display the main frame
-		this.w.getFrame().setVisible(true);
+
+		// MainWindow.getFrame().setVisible(true);
 	}
 
 }

@@ -64,7 +64,7 @@ public class Utils {
 		if (imgURL != null) {
 			return new ImageIcon(imgURL);
 		} else {
-			System.err.println("Couldn't find file: " + url.getPath());
+			System.err.println("Couldn't find file ");
 			return null;
 		}
 	}

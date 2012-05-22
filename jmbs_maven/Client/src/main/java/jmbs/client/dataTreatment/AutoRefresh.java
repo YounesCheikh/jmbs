@@ -32,7 +32,7 @@ import jmbs.client.gui.users.UsersMngmntPanel;
  * @author ycheikh
  */
 public class AutoRefresh {
-	private static Timer timeLine ;
+	private static Timer timeLine;
 	private static Timer prjctTimeline;
 	private static Timer participations;
 	private static Timer following;

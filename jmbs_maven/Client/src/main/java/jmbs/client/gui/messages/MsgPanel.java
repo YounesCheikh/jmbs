@@ -131,7 +131,7 @@ public class MsgPanel extends JPanel {
 			}
 		});
 		popupMenu.add(mntmRemove);
-		if (m.getOwner().getId()!=CurrentUser.getId()) {
+		if (m.getOwner().getId() != CurrentUser.getId()) {
 			mntmRemove.setEnabled(false);
 		}
 	}

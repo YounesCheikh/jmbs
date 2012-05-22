@@ -122,7 +122,7 @@ public class NewMessagePanel extends JPanel {
 				// (>600 chars) to the DB
 				if (textArea.getText().length() > 0
 						&& textArea.getText().length() <= 599) {
-					newMsgStr = textArea.getText();// replaceAll("'", "$'$");
+					newMsgStr = textArea.getText();
 					Message m = new Message(CurrentUser.get(), newMsgStr,
 							new Timestamp(Calendar.getInstance()
 									.getTimeInMillis()));

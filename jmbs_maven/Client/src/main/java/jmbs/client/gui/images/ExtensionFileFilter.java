@@ -13,13 +13,13 @@ import javax.swing.filechooser.FileFilter;
  * @author <a target="_blank" href="http://cyounes.com/">Younes CHEIKH</a>
  */
 
-class ExtensionFileFilter extends FileFilter {
+public class ExtensionFileFilter extends FileFilter {
 	String description;
 
 	String extensions[];
 
 	public ExtensionFileFilter(String description, String extension) {
-		this(description, new String[] { extension });
+		this(description, new String[] {extension });
 	}
 
 	public ExtensionFileFilter(String description, String extensions[]) {
