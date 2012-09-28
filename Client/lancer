@@ -1,1 +1,0 @@
-java -jar -Djava.rmi.server.codebase=file:../RMI/target/RMI-0.0.1-SNAPSHOT.jar -Djava.security.policy=target/classes/security.policy target/Client-jar-with-dependencies.jar
