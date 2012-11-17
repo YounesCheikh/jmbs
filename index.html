@@ -1,0 +1,141 @@
+<!doctype html>
+<!-- The Time Machine GitHub pages theme was designed and developed by Jon Rohan, on Feb 7, 2012. -->
+<!-- Follow him for fun. http://twitter.com/jonrohan. Tail his code on http://github.com/jonrohan -->
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+  <link rel="stylesheet" href="stylesheets/stylesheet.css" media="screen"/>
+  <link rel="stylesheet" href="stylesheets/pygment_trac.css"/>
+  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+  <script type="text/javascript" src="javascripts/script.js"></script>
+
+  <title>Jmbs</title>
+  <meta name="description" content="Java Micro Blogging System, free and open source software, Currently allows to create a mini platform for a local social network.">
+
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+</head>
+
+<body>
+
+  <div class="wrapper">
+    <header>
+      <h1 class="title">Jmbs</h1>
+    </header>
+    <div id="container">
+      <p class="tagline">Java Micro Blogging System, free and open source software, Currently allows to create a mini platform for a local social network.</p>
+      <div id="main" role="main">
+        <div class="download-bar">
+        <div class="inner">
+          <a href="https://github.com/cyounes/jmbs/tarball/master" class="download-button tar"><span>Download</span></a>
+          <a href="https://github.com/cyounes/jmbs/zipball/master" class="download-button zip"><span>Download</span></a>
+          <a href="https://github.com/cyounes/jmbs" class="code">View Jmbs on GitHub</a>
+        </div>
+        <span class="blc"></span><span class="trc"></span>
+        </div>
+        <article class="markdown-body">
+          <h1>jMBS: Java Micro Blogging System</h1>
+
+<hr><pre><code>       88  88b           d88  88888888ba    ad88888ba   
+       ""  888b         d888  88      "8b  d8"     "8b  
+           88`8b       d8'88  88      ,8P  Y8,          
+       88  88 `8b     d8' 88  88aaaaaa8P'  `Y8aaaaa,    
+       88  88  `8b   d8'  88  88""""""8b,    `"""""8b,  
+       88  88   `8b d8'   88  88      `8b          `8b  
+       88  88    `888'    88  88      a8P  Y8a     a8P  
+       88  88     `8'     88  88888888P"    "Y88888P"   
+      ,88                                               
+    888P"                                               
+</code></pre>
+
+<p><strong><code>jMBS</code></strong> is free and open source software, Currently allows to create a mini platform for a local social network.  </p>
+
+<h5>How it works?</h5>
+
+<p>Users can register using the Client GUI, each user can writes messages, and follows other users, participate to one or more projects.  </p>
+
+<p><img src="http://cyounes.com/portail_files/jmbs_login_client.png" alt="jMBS"></p>
+
+<h2>Get Code Source:</h2>
+
+<p>You can get a copy of the repository using the public git</p>
+
+<pre><code>$ git clone git://github.com/cyounes/jmbs.git
+</code></pre>
+
+<h2>Compile jMBS</h2>
+
+<p>First, you need to create a new <strong>PostgreSQL</strong> database, use the latest version of SQL script included in the <code>Server/SQL/</code> directory.</p>
+
+<p>Next you need to configure jMBS to connect to Database. to do this you could edit the <code>db.connect</code> file.</p>
+
+<h3>Compile Server:</h3>
+
+<ol>
+<li>
+<p>You need to compile the RMI project innorder to compile the server project.</p>
+
+<pre><code>$ cd /PATH/TO/JMBS/DIRECTORY/RMI/
+$ mvn clean compile install
+</code></pre>
+</li>
+<li>
+<p>Compile the server maven project</p>
+
+<pre><code>$ cd /PATH/TO/JMBS/DIRECTORY/Server/
+$ mvn clean assembly:assembly
+</code></pre>
+</li>
+</ol><h3>Compile Client:</h3>
+
+<pre><code>    $ cd /PATH/TO/JMBS/DIRECTORY/Client/
+    $ mvn clean assembly:assembly -Dmaven.test.skip=true
+</code></pre>
+
+<h2>Start jMBS</h2>
+
+<h3>Server:</h3>
+
+<p><img src="http://cyounes.com/portail_files/jmbs_start_server.png" alt="jMBS Start Server"></p>
+
+<pre><code>$ java -jar -Djava.rmi.server.codebase=file:../RMI/target/RMI-0.0.1-SNAPSHOT.jar target/Server-jar-with-dependencies.jar
+</code></pre>
+
+<h3>Client:</h3>
+
+<p><img src="http://cyounes.com/portail_files/jmbs_loading_client.png" alt="jMBS Start Client"></p>
+
+<pre><code>$ java -jar -Djava.rmi.server.codebase=file:../RMI/target/RMI-0.0.1-SNAPSHOT.jar -Djava.security.policy=target/classes/security.policy target/Client-jar-with-dependencies.jar
+</code></pre>
+
+<h2>TODO:</h2>
+
+<ul>
+<li>add some lines to this file to explain how to use jMBS</li>
+<li>add JavaDoc link</li>
+</ul>
+        </article>
+      </div>
+    </div>
+    <footer>
+      <div class="owner">
+      <p><a href="https://github.com/cyounes" class="avatar"><img src="https://secure.gravatar.com/avatar/aa413781a3cc7b265536282483dbe8a0?s=30&amp;d=https://a248.e.akamai.net/assets.github.com%2Fimages%2Fgravatars%2Fgravatar-user-420.png" width="48" height="48"/></a> <a href="https://github.com/cyounes">cyounes</a> maintains <a href="https://github.com/cyounes/jmbs">Jmbs</a></p>
+
+
+      </div>
+      <div class="creds">
+        <small>This page generated using <a href="https://pages.github.com/">GitHub Pages</a><br/>theme by <a href="http://twitter.com/jonrohan/">Jon Rohan</a></small>
+      </div>
+    </footer>
+  </div>
+  <div class="current-section">
+    <a href="#top">Scroll to top</a>
+    <a href="https://github.com/cyounes/jmbs/tarball/master" class="tar">tar</a><a href="https://github.com/cyounes/jmbs/zipball/master" class="zip">zip</a><a href="" class="code">source code</a>
+    <p class="name"></p>
+  </div>
+
+  
+</body>
+</html>
