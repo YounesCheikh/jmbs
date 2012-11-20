@@ -61,6 +61,10 @@ Next you need to configure jMBS to connect to Database. to do this you could edi
 
 	$ java -jar -Djava.rmi.server.codebase=file:../RMI/target/RMI-0.0.1-SNAPSHOT.jar -Djava.security.policy=target/classes/security.policy target/Client-jar-with-dependencies.jar
 
+## Contributors:
++ [Younes Cheikh](http://cyounes.com)
++ [Benjamin Babic](https://www.facebook.com/babicbenjamin)  
+
 ## TODO:
 - add some lines to this file to explain how to use jMBS
 - add JavaDoc link
