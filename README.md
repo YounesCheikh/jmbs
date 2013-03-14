@@ -63,7 +63,7 @@ Next you need to configure jMBS to connect to Database. to do this you could edi
 
 ## Contributors:
 + [Younes Cheikh](http://cyounes.com)
-+ [Benjamin Babic](https://www.facebook.com/babicbenjamin)  
++ [Benjamin Babic](https://github.com/Ornro)  
 
 ## TODO:
 - add some lines to this file to explain how to use jMBS
